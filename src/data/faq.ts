@@ -67,21 +67,21 @@ export const faqs: FaqEntry[] = [
     keywords: ["how much", "quantity", "use", "usage", "pinch", "recipe", "cook", "tempering"],
     question: "How much hing should I use?",
     answer:
-      "About a quarter teaspoon of powder into hot ghee or oil at the tempering stage serves a family pot of sambar or rasam. For granules, crush a pinch. For the cake, scrape a pea-sized piece. Hing is strong — less is more.",
+      "About a quarter teaspoon of powder into hot ghee at the tempering stage serves a family pot of sambar or rasam. For granules, crush a pinch. For the cake, scrape a pea-sized piece. Hing is strong — less is more.",
   },
   {
     id: "ingredients",
     keywords: ["ingredient", "made of", "contains", "compounded", "pure", "additive", "preservative"],
     question: "What is compounded hing made of?",
     answer:
-      "Compounded asafoetida is resin blended with edible starch, edible gum and a little refined vegetable oil — that's what makes it pourable and safe to use by the pinch. No artificial colours or preservatives are added.",
+      "Compounded asafoetida is resin blended with edible starch and edible gum — that's what makes it pourable and safe to use by the pinch. No artificial colours or preservatives are added.",
   },
   {
     id: "shelf-life",
     keywords: ["shelf life", "expiry", "expire", "store", "storage", "how to keep", "airtight"],
     question: "How should I store it and how long does it last?",
     answer:
-      "Keep the jar tightly closed in a cool, dry cupboard away from steam. Unopened packs stay good for 18 months from packing; once opened, use within 12 months for the fullest aroma.",
+      "Keep the jar tightly closed in a cool, dry cupboard away from steam. All products have an optimal shelf life of 12 months from packing. Store in an airtight container.",
   },
   {
     id: "order-track",

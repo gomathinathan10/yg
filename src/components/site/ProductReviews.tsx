@@ -148,10 +148,52 @@ export function ProductReviews({ product }: { product: Product }) {
           {/* Middle Rating Bars */}
           <div className="md:col-span-5 space-y-1.5 text-xs text-muted-foreground px-0 md:px-3">
             {[
-              { star: 5, pct: "92%" },
-              { star: 4, pct: "6%" },
-              { star: 3, pct: "2%" },
-              { star: 2, pct: "0%" },
+              {
+                star: 5,
+                pct: `${Math.round(
+                  product.rating >= 4.9
+                    ? 90
+                    : product.rating >= 4.8
+                    ? 82
+                    : product.rating >= 4.7
+                    ? 74
+                    : product.rating >= 4.6
+                    ? 66
+                    : 58
+                )}%`,
+              },
+              {
+                star: 4,
+                pct: `${Math.round(
+                  product.rating >= 4.9
+                    ? 8
+                    : product.rating >= 4.8
+                    ? 14
+                    : product.rating >= 4.7
+                    ? 21
+                    : product.rating >= 4.6
+                    ? 28
+                    : 35
+                )}%`,
+              },
+              {
+                star: 3,
+                pct: `${Math.round(
+                  product.rating >= 4.9
+                    ? 2
+                    : product.rating >= 4.8
+                    ? 4
+                    : product.rating >= 4.7
+                    ? 4
+                    : product.rating >= 4.6
+                    ? 5
+                    : 6
+                )}%`,
+              },
+              {
+                star: 2,
+                pct: `${Math.round(product.rating <= 4.5 ? 1 : 0)}%`,
+              },
               { star: 1, pct: "0%" },
             ].map((b) => (
               <div key={b.star} className="flex items-center gap-2">
@@ -261,7 +303,7 @@ export function ProductReviews({ product }: { product: Product }) {
                 maxLength={MAX_COMMENT}
                 rows={4}
                 className="text-xs"
-                placeholder="How did this hing bloom in your ghee/oil? Which recipes did you cook with it?"
+                placeholder="How did this hing bloom in your ghee? Which recipes did you cook with it?"
               />
               <div className="flex justify-between text-[10px]">
                 <span className="text-destructive">{errorFor("comment")}</span>

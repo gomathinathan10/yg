@@ -63,7 +63,7 @@ export function SmartImage({
         {...(width ? { width } : {})}
         {...(height ? { height } : {})}
         loading={priority ? "eager" : loading}
-        decoding={priority ? "sync" : "async"}
+        decoding="async"
         {...(priority ? { fetchPriority: "high" as const } : {})}
         onError={() => setHasError(true)}
         className={cn("h-full w-full object-contain block", className)}

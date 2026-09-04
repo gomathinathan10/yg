@@ -94,7 +94,7 @@ const CAPABILITIES = [
     icon: Factory,
     title: "Custom Formulation & Potency",
     description:
-      "Tune the aromatic intensity, volatile oil concentration, and Ferula oleoresin percentage (10% to 50%+ export strength) tailored precisely for your target market.",
+      "Tune the aromatic intensity, essential aroma concentration, and Ferula oleoresin percentage (10% to 50%+ export strength) tailored precisely for your target market.",
     points: [
       "Custom carrier bases: Wheat starch, Rice flour, Tapioca, or Acacia gum",
       "100% Celiac-safe gluten-free compounding available",

@@ -44,6 +44,7 @@ import { lookupPincode, type PincodeLookup } from "@/lib/pincode.functions";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/product/$slug")({
+  pendingComponent: () => null,
   loader: ({ params }) => {
     const product = getProduct(params.slug);
     if (!product) throw notFound();
@@ -408,6 +409,24 @@ function ProductPage() {
               </div>
             </div>
 
+            {/* 12 Months Freshness & Lifetime Guarantee */}
+            <div className="flex items-center gap-3 p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-950 dark:text-amber-100 shadow-xs">
+              <div className="h-9 w-9 rounded-lg bg-amber-500/20 border border-amber-500/30 flex items-center justify-center shrink-0">
+                <Clock className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold text-foreground">12 Months Shelf Life Guaranteed</span>
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-800 dark:text-amber-300">
+                    1 Year Freshness
+                  </span>
+                </div>
+                <p className="text-[11px] text-muted-foreground mt-0.5 leading-tight">
+                  {product.shelfLife || "12 months from packing. Store sealed in airtight container."}
+                </p>
+              </div>
+            </div>
+
             {/* Stock & Purchase Buttons */}
             {soldOut ? (
               <div className="rounded-xl border border-border bg-card p-4 space-y-3">
@@ -514,8 +533,12 @@ function ProductPage() {
               ) : null}
             </div>
 
-            {/* 3-Point Guarantee Badges */}
-            <div className="grid grid-cols-3 gap-1.5 sm:gap-2 text-[10px] sm:text-[11px] font-medium text-muted-foreground border-t border-border/60 pt-3">
+            {/* 4-Point Guarantee Badges */}
+            <div className="grid grid-cols-4 gap-1.5 sm:gap-2 text-[10px] sm:text-[11px] font-medium text-muted-foreground border-t border-border/60 pt-3">
+              <div className="flex items-center justify-center gap-1 rounded-lg bg-amber-500/10 border border-amber-500/20 py-1.5 px-1 text-center">
+                <Clock className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
+                <span className="truncate font-bold text-amber-900 dark:text-amber-200">12M Life</span>
+              </div>
               <div className="flex items-center justify-center gap-1 rounded-lg bg-muted/40 py-1.5 px-1 text-center">
                 <Truck className="h-3.5 w-3.5 text-primary shrink-0" />
                 <span className="truncate">Free &gt; ₹499</span>

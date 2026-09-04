@@ -11,14 +11,12 @@ export const getRouter = () => {
     context: { queryClient },
     scrollRestoration: true,
     defaultPreload: "intent",
-    // Start fetching the route as soon as a finger/pointer touches the link, and
-    // keep the preloaded result so the tap itself renders instantly.
-    defaultPreloadDelay: 20,
-    defaultPreloadStaleTime: 30_000,
-    defaultPendingComponent: RoutePending,
-    // Only show the skeleton if navigation is genuinely slow — avoids a flash.
-    defaultPendingMs: 500,
-    defaultPendingMinMs: 200,
+    // Start fetching the route instantly as soon as a finger/pointer touches or hovers the link
+    defaultPreloadDelay: 0,
+    defaultPreloadStaleTime: 60_000,
+    // Do not show an intrusive loading skeleton for instant local transitions
+    defaultPendingMs: 4000,
+    defaultPendingMinMs: 0,
   });
 
   return router;

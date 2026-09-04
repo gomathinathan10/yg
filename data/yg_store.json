@@ -10,15 +10,15 @@
       "image": "/products/100g-gold-asafoetida-powder/img-1.jpg",
       "gallery": "[\"/products/100g-gold-asafoetida-powder/img-1.jpg\",\"/products/50g-gold-asafoetida-powder/img-1.jpg\",\"/products/500g-gold-asafoetida-powder/img-1.jpg\"]",
       "description": "Our signature Gold grade compounded hing powder crafted to age-old Tirunelveli traditions since 1932.",
-      "ingredients": "Asafoetida (Ferula asafoetida), edible starch, edible gum, refined vegetable oil.",
-      "usage": "Add 1/4 teaspoon to hot ghee or oil during tempering.",
-      "shelf_life": "18 months from packing. Store in an airtight container.",
+      "ingredients": "Asafoetida (Ferula asafoetida), edible starch, edible gum.",
+      "usage": "Add 1/4 teaspoon to hot ghee during tempering.",
+      "shelf_life": "12 months from packing. Store in an airtight container.",
       "in_stock": 1,
       "stock_left": null,
-      "rating": 4.9,
-      "reviews": 1420,
-      "created_at": 1788069798942,
-      "updated_at": 1788069798942
+      "rating": 4.8,
+      "reviews": 312,
+      "created_at": 1788495938181,
+      "updated_at": 1788495938181
     },
     {
       "slug": "premium-asafoetida-powder",
@@ -31,14 +31,14 @@
       "gallery": "[\"/products/100g-premium-asafoetida-powder/img-1.jpg\"]",
       "description": "Superior chef-grade asafoetida with higher natural resin concentration.",
       "ingredients": "Selected Asafoetida (Ferula asafoetida), edible starch, gum arabic.",
-      "usage": "A small pinch in hot oil or ghee is sufficient.",
-      "shelf_life": "24 months from packing.",
+      "usage": "A small pinch in hot ghee is sufficient.",
+      "shelf_life": "12 months from packing. Store in an airtight container.",
       "in_stock": 1,
       "stock_left": null,
       "rating": 4.9,
-      "reviews": 890,
-      "created_at": 1788069798942,
-      "updated_at": 1788069798942
+      "reviews": 184,
+      "created_at": 1788495938181,
+      "updated_at": 1788495938181
     },
     {
       "slug": "gluten-free-asafoetida-powder",
@@ -52,13 +52,13 @@
       "description": "Made exclusively with pure rice starch base without any wheat flour.",
       "ingredients": "Asafoetida (Ferula asafoetida), rice starch, edible gum. Certified gluten-free.",
       "usage": "Use exactly like classic powder.",
-      "shelf_life": "18 months from packing.",
+      "shelf_life": "12 months from packing. Store in an airtight container.",
       "in_stock": 1,
       "stock_left": 8,
-      "rating": 4.8,
-      "reviews": 512,
-      "created_at": 1788069798942,
-      "updated_at": 1788069798942
+      "rating": 4.6,
+      "reviews": 96,
+      "created_at": 1788495938181,
+      "updated_at": 1788495938181
     },
     {
       "slug": "asafoetida-gold-cake",
@@ -72,13 +72,13 @@
       "description": "Pure concentrated hing cake block for traditional recipes.",
       "ingredients": "Asafoetida (Ferula asafoetida), edible gum, edible starch.",
       "usage": "Shave a pea-sized piece into tempering.",
-      "shelf_life": "36 months.",
+      "shelf_life": "12 months from packing. Store in an airtight container.",
       "in_stock": 1,
       "stock_left": null,
-      "rating": 4.9,
-      "reviews": 340,
-      "created_at": 1788069798942,
-      "updated_at": 1788069798942
+      "rating": 4.7,
+      "reviews": 142,
+      "created_at": 1788495938181,
+      "updated_at": 1788495938181
     },
     {
       "slug": "hing-chips",
@@ -92,13 +92,13 @@
       "description": "Coarse sun-cured hing flakes that bloom slowly in sizzling ghee.",
       "ingredients": "Asafoetida (Ferula foetida resin), edible gum, edible flour.",
       "usage": "Drop 2-3 flakes into warm ghee.",
-      "shelf_life": "24 months.",
+      "shelf_life": "12 months from packing. Store in an airtight container.",
       "in_stock": 1,
       "stock_left": null,
-      "rating": 4.9,
-      "reviews": 215,
-      "created_at": 1788069798942,
-      "updated_at": 1788069798942
+      "rating": 4.6,
+      "reviews": 78,
+      "created_at": 1788495938181,
+      "updated_at": 1788495938181
     },
     {
       "slug": "hing-pellets",
@@ -111,14 +111,14 @@
       "gallery": "[\"/products/hing-pellets/img-1.jpg\"]",
       "description": "Free-flowing crisp hing pellets for curd rice and potato roasts.",
       "ingredients": "Asafoetida, natural gum, edible cereal starch.",
-      "usage": "Crush a pellet or drop whole into hot oil.",
-      "shelf_life": "24 months.",
+      "usage": "Crush a pellet or drop whole into hot ghee during tadka.",
+      "shelf_life": "12 months from packing. Store in an airtight container.",
       "in_stock": 1,
       "stock_left": null,
-      "rating": 4.8,
-      "reviews": 310,
-      "created_at": 1788069798942,
-      "updated_at": 1788069798942
+      "rating": 4.5,
+      "reviews": 65,
+      "created_at": 1788495938181,
+      "updated_at": 1788495938181
     },
     {
       "slug": "bottle-jar-asafoetida",
@@ -129,16 +129,16 @@
       "bestseller": 1,
       "image": "/products/bottle-jar/img-1.jpg",
       "gallery": "[\"/products/bottle-jar/img-1.jpg\"]",
-      "description": "Signature airtight glass jar preserving volatile oils for years.",
+      "description": "Signature airtight glass jar preserving volatile aroma and freshness for years.",
       "ingredients": "Compounded Asafoetida (Ferula asafoetida), edible starch, edible gum.",
       "usage": "Keep on kitchen counter for easy daily spooning.",
-      "shelf_life": "36 months.",
+      "shelf_life": "12 months from packing. Store in an airtight container.",
       "in_stock": 1,
       "stock_left": null,
-      "rating": 5,
-      "reviews": 460,
-      "created_at": 1788069798942,
-      "updated_at": 1788069798942
+      "rating": 4.9,
+      "reviews": 218,
+      "created_at": 1788495938181,
+      "updated_at": 1788495938181
     },
     {
       "slug": "pure-raw-hing",
@@ -152,13 +152,13 @@
       "description": "The raw unadulterated gum oleoresin from mountain roots.",
       "ingredients": "100% Raw Asafoetida Oleoresin (Ferula foetida).",
       "usage": "Scrape a tiny pinhead amount into warm liquid.",
-      "shelf_life": "60 months.",
+      "shelf_life": "12 months from packing. Store in an airtight container.",
       "in_stock": 1,
       "stock_left": null,
-      "rating": 5,
-      "reviews": 195,
-      "created_at": 1788069798942,
-      "updated_at": 1788069798942
+      "rating": 4.7,
+      "reviews": 58,
+      "created_at": 1788495938181,
+      "updated_at": 1788495938181
     },
     {
       "slug": "all-product-heritage-combo",
@@ -172,13 +172,13 @@
       "description": "Grand all-in-one tasting experience box with brass spoon.",
       "ingredients": "Contains: Gold Powder, Cake, Pellets, Chips, Brass Spoon.",
       "usage": "The ultimate culinary gift for gourmet cooks.",
-      "shelf_life": "24 months.",
+      "shelf_life": "12 months from packing. Store in an airtight container.",
       "in_stock": 1,
       "stock_left": null,
-      "rating": 5,
-      "reviews": 280,
-      "created_at": 1788069798942,
-      "updated_at": 1788069798942
+      "rating": 4.8,
+      "reviews": 124,
+      "created_at": 1788495938181,
+      "updated_at": 1788495938181
     },
     {
       "slug": "traditional-health-mix",
@@ -192,13 +192,13 @@
       "description": "Handcrafted traditional Sathu Maavu multigrain porridge mix with 18 roasted grains.",
       "ingredients": "Ragi, Kambu, Red Rice, Roasted Gram, Green Gram, Wheat, Almonds, Cashews, Cardamom.",
       "usage": "Mix 2 tbsp in 250ml water or milk, simmer for 3-5 minutes.",
-      "shelf_life": "9 months from packing.",
+      "shelf_life": "12 months from packing. Store in an airtight container.",
       "in_stock": 1,
       "stock_left": null,
-      "rating": 4.9,
-      "reviews": 310,
-      "created_at": 1788069798942,
-      "updated_at": 1788069798942
+      "rating": 4.7,
+      "reviews": 115,
+      "created_at": 1788495938181,
+      "updated_at": 1788495938181
     },
     {
       "slug": "pure-benzoin-sambrani",
@@ -212,13 +212,13 @@
       "description": "Pure natural Benzoin resin (Loban / Paal Sambrani) with authentic temple aroma.",
       "ingredients": "100% Pure Natural Benzoin Resin (Styrax benzoin).",
       "usage": "Sprinkle onto glowing charcoal or dhoop burner.",
-      "shelf_life": "36 months.",
+      "shelf_life": "12 months from packing. Store in a dry place.",
       "in_stock": 1,
       "stock_left": null,
-      "rating": 5,
-      "reviews": 185,
-      "created_at": 1788069798942,
-      "updated_at": 1788069798942
+      "rating": 4.8,
+      "reviews": 89,
+      "created_at": 1788495938181,
+      "updated_at": 1788495938181
     },
     {
       "slug": "black-sesame-seeds",
@@ -232,13 +232,13 @@
       "description": "Sun-dried South Indian Black Sesame (Karuppu Ellu) rich in natural calcium.",
       "ingredients": "100% Pure Natural Black Sesame Seeds.",
       "usage": "Dry roast for ellu sadam or consume with palm jaggery.",
-      "shelf_life": "12 months.",
+      "shelf_life": "12 months from packing. Store in an airtight container.",
       "in_stock": 1,
       "stock_left": null,
-      "rating": 4.9,
-      "reviews": 145,
-      "created_at": 1788069798942,
-      "updated_at": 1788069798942
+      "rating": 4.6,
+      "reviews": 72,
+      "created_at": 1788495938181,
+      "updated_at": 1788495938181
     },
     {
       "slug": "traditional-idli-podi",
@@ -251,14 +251,14 @@
       "gallery": "[\"/products/traditional-idli-podi/img-1.jpg\"]",
       "description": "Grandmother's heritage recipe of slow-roasted lentils, chillies, and pure hing.",
       "ingredients": "Urad Dal, Chana Dal, Dry Red Chillies, Sesame, Curry Leaves, Hing, Rock Salt.",
-      "usage": "Mix with cold-pressed gingelly oil or hot ghee.",
-      "shelf_life": "9 months.",
+      "usage": "Mix with hot melted A2 ghee.",
+      "shelf_life": "12 months from packing. Keep jar sealed.",
       "in_stock": 1,
       "stock_left": null,
-      "rating": 5,
-      "reviews": 260,
-      "created_at": 1788069798942,
-      "updated_at": 1788069798942
+      "rating": 4.7,
+      "reviews": 138,
+      "created_at": 1788495938181,
+      "updated_at": 1788495938181
     },
     {
       "slug": "millet-pongal-mix",
@@ -272,13 +272,13 @@
       "description": "Low-glycemic breakfast blend of unpolished millets, moong dal, pepper, cashews.",
       "ingredients": "Foxtail Millet, Little Millet, Moong Dal, Black Pepper, Cashews, Ginger, Hing, Salt.",
       "usage": "Pressure cook 1 cup mix with 3.5 cups water for 3 whistles.",
-      "shelf_life": "9 months.",
+      "shelf_life": "12 months from packing. Store in an airtight container.",
       "in_stock": 1,
       "stock_left": null,
-      "rating": 4.9,
-      "reviews": 178,
-      "created_at": 1788069798942,
-      "updated_at": 1788069798942
+      "rating": 4.5,
+      "reviews": 54,
+      "created_at": 1788495938181,
+      "updated_at": 1788495938181
     },
     {
       "slug": "millet-sambar-mix",
@@ -292,13 +292,13 @@
       "description": "One-pot South Indian comfort food with Kodo and Barnyard millets and toor dal.",
       "ingredients": "Kodo Millet, Barnyard Millet, Toor Dal, Roasted Spices, Tamarind, Hing, Rock Salt.",
       "usage": "Cook 1 cup mix with 4 cups boiling water in pressure cooker for 3 whistles.",
-      "shelf_life": "9 months.",
+      "shelf_life": "12 months from packing. Store in an airtight container.",
       "in_stock": 1,
       "stock_left": null,
-      "rating": 4.9,
-      "reviews": 162,
-      "created_at": 1788069798942,
-      "updated_at": 1788069798942
+      "rating": 4.6,
+      "reviews": 49,
+      "created_at": 1788495938181,
+      "updated_at": 1788495938181
     }
   ],
   "product_variants": [
@@ -604,7 +604,18 @@
   "order_items": [],
   "reviews": [],
   "questions": [],
-  "tickets": [],
+  "tickets": [
+    {
+      "id": "TKT28059",
+      "topic": "nice",
+      "order_id": null,
+      "message": "nice and super product (From: gg2132ddf)",
+      "contact": "ijdhn@gmail.com",
+      "name": null,
+      "status": 1788434648465,
+      "reply": 1788434648465
+    }
+  ],
   "stock_alerts": [],
   "promos": [
     {
@@ -616,7 +627,7 @@
       "min_subtotal": null,
       "free_shipping": 0,
       "automatic": 0,
-      "is_active": 1788069798942
+      "is_active": 1788495938181
     },
     {
       "code": "HING50",
@@ -627,7 +638,7 @@
       "min_subtotal": 399,
       "free_shipping": 0,
       "automatic": 0,
-      "is_active": 1788069798942
+      "is_active": 1788495938181
     },
     {
       "code": "FREESHIP",
@@ -638,7 +649,7 @@
       "min_subtotal": null,
       "free_shipping": 1,
       "automatic": 0,
-      "is_active": 1788069798942
+      "is_active": 1788495938181
     },
     {
       "code": "BULK15",
@@ -649,7 +660,7 @@
       "min_subtotal": 999,
       "free_shipping": 0,
       "automatic": 1,
-      "is_active": 1788069798942
+      "is_active": 1788495938181
     }
   ],
   "recipes": []

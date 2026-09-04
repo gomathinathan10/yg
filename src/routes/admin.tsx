@@ -1,4 +1,4 @@
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   AlertCircle,
@@ -174,7 +174,9 @@ function AdminDashboardPage() {
   const [orderStatusFilter, setOrderStatusFilter] = useState("all");
   const [selectedOrder, setSelectedOrder] = useState<FullOrder | null>(null);
 
-  // Product Dialog
+  // Product Filters & Dialog
+  const [productSearch, setProductSearch] = useState("");
+  const [productFormatFilter, setProductFormatFilter] = useState("all");
   const [productDialogOpen, setProductDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<AdminProductInput | null>(null);
   const [newGalleryUrl, setNewGalleryUrl] = useState("");
@@ -355,13 +357,15 @@ function AdminDashboardPage() {
       glutenFree: false,
       bestseller: false,
       image: "powder",
-      gallery: ["powder", "hero"],
+      gallery: ["powder"],
       description: "",
       ingredients: "",
       usage: "",
-      shelfLife: "18 months from packing",
+      shelfLife: "12 months from packing. Store in an airtight container.",
       inStock: true,
       stockLeft: null,
+      rating: 4.8,
+      reviews: 120,
       variants: [
         { id: "50g", label: "50 g", price: 150, mrp: 180, stock: 100 },
       ],
@@ -389,9 +393,11 @@ function AdminDashboardPage() {
       description: p.description,
       ingredients: p.ingredients,
       usage: p.usage,
-      shelfLife: p.shelf_life,
+      shelfLife: p.shelf_life || "12 months from packing. Store in an airtight container.",
       inStock: Boolean(p.in_stock),
       stockLeft: p.stock_left,
+      rating: Math.min(4.9, Math.max(4.5, Number(p.rating || 4.8))),
+      reviews: p.reviews ?? 100,
       variants: (p.variants || []).map((v) => ({
         id: v.id,
         label: v.label,
@@ -460,9 +466,14 @@ function AdminDashboardPage() {
       toast.error("Slug and Name are required");
       return;
     }
+    const r = Number(editingProduct.rating ?? 4.8);
+    if (isNaN(r) || r < 4.5 || r > 4.9) {
+      toast.error("Rating must be between 4.5 and 4.9");
+      return;
+    }
     try {
       await adminSaveProductServerFn({ data: editingProduct });
-      toast.success(`Product ${editingProduct.name} saved`);
+      toast.success(`Product "${editingProduct.name}" saved successfully`);
       setProductDialogOpen(false);
       loadAllData();
     } catch (err) {
@@ -1248,18 +1259,70 @@ function AdminDashboardPage() {
           {/* ======================================================== */}
           <TabsContent value="products" className="space-y-4">
             <div className="surface-card p-6">
-              <div className="flex items-center justify-between mb-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                 <div>
-                  <h2 className="text-lg font-semibold">Catalog & Inventory Management</h2>
-                  <p className="text-xs text-muted-foreground">Manage products, format variants, prices, and stock status</p>
+                  <h2 className="text-lg font-semibold">Catalog & Product Flexibility</h2>
+                  <p className="text-xs text-muted-foreground">Add products, edit details, adjust ratings (4.5–4.9), manage variants and shelf life</p>
                 </div>
-                <Button onClick={handleOpenNewProduct}>
-                  <Plus className="h-4 w-4 mr-1.5" /> Add Product
+                <Button onClick={handleOpenNewProduct} className="shrink-0">
+                  <Plus className="h-4 w-4 mr-1.5" /> Add New Product
                 </Button>
               </div>
 
+              {/* Product Search & Format Filter */}
+              <div className="flex flex-col sm:flex-row gap-3 items-center justify-between mb-6 pb-4 border-b border-border">
+                <div className="flex flex-1 w-full gap-2 items-center">
+                  <div className="relative flex-1 max-w-sm">
+                    <Search className="h-3.5 w-3.5 absolute left-2.5 top-2.5 text-muted-foreground" />
+                    <Input
+                      placeholder="Search products by name, slug, tagline..."
+                      value={productSearch}
+                      onChange={(e) => setProductSearch(e.target.value)}
+                      className="pl-8 h-8 text-xs"
+                    />
+                  </div>
+                  <Select value={productFormatFilter} onValueChange={setProductFormatFilter}>
+                    <SelectTrigger className="h-8 text-xs w-[170px]">
+                      <SelectValue placeholder="All Formats" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Formats</SelectItem>
+                      <SelectItem value="powder">Powder</SelectItem>
+                      <SelectItem value="granules">Granules</SelectItem>
+                      <SelectItem value="cake">Solid Cake</SelectItem>
+                      <SelectItem value="combo">Combo & Gift</SelectItem>
+                      <SelectItem value="wellness">Health Mix (Wellness)</SelectItem>
+                      <SelectItem value="pooja">Pooja Sambrani</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="text-xs text-muted-foreground shrink-0">
+                  Showing {products.filter((p) => {
+                    const matchSearch =
+                      !productSearch.trim() ||
+                      p.name.toLowerCase().includes(productSearch.toLowerCase()) ||
+                      p.slug.toLowerCase().includes(productSearch.toLowerCase()) ||
+                      p.tagline.toLowerCase().includes(productSearch.toLowerCase());
+                    const matchFormat =
+                      productFormatFilter === "all" || p.format === productFormatFilter;
+                    return matchSearch && matchFormat;
+                  }).length} of {products.length} products
+                </div>
+              </div>
+
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {products.map((p) => (
+                {products
+                  .filter((p) => {
+                    const matchSearch =
+                      !productSearch.trim() ||
+                      p.name.toLowerCase().includes(productSearch.toLowerCase()) ||
+                      p.slug.toLowerCase().includes(productSearch.toLowerCase()) ||
+                      p.tagline.toLowerCase().includes(productSearch.toLowerCase());
+                    const matchFormat =
+                      productFormatFilter === "all" || p.format === productFormatFilter;
+                    return matchSearch && matchFormat;
+                  })
+                  .map((p) => (
                   <div key={p.slug} className="surface-card p-5 flex flex-col justify-between border border-border">
                     <div>
                       <div className="flex items-start gap-3">
@@ -1274,9 +1337,16 @@ function AdminDashboardPage() {
                           />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <Badge variant="secondary" className="capitalize text-[10px] mb-1">
-                            {p.format}
-                          </Badge>
+                          <div className="flex items-center gap-1.5 mb-1">
+                            <Badge variant="secondary" className="capitalize text-[10px]">
+                              {p.format}
+                            </Badge>
+                            {p.bestseller ? (
+                              <Badge variant="default" className="text-[9px] bg-amber-600">
+                                Bestseller
+                              </Badge>
+                            ) : null}
+                          </div>
                           <h3 className="font-semibold text-base leading-snug truncate">{p.name}</h3>
                           <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{p.tagline}</p>
                         </div>
@@ -1288,7 +1358,19 @@ function AdminDashboardPage() {
                         </Badge>
                       </div>
 
-                      <div className="mt-4 space-y-1.5 border-t border-b border-border/60 py-3 text-xs">
+                      {/* Rating & Shelf Life badges */}
+                      <div className="flex items-center gap-2 mt-3 pt-2 border-t border-border/40">
+                        <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-amber-700 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+                          <Star className="h-3 w-3 fill-amber-500 text-amber-500" />
+                          {(p.rating || 4.8).toFixed(1)}
+                        </span>
+                        <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground bg-muted/50 px-2 py-0.5 rounded border border-border">
+                          <Clock className="h-3 w-3 text-muted-foreground" />
+                          {p.shelf_life || "12 months from packing"}
+                        </span>
+                      </div>
+
+                      <div className="mt-3 space-y-1.5 border-t border-b border-border/60 py-3 text-xs">
                         <div className="font-medium text-muted-foreground mb-1">Variants & Pricing:</div>
                         {(p.variants || []).map((v) => (
                           <div key={v.id} className="flex items-center justify-between text-xs">
@@ -1315,7 +1397,7 @@ function AdminDashboardPage() {
                         <Button size="sm" variant="outline" onClick={() => handleEditProduct(p)}>
                           <Edit className="h-3.5 w-3.5 mr-1" /> Edit
                         </Button>
-                        <Button size="sm" variant="ghost" className="text-destructive hover:bg-destructive/10" onClick={() => handleDeleteProduct(p.slug)}>
+                        <Button size="sm" variant="ghost" className="text-destructive hover:bg-destructive/10" title="Delete Product" onClick={() => handleDeleteProduct(p.slug)}>
                           <Trash2 className="h-3.5 w-3.5" />
                         </Button>
                       </div>
@@ -1830,7 +1912,25 @@ function AdminDashboardPage() {
             <div className="space-y-4 text-sm">
               <div className="grid sm:grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <Label htmlFor="prod-slug">Slug (Unique ID)</Label>
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="prod-slug">Slug (Unique ID)</Label>
+                    <button
+                      type="button"
+                      className="text-[11px] text-primary hover:underline font-medium"
+                      onClick={() => {
+                        if (editingProduct.name) {
+                          const autoSlug = editingProduct.name
+                            .toLowerCase()
+                            .trim()
+                            .replace(/[^a-z0-9]+/g, "-")
+                            .replace(/^-|-$/g, "");
+                          setEditingProduct({ ...editingProduct, slug: autoSlug });
+                        }
+                      }}
+                    >
+                      Generate from Name
+                    </button>
+                  </div>
                   <Input
                     id="prod-slug"
                     value={editingProduct.slug}
@@ -1843,7 +1943,19 @@ function AdminDashboardPage() {
                   <Input
                     id="prod-name"
                     value={editingProduct.name}
-                    onChange={(e) => setEditingProduct({ ...editingProduct, name: e.target.value })}
+                    onChange={(e) => {
+                      const name = e.target.value;
+                      if (!editingProduct.slug) {
+                        const autoSlug = name
+                          .toLowerCase()
+                          .trim()
+                          .replace(/[^a-z0-9]+/g, "-")
+                          .replace(/^-|-$/g, "");
+                        setEditingProduct({ ...editingProduct, name, slug: autoSlug });
+                      } else {
+                        setEditingProduct({ ...editingProduct, name });
+                      }
+                    }}
                     placeholder="e.g. YG Special Hing"
                   />
                 </div>
@@ -1870,8 +1982,10 @@ function AdminDashboardPage() {
                     <SelectContent>
                       <SelectItem value="powder">Powder</SelectItem>
                       <SelectItem value="granules">Granules</SelectItem>
-                      <SelectItem value="cake">Cake</SelectItem>
-                      <SelectItem value="combo">Combo</SelectItem>
+                      <SelectItem value="cake">Solid Cake</SelectItem>
+                      <SelectItem value="combo">Combo & Gift</SelectItem>
+                      <SelectItem value="wellness">Health Mix (Wellness)</SelectItem>
+                      <SelectItem value="pooja">Pooja Sambrani</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -1903,6 +2017,36 @@ function AdminDashboardPage() {
                     value={editingProduct.usage}
                     onChange={(e) => setEditingProduct({ ...editingProduct, usage: e.target.value })}
                   />
+                </div>
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <Label htmlFor="prod-shelf-life">Shelf Life / Expiry</Label>
+                  <Input
+                    id="prod-shelf-life"
+                    value={editingProduct.shelfLife || ""}
+                    onChange={(e) => setEditingProduct({ ...editingProduct, shelfLife: e.target.value })}
+                    placeholder="e.g. 12 months from packing. Store in an airtight container."
+                  />
+                  <p className="text-[10px] text-muted-foreground">Standard 12 months for all products</p>
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor="prod-rating">Customer Rating (4.5 to 4.9)</Label>
+                  <Input
+                    id="prod-rating"
+                    type="number"
+                    step="0.1"
+                    min="4.5"
+                    max="4.9"
+                    value={editingProduct.rating ?? 4.8}
+                    onChange={(e) => {
+                      const val = parseFloat(e.target.value);
+                      setEditingProduct({ ...editingProduct, rating: isNaN(val) ? 4.8 : val });
+                    }}
+                    placeholder="4.8"
+                  />
+                  <p className="text-[10px] text-muted-foreground">Must be between 4.5 and 4.9</p>
                 </div>
               </div>
 

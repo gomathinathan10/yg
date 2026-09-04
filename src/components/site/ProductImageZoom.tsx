@@ -33,8 +33,11 @@ export function ProductImageZoom({
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   const [isHovering, setIsHovering] = useState(false);
-  const [coords, setCoords] = useState({ percentX: 50, percentY: 50, lensX: 0, lensY: 0 });
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const imgRef = useRef<HTMLImageElement | null>(null);
+  const lensRef = useRef<HTMLDivElement | null>(null);
+  const rectRef = useRef<DOMRect | null>(null);
+  const rafRef = useRef<number | null>(null);
 
   const nextImage = useCallback(() => {
     if (images.length <= 1) return;
@@ -84,35 +87,59 @@ export function ProductImageZoom({
     touchEndX.current = null;
   };
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const container = containerRef.current;
-    if (!container) return;
+  const handleMouseEnter = () => {
+    setIsHovering(true);
+    if (containerRef.current) {
+      rectRef.current = containerRef.current.getBoundingClientRect();
+    }
+  };
 
-    const rect = container.getBoundingClientRect();
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!rectRef.current) {
+      if (containerRef.current) {
+        rectRef.current = containerRef.current.getBoundingClientRect();
+      } else {
+        return;
+      }
+    }
+    const rect = rectRef.current;
     const clientX = Math.max(0, Math.min(rect.width, e.clientX - rect.left));
     const clientY = Math.max(0, Math.min(rect.height, e.clientY - rect.top));
 
-    const percentX = (clientX / rect.width) * 100;
-    const percentY = (clientY / rect.height) * 100;
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    rafRef.current = requestAnimationFrame(() => {
+      const percentX = (clientX / rect.width) * 100;
+      const percentY = (clientY / rect.height) * 100;
+      const lensW = 140;
+      const lensH = 140;
+      let lensX = clientX - lensW / 2;
+      let lensY = clientY - lensH / 2;
+      const maxX = rect.width - lensW;
+      const maxY = rect.height - lensH;
 
-    const lensW = 140;
-    const lensH = 140;
-    let lensX = clientX - lensW / 2;
-    let lensY = clientY - lensH / 2;
-    const maxX = rect.width - lensW;
-    const maxY = rect.height - lensH;
+      if (lensX < 0) lensX = 0;
+      if (lensY < 0) lensY = 0;
+      if (lensX > maxX) lensX = maxX;
+      if (lensY > maxY) lensY = maxY;
 
-    if (lensX < 0) lensX = 0;
-    if (lensY < 0) lensY = 0;
-    if (lensX > maxX) lensX = maxX;
-    if (lensY > maxY) lensY = maxY;
-
-    setCoords({
-      percentX: Math.round(percentX * 100) / 100,
-      percentY: Math.round(percentY * 100) / 100,
-      lensX,
-      lensY,
+      if (imgRef.current) {
+        imgRef.current.style.transformOrigin = `${percentX}% ${percentY}%`;
+        imgRef.current.style.transform = "scale(2.2)";
+      }
+      if (lensRef.current) {
+        lensRef.current.style.left = `${lensX}px`;
+        lensRef.current.style.top = `${lensY}px`;
+      }
     });
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovering(false);
+    rectRef.current = null;
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    if (imgRef.current) {
+      imgRef.current.style.transform = "scale(1)";
+    }
   };
 
   return (
@@ -123,9 +150,9 @@ export function ProductImageZoom({
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        onMouseEnter={() => setIsHovering(true)}
+        onMouseEnter={handleMouseEnter}
         onMouseMove={handleMouseMove}
-        onMouseLeave={() => setIsHovering(false)}
+        onMouseLeave={handleMouseLeave}
         className="surface-card group relative overflow-hidden rounded-2xl border border-border bg-white p-4 sm:p-6 flex items-center justify-center touch-pan-y min-h-[340px] sm:min-h-[460px] cursor-crosshair shadow-sm"
       >
         {/* Dynamic Zoom Image Container */}
@@ -135,12 +162,11 @@ export function ProductImageZoom({
           title="Click to view next image, or hover to zoom"
         >
           <img
-            key={currentImage}
+            ref={imgRef}
             src={currentImage}
             alt={`${productName} - View ${activeImage + 1}`}
             className="h-full w-full max-h-[340px] sm:max-h-[440px] object-contain block transition-transform duration-100 ease-out will-change-transform"
             style={{
-              transformOrigin: `${coords.percentX}% ${coords.percentY}%`,
               transform: isHovering ? "scale(2.2)" : "scale(1)",
             }}
             loading="eager"
@@ -151,12 +177,13 @@ export function ProductImageZoom({
         {/* Hover Lens Box Indicator (Desktop only when hovering) */}
         {isHovering && (
           <div
+            ref={lensRef}
             className="hidden md:block absolute pointer-events-none border-2 border-primary bg-primary/15 backdrop-contrast-110 shadow-lg rounded-lg z-20 transition-all duration-75"
             style={{
               width: "140px",
               height: "140px",
-              left: `${coords.lensX}px`,
-              top: `${coords.lensY}px`,
+              left: "50%",
+              top: "50%",
             }}
           >
             {/* Center Crosshair */}

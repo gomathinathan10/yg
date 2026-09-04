@@ -8,6 +8,7 @@ export type PaletteThemeInfo = {
   subtitle: string;
   dotColor: string;
   bgPreview: string;
+  background: string;
   primary: string;
   ring: string;
 };
@@ -18,7 +19,8 @@ export const PALETTE_THEMES: PaletteThemeInfo[] = [
     name: "Saffron Sandal",
     subtitle: "Heritage Terracotta & Sandal Gold",
     dotColor: "#C25E00",
-    bgPreview: "#FFFFFF",
+    bgPreview: "#FAF1E4",
+    background: "oklch(0.960 0.035 78)",
     primary: "oklch(0.52 0.19 44)",
     ring: "oklch(0.52 0.19 44)",
   },
@@ -27,7 +29,8 @@ export const PALETTE_THEMES: PaletteThemeInfo[] = [
     name: "Emerald Cardamom",
     subtitle: "Vedic Botanical Cardamom Green",
     dotColor: "#059669",
-    bgPreview: "#FFFFFF",
+    bgPreview: "#EEF6F1",
+    background: "oklch(0.960 0.032 148)",
     primary: "oklch(0.44 0.17 142)",
     ring: "oklch(0.44 0.17 142)",
   },
@@ -36,7 +39,8 @@ export const PALETTE_THEMES: PaletteThemeInfo[] = [
     name: "Nilgiri Indigo",
     subtitle: "Royal Heritage Sapphire Blue",
     dotColor: "#2563EB",
-    bgPreview: "#FFFFFF",
+    bgPreview: "#EEF3FC",
+    background: "oklch(0.960 0.030 255)",
     primary: "oklch(0.44 0.18 255)",
     ring: "oklch(0.44 0.18 255)",
   },
@@ -45,7 +49,8 @@ export const PALETTE_THEMES: PaletteThemeInfo[] = [
     name: "Mysore Plum",
     subtitle: "Royal Velvet Amethyst Purple",
     dotColor: "#9333EA",
-    bgPreview: "#FFFFFF",
+    bgPreview: "#F8EEFB",
+    background: "oklch(0.960 0.030 315)",
     primary: "oklch(0.44 0.19 315)",
     ring: "oklch(0.44 0.19 315)",
   },
@@ -59,10 +64,16 @@ function applyThemeToDOM(themeId: PaletteThemeId) {
   document.documentElement.style.setProperty("--color-primary", item.primary);
   document.documentElement.style.setProperty("--ring", item.ring);
   document.documentElement.style.setProperty("--color-ring", item.ring);
+  document.documentElement.style.setProperty("--background", item.background);
+  document.documentElement.style.setProperty("--color-background", item.background);
+  document.documentElement.style.backgroundColor = item.bgPreview;
   if (document.body) {
     document.body.setAttribute("data-theme", themeId);
     document.body.style.setProperty("--primary", item.primary);
     document.body.style.setProperty("--color-primary", item.primary);
+    document.body.style.setProperty("--background", item.background);
+    document.body.style.setProperty("--color-background", item.background);
+    document.body.style.backgroundColor = item.bgPreview;
   }
 }
 

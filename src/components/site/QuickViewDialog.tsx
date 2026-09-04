@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Star } from "lucide-react";
+import { Clock, Star } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -58,12 +58,16 @@ export function QuickViewDialog({
           />
 
           <div className="min-w-0">
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
               <Star className="h-3.5 w-3.5 fill-gold text-gold" />
               <span className="font-medium text-foreground">{product.rating}</span>
               <span>({product.reviews})</span>
               <span aria-hidden>·</span>
               <span>{formatLabels[product.format]}</span>
+              <span aria-hidden>·</span>
+              <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-amber-700 dark:text-amber-300 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-full">
+                <Clock className="h-3 w-3" /> 12 Months Life
+              </span>
             </div>
 
             <p className="mt-3 line-clamp-4 text-sm text-muted-foreground">{product.description}</p>

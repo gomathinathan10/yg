@@ -72,7 +72,7 @@ html[data-theme="saffron"],
 [data-theme="saffron"] {
   --radius: 0.625rem;
 
-  --background: oklch(1 0 0); /* Pure White */
+  --background: oklch(0.960 0.035 78); /* Soothing warm sandalwood ivory tint */
   --foreground: oklch(0.18 0.04 42); /* Deep Clove Charcoal for ultra-high contrast */
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.18 0.04 42);
@@ -161,7 +161,7 @@ html[data-theme="sage"],
 [data-theme="sage"] {
   --radius: 0.625rem;
 
-  --background: oklch(1 0 0); /* Pure White */
+  --background: oklch(0.960 0.032 145); /* Soothing botanical herbal sage tint */
   --foreground: oklch(0.16 0.035 155); /* Deep Forest Charcoal */
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.16 0.035 155);
@@ -245,7 +245,7 @@ html[data-theme="rose"],
 [data-theme="rose"] {
   --radius: 0.625rem;
 
-  --background: oklch(1 0 0); /* Pure White */
+  --background: oklch(0.960 0.032 25); /* Soothing delicate rosewater silk tint */
   --foreground: oklch(0.17 0.04 20); /* Deep Burgundy Charcoal */
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.17 0.04 20);
@@ -317,7 +317,7 @@ html[data-theme="amber"],
 [data-theme="amber"] {
   --radius: 0.625rem;
 
-  --background: oklch(1 0 0); /* Pure White */
+  --background: oklch(0.960 0.038 82); /* Soothing warm golden temple amber tint */
   --foreground: oklch(0.18 0.04 60); /* Deep Amber Charcoal */
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.18 0.04 60);
@@ -389,7 +389,7 @@ html[data-theme="emerald"],
 [data-theme="emerald"] {
   --radius: 0.625rem;
 
-  --background: oklch(1 0 0); /* Pure White */
+  --background: oklch(0.960 0.032 148); /* Soothing fresh cardamom emerald tint */
   --foreground: oklch(0.16 0.04 145); /* Deep Emerald Charcoal */
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.16 0.04 145);
@@ -461,7 +461,7 @@ html[data-theme="indigo"],
 [data-theme="indigo"] {
   --radius: 0.625rem;
 
-  --background: oklch(1 0 0); /* Pure White */
+  --background: oklch(0.960 0.030 255); /* Soothing royal Nilgiri sapphire indigo tint */
   --foreground: oklch(0.16 0.04 260); /* Deep Navy Charcoal */
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.16 0.04 260);
@@ -533,7 +533,7 @@ html[data-theme="plum"],
 [data-theme="plum"] {
   --radius: 0.625rem;
 
-  --background: oklch(1 0 0); /* Pure White */
+  --background: oklch(0.960 0.030 315); /* Soothing royal Mysore plum amethyst tint */
   --foreground: oklch(0.17 0.04 315); /* Deep Amethyst Charcoal */
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.17 0.04 315);
@@ -605,7 +605,7 @@ html[data-theme="teal"],
 [data-theme="teal"] {
   --radius: 0.625rem;
 
-  --background: oklch(1 0 0); /* Pure White */
+  --background: oklch(0.960 0.030 195); /* Soothing coastal sea-mist teal tint */
   --foreground: oklch(0.16 0.035 195); /* Deep Teal Charcoal */
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.16 0.035 195);
@@ -677,7 +677,7 @@ html[data-theme="copper"],
 [data-theme="copper"] {
   --radius: 0.625rem;
 
-  --background: oklch(1 0 0); /* Pure White */
+  --background: oklch(0.960 0.035 45); /* Soothing warm spiced malabar copper tint */
   --foreground: oklch(0.18 0.04 38); /* Deep Copper Charcoal */
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.18 0.04 38);

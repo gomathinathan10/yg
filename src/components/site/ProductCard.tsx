@@ -1,6 +1,6 @@
 import { Suspense, lazy, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Eye, ShoppingBag, Star } from "lucide-react";
+import { Clock, Eye, ShoppingBag, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatPrice, type Product } from "@/data/products";
 import { useCart } from "@/lib/cart";
@@ -35,6 +35,7 @@ export function ProductCard({
         <Link
           to="/product/$slug"
           params={{ slug: product.slug }}
+          preload="intent"
           className="relative block overflow-hidden bg-white aspect-square w-full p-2.5 flex items-center justify-center"
         >
           <SmartImage
@@ -97,11 +98,13 @@ export function ProductCard({
               <Star className="h-3 w-3 fill-gold text-gold" />
               <span className="font-semibold text-foreground">{product.rating}</span>
             </div>
-            <span className="text-[10px] text-muted-foreground/80">({product.reviews})</span>
+            <span className="text-[10px] font-semibold text-amber-700 dark:text-amber-300 bg-amber-500/10 px-1.5 py-0.5 rounded">
+              12M Life
+            </span>
           </div>
 
           <h3 className="mt-1 text-xs sm:text-sm font-semibold leading-tight line-clamp-1 group-hover:text-primary transition-colors">
-            <Link to="/product/$slug" params={{ slug: product.slug }}>
+            <Link to="/product/$slug" params={{ slug: product.slug }} preload="intent">
               {product.name}
             </Link>
           </h3>
@@ -156,6 +159,7 @@ export function ProductCard({
         <Link
           to="/product/$slug"
           params={{ slug: product.slug }}
+          preload="intent"
           className="relative block overflow-hidden rounded-lg bg-white h-28 w-28 sm:h-36 sm:w-36 shrink-0 p-2 flex items-center justify-center"
         >
           <SmartImage
@@ -178,7 +182,7 @@ export function ProductCard({
 
         <div className="flex flex-1 flex-col justify-between w-full min-w-0">
           <div>
-            <div className="flex items-center gap-2 text-xs text-muted-foreground mb-1">
+            <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground mb-1">
               <span className="capitalize font-medium text-foreground px-1.5 py-0.5 bg-muted rounded text-[10px]">
                 {product.format}
               </span>
@@ -187,10 +191,13 @@ export function ProductCard({
                 <span className="font-semibold text-foreground">{product.rating}</span>
                 <span>({product.reviews} reviews)</span>
               </div>
+              <span className="text-[10px] font-semibold text-amber-700 dark:text-amber-300 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-full flex items-center gap-1">
+                <Clock className="h-3 w-3" /> 12 Months Shelf Life
+              </span>
             </div>
 
             <h3 className="text-sm sm:text-base font-bold leading-tight group-hover:text-primary transition-colors">
-              <Link to="/product/$slug" params={{ slug: product.slug }}>
+              <Link to="/product/$slug" params={{ slug: product.slug }} preload="intent">
                 {product.name}
               </Link>
             </h3>
@@ -248,6 +255,7 @@ export function ProductCard({
       <Link
         to="/product/$slug"
         params={{ slug: product.slug }}
+        preload="intent"
         className="relative block overflow-hidden bg-white aspect-square w-full p-3.5 flex items-center justify-center"
       >
         <SmartImage
@@ -302,13 +310,18 @@ export function ProductCard({
       </div>
 
       <div className="flex flex-1 flex-col p-4 sm:p-5">
-        <div className="flex items-center gap-1 text-xs text-muted-foreground">
-          <Star className="h-3.5 w-3.5 fill-gold text-gold" />
-          <span className="font-semibold text-foreground">{product.rating}</span>
-          <span>({product.reviews})</span>
+        <div className="flex items-center justify-between text-xs text-muted-foreground">
+          <div className="flex items-center gap-1">
+            <Star className="h-3.5 w-3.5 fill-gold text-gold" />
+            <span className="font-semibold text-foreground">{product.rating}</span>
+            <span>({product.reviews})</span>
+          </div>
+          <span className="text-[10px] font-semibold text-amber-700 dark:text-amber-300 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-full flex items-center gap-1">
+            <Clock className="h-3 w-3" /> 12M Life
+          </span>
         </div>
         <h3 className="mt-1.5 text-base font-bold leading-snug">
-          <Link to="/product/$slug" params={{ slug: product.slug }}>
+          <Link to="/product/$slug" params={{ slug: product.slug }} preload="intent">
             {product.name}
           </Link>
         </h3>

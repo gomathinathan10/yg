@@ -9,11 +9,14 @@ import {
   Clock,
   Heart,
   Leaf,
+  Play,
   ShieldCheck,
   ShoppingBag,
   Sparkles,
   Star,
   Truck,
+  Volume2,
+  VolumeX,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SectionHeading } from "@/components/site/SectionHeading";
@@ -138,7 +141,7 @@ const formatGuides = [
     title: "Gold & Premium Powder",
     tagline: "Instant Dissolving · Daily Tadka",
     description:
-      "Dissolves instantly in hot ghee or sesame oil for fragrant sambar, rasam, and dal tadka.",
+      "Dissolves instantly in hot ghee for fragrant sambar, rasam, and dal tadka.",
     bestFor: "Sambar, Rasam, Dal",
     image: "/products/100g-gold-asafoetida-powder/img-1.jpg",
     price: "From ₹175",
@@ -160,7 +163,7 @@ const formatGuides = [
     title: "Pure Gold Cake & Raw Lump",
     tagline: "Concentrated · Traditional Strength",
     description:
-      "Solid block. Shave a pea-sized piece into oil or dissolve in warm water for festive gravies.",
+      "Solid block. Shave a pea-sized piece into tempering or dissolve in warm water for festive gravies.",
     bestFor: "Festive Kuzhambu, Pickles",
     image: "/products/100g-asafoetida-gold-cake/img-1.jpg",
     price: "From ₹240",
@@ -189,7 +192,7 @@ const verifiedReviews = [
     product: "Gold Powder",
   },
   {
-    rating: 5,
+    rating: 4,
     title: "Life-Saver for Celiac Cooking",
     comment:
       "Finding truly wheat-free hing that still has authentic strength was impossible until I found Y.G's rice-starch formula. Safe and fragrant.",
@@ -198,10 +201,10 @@ const verifiedReviews = [
     product: "Gluten-Free Hing",
   },
   {
-    rating: 5,
+    rating: 4,
     title: "Pellets in Curd Rice are Perfection",
     comment:
-      "The Hing Pellets don't burn like fine powders do. They puff slightly in mustard oil, giving a delicate crunch and sustained aroma.",
+      "The Hing Pellets don't burn like fine powders do. They puff slightly during tempering, giving a delicate crunch and sustained aroma.",
     name: "Meenakshi V.",
     city: "Madurai",
     product: "Hing Pellets",
@@ -210,7 +213,7 @@ const verifiedReviews = [
     rating: 5,
     title: "Gold Cake for Temple Kuzhambu",
     comment:
-      "Shaving a small piece of the Pindi Hing into hot gingelly oil gives the authentic tangy aroma needed for traditional vathal kuzhambu.",
+      "Shaving a small piece of the Pindi Hing into hot ghee gives the authentic tangy aroma needed for traditional vathal kuzhambu.",
     name: "Dr. K. Raghavan",
     city: "Coimbatore",
     product: "Gold Cake",
@@ -239,18 +242,50 @@ const HERO_VIDEOS = [
   {
     src: "/hero-video-slide2.mp4",
     title: "Heritage Tradition",
+    subtitle: "Purity Since 1932",
+    tag: "Tradition",
+  },
+  {
+    src: "/hero-video-heritage.mp4",
+    title: "Generational Legacy",
+    subtitle: "Artisans of Tirunelveli",
+    tag: "Legacy",
+  },
+  {
+    src: "/hero-video-tradition.mp4",
+    title: "Pure Temple Aroma",
+    subtitle: "Sacred Ferula Resin",
+    tag: "Temple Aroma",
   },
   {
     src: "/hero-video-factory.mp4",
     title: "Generational Works",
+    subtitle: "Authentic Stone-Milling",
+    tag: "Factory Works",
+  },
+  {
+    src: "/hero-video-craft.mp4",
+    title: "Artisanal Handcrafting",
+    subtitle: "Zero Additives, 100% Purity",
+    tag: "Handcrafted",
   },
   {
     src: "/hero-video-gold.mp4",
     title: "Gold Hing Collection",
+    subtitle: "Signature Royal Grade",
+    tag: "Gold Collection",
+  },
+  {
+    src: "/hero-video-purity.mp4",
+    title: "Culinary Essence",
+    subtitle: "Daily Kitchen Vitality",
+    tag: "Kitchen Essential",
   },
   {
     src: "/hero-video-master.mp4?v=20260827",
-    title: "Artisanal Compounding",
+    title: "Culinary Alchemy",
+    subtitle: "Instant Bloom in Hot Ghee",
+    tag: "Tadka Bloom",
   },
 ];
 
@@ -259,16 +294,36 @@ function HomePage() {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const soundPlayCountRef = useRef(0);
   const [isMuted, setIsMuted] = useState(true);
+  const [isFading, setIsFading] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  // Smoothly transition video source without destroying video DOM node
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
+    setIsFading(true);
+    const targetSrc = HERO_VIDEOS[currentVideoIndex]?.src;
+    if (targetSrc && video.src !== window.location.origin + targetSrc && !video.src.endsWith(targetSrc)) {
+      video.src = targetSrc;
+      video.load();
+    }
+
     video.muted = isMuted;
     video.volume = 1.0;
-    video.currentTime = 0;
-    video.play().catch(() => {});
+    const playPromise = video.play();
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => setIsFading(false))
+        .catch((err) => {
+          setIsFading(false);
+          if (err.name !== "AbortError") {
+            // benign autoplay restrictions
+          }
+        });
+    } else {
+      setIsFading(false);
+    }
   }, [currentVideoIndex, isMuted]);
 
   useEffect(() => {
@@ -277,7 +332,10 @@ function HomePage() {
 
     // Start playback initially muted for browser autoplay compliance
     video.muted = true;
-    video.play().catch(() => {});
+    const playPromise = video.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {});
+    }
 
     // Automatically unmute sound when the user interacts on the page
     const activateSound = () => {
@@ -299,6 +357,11 @@ function HomePage() {
       window.removeEventListener("touchstart", activateSound);
       window.removeEventListener("pointerdown", activateSound);
       window.removeEventListener("keydown", activateSound);
+      if (video) {
+        video.pause();
+        video.removeAttribute("src");
+        video.load();
+      }
     };
   }, []);
 
@@ -306,7 +369,7 @@ function HomePage() {
     const video = videoRef.current;
     if (!video) return;
 
-    // Only count as a completed cycle after the entire 4-video reel completes the last video
+    // Only count as a completed cycle after the entire reel sequence completes the last video
     if (currentVideoIndex === HERO_VIDEOS.length - 1) {
       if (!isMuted) {
         soundPlayCountRef.current += 1;
@@ -349,31 +412,87 @@ function HomePage() {
   });
 
   const currentVideo = HERO_VIDEOS[currentVideoIndex] ?? HERO_VIDEOS[0]!;
+  const nextVideoItem = HERO_VIDEOS[(currentVideoIndex + 1) % HERO_VIDEOS.length];
 
   return (
     <div className="space-y-0">
-      {/* ======================================================== */}
-      {/* 1. CINEMATIC MULTI-VIDEO HERO BANNER                     */}
-      {/* ======================================================== */}
-      <section className="group relative overflow-hidden border-b border-border aspect-[16/9] sm:aspect-[21/9] max-h-[75vh] w-full bg-black select-none">
+      {/* Hidden pre-buffering video element for instant, zero-lag transitions */}
+      {nextVideoItem ? (
         <video
-          key={currentVideo.src}
+          src={nextVideoItem.src}
+          preload="auto"
+          muted
+          playsInline
+          aria-hidden="true"
+          className="sr-only hidden"
+        />
+      ) : null}
+
+      {/* ======================================================== */}
+      {/* 1. CINEMATIC MULTI-VIDEO HERO BANNER (8 REELS)           */}
+      {/* ======================================================== */}
+      <section className="group relative overflow-hidden border-b border-border aspect-[16/9] sm:aspect-[21/9] max-h-[78vh] w-full bg-black select-none">
+        <video
           ref={videoRef}
+          src={currentVideo.src}
           autoPlay
           playsInline
+          preload="metadata"
           muted={isMuted}
           onEnded={handleVideoEnded}
-          className="h-full w-full object-cover object-center"
-        >
-          <source src={currentVideo.src} type="video/mp4" />
-        </video>
+          onCanPlay={() => {
+            setIsFading(false);
+            videoRef.current?.play().catch(() => {});
+          }}
+          className={`h-full w-full object-cover object-center transition-opacity duration-300 ${
+            isFading ? "opacity-75" : "opacity-100"
+          }`}
+          style={{ willChange: "transform, opacity", transform: "translateZ(0)" }}
+        />
+
+        {/* Subtle Vignette Gradient for extra readability */}
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/60 via-transparent to-black/30" />
+
+        {/* Top-Left: Active Reel Badge & Progress */}
+        <div className="absolute top-3 sm:top-5 left-3 sm:left-5 z-20 pointer-events-none flex items-center gap-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-md border border-white/20 text-white shadow-xl">
+            <span className="h-2 w-2 rounded-full bg-amber-400 animate-pulse" />
+            <span className="text-[11px] sm:text-xs font-bold tracking-wider uppercase">{currentVideo.title}</span>
+            <span className="text-[10px] text-white/70 hidden md:inline">· {currentVideo.subtitle}</span>
+          </div>
+          <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-md text-white/90 border border-white/20">
+            {currentVideoIndex + 1} / {HERO_VIDEOS.length}
+          </span>
+        </div>
+
+        {/* Top-Right: Sound Toggle Button */}
+        <div className="absolute top-3 sm:top-5 right-3 sm:right-5 z-20 flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setIsMuted((m) => !m)}
+            className="h-8 sm:h-9 px-3 rounded-full bg-black/50 backdrop-blur-md border border-white/20 text-white flex items-center gap-1.5 text-xs font-medium hover:bg-black/75 transition-all shadow-xl cursor-pointer active:scale-95"
+            aria-label={isMuted ? "Unmute video sound" : "Mute video sound"}
+          >
+            {isMuted ? (
+              <>
+                <VolumeX className="h-3.5 w-3.5 text-white/80" />
+                <span className="text-[10px] sm:text-xs font-medium">Sound Off</span>
+              </>
+            ) : (
+              <>
+                <Volume2 className="h-3.5 w-3.5 text-amber-400 animate-pulse" />
+                <span className="text-[10px] sm:text-xs text-amber-400 font-bold">Sound On</span>
+              </>
+            )}
+          </button>
+        </div>
 
         {/* Navigation Arrow Left */}
         <button
           type="button"
           onClick={prevVideo}
           aria-label="Previous video"
-          className="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 h-9 w-9 sm:h-11 sm:w-11 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white flex items-center justify-center shadow-lg transition-all hover:bg-black/70 hover:scale-110 active:scale-95 z-20 opacity-80 sm:opacity-0 group-hover:opacity-100"
+          className="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 h-9 w-9 sm:h-11 sm:w-11 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white flex items-center justify-center shadow-lg transition-all hover:bg-black/70 hover:scale-110 active:scale-95 z-20 opacity-80 sm:opacity-0 group-hover:opacity-100 cursor-pointer"
         >
           <ChevronLeft className="h-5 w-5" />
         </button>
@@ -383,26 +502,48 @@ function HomePage() {
           type="button"
           onClick={nextVideo}
           aria-label="Next video"
-          className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 h-9 w-9 sm:h-11 sm:w-11 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white flex items-center justify-center shadow-lg transition-all hover:bg-black/70 hover:scale-110 active:scale-95 z-20 opacity-80 sm:opacity-0 group-hover:opacity-100"
+          className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 h-9 w-9 sm:h-11 sm:w-11 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white flex items-center justify-center shadow-lg transition-all hover:bg-black/70 hover:scale-110 active:scale-95 z-20 opacity-80 sm:opacity-0 group-hover:opacity-100 cursor-pointer"
         >
           <ChevronRight className="h-5 w-5" />
         </button>
 
-        {/* Video Indicator Indicators */}
-        <div className="absolute bottom-3 sm:bottom-4 inset-x-0 flex justify-center items-center gap-2 z-20 pointer-events-auto">
-          {HERO_VIDEOS.map((v, i) => (
-            <button
-              key={v.src}
-              type="button"
-              onClick={() => selectVideo(i)}
-              aria-label={`Switch to video ${i + 1}`}
-              className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${
-                currentVideoIndex === i
-                  ? "w-8 sm:w-10 bg-amber-400 shadow-md"
-                  : "w-2 sm:w-2.5 bg-white/40 hover:bg-white/70"
-              }`}
-            />
-          ))}
+        {/* Bottom Interactive Video Selector Dock */}
+        <div className="absolute bottom-3 sm:bottom-4 inset-x-0 flex flex-col items-center gap-2 z-20 pointer-events-auto px-4">
+          {/* Desktop & Tablet Reel Pills */}
+          <div className="hidden sm:flex items-center gap-1.5 p-1 rounded-full bg-black/55 backdrop-blur-md border border-white/20 shadow-2xl max-w-full overflow-x-auto scrollbar-none">
+            {HERO_VIDEOS.map((v, i) => (
+              <button
+                key={v.src}
+                type="button"
+                onClick={() => selectVideo(i)}
+                className={`px-3 py-1 rounded-full text-[11px] font-medium transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
+                  currentVideoIndex === i
+                    ? "bg-amber-500 text-slate-950 font-bold shadow-md scale-105"
+                    : "text-white/80 hover:text-white hover:bg-white/10"
+                }`}
+              >
+                <span className={`h-1.5 w-1.5 rounded-full ${currentVideoIndex === i ? "bg-slate-950" : "bg-white/50"}`} />
+                {v.tag || v.title}
+              </button>
+            ))}
+          </div>
+
+          {/* Mobile Indicator Dots */}
+          <div className="flex sm:hidden justify-center items-center gap-1.5">
+            {HERO_VIDEOS.map((v, i) => (
+              <button
+                key={v.src}
+                type="button"
+                onClick={() => selectVideo(i)}
+                aria-label={`Switch to video ${i + 1}`}
+                className={`h-1.5 rounded-full transition-all duration-300 ${
+                  currentVideoIndex === i
+                    ? "w-7 bg-amber-400 shadow-md"
+                    : "w-1.5 bg-white/40 hover:bg-white/70"
+                }`}
+              />
+            ))}
+          </div>
         </div>
       </section>
 

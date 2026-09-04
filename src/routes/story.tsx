@@ -94,7 +94,7 @@ const chapters: StoryChapter[] = [
       "Near the sacred Thamirabarani river, young Shri P. Subramanian opened a modest stone-floored shop with two polished brass scales and an unyielding commitment to purity.",
     paragraphs: [
       "In the 1930s, finding raw asafoetida resin unadulterated by cheap gypsum was rare. Shri Subramanian forged direct links with overland merchants importing raw ferula gum tears.",
-      "Every morning before dawn, he hand-pounded the resin in stone mortars, balancing it with edible starches so even a tiny pinhead pinch would dissolve cleanly without burning in hot oil.",
+      "Every morning before dawn, he hand-pounded the resin in stone mortars, balancing it with edible starches so even a tiny pinhead pinch would dissolve cleanly without burning during tempering.",
       "Word traveled swiftly. Temple cooks and neighbourhood families swore by the fragrant parcels from Subramanian's shop.",
     ],
     highlight:
@@ -110,11 +110,11 @@ const chapters: StoryChapter[] = [
     lead:
       "Subramanian's son realized that South Indian cooking demanded immediate, blooming heat without scorching.",
     paragraphs: [
-      "South Indian kitchens thrive on blistering tadkas — crackling mustard in sesame oil and fiery tamarind vathal gravies. High-heat cooking destroyed ordinary hing.",
+      "South Indian kitchens thrive on blistering tadkas — crackling mustard and fiery tamarind vathal gravies. High-heat cooking destroyed ordinary hing.",
       "By controlling stone-milling speeds, volatile aromatic terpenes were protected against heat degradation, creating our signature aroma bloom.",
     ],
     highlight:
-      "Stone-milled at low temperatures so essential aromatic oils remain intact until they touch your hot pan.",
+      "Stone-milled at low temperatures so essential natural aromas remain intact until they touch your hot pan.",
   },
   {
     no: "Chapter III",
@@ -325,7 +325,7 @@ function StoryPage() {
               The 4 Pillars of Stone-Compounding
             </h2>
             <p className="text-xs text-muted-foreground">
-              Why Y.G asafoetida preserves its volatile aromatic oils.
+              Why Y.G asafoetida preserves its natural aroma and potency.
             </p>
           </div>
 
