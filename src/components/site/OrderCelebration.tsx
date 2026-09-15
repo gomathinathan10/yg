@@ -20,7 +20,7 @@ const CONFETTI_COLORS = [
   "#F59E0B", // Amber Gold
   "#10B981", // Emerald Cardamom
   "#EF4444", // Ruby Red
-  "#3B82F6", // Royal Blue
+  "#FFC700", // Neon Gold
   "#8B5CF6", // Velvet Purple
   "#EC4899", // Pink
   "#FCD34D", // Saffron

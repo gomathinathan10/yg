@@ -1,6 +1,6 @@
 import { r as __toESM } from "../_runtime.mjs";
 import { a as offset, c as useFloating, i as limitShift, n as flip, o as shift, r as hide, s as size, t as arrow, u as require_react } from "./@floating-ui/react-dom+[...].mjs";
-import { l as Primitive, m as createContextScope, p as useLayoutEffect2, v as useComposedRefs, y as require_jsx_runtime } from "./@radix-ui/react-accordion+[...].mjs";
+import { _ as useComposedRefs, l as Primitive, m as createContextScope, p as useLayoutEffect2, v as require_jsx_runtime } from "./@radix-ui/react-accordion+[...].mjs";
 import { h as useCallbackRef } from "./@radix-ui/react-dialog+[...].mjs";
 import { r as useSize } from "./@radix-ui/react-checkbox+[...].mjs";
 import { n as autoUpdate } from "./@floating-ui/dom+[...].mjs";

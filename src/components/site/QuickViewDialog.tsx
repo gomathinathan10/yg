@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Link } from "@tanstack/react-router";
-import { Clock, Star } from "lucide-react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { Clock, Loader2, Star, Zap } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -26,7 +26,9 @@ export function QuickViewDialog({
   onOpenChange: (open: boolean) => void;
 }) {
   const { add, setOpen: openCart } = useCart();
+  const navigate = useNavigate();
   const [variantId, setVariantId] = useState(product.variants[0]!.id);
+  const [buyingNow, setBuyingNow] = useState(false);
   const variant = product.variants.find((v) => v.id === variantId) ?? product.variants[0]!;
   const soldOut = product.inStock === false;
 
@@ -37,6 +39,14 @@ export function QuickViewDialog({
       description: `${variant.label} · ${formatPrice(variant.price)}`,
       action: { label: "View basket", onClick: () => openCart(true) },
     });
+  };
+
+  const handleBuyNow = () => {
+    setBuyingNow(true);
+    add(product.slug, variant.id);
+    onOpenChange(false);
+    toast.success(`Proceeding to checkout with ${product.name}...`);
+    void navigate({ to: "/checkout" }).finally(() => setBuyingNow(false));
   };
 
   return (
@@ -100,7 +110,15 @@ export function QuickViewDialog({
             </div>
 
             <div className="mt-5 flex flex-wrap gap-2">
-              <Button onClick={addToCart} disabled={soldOut} className="flex-1 sm:flex-none">
+              <Button onClick={handleBuyNow} disabled={soldOut || buyingNow} className="flex-1 sm:flex-none gap-1.5 font-bold active:scale-95">
+                {buyingNow ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Zap className="h-4 w-4 fill-current" />
+                )}
+                Buy Now
+              </Button>
+              <Button onClick={addToCart} variant="outline" disabled={soldOut} className="flex-1 sm:flex-none active:scale-95">
                 {soldOut ? "Sold out" : "Add to basket"}
               </Button>
               <WishlistButton slug={product.slug} name={product.name} variant="full" />

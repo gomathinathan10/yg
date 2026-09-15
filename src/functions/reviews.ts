@@ -1,5 +1,4 @@
-import { createServerFn } from "@tanstack/react-start";
-import { getDb } from "@/server/db";
+import { apiFetch } from "@/lib/api-client";
 
 export type DbReview = {
   id: string;
@@ -16,20 +15,18 @@ export type DbReview = {
   status: "pending" | "published" | "rejected";
 };
 
-export const getProductReviewsServerFn = createServerFn({ method: "GET" })
-  .validator((data: { slug: string }) => ({ slug: String(data?.slug ?? "").trim() }))
-  .handler(async ({ data }): Promise<DbReview[]> => {
-    if (!data.slug) return [];
-    const db = getDb();
-    return db.prepare(`
-      SELECT * FROM reviews
-      WHERE slug = ? AND status = 'published'
-      ORDER BY created_at DESC
-    `).all(data.slug) as DbReview[];
-  });
+export const getProductReviewsServerFn = async ({
+  data,
+}: {
+  data: { slug: string };
+}): Promise<DbReview[]> => {
+  return apiFetch<DbReview[]>(`/api/reviews?slug=${encodeURIComponent(data.slug)}&status=published`);
+};
 
-export const submitReviewServerFn = createServerFn({ method: "POST" })
-  .validator((data: {
+export const submitReviewServerFn = async ({
+  data,
+}: {
+  data: {
     slug: string;
     rating: number;
     title: string;
@@ -39,71 +36,40 @@ export const submitReviewServerFn = createServerFn({ method: "POST" })
     email?: string | undefined;
     phone?: string | undefined;
     contactOptIn?: boolean | undefined;
-  }) => data)
-  .handler(async ({ data }): Promise<{ ok: boolean; review: DbReview }> => {
-    const db = getDb();
-    const id = `rev_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
-    const now = Date.now();
-
-    db.prepare(`
-      INSERT INTO reviews (
-        id, slug, rating, title, comment, name, city, email, phone, contact_opt_in, created_at, status
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')
-    `).run(
-      id,
-      data.slug,
-      data.rating,
-      data.title,
-      data.comment,
-      data.name,
-      data.city ?? null,
-      data.email ?? null,
-      data.phone ?? null,
-      data.contactOptIn ? 1 : 0,
-      now
-    );
-
-    const review = db.prepare("SELECT * FROM reviews WHERE id = ?").get(id) as DbReview;
-    return { ok: true, review };
+  };
+}): Promise<{ ok: boolean; review: DbReview }> => {
+  return apiFetch<{ ok: boolean; review: DbReview }>("/api/reviews", {
+    method: "POST",
+    body: JSON.stringify(data),
   });
+};
 
-export const adminListReviewsServerFn = createServerFn({ method: "GET" })
-  .validator((data?: { status?: string; slug?: string }) => ({
-    status: data?.status ? String(data.status).trim() : undefined,
-    slug: data?.slug ? String(data.slug).trim() : undefined,
-  }))
-  .handler(async ({ data }): Promise<DbReview[]> => {
-    const db = getDb();
-    let query = "SELECT * FROM reviews";
-    const conditions: string[] = [];
-    const params: string[] = [];
+export const adminListReviewsServerFn = async ({
+  data,
+}: {
+  data?: { slug?: string; status?: "pending" | "published" | "rejected" | "all" };
+} = {}): Promise<DbReview[]> => {
+  const params = new URLSearchParams();
+  if (data?.slug) params.set("slug", data.slug);
+  if (data?.status) params.set("status", data.status);
+  const q = params.toString() ? `?${params.toString()}` : "";
+  return apiFetch<DbReview[]>(`/api/reviews${q}`);
+};
 
-    if (data?.status && data.status !== "all") {
-      conditions.push("status = ?");
-      params.push(data.status);
-    }
-    if (data?.slug && data.slug !== "all") {
-      conditions.push("slug = ?");
-      params.push(data.slug);
-    }
+export const adminModerateReviewServerFn = async ({
+  data,
+}: {
+  data: { id: string; action?: "publish" | "reject" | "delete"; status?: "pending" | "published" | "rejected" };
+}) => {
+  if (data.action === "delete") {
+    await apiFetch(`/api/reviews/${data.id}`, { method: "DELETE" });
+    return { ok: true, id: data.id };
+  }
 
-    if (conditions.length > 0) {
-      query += " WHERE " + conditions.join(" AND ");
-    }
-    query += " ORDER BY created_at DESC";
-
-    return db.prepare(query).all(...params) as DbReview[];
+  const status = data.action === "publish" ? "published" : data.action === "reject" ? "rejected" : (data.status || "published");
+  await apiFetch(`/api/reviews/${data.id}`, {
+    method: "PATCH",
+    body: JSON.stringify({ status }),
   });
-
-export const adminModerateReviewServerFn = createServerFn({ method: "POST" })
-  .validator((data: { id: string; action: "publish" | "reject" | "delete" }) => data)
-  .handler(async ({ data }) => {
-    const db = getDb();
-    if (data.action === "delete") {
-      db.prepare("DELETE FROM reviews WHERE id = ?").run(data.id);
-    } else {
-      const newStatus = data.action === "publish" ? "published" : "rejected";
-      db.prepare("UPDATE reviews SET status = ? WHERE id = ?").run(newStatus, data.id);
-    }
-    return { ok: true };
-  });
+  return { ok: true, id: data.id, status };
+};

@@ -60,10 +60,10 @@ export function FaqBot() {
         aria-expanded={open}
         aria-label={open ? "Close the FAQ helper" : "Open the FAQ helper"}
         style={{ bottom: "calc(1rem + var(--fab-offset, 0px))" }}
-        className="fixed right-3 z-40 flex h-11 w-11 sm:h-12 sm:w-auto items-center justify-center sm:justify-start gap-2 rounded-full bg-primary p-0 sm:px-4 text-sm font-medium text-primary-foreground shadow-lift transition-transform hover:scale-105 sm:right-6"
+        className="fixed right-3 z-40 flex h-11 w-11 sm:h-12 sm:w-auto items-center justify-center sm:justify-start gap-2 rounded-full bg-[#FFC700] hover:bg-[#E6B000] p-0 sm:px-4 text-sm font-semibold text-white shadow-lift transition-transform hover:scale-105 sm:right-6 cursor-pointer"
       >
         {open ? <X className="h-5 w-5" /> : <MessageSquare className="h-5 w-5" />}
-        <span className="hidden sm:inline">{open ? "Close" : "FAQ helper"}</span>
+        <span className="hidden sm:inline">{open ? "Close" : "FAQ Helper"}</span>
       </button>
 
       {open && (
@@ -71,43 +71,51 @@ export function FaqBot() {
           role="dialog"
           aria-label="Y.G FAQ helper"
           style={{ bottom: "calc(5rem + var(--fab-offset, 0px))" }}
-          className="fixed inset-x-3 z-40 flex max-h-[70vh] flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-lift sm:inset-x-auto sm:right-6 sm:w-96"
+          className="fixed inset-x-3 z-40 flex max-h-[70vh] flex-col overflow-hidden rounded-[8px] border border-[#E8DEC8] bg-white shadow-2xl sm:inset-x-auto sm:right-6 sm:w-96"
         >
-
-          <header className="border-b border-border bg-primary/5 px-4 py-3">
-            <p className="font-display text-base font-semibold">Y.G FAQ helper</p>
-            <p className="text-xs text-muted-foreground">
-              Rule-based answers only · built for quick clarity
-            </p>
+          <header className="bg-[#FFC700] text-[#181206] font-black px-4 py-3 flex items-center justify-between">
+            <div>
+              <p className="font-bold text-sm tracking-wide">Y.G FAQ Helper</p>
+              <p className="text-[11px] text-white/80">
+                Rule-based answers for instant clarity
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              className="p-1 text-white/80 hover:text-white"
+            >
+              <X className="w-4 h-4" />
+            </button>
           </header>
 
-          <div ref={listRef} className="flex-1 space-y-4 overflow-y-auto px-4 py-4">
+          <div ref={listRef} className="flex-1 space-y-4 overflow-y-auto px-4 py-4 bg-[#FAF3D6]">
             {messages.map((m) => (
               <div key={m.id}>
                 {m.from === "user" ? (
-                  <p className="ml-auto w-fit max-w-[85%] rounded-2xl rounded-br-sm bg-primary px-3 py-2 text-sm text-primary-foreground">
+                  <p className="ml-auto w-fit max-w-[85%] rounded-[6px] bg-[#FFC700] px-3.5 py-2 text-xs text-white font-medium shadow-xs">
                     {m.text}
                   </p>
                 ) : (
-                  <div className="max-w-[92%] text-sm leading-relaxed text-foreground">
+                  <div className="max-w-[92%] text-xs leading-relaxed text-[#181206] bg-white p-3 rounded-[6px] border border-[#E8DEC8] shadow-xs">
                     <p>{m.text}</p>
                     {m.escalate && (
-                      <div className="mt-3 rounded-xl border border-border bg-primary/5 p-3">
-                        <p className="text-xs font-medium">
-                          Please contact our support team — they can help properly:
+                      <div className="mt-3 rounded-[4px] border border-[#FFC700]/20 bg-[#FAF3D6] p-2.5 text-[11px]">
+                        <p className="font-bold text-[#181206]">
+                          Please contact our support team:
                         </p>
-                        <ul className="mt-2 space-y-1.5 text-xs text-muted-foreground">
-                          <li className="flex items-center gap-2">
-                            <Phone className="h-3.5 w-3.5 text-primary" />
-                            <a className="underline-offset-2 hover:underline" href={SUPPORT.phoneHref}>
+                        <ul className="mt-1.5 space-y-1 text-[#6E777D]">
+                          <li className="flex items-center gap-1.5">
+                            <Phone className="h-3 w-3 text-[#181206]" />
+                            <a className="font-medium text-[#181206] hover:underline" href={SUPPORT.phoneHref}>
                               {SUPPORT.phone}
                             </a>
                             <span>· {SUPPORT.hours}</span>
                           </li>
-                          <li className="flex items-center gap-2">
-                            <MessageSquare className="h-3.5 w-3.5 text-primary" />
+                          <li className="flex items-center gap-1.5">
+                            <MessageSquare className="h-3 w-3 text-[#181206]" />
                             <a
-                              className="underline-offset-2 hover:underline"
+                              className="font-medium text-[#181206] hover:underline"
                               href={SUPPORT.whatsappHref}
                               target="_blank"
                               rel="noreferrer"
@@ -115,26 +123,31 @@ export function FaqBot() {
                               WhatsApp {SUPPORT.whatsapp}
                             </a>
                           </li>
-                          <li className="flex items-center gap-2">
-                            <Mail className="h-3.5 w-3.5 text-primary" />
-                            <a className="underline-offset-2 hover:underline" href={SUPPORT.emailHref}>
+                          <li className="flex items-center gap-1.5">
+                            <Mail className="h-3 w-3 text-[#181206]" />
+                            <a className="font-medium text-[#181206] hover:underline" href={SUPPORT.emailHref}>
                               {SUPPORT.email}
                             </a>
                           </li>
                         </ul>
-                        <Button asChild size="sm" className="mt-3" onClick={() => setOpen(false)}>
-                          <Link to="/contact">Open the support page</Link>
+                        <Button
+                          asChild
+                          size="sm"
+                          className="mt-2.5 w-full h-8 text-[11px] rounded-[4px] bg-[#FFC700] hover:bg-[#E6B000] text-[#181206] font-black font-bold"
+                          onClick={() => setOpen(false)}
+                        >
+                          <Link to="/contact">Open Support Page</Link>
                         </Button>
                       </div>
                     )}
                     {m.followUps && m.followUps.length > 0 && (
-                      <div className="mt-3 flex flex-wrap gap-2">
+                      <div className="mt-2.5 flex flex-wrap gap-1.5">
                         {m.followUps.map((f) => (
                           <button
                             key={f}
                             type="button"
                             onClick={() => ask(f)}
-                            className="min-h-8 rounded-full border border-border px-3 text-xs transition-colors hover:border-primary hover:text-primary"
+                            className="rounded-[4px] border border-[#E8DEC8] bg-[#FAF3D6] px-2 py-1 text-[10px] font-medium text-[#181206] transition-colors hover:border-[#FFC700] hover:text-[#181206] cursor-pointer"
                           >
                             {f}
                           </button>
@@ -148,7 +161,7 @@ export function FaqBot() {
           </div>
 
           <form
-            className="flex items-center gap-2 border-t border-border p-3"
+            className="flex items-center gap-2 border-t border-[#E8DEC8] p-2.5 bg-white"
             onSubmit={(e) => {
               e.preventDefault();
               ask(input);
@@ -157,12 +170,17 @@ export function FaqBot() {
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Type your question here"
+              placeholder="Type your question here..."
               aria-label="Ask the FAQ helper a question"
-              className="min-h-10 flex-1 rounded-full border border-input bg-background px-4 text-sm outline-none focus-visible:border-primary"
+              className="min-h-9 flex-1 rounded-[6px] border border-[#E8DEC8] bg-white px-3 text-xs text-[#181206] outline-none focus-visible:border-[#FFC700]"
             />
-            <Button type="submit" size="icon" className="h-10 w-10 shrink-0 rounded-full" aria-label="Send">
-              <Send className="h-4 w-4" />
+            <Button
+              type="submit"
+              size="icon"
+              className="h-9 w-9 shrink-0 rounded-[6px] bg-[#FFC700] hover:bg-[#E6B000] text-[#181206] font-black cursor-pointer"
+              aria-label="Send"
+            >
+              <Send className="h-3.5 w-3.5" />
             </Button>
           </form>
         </div>

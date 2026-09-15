@@ -1,16 +1,14 @@
-import { useEffect, useRef, useState, useTransition } from "react";
-import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
+import { lazy, Suspense, useEffect, useRef, useState, useTransition } from "react";
+import { createFileRoute, Link, notFound, useNavigate, useRouter } from "@tanstack/react-router";
 import {
   ArrowRight,
   Check,
   CheckCircle2,
-  ChevronLeft,
   ChevronRight,
   Clock,
   Flame,
-  Heart,
-  HelpCircle,
   Leaf,
+  Loader2,
   MapPin,
   RotateCcw,
   ShieldCheck,
@@ -34,14 +32,24 @@ import { formatLabels, formatPrice, getProduct, products } from "@/data/products
 import { useCart } from "@/lib/cart";
 import { SmartImage } from "@/components/site/SmartImage";
 import { ProductImageZoom } from "@/components/site/ProductImageZoom";
-import { ProductReviews } from "@/components/site/ProductReviews";
-import { ProductQuestions } from "@/components/site/ProductQuestions";
 import { WishlistButton } from "@/components/site/WishlistButton";
-import { BackInStockDialog } from "@/components/site/BackInStockDialog";
-import { RecentlyViewed } from "@/components/site/RecentlyViewed";
 import { useRecentlyViewed } from "@/lib/recently-viewed";
 import { lookupPincode, type PincodeLookup } from "@/lib/pincode.functions";
 import { toast } from "sonner";
+
+// Lazy load below-the-fold heavy components to eliminate initial page render lag
+const ProductReviews = lazy(() =>
+  import("@/components/site/ProductReviews").then((m) => ({ default: m.ProductReviews }))
+);
+const ProductQuestions = lazy(() =>
+  import("@/components/site/ProductQuestions").then((m) => ({ default: m.ProductQuestions }))
+);
+const RecentlyViewed = lazy(() =>
+  import("@/components/site/RecentlyViewed").then((m) => ({ default: m.RecentlyViewed }))
+);
+const BackInStockDialog = lazy(() =>
+  import("@/components/site/BackInStockDialog").then((m) => ({ default: m.BackInStockDialog }))
+);
 
 export const Route = createFileRoute("/product/$slug")({
   pendingComponent: () => null,
@@ -218,9 +226,20 @@ function ProductPage() {
     });
   };
 
+  const [buyingNow, setBuyingNow] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    void router.preloadRoute({ to: "/checkout" });
+  }, [router]);
+
   const handleBuyNow = () => {
+    setBuyingNow(true);
     add(product.slug, variant.id, qty);
-    void navigate({ to: "/checkout" });
+    toast.success(`Preparing instant checkout for ${product.name}...`);
+    void navigate({ to: "/checkout" }).finally(() => {
+      setBuyingNow(false);
+    });
   };
 
   const jsonLd = {
@@ -247,36 +266,41 @@ function ProductPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       {/* Breadcrumb Navigation */}
-      <div className="border-b border-border bg-muted/20">
-        <div className="container-page py-2.5 sm:py-3">
-          <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-muted-foreground overflow-x-auto whitespace-nowrap scrollbar-none">
-            <Link to="/" className="hover:text-foreground shrink-0">
+      <div className="border-b border-[#E8DEC8] bg-[#F5EAC4] py-3.5">
+        <div className="container-page flex items-center justify-between">
+          <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-[#6E777D] overflow-x-auto whitespace-nowrap scrollbar-none">
+            <Link to="/" className="hover:text-[#181206] transition-colors font-medium shrink-0">
               Home
             </Link>
-            <ChevronRight className="h-3 w-3 text-muted-foreground/60 shrink-0" aria-hidden />
-            <Link to="/shop" className="hover:text-foreground shrink-0">
+            <ChevronRight className="h-3 w-3 text-[#A0A8B0] shrink-0" aria-hidden />
+            <Link to="/shop" className="hover:text-[#181206] transition-colors font-medium shrink-0">
               Shop
             </Link>
-            <ChevronRight className="h-3 w-3 text-muted-foreground/60 shrink-0" aria-hidden />
-            <span className="capitalize text-muted-foreground shrink-0">{product.format}</span>
-            <ChevronRight className="h-3 w-3 text-muted-foreground/60 shrink-0" aria-hidden />
-            <span aria-current="page" className="truncate font-medium text-foreground min-w-0">
+            <ChevronRight className="h-3 w-3 text-[#A0A8B0] shrink-0" aria-hidden />
+            <span className="capitalize text-[#6E777D] shrink-0">{product.format}</span>
+            <ChevronRight className="h-3 w-3 text-[#A0A8B0] shrink-0" aria-hidden />
+            <span aria-current="page" className="truncate font-semibold text-[#181206] min-w-0">
               {product.name}
             </span>
           </nav>
+          <span className="hidden sm:inline-block text-xs font-semibold text-[#181206] bg-[#FFC700]/10 px-2.5 py-0.5 rounded-[4px]">
+            In Stock · Authentic
+          </span>
         </div>
       </div>
 
       {/* Main Product Showcase Section */}
-      <section className="container-page py-4 sm:py-10">
+      <section className="container-page py-6 sm:py-10">
         {/* Mobile Header Lockup (Title, Rating, Eyebrow & Wishlist on top) */}
-        <div className="lg:hidden space-y-1.5 pb-3">
+        <div className="lg:hidden space-y-2 pb-4 border-b border-[#E8DEC8] mb-4">
           <div className="flex items-center justify-between gap-2">
-            <p className="eyebrow">{formatLabels[product.format]} · Estd. 1932</p>
+            <span className="text-xs font-semibold text-[#181206] bg-[#FFC700]/10 px-2.5 py-1 rounded-[4px]">
+              {formatLabels[product.format]} · Estd. 1932
+            </span>
             <WishlistButton slug={product.slug} name={product.name} />
           </div>
 
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#181206]">
             {product.name}
           </h1>
 
@@ -286,21 +310,21 @@ function ProductPage() {
                 <Star
                   key={i}
                   className={`h-3.5 w-3.5 ${
-                    i < Math.round(product.rating) ? "fill-amber-500 text-amber-500" : "text-border"
+                    i < Math.round(product.rating) ? "fill-amber-500 text-amber-500" : "text-[#E2E2E2]"
                   }`}
                 />
               ))}
             </div>
-            <span className="font-bold text-foreground">{product.rating}</span>
-            <span className="text-muted-foreground text-[11px]">({product.reviews} reviews)</span>
-            <span className="text-muted-foreground/60">·</span>
-            <span className="text-primary font-medium flex items-center gap-1 text-[11px]">
+            <span className="font-bold text-[#181206]">{product.rating}</span>
+            <span className="text-[#6E777D] text-[11px]">({product.reviews} reviews)</span>
+            <span className="text-[#A0A8B0]">·</span>
+            <span className="text-[#181206] font-medium flex items-center gap-1 text-[11px]">
               <CheckCircle2 className="h-3 w-3" /> FSSAI Certified
             </span>
           </div>
         </div>
 
-        <div className="grid gap-6 lg:gap-8 lg:grid-cols-12 items-start">
+        <div className="grid gap-8 lg:grid-cols-12 items-start">
           {/* ======================================================== */}
           {/* LEFT: COMPACT MEDIA GALLERY WITH AMAZON-STYLE SIDE ZOOM */}
           {/* ======================================================== */}
@@ -324,11 +348,13 @@ function ProductPage() {
             {/* Desktop Header Lockup */}
             <div className="hidden lg:block">
               <div className="flex items-center justify-between gap-2">
-                <p className="eyebrow">{formatLabels[product.format]} · Estd. 1932</p>
+                <span className="text-xs font-semibold text-[#181206] bg-[#FFC700]/10 px-2.5 py-1 rounded-[4px]">
+                  {formatLabels[product.format]} · Estd. 1932
+                </span>
                 <WishlistButton slug={product.slug} name={product.name} />
               </div>
 
-              <h1 className="mt-1 text-3xl font-bold tracking-tight text-foreground">
+              <h1 className="mt-2 text-3xl font-bold tracking-tight text-[#181206]">
                 {product.name}
               </h1>
 
@@ -338,55 +364,55 @@ function ProductPage() {
                     <Star
                       key={i}
                       className={`h-3.5 w-3.5 ${
-                        i < Math.round(product.rating) ? "fill-amber-500 text-amber-500" : "text-border"
+                        i < Math.round(product.rating) ? "fill-amber-500 text-amber-500" : "text-[#E2E2E2]"
                       }`}
                     />
                   ))}
                 </div>
-                <span className="font-bold text-foreground">{product.rating}</span>
-                <span className="text-muted-foreground">({product.reviews} verified reviews)</span>
-                <span className="text-muted-foreground/60">·</span>
-                <span className="text-primary font-medium flex items-center gap-1">
+                <span className="font-bold text-[#181206]">{product.rating}</span>
+                <span className="text-[#6E777D]">({product.reviews} verified reviews)</span>
+                <span className="text-[#A0A8B0]">·</span>
+                <span className="text-[#181206] font-medium flex items-center gap-1">
                   <CheckCircle2 className="h-3 w-3" /> FSSAI Certified
                 </span>
               </div>
             </div>
 
-            {/* Mobile Tagline (shown under photos) */}
-            <p className="lg:hidden text-xs text-muted-foreground leading-relaxed">
+            {/* Tagline */}
+            <p className="text-xs text-[#6E777D] leading-relaxed">
               {product.tagline}
             </p>
 
             {/* Price Box */}
-            <div className="rounded-xl border border-border/80 bg-muted/20 p-3 sm:p-3.5 flex items-baseline justify-between">
+            <div className="rounded-[6px] border border-[#E8DEC8] bg-[#FAF3D6] p-3.5 sm:p-4 flex items-baseline justify-between shadow-xs">
               <div>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-2xl sm:text-3xl font-bold text-foreground">
+                <div className="flex items-baseline gap-2.5">
+                  <span className="text-2xl sm:text-3xl font-bold text-[#DC2626] font-mono">
                     {formatPrice(variant.price)}
                   </span>
                   {variant.mrp ? (
-                    <span className="text-sm text-muted-foreground line-through">
+                    <span className="text-sm text-[#A0A8B0] line-through font-mono">
                       {formatPrice(variant.mrp)}
                     </span>
                   ) : null}
                   {variant.mrp ? (
-                    <span className="rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-2 py-0.5 text-[10px] font-bold">
+                    <span className="rounded-[4px] bg-[#EABC5E] text-[#181206] px-2 py-0.5 text-[11px] font-bold shadow-xs">
                       Save {Math.round(((variant.mrp - variant.price) / variant.mrp) * 100)}%
                     </span>
                   ) : null}
                 </div>
-                <p className="text-[10px] text-muted-foreground mt-0.5">
-                  Inclusive of all GST · Free delivery over ₹499
+                <p className="text-[11px] text-[#6E777D] mt-1">
+                  Inclusive of all taxes · Free delivery across India over ₹499
                 </p>
               </div>
-              <span className="text-xs font-semibold px-2 py-1 bg-card rounded-md border border-border text-foreground">
+              <span className="text-xs font-bold px-2.5 py-1 bg-white rounded-[4px] border border-[#E8DEC8] text-[#181206]">
                 {variant.label}
               </span>
             </div>
 
             {/* Pack Size Selector */}
             <div className="space-y-2">
-              <label className="text-xs font-bold uppercase tracking-wider text-foreground block">
+              <label className="text-xs font-bold uppercase tracking-wider text-[#181206] block">
                 Select Pack Size / Weight:
               </label>
               <div className="flex flex-wrap gap-2">
@@ -395,59 +421,49 @@ function ProductPage() {
                     key={v.id}
                     type="button"
                     onClick={() => setVariantId(v.id)}
-                    className={`flex items-center gap-1.5 rounded-xl border px-3 py-2 text-xs font-semibold transition-all ${
+                    className={`flex items-center gap-1.5 rounded-[6px] border px-3 py-2 text-xs font-semibold transition-all cursor-pointer ${
                       v.id === variantId
-                        ? "border-primary bg-primary/10 text-primary shadow-xs font-bold"
-                        : "border-border bg-card text-muted-foreground hover:text-foreground hover:border-primary/40"
+                        ? "border-[#FFC700] bg-[#FFC700]/10 text-[#181206] shadow-xs font-bold ring-1 ring-[#FFC700]"
+                        : "border-[#E8DEC8] bg-white text-[#181206] hover:border-[#FFC700]/60 hover:text-[#181206]"
                     }`}
                   >
-                    {v.id === variantId ? <Check className="h-3 w-3" /> : null}
+                    {v.id === variantId ? <Check className="h-3 w-3 text-[#181206]" /> : null}
                     <span>{v.label}</span>
-                    <span className="opacity-75">· {formatPrice(v.price)}</span>
+                    <span className="opacity-75 font-mono">· {formatPrice(v.price)}</span>
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* 12 Months Freshness & Lifetime Guarantee */}
-            <div className="flex items-center gap-3 p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-950 dark:text-amber-100 shadow-xs">
-              <div className="h-9 w-9 rounded-lg bg-amber-500/20 border border-amber-500/30 flex items-center justify-center shrink-0">
-                <Clock className="h-5 w-5 text-amber-600 dark:text-amber-400" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold text-foreground">12 Months Shelf Life Guaranteed</span>
-                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-800 dark:text-amber-300">
-                    1 Year Freshness
-                  </span>
-                </div>
-                <p className="text-[11px] text-muted-foreground mt-0.5 leading-tight">
-                  {product.shelfLife || "12 months from packing. Store sealed in airtight container."}
-                </p>
-              </div>
-            </div>
-
             {/* Stock & Purchase Buttons */}
             {soldOut ? (
-              <div className="rounded-xl border border-border bg-card p-4 space-y-3">
-                <p className="text-xs text-muted-foreground">
+              <div className="rounded-[6px] border border-[#E8DEC8] bg-white p-4 space-y-3">
+                <p className="text-xs text-[#6E777D]">
                   This batch is currently sold out. Leave your details for instant restock notice.
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  <BackInStockDialog slug={product.slug} name={product.name} />
+                  <Suspense
+                    fallback={
+                      <Button variant="outline" size="sm" className="text-xs h-9 gap-1.5" disabled>
+                        <Loader2 className="h-3.5 w-3.5 animate-spin" /> Loading...
+                      </Button>
+                    }
+                  >
+                    <BackInStockDialog slug={product.slug} name={product.name} />
+                  </Suspense>
                   <WishlistButton slug={product.slug} name={product.name} variant="full" />
                 </div>
               </div>
             ) : (
-              <div className="space-y-2.5 sm:space-y-3">
+              <div className="space-y-3">
                 {product.stockLeft ? (
-                  <p className="text-[11px] font-semibold text-primary flex items-center gap-1.5">
-                    <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+                  <p className="text-[11px] font-semibold text-[#181206] flex items-center gap-1.5">
+                    <span className="h-2 w-2 rounded-full bg-[#FFC700] animate-pulse" />
                     Only {product.stockLeft} packs remaining from this fresh Tirunelveli batch
                   </p>
                 ) : null}
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2.5">
                   <QuantityStepper
                     qty={qty}
                     label={`Quantity of ${product.name}`}
@@ -458,7 +474,7 @@ function ProductPage() {
 
                   <Button
                     size="sm"
-                    className="h-11 sm:h-10 flex-1 font-bold gap-1.5 sm:gap-2 shadow-xs text-xs sm:text-sm"
+                    className="h-11 flex-1 font-bold gap-2 rounded-[6px] bg-[#FFC700] hover:bg-[#E6B000] text-[#181206] font-black shadow-xs text-xs sm:text-sm cursor-pointer transition-colors"
                     onClick={() => {
                       add(product.slug, variant.id, qty);
                       toast.success(`Added ${qty} × ${product.name} to your basket!`);
@@ -472,43 +488,53 @@ function ProductPage() {
                 <Button
                   size="sm"
                   variant="outline"
-                  className="w-full h-10 sm:h-10 font-bold gap-1.5 shadow-xs border-primary/50 text-primary hover:bg-primary hover:text-primary-foreground transition-colors"
+                  disabled={buyingNow}
+                  className="w-full h-10 font-bold gap-1.5 rounded-[6px] border-[#FFC700] text-[#181206] hover:bg-[#FFC700] hover:text-white transition-all cursor-pointer"
                   onClick={handleBuyNow}
                 >
-                  <Zap className="h-4 w-4 fill-primary group-hover:fill-primary-foreground" />
-                  Instant Checkout · Buy Now
+                  {buyingNow ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin text-[#181206]" />
+                      <span>Directing to Secure Checkout…</span>
+                    </>
+                  ) : (
+                    <>
+                      <Zap className="h-4 w-4 fill-[#FFC700] group-hover:fill-white" />
+                      <span>Instant Checkout · Buy Now</span>
+                    </>
+                  )}
                 </Button>
               </div>
             )}
 
-            {/* Quick Culinary Profile Card */}
-            <div className="rounded-xl border border-border/80 bg-card p-3.5 space-y-2 text-xs">
-              <p className="font-bold text-foreground flex items-center gap-1.5 text-[11px] uppercase tracking-wider text-primary">
-                <Flame className="h-3.5 w-3.5" /> Culinary Characteristics
-              </p>
-              <div className="grid grid-cols-2 gap-2 text-muted-foreground">
-                <div className="rounded-lg bg-muted/40 p-2">
-                  <span className="block text-[10px] text-muted-foreground/80 font-medium">Aroma Strength</span>
-                  <span className="font-semibold text-foreground text-xs">
-                    {product.format === "cake" ? "Intense (5/5)" : product.format === "granules" ? "Roasted Nutty (4/5)" : "Sharp Classic (4.5/5)"}
-                  </span>
+            {/* Available Offers (Ekomart Styled) */}
+            <div className="rounded-[6px] border border-[#E8DEC8] bg-[#F5EAC4] p-4 space-y-2.5">
+              <h4 className="text-xs font-bold text-[#181206] uppercase tracking-wider">
+                Available Offers & Guarantee
+              </h4>
+              <div className="space-y-1.5 text-xs text-[#6E777D]">
+                <div className="flex items-center gap-2">
+                  <Truck className="h-3.5 w-3.5 text-[#181206] shrink-0" />
+                  <span>Free delivery across India on orders above ₹499</span>
                 </div>
-                <div className="rounded-lg bg-muted/40 p-2">
-                  <span className="block text-[10px] text-muted-foreground/80 font-medium">Bloom Speed</span>
-                  <span className="font-semibold text-foreground text-xs">
-                    {product.format === "granules" ? "Slow-Release" : product.format === "cake" ? "Solid Dissolve" : "Instant in Hot Ghee"}
-                  </span>
+                <div className="flex items-center gap-2">
+                  <Clock className="h-3.5 w-3.5 text-[#181206] shrink-0" />
+                  <span>12 Months Shelf Life Guaranteed · Sealed Airtight</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="h-3.5 w-3.5 text-[#181206] shrink-0" />
+                  <span>100% Genuine Heritage Hing · Safe Secure Checkout</span>
                 </div>
               </div>
             </div>
 
             {/* Pincode Express Delivery Estimator */}
-            <div className="rounded-xl border border-border/80 bg-card p-3.5 space-y-2">
-              <div className="flex items-center justify-between text-xs font-semibold text-foreground">
+            <div className="rounded-[6px] border border-[#E8DEC8] bg-white p-3.5 space-y-2 shadow-xs">
+              <div className="flex items-center justify-between text-xs font-semibold text-[#181206]">
                 <span className="flex items-center gap-1.5">
-                  <MapPin className="h-3.5 w-3.5 text-primary" /> Delivery & Pincode Check
+                  <MapPin className="h-3.5 w-3.5 text-[#181206]" /> Delivery & Pincode Check
                 </span>
-                <span className="text-[10px] text-muted-foreground">Dispatches in 24h</span>
+                <span className="text-[10px] text-[#6E777D]">Dispatches in 24h</span>
               </div>
 
               <form onSubmit={handleCheckPincode} className="flex gap-2">
@@ -518,75 +544,61 @@ function ProductPage() {
                   placeholder="Enter 6-digit Pincode"
                   value={pinInput}
                   onChange={(e) => setPinInput(e.target.value.replace(/\D/g, ""))}
-                  className="h-8 text-xs font-mono"
+                  className="h-8 text-xs font-mono rounded-[6px] border-[#E8DEC8]"
                 />
-                <Button type="submit" size="sm" variant="outline" className="h-8 text-xs shrink-0" disabled={isCheckingPin}>
+                <Button
+                  type="submit"
+                  size="sm"
+                  variant="outline"
+                  className="h-8 text-xs shrink-0 rounded-[6px] border-[#FFC700] text-[#181206] hover:bg-[#FFC700] hover:text-white"
+                  disabled={isCheckingPin}
+                >
                   {isCheckingPin ? "Checking..." : "Check"}
                 </Button>
               </form>
 
               {pinResult && pinResult.ok ? (
-                <p className="text-[11px] font-medium text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                <p className="text-[11px] font-medium text-[#181206] flex items-center gap-1">
                   <CheckCircle2 className="h-3 w-3 shrink-0" />
                   Express delivery to {pinResult.city}, {pinResult.state} in 2-4 business days.
                 </p>
               ) : null}
             </div>
 
-            {/* 4-Point Guarantee Badges */}
-            <div className="grid grid-cols-4 gap-1.5 sm:gap-2 text-[10px] sm:text-[11px] font-medium text-muted-foreground border-t border-border/60 pt-3">
-              <div className="flex items-center justify-center gap-1 rounded-lg bg-amber-500/10 border border-amber-500/20 py-1.5 px-1 text-center">
-                <Clock className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
-                <span className="truncate font-bold text-amber-900 dark:text-amber-200">12M Life</span>
-              </div>
-              <div className="flex items-center justify-center gap-1 rounded-lg bg-muted/40 py-1.5 px-1 text-center">
-                <Truck className="h-3.5 w-3.5 text-primary shrink-0" />
-                <span className="truncate">Free &gt; ₹499</span>
-              </div>
-              <div className="flex items-center justify-center gap-1 rounded-lg bg-muted/40 py-1.5 px-1 text-center">
-                <ShieldCheck className="h-3.5 w-3.5 text-primary shrink-0" />
-                <span className="truncate">FSSAI Certified</span>
-              </div>
-              <div className="flex items-center justify-center gap-1 rounded-lg bg-muted/40 py-1.5 px-1 text-center">
-                <RotateCcw className="h-3.5 w-3.5 text-primary shrink-0" />
-                <span className="truncate">7-Day Replace</span>
-              </div>
-            </div>
-
             {/* Accordion Specs */}
-            <Accordion type="single" collapsible className="mt-2 text-xs border border-border/70 rounded-xl overflow-hidden">
-              <AccordionItem value="ingredients" className="border-b px-3">
-                <AccordionTrigger className="text-xs font-semibold py-2.5">
+            <Accordion type="single" collapsible className="mt-2 text-xs border border-[#E8DEC8] rounded-[6px] bg-white overflow-hidden shadow-xs">
+              <AccordionItem value="ingredients" className="border-b border-[#E8DEC8] px-3.5">
+                <AccordionTrigger className="text-xs font-semibold py-2.5 text-[#181206] hover:text-[#181206]">
                   Ingredients & Carrier Base
                 </AccordionTrigger>
-                <AccordionContent className="text-xs text-muted-foreground leading-relaxed">
+                <AccordionContent className="text-xs text-[#6E777D] leading-relaxed">
                   {product.ingredients}
                 </AccordionContent>
               </AccordionItem>
 
-              <AccordionItem value="usage" className="border-b px-3">
-                <AccordionTrigger className="text-xs font-semibold py-2.5">
+              <AccordionItem value="usage" className="border-b border-[#E8DEC8] px-3.5">
+                <AccordionTrigger className="text-xs font-semibold py-2.5 text-[#181206] hover:text-[#181206]">
                   Grandmother's Culinary Usage Guide
                 </AccordionTrigger>
-                <AccordionContent className="text-xs text-muted-foreground leading-relaxed">
+                <AccordionContent className="text-xs text-[#6E777D] leading-relaxed">
                   {product.usage}
                 </AccordionContent>
               </AccordionItem>
 
-              <AccordionItem value="shelf" className="border-b px-3">
-                <AccordionTrigger className="text-xs font-semibold py-2.5">
+              <AccordionItem value="shelf" className="border-b border-[#E8DEC8] px-3.5">
+                <AccordionTrigger className="text-xs font-semibold py-2.5 text-[#181206] hover:text-[#181206]">
                   Shelf Life & Storage Instructions
                 </AccordionTrigger>
-                <AccordionContent className="text-xs text-muted-foreground leading-relaxed">
+                <AccordionContent className="text-xs text-[#6E777D] leading-relaxed">
                   {product.shelfLife}
                 </AccordionContent>
               </AccordionItem>
 
-              <AccordionItem value="shipping" className="px-3">
-                <AccordionTrigger className="text-xs font-semibold py-2.5">
+              <AccordionItem value="shipping" className="px-3.5">
+                <AccordionTrigger className="text-xs font-semibold py-2.5 text-[#181206] hover:text-[#181206]">
                   Shipping, Packaging & Returns
                 </AccordionTrigger>
-                <AccordionContent className="text-xs text-muted-foreground leading-relaxed">
+                <AccordionContent className="text-xs text-[#6E777D] leading-relaxed">
                   Dispatched from our Tirunelveli works within 24 hours. Sealed in airtight containers to preserve essential terpenes. Damaged packs are replaced free upon photo submission.
                 </AccordionContent>
               </AccordionItem>
@@ -596,28 +608,56 @@ function ProductPage() {
       </section>
 
       {/* Community Q&A Section */}
-      <section className="border-t border-border bg-secondary/15 py-8 sm:py-12">
+      <section className="border-t border-[#E8DEC8] bg-[#F5EAC4] py-8 sm:py-12">
         <div className="container-page">
-          <ProductQuestions slug={product.slug} />
+          <Suspense
+            fallback={
+              <div className="space-y-4 py-4 animate-pulse">
+                <div className="h-6 w-48 rounded bg-gray-200" />
+                <div className="h-24 rounded-[6px] bg-white border border-[#E8DEC8]" />
+              </div>
+            }
+          >
+            <ProductQuestions slug={product.slug} />
+          </Suspense>
         </div>
       </section>
 
       {/* Verified Reviews Section */}
-      <section className="border-t border-border py-8 sm:py-12">
-        <ProductReviews product={product} />
+      <section className="border-t border-[#E8DEC8] py-8 sm:py-12 bg-white">
+        <Suspense
+          fallback={
+            <div className="container-page space-y-6 py-6 animate-pulse">
+              <div className="h-8 w-56 rounded bg-gray-200" />
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="h-36 rounded-[6px] bg-gray-100 border border-[#E8DEC8]" />
+                <div className="h-36 rounded-[6px] bg-gray-100 border border-[#E8DEC8]" />
+              </div>
+            </div>
+          }
+        >
+          <ProductReviews product={product} />
+        </Suspense>
       </section>
 
       {/* Related Formulations Grid */}
-      <section className="border-t border-border bg-muted/20 py-10 sm:py-14">
+      <section className="border-t border-[#E8DEC8] bg-[#F5EAC4] py-10 sm:py-14">
         <div className="container-page space-y-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="eyebrow">Other Formulations</p>
-              <h2 className="text-xl sm:text-2xl font-bold text-foreground">
-                Explore Alternative Y.G Textures
+              <span className="text-xs font-bold uppercase tracking-wider text-[#181206]">
+                Related Formulations
+              </span>
+              <h2 className="text-xl sm:text-2xl font-bold text-[#181206] mt-1">
+                Explore Alternative Y.G Formulations
               </h2>
             </div>
-            <Button variant="outline" size="sm" className="text-xs" asChild>
+            <Button
+              variant="outline"
+              size="sm"
+              className="text-xs rounded-[6px] border-[#FFC700] text-[#181206] hover:bg-[#FFC700] hover:text-white"
+              asChild
+            >
               <Link to="/shop">
                 View All <ArrowRight className="ml-1 h-3 w-3" />
               </Link>
@@ -632,18 +672,20 @@ function ProductPage() {
         </div>
       </section>
 
-      <RecentlyViewed currentSlug={product.slug} />
+      <Suspense fallback={null}>
+        <RecentlyViewed currentSlug={product.slug} />
+      </Suspense>
 
       {/* Mobile Sticky Buy Bar */}
       <div
         role="region"
         aria-label="Add to basket"
-        className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/95 px-3.5 pt-2 pb-[calc(0.625rem+env(safe-area-inset-bottom,0px))] backdrop-blur-md lg:hidden shadow-lg"
+        className="fixed inset-x-0 bottom-0 z-30 border-t border-[#E8DEC8] bg-white/95 px-3.5 pt-2 pb-[calc(0.625rem+env(safe-area-inset-bottom,0px))] backdrop-blur-md lg:hidden shadow-lg"
       >
         <div className="flex items-center justify-between gap-3">
           <div className="min-w-0">
-            <p className="truncate text-[11px] text-muted-foreground">{variant.label}</p>
-            <p className="text-base font-bold text-foreground">{formatPrice(variant.price * qty)}</p>
+            <p className="truncate text-[11px] text-[#6E777D]">{variant.label}</p>
+            <p className="text-base font-bold text-[#DC2626] font-mono">{formatPrice(variant.price * qty)}</p>
           </div>
 
           <div className="flex items-center gap-2">
@@ -652,21 +694,34 @@ function ProductPage() {
                 type="button"
                 onClick={() => setCartOpen(true)}
                 aria-label={`Open basket, ${count} items`}
-                className="relative grid h-9 w-9 shrink-0 place-items-center rounded-lg border border-border bg-card shadow-xs"
+                className="relative grid h-9 w-9 shrink-0 place-items-center rounded-[6px] border border-[#E8DEC8] bg-[#FAF3D6] text-[#181206] shadow-xs"
               >
                 <ShoppingBag className="h-4 w-4" />
-                <span className="absolute -top-1 -right-1 grid h-4 min-w-4 place-items-center rounded-full bg-primary px-1 text-[9px] font-bold text-primary-foreground">
+                <span className="absolute -top-1 -right-1 grid h-4 min-w-4 place-items-center rounded-full bg-[#FFC700] px-1 text-[9px] font-bold text-white">
                   {count}
                 </span>
               </button>
             ) : null}
 
             <Button
-              className="h-9 px-4 text-xs font-bold gap-1"
+              variant="outline"
+              className="h-9 px-3 text-xs font-bold gap-1 rounded-[6px] border-[#FFC700] text-[#181206] hover:bg-[#FFC700] hover:text-white active:scale-95"
+              disabled={soldOut || buyingNow}
+              onClick={handleBuyNow}
+            >
+              {buyingNow ? (
+                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              ) : (
+                <Zap className="h-3.5 w-3.5 fill-current" />
+              )}
+              Buy Now
+            </Button>
+            <Button
+              className="h-9 px-3.5 text-xs font-bold gap-1 rounded-[6px] bg-[#FFC700] hover:bg-[#E6B000] text-[#181206] font-black active:scale-95"
               disabled={soldOut}
               onClick={() => {
                 add(product.slug, variant.id, qty);
-                toast.success(`Added to basket!`);
+                toast.success(`Added ${product.name} to basket!`);
               }}
             >
               <Check className="h-3.5 w-3.5" />

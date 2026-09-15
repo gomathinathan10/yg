@@ -16,33 +16,33 @@ export type PaletteThemeInfo = {
 export const PALETTE_THEMES: PaletteThemeInfo[] = [
   {
     id: "saffron",
-    name: "Saffron Sandal",
-    subtitle: "Heritage Terracotta & Sandal Gold",
-    dotColor: "#C25E00",
-    bgPreview: "#FAF1E4",
-    background: "oklch(0.960 0.035 78)",
-    primary: "oklch(0.52 0.19 44)",
-    ring: "oklch(0.52 0.19 44)",
+    name: "Neon Gold",
+    subtitle: "Radiant Neon Gold & Mild Luminous Background",
+    dotColor: "#FFC700",
+    bgPreview: "#FAF3D6",
+    background: "#FAF3D6",
+    primary: "#FFC700",
+    ring: "#FFC700",
   },
   {
     id: "emerald",
-    name: "Emerald Cardamom",
-    subtitle: "Vedic Botanical Cardamom Green",
-    dotColor: "#059669",
-    bgPreview: "#EEF6F1",
-    background: "oklch(0.960 0.032 148)",
-    primary: "oklch(0.44 0.17 142)",
-    ring: "oklch(0.44 0.17 142)",
+    name: "Champagne Amber",
+    subtitle: "Glowing Amber & Mild Luminous Background",
+    dotColor: "#FFAE00",
+    bgPreview: "#FAF3D6",
+    background: "#FAF3D6",
+    primary: "#FFAE00",
+    ring: "#FFAE00",
   },
   {
     id: "indigo",
-    name: "Nilgiri Indigo",
-    subtitle: "Royal Heritage Sapphire Blue",
-    dotColor: "#2563EB",
-    bgPreview: "#EEF3FC",
-    background: "oklch(0.960 0.030 255)",
-    primary: "oklch(0.44 0.18 255)",
-    ring: "oklch(0.44 0.18 255)",
+    name: "Vintage Brass",
+    subtitle: "Tirunelveli Temple Brass & Mild Gold",
+    dotColor: "#D4AF37",
+    bgPreview: "#FAF3D6",
+    background: "#FAF3D6",
+    primary: "#D4AF37",
+    ring: "#D4AF37",
   },
   {
     id: "plum",
@@ -62,6 +62,8 @@ function applyThemeToDOM(themeId: PaletteThemeId) {
   document.documentElement.setAttribute("data-theme", themeId);
   document.documentElement.style.setProperty("--primary", item.primary);
   document.documentElement.style.setProperty("--color-primary", item.primary);
+  document.documentElement.style.setProperty("--primary-foreground", "#181206");
+  document.documentElement.style.setProperty("--color-primary-foreground", "#181206");
   document.documentElement.style.setProperty("--ring", item.ring);
   document.documentElement.style.setProperty("--color-ring", item.ring);
   document.documentElement.style.setProperty("--background", item.background);
@@ -71,6 +73,8 @@ function applyThemeToDOM(themeId: PaletteThemeId) {
     document.body.setAttribute("data-theme", themeId);
     document.body.style.setProperty("--primary", item.primary);
     document.body.style.setProperty("--color-primary", item.primary);
+    document.body.style.setProperty("--primary-foreground", "#181206");
+    document.body.style.setProperty("--color-primary-foreground", "#181206");
     document.body.style.setProperty("--background", item.background);
     document.body.style.setProperty("--color-background", item.background);
     document.body.style.backgroundColor = item.bgPreview;

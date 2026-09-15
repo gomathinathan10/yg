@@ -16,6 +16,7 @@ import {
   Printer,
   ShieldCheck,
   Sparkles,
+  Tag,
   Truck,
   Users,
   Zap,
@@ -24,6 +25,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { TradePriceMatrix } from "@/components/site/TradePriceMatrix";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/custom-branding")({
@@ -258,6 +260,16 @@ function CustomBrandingPage() {
             <Button
               size="lg"
               variant="outline"
+              className="font-bold border-amber-500/30 bg-amber-500/5 hover:bg-amber-500/10 text-amber-900 dark:text-amber-300 h-11 px-6 text-sm gap-2"
+              asChild
+            >
+              <a href="#trade-pricing">
+                <Tag className="h-4 w-4" /> Wholesale Price Matrix
+              </a>
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
               onClick={openWhatsApp}
               className="font-bold border-border bg-card hover:bg-muted/40 h-11 px-6 text-sm gap-2"
             >
@@ -376,6 +388,11 @@ function CustomBrandingPage() {
           </div>
         </div>
       </section>
+
+      {/* ======================================================== */}
+      {/* 3.5. OFFICIAL WHOLESALE & TRADE PRICE MATRIX */}
+      {/* ======================================================== */}
+      <TradePriceMatrix />
 
       {/* ======================================================== */}
       {/* 4. FOUR-STEP PRIVATE LABEL ONBOARDING */}

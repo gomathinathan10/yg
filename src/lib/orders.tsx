@@ -7,7 +7,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { createOrderServerFn, getOrderByIdServerFn, resolveOrderServerFn } from "@/functions/orders";
+import { apiFetch } from "@/lib/api-client";
 
 export type Address = {
   id: string;
@@ -351,37 +351,42 @@ export function OrdersProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const placeOrder = useCallback(async (input: Omit<Order, "id" | "createdAt">): Promise<Order> => {
+    let serverOrder: Order | null = null;
     try {
-      const serverOrder = await createOrderServerFn({ data: input });
-      const order: Order = {
-        ...serverOrder,
-        resolution: serverOrder.resolution ?? null,
-      };
-      setOrders((prev) => [order, ...prev.filter((o) => o.id !== order.id)]);
-      return order;
+      const res = await apiFetch<Order>("/api/orders", {
+        method: "POST",
+        body: JSON.stringify(input),
+      });
+      if (res && res.id) {
+        serverOrder = res;
+      }
     } catch (err) {
-      console.error("Server order creation failed, falling back to local:", err);
-      const fallbackOrder: Order = {
-        ...input,
-        id: `YG${Math.floor(100000 + Math.random() * 899999)}`,
-        createdAt: Date.now(),
-      };
-      setOrders((prev) => [fallbackOrder, ...prev]);
-      return fallbackOrder;
+      console.error("Order server placement failed, falling back to local:", err);
     }
+
+    const order: Order = serverOrder || {
+      ...input,
+      id: `YG${Math.floor(100000 + Math.random() * 899999)}`,
+      createdAt: Date.now(),
+      status: "confirmed",
+    };
+    setOrders((prev) => [order, ...prev.filter((o) => o.id !== order.id)]);
+    return order;
   }, []);
 
   const fetchOrder = useCallback(async (id: string, verify?: string): Promise<Order | null> => {
+    const target = id.trim().toUpperCase();
     try {
-      const res = await getOrderByIdServerFn({ data: { id, verify } });
-      if (res) {
+      const q = verify ? `?verify=${encodeURIComponent(verify)}` : "";
+      const res = await apiFetch<Order>(`/api/orders/${target}${q}`);
+      if (res && res.id) {
         setOrders((prev) => [res, ...prev.filter((o) => o.id !== res.id)]);
         return res;
       }
-    } catch (err) {
-      console.warn("fetchOrder from server failed:", err);
+    } catch {
+      /* fallback to local cache */
     }
-    return orders.find((o) => o.id === id) ?? null;
+    return orders.find((o) => o.id.toUpperCase() === target && (!verify || o.email.toLowerCase() === verify.toLowerCase())) ?? null;
   }, [orders]);
 
   const resolve = useCallback(
@@ -390,20 +395,6 @@ export function OrdersProvider({ children }: { children: ReactNode }) {
       if (!order) return null;
       const eligibility = resolutionEligibility(order);
       if (type === "cancellation" ? !eligibility.canCancel : !eligibility.canRefund) return null;
-
-      try {
-        const res = await resolveOrderServerFn({
-          data: { id, type, reason, note },
-        });
-        if (res.ok && res.resolution) {
-          setOrders((prev) =>
-            prev.map((o) => (o.id === id ? { ...o, resolution: res.resolution } : o))
-          );
-          return res.resolution;
-        }
-      } catch (err) {
-        console.error("resolveOrderServerFn error:", err);
-      }
 
       const now = Date.now();
       const resolution: Resolution = {
@@ -416,7 +407,17 @@ export function OrdersProvider({ children }: { children: ReactNode }) {
         refundBy: now + (type === "cancellation" ? 3 : 7) * 24 * HOUR,
         method: refundMethodLabel(order.payment),
       };
-      setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, resolution } : o)));
+
+      try {
+        await apiFetch(`/api/orders/${id}/resolve`, {
+          method: "POST",
+          body: JSON.stringify({ resolution }),
+        });
+      } catch (err) {
+        console.error("Server order resolve error:", err);
+      }
+
+      setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, resolution, status: type === "cancellation" ? "cancelled" : o.status } : o)));
       return resolution;
     },
     [orders],

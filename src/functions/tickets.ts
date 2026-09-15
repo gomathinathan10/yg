@@ -1,5 +1,4 @@
-import { createServerFn } from "@tanstack/react-start";
-import { getDb } from "@/server/db";
+import { apiFetch } from "@/lib/api-client";
 
 export type DbTicket = {
   id: string;
@@ -14,79 +13,55 @@ export type DbTicket = {
   updated_at: number;
 };
 
-export const createTicketServerFn = createServerFn({ method: "POST" })
-  .validator((data: {
+export const createTicketServerFn = async ({
+  data,
+}: {
+  data: {
     topic: string;
     orderId?: string | undefined;
     message: string;
     contact: string;
     name?: string | undefined;
-  }) => data)
-  .handler(async ({ data }): Promise<{ ok: boolean; ticket: DbTicket }> => {
-    const db = getDb();
-    const id = `TKT${Math.floor(10000 + Math.random() * 89999)}`;
-    const now = Date.now();
+  };
+}): Promise<{ ok: boolean; ticket: DbTicket }> => {
+  return apiFetch<{ ok: boolean; ticket: DbTicket }>("/api/tickets", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+};
 
-    db.prepare(`
-      INSERT INTO tickets (id, topic, order_id, message, contact, name, status, reply, created_at, updated_at)
-      VALUES (?, ?, ?, ?, ?, ?, 'open', NULL, ?, ?)
-    `).run(
-      id,
-      data.topic,
-      data.orderId ?? null,
-      data.message.trim(),
-      data.contact.trim(),
-      data.name?.trim() ?? null,
-      now,
-      now
+export const adminListTicketsServerFn = async ({
+  data,
+}: {
+  data?: { status?: string; search?: string };
+} = {}): Promise<DbTicket[]> => {
+  const query = data?.status && data.status !== "all" ? `?status=${encodeURIComponent(data.status)}` : "";
+  const tickets = await apiFetch<DbTicket[]>(`/api/tickets${query}`);
+  if (data?.search) {
+    const term = data.search.toLowerCase();
+    return tickets.filter(
+      (t) =>
+        t.id.toLowerCase().includes(term) ||
+        t.contact.toLowerCase().includes(term) ||
+        t.message.toLowerCase().includes(term) ||
+        t.topic.toLowerCase().includes(term)
     );
+  }
+  return tickets;
+};
 
-    const ticket = db.prepare("SELECT * FROM tickets WHERE id = ?").get(id) as DbTicket;
-    return { ok: true, ticket };
-  });
-
-export const adminListTicketsServerFn = createServerFn({ method: "GET" })
-  .validator((data?: { status?: string; search?: string }) => ({
-    status: data?.status ? String(data.status).trim() : undefined,
-    search: data?.search ? String(data.search).trim() : undefined,
-  }))
-  .handler(async ({ data }): Promise<DbTicket[]> => {
-    const db = getDb();
-    let query = "SELECT * FROM tickets";
-    const conditions: string[] = [];
-    const params: string[] = [];
-
-    if (data?.status && data.status !== "all") {
-      conditions.push("status = ?");
-      params.push(data.status);
-    }
-    if (data?.search) {
-      conditions.push("(id LIKE ? OR contact LIKE ? OR message LIKE ? OR topic LIKE ?)");
-      const term = `%${data.search}%`;
-      params.push(term, term, term, term);
-    }
-
-    if (conditions.length > 0) {
-      query += " WHERE " + conditions.join(" AND ");
-    }
-    query += " ORDER BY created_at DESC";
-
-    return db.prepare(query).all(...params) as DbTicket[];
-  });
-
-export const adminUpdateTicketServerFn = createServerFn({ method: "POST" })
-  .validator((data: {
+export const adminUpdateTicketServerFn = async ({
+  data,
+}: {
+  data: {
     id: string;
     status: "open" | "in_progress" | "resolved" | "closed";
     reply?: string | undefined;
-  }) => data)
-  .handler(async ({ data }) => {
-    const db = getDb();
-    const now = Date.now();
-    db.prepare(`
-      UPDATE tickets
-      SET status = ?, reply = ?, updated_at = ?
-      WHERE id = ?
-    `).run(data.status, data.reply ?? null, now, data.id);
-    return { ok: true };
+  };
+}) => {
+  await apiFetch(`/api/tickets/${data.id}`, {
+    method: "PATCH",
+    body: JSON.stringify({ status: data.status, reply: data.reply }),
   });
+  return { ok: true };
+};

@@ -30,7 +30,7 @@ export function QuantityStepper({
         aria-label={`Decrease ${label.toLowerCase()}`}
         disabled={atMin}
         onClick={() => onChange(qty - 1)}
-        className={`${size} inline-flex items-center justify-center rounded-full text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:pointer-events-none disabled:opacity-40`}
+        className={`${size} inline-flex items-center justify-center rounded-full text-muted-foreground transition-all duration-100 hover:text-foreground active:scale-75 active:bg-muted/60 cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:pointer-events-none disabled:opacity-40`}
       >
         <Minus className="h-4 w-4" aria-hidden />
       </button>
@@ -47,7 +47,7 @@ export function QuantityStepper({
         aria-label={`Increase ${label.toLowerCase()}`}
         disabled={atMax}
         onClick={() => onChange(qty + 1)}
-        className={`${size} inline-flex items-center justify-center rounded-full text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:pointer-events-none disabled:opacity-40`}
+        className={`${size} inline-flex items-center justify-center rounded-full text-muted-foreground transition-all duration-100 hover:text-foreground active:scale-75 active:bg-muted/60 cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:pointer-events-none disabled:opacity-40`}
       >
         <Plus className="h-4 w-4" aria-hidden />
       </button>

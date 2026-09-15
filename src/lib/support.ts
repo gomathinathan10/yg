@@ -31,46 +31,40 @@ export function readTickets(): Ticket[] {
   }
 }
 
-import { createTicketServerFn } from "@/functions/tickets";
+import { apiFetch } from "@/lib/api-client";
 
 export async function saveTicket(input: Omit<Ticket, "id" | "createdAt">): Promise<Ticket> {
+  let created: Ticket = {
+    ...input,
+    id: `TKT${Math.floor(10000 + Math.random() * 89999)}`,
+    createdAt: Date.now(),
+  };
+
   try {
-    const res = await createTicketServerFn({
-      data: {
-        topic: input.topic,
-        orderId: input.orderId,
-        message: input.message,
-        contact: input.contact,
-      },
+    const res = await apiFetch<{ ok: boolean; ticket: any }>("/api/tickets", {
+      method: "POST",
+      body: JSON.stringify(input),
     });
-    const ticket: Ticket = {
-      id: res.ticket.id,
-      topic: res.ticket.topic,
-      orderId: res.ticket.order_id ?? undefined,
-      message: res.ticket.message,
-      contact: res.ticket.contact,
-      createdAt: res.ticket.created_at,
-    };
-    try {
-      window.localStorage.setItem(TICKETS_KEY, JSON.stringify([ticket, ...readTickets()]));
-    } catch {
-      /* ignore */
+    if (res?.ticket) {
+      created = {
+        id: res.ticket.id,
+        topic: res.ticket.topic,
+        orderId: res.ticket.order_id || undefined,
+        contact: res.ticket.contact,
+        message: res.ticket.message,
+        createdAt: res.ticket.created_at || Date.now(),
+      };
     }
-    return ticket;
   } catch (err) {
-    console.error("createTicketServerFn failed, fallback:", err);
-    const fallbackTicket: Ticket = {
-      ...input,
-      id: `TKT${Math.floor(10000 + Math.random() * 89999)}`,
-      createdAt: Date.now(),
-    };
-    try {
-      window.localStorage.setItem(TICKETS_KEY, JSON.stringify([fallbackTicket, ...readTickets()]));
-    } catch {
-      /* ignore */
-    }
-    return fallbackTicket;
+    console.error("Failed to post ticket to server, saving locally:", err);
   }
+
+  try {
+    window.localStorage.setItem(TICKETS_KEY, JSON.stringify([created, ...readTickets()]));
+  } catch {
+    /* ignore */
+  }
+  return created;
 }
 
 /** Human-readable order digest used to prefill a support ticket, so nothing is typed twice. */

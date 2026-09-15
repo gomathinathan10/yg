@@ -15,8 +15,8 @@
       "shelf_life": "12 months from packing. Store in an airtight container.",
       "in_stock": 1,
       "stock_left": null,
-      "rating": 4.8,
-      "reviews": 312,
+      "rating": 5,
+      "reviews": 4,
       "created_at": 1788497335967,
       "updated_at": 1788497335967
     },
@@ -303,31 +303,67 @@
   ],
   "product_variants": [
     {
+      "id": "10g",
+      "product_slug": "gold-asafoetida-powder",
+      "label": "10 g Cover (Pack of 10)",
+      "price": 18,
+      "mrp": 20,
+      "stock": 150,
+      "sort_order": 0
+    },
+    {
+      "id": "20g",
+      "product_slug": "gold-asafoetida-powder",
+      "label": "20 g Cover (Pack of 10)",
+      "price": 36,
+      "mrp": 40,
+      "stock": 150,
+      "sort_order": 1
+    },
+    {
       "id": "50g",
       "product_slug": "gold-asafoetida-powder",
-      "label": "50 g",
-      "price": 175,
-      "mrp": 200,
-      "stock": 80,
-      "sort_order": 0
+      "label": "50 g Tray",
+      "price": 85,
+      "mrp": 96,
+      "stock": 120,
+      "sort_order": 2
     },
     {
       "id": "100g",
       "product_slug": "gold-asafoetida-powder",
-      "label": "100 g",
-      "price": 320,
-      "mrp": 360,
-      "stock": 120,
-      "sort_order": 1
+      "label": "100 g Tray",
+      "price": 165,
+      "mrp": 186,
+      "stock": 140,
+      "sort_order": 3
+    },
+    {
+      "id": "200g",
+      "product_slug": "gold-asafoetida-powder",
+      "label": "200 g Container",
+      "price": 315,
+      "mrp": 350,
+      "stock": 80,
+      "sort_order": 4
     },
     {
       "id": "500g",
       "product_slug": "gold-asafoetida-powder",
-      "label": "500 g",
-      "price": 1450,
-      "mrp": 1650,
-      "stock": 40,
-      "sort_order": 2
+      "label": "500 g Pouch",
+      "price": 765,
+      "mrp": 850,
+      "stock": 60,
+      "sort_order": 5
+    },
+    {
+      "id": "1kg",
+      "product_slug": "gold-asafoetida-powder",
+      "label": "1 kg Pouch",
+      "price": 1440,
+      "mrp": 1600,
+      "stock": 45,
+      "sort_order": 6
     },
     {
       "id": "50g",
@@ -366,22 +402,31 @@
       "sort_order": 1
     },
     {
+      "id": "25g",
+      "product_slug": "asafoetida-gold-cake",
+      "label": "25 g Cake Bag",
+      "price": 42,
+      "mrp": 46,
+      "stock": 80,
+      "sort_order": 0
+    },
+    {
       "id": "50g",
       "product_slug": "asafoetida-gold-cake",
-      "label": "50 g cake",
-      "price": 240,
-      "mrp": 280,
-      "stock": 50,
-      "sort_order": 0
+      "label": "50 g Cake Bag",
+      "price": 78,
+      "mrp": 86,
+      "stock": 90,
+      "sort_order": 1
     },
     {
       "id": "100g",
       "product_slug": "asafoetida-gold-cake",
-      "label": "100 g cake",
-      "price": 450,
-      "mrp": 520,
-      "stock": 60,
-      "sort_order": 1
+      "label": "100 g Cake Bag",
+      "price": 148,
+      "mrp": 164,
+      "stock": 110,
+      "sort_order": 2
     },
     {
       "id": "50g",
@@ -602,9 +647,111 @@
   ],
   "orders": [],
   "order_items": [],
-  "reviews": [],
-  "questions": [],
+  "reviews": [
+    {
+      "id": "rev-seed-1",
+      "slug": "gold-asafoetida-powder",
+      "rating": 5,
+      "title": "Incomparable Traditional Aroma",
+      "comment": "Just a pinch transforms the rasam and sambar completely. Unmatched authenticity and freshness. Truly heritage quality!",
+      "name": "Meenakshi Sundaram",
+      "city": "Chennai",
+      "email": null,
+      "phone": null,
+      "contact_opt_in": 1,
+      "created_at": 1789194488295,
+      "status": "published"
+    },
+    {
+      "id": "rev-seed-2",
+      "slug": "gold-asafoetida-powder",
+      "rating": 5,
+      "title": "Best Hing in South India",
+      "comment": "We have been using Y.G for three generations. The gold powder has that deep, rounded compound aroma without any bitter aftertaste.",
+      "name": "Venkatesh Raghavan",
+      "city": "Tirunelveli",
+      "email": null,
+      "phone": null,
+      "contact_opt_in": 1,
+      "created_at": 1788676088295,
+      "status": "published"
+    },
+    {
+      "id": "rev-seed-3",
+      "slug": "gold-asafoetida-powder",
+      "rating": 5,
+      "title": "Airtight packaging is excellent",
+      "comment": "Arrived fresh and tightly sealed. Dissolves seamlessly in hot ghee tempering.",
+      "name": "Ananya Sharma",
+      "city": "Bengaluru",
+      "email": null,
+      "phone": null,
+      "contact_opt_in": 0,
+      "created_at": 1788157688295,
+      "status": "published"
+    },
+    {
+      "id": "rev-seed-4",
+      "slug": "gluten-free-asafoetida-powder",
+      "rating": 5,
+      "title": "Life-saver for Celiac Diet",
+      "comment": "Finally an authentic hing without wheat flour or maida. Clean aroma, pure taste, and completely gut-friendly.",
+      "name": "Dr. Shalini Rao",
+      "city": "Hyderabad",
+      "email": null,
+      "phone": null,
+      "contact_opt_in": 1,
+      "created_at": 1789021688295,
+      "status": "published"
+    }
+  ],
+  "questions": [
+    {
+      "id": "q-seed-1",
+      "slug": "gold-asafoetida-powder",
+      "question": "How should I store the asafoetida powder to preserve the aroma?",
+      "answer": "Keep in the airtight container provided, away from direct moisture and sunlight. Do not keep open next to other spices as its aroma is very potent.",
+      "asked_by": "Kavitha S.",
+      "answered_by": "Y.G Quality Team",
+      "created_at": 1787725688295,
+      "answered_at": 1787812088295,
+      "status": "published"
+    },
+    {
+      "id": "q-seed-2",
+      "slug": "gold-asafoetida-powder",
+      "question": "How much powder is recommended per serving of sambar or dal?",
+      "answer": "A pinch (approx. 1/8 to 1/4 teaspoon) tempered in hot ghee or sesame oil is sufficient for 4-6 servings.",
+      "asked_by": "Ramesh P.",
+      "answered_by": "Y.G Culinary Advisor",
+      "created_at": 1788244088295,
+      "answered_at": 1788330488295,
+      "status": "published"
+    },
+    {
+      "id": "q-seed-3",
+      "slug": "gluten-free-asafoetida-powder",
+      "question": "Does this contain any traces of wheat or gluten-bearing starches?",
+      "answer": "No. Our gluten-free asafoetida is formulated using non-gluten starches and processed on dedicated, tested equipment.",
+      "asked_by": "Deepa N.",
+      "answered_by": "Y.G Quality Assurance",
+      "created_at": 1788589688295,
+      "answered_at": 1788676088295,
+      "status": "published"
+    }
+  ],
   "tickets": [
+    {
+      "id": "TKT45929",
+      "topic": "Wholesale order inquiry",
+      "order_id": null,
+      "contact": "wholesale@spicestore.in",
+      "message": "Looking to purchase 50 kg bulk Gold Asafoetida cakes.",
+      "status": "open",
+      "reply": null,
+      "created_at": 1789454042896,
+      "updated_at": 1789454042896
+    },
     {
       "id": "TKT28059",
       "topic": "nice",

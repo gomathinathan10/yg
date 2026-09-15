@@ -20,6 +20,7 @@ import { Footer } from "@/components/site/Footer";
 import { CartDrawer } from "@/components/site/CartDrawer";
 import { MobileCartBar } from "@/components/site/MobileCartBar";
 import { Toaster } from "@/components/ui/sonner";
+import { ClickEffects } from "@/components/site/ClickEffects";
 // The FAQ bot is a floating helper: keep it out of the first paint bundle.
 const FaqBot = lazy(() =>
   import("@/components/site/FaqBot").then((m) => ({ default: m.FaqBot })),
@@ -133,7 +134,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { name: "author", content: "Y.G Asafoetida" },
       { name: "robots", content: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" },
-      { name: "theme-color", content: "#c25e00" },
+      { name: "theme-color", content: "#FFC700" },
       // Open Graph
       { property: "og:site_name", content: "Y.G Asafoetida" },
       { property: "og:type", content: "website" },
@@ -148,11 +149,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:image:alt", content: "Y.G Asafoetida Logo" },
       // Twitter Card
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Y.G Asafoetida — Authentic Heritage Hing Since 1932" },
+      { name: "twitter:title", content: "Y.G Asafoetida — Authentic Heritage Hing & Traditional Products Since 1932" },
       {
         name: "twitter:description",
         content:
-          "Artisanal compounded hing powder, gold cakes, traditional sathu maavu and pure benzoin sambrani from Tirunelveli.",
+          "Compounded artisanal asafoetida powder, pure gold hing cake, gluten-free hing, traditional health mix, and sambrani from Tirunelveli since 1932.",
       },
       { name: "twitter:image", content: "https://ygasafoetida.in/logo.png" },
       // Regional & Local SEO
@@ -169,7 +170,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=DM+Sans:wght@400;500;600;700&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600;1,700&display=swap",
       },
       { rel: "icon", href: "/favicon.png", type: "image/png" },
       { rel: "apple-touch-icon", href: "/logo.png" },
@@ -179,36 +180,23 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         type: "application/ld+json",
         children: JSON.stringify({
           "@context": "https://schema.org",
-          "@type": "LocalBusiness",
-          "@id": "https://ygasafoetida.in/#organization",
+          "@type": "GroceryStore",
           "name": "Y.G Asafoetida",
-          "alternateName": ["YG Hing", "Y.G Products", "Y.G Traditional Products"],
+          "description": "Authentic Heritage Asafoetida, Traditional Health Mix & Pure Sambrani handcrafted in Tirunelveli since 1932.",
           "url": "https://ygasafoetida.in",
           "logo": "https://ygasafoetida.in/logo.png",
-          "image": "https://ygasafoetida.in/logo.png",
-          "description": "Compounded and artisanal asafoetida powder, cakes, granules, traditional health mix, and pure benzoin sambrani made in Tirunelveli since 1932.",
           "foundingDate": "1932",
           "address": {
             "@type": "PostalAddress",
-            "streetAddress": "Town Car Street",
             "addressLocality": "Tirunelveli",
             "addressRegion": "Tamil Nadu",
-            "postalCode": "627006",
             "addressCountry": "IN"
           },
           "geo": {
             "@type": "GeoCoordinates",
             "latitude": 8.7139,
             "longitude": 77.7567
-          },
-          "telephone": "+91 98765 43210",
-          "email": "care@ygasafoetida.in",
-          "priceRange": "₹85 - ₹999",
-          "openingHours": "Mo-Sa 09:00-19:00",
-          "sameAs": [
-            "https://www.facebook.com/ygasafoetida",
-            "https://www.instagram.com/ygasafoetida"
-          ]
+          }
         }),
       },
     ],
@@ -226,16 +214,16 @@ function RootShell({ children }: { children: ReactNode }) {
         <style
           dangerouslySetInnerHTML={{
             __html: `
-              html { background-color: #ffffff; color: #1c1917; }
-              body { margin: 0; background-color: #ffffff; color: #1c1917; font-family: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-font-smoothing: antialiased; }
-              header { background-color: #ffffff; }
+              html { background-color: #FAF3D6; color: #181206; font-family: "Barlow", sans-serif; overflow-x: hidden; }
+              body { margin: 0; background-color: #FAF3D6; color: #181206; font-family: "Barlow", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+              header.sticky { background-color: #FAF3D6; }
               img { content-visibility: auto; }
             `,
           }}
         />
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{var t=localStorage.getItem('yg-palette-theme-v1')||'saffron';document.documentElement.setAttribute('data-theme',t);var c={saffron:'oklch(0.52 0.19 44)',emerald:'oklch(0.44 0.17 142)',indigo:'oklch(0.44 0.18 255)',plum:'oklch(0.44 0.19 315)'};if(c[t]){document.documentElement.style.setProperty('--primary',c[t]);document.documentElement.style.setProperty('--color-primary',c[t]);}}catch(e){}`,
+            __html: `try{var t=localStorage.getItem('yg-palette-theme-v1')||'saffron';document.documentElement.setAttribute('data-theme',t);var c={saffron:'#FFC700',emerald:'#FFAE00',indigo:'#D4AF37',plum:'#7289da'};if(c[t]){document.documentElement.style.setProperty('--primary',c[t]);document.documentElement.style.setProperty('--color-primary',c[t]);document.documentElement.style.setProperty('--primary-foreground','#181206');}}catch(e){}`,
           }}
         />
         <HeadContent />
@@ -273,6 +261,7 @@ function RootComponent() {
         </div>
         <CartDrawer />
         <MobileCartBar />
+        <ClickEffects />
         <DeferUntilIdle>
           <FaqBot />
         </DeferUntilIdle>

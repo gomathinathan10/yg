@@ -43,7 +43,7 @@ export function MobileCartBar() {
         type="button"
         onClick={() => cart.setOpen(true)}
         aria-label={`Open basket, ${cart.count} item${cart.count === 1 ? "" : "s"}, total ${formatPrice(cart.total)}`}
-        className="flex w-full items-center gap-3 rounded-xl bg-primary px-3 py-2 text-primary-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
+        className="flex w-full items-center gap-3 rounded-xl bg-primary px-3.5 py-2.5 text-primary-foreground font-bold border border-black/15 shadow-xl focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none active:scale-98 transition-all"
       >
         <div className="flex -space-x-2">
           {cart.resolved.slice(0, 3).map((line) => (

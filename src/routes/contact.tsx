@@ -118,177 +118,281 @@ function ContactPage() {
   };
 
   return (
-    <div className="container-page py-12 sm:py-16">
-      <header className="max-w-2xl">
-        <p className="eyebrow">We're here</p>
-        <h1 className="mt-2 text-4xl font-semibold sm:text-5xl">Contact & support</h1>
-        <p className="mt-3 text-muted-foreground">
-          Order questions, bulk and export enquiries, or advice on which format suits your
-          cooking — write to us and we reply within one working day.
-        </p>
-      </header>
-
-      <div className="mt-12 grid items-start gap-10 lg:grid-cols-[1.2fr_1fr]">
-        {status === "sent" ? (
-          <div className="surface-card flex flex-col items-start p-6 sm:p-8">
-            <CheckCircle2 className="h-10 w-10 text-primary" />
-            <h2 className="mt-4 text-2xl font-semibold">Thanks, {values.name.split(" ")[0]}</h2>
-            <p className="mt-2 text-muted-foreground">
-              Your message about &ldquo;{values.subject}&rdquo; has reached our Tirunelveli office. We
-              reply to {values.email} within one working day.
-            </p>
-            <Button
-              variant="outline"
-              className="mt-6"
-              onClick={() => {
-                setValues({ name: "", email: "", subject: "", message: "" });
-                setTouched({});
-                setStatus("idle");
-              }}
-            >
-              Send another message
-            </Button>
+    <div className="min-h-screen bg-[#FAF3D6] font-sans pb-16">
+      {/* Breadcrumb Navigation */}
+      <div className="border-b border-[#E8DEC8] bg-[#F5EAC4] py-3.5">
+        <div className="container-page flex items-center justify-between">
+          <div className="flex items-center gap-2 text-xs text-[#6E777D]">
+            <a href="/" className="hover:text-[#181206] transition-colors font-medium">
+              Home
+            </a>
+            <span className="text-[#A0A8B0]">/</span>
+            <span className="font-semibold text-[#181206]">Contact Us</span>
           </div>
-        ) : (
-        <form className="surface-card space-y-5 p-6 sm:p-8" noValidate onSubmit={onSubmit}>
-          <div className="grid gap-5 sm:grid-cols-2">
-            <div className="space-y-2">
-              <Label htmlFor="name">Name <span className="text-destructive">*</span></Label>
-              <Input id="name" value={values.name} onChange={set("name")} onBlur={blur("name")} aria-invalid={Boolean(errorFor("name"))} placeholder="Enter your name" className="min-h-11" />
-              {errorFor("name") && <p className="text-xs text-destructive">{errorFor("name")}</p>}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="email">Email <span className="text-destructive">*</span></Label>
-              <Input id="email" type="email" value={values.email} onChange={set("email")} onBlur={blur("email")} aria-invalid={Boolean(errorFor("email"))} placeholder="Enter your email address" className="min-h-11" />
-              {errorFor("email") && <p className="text-xs text-destructive">{errorFor("email")}</p>}
-            </div>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="subject">Subject <span className="text-destructive">*</span></Label>
-            <Input id="subject" value={values.subject} onChange={set("subject")} onBlur={blur("subject")} aria-invalid={Boolean(errorFor("subject"))} placeholder="Enter a subject" className="min-h-11" />
-            {errorFor("subject") && <p className="text-xs text-destructive">{errorFor("subject")}</p>}
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="message">Message <span className="text-destructive">*</span></Label>
-            <Textarea id="message" value={values.message} onChange={set("message")} onBlur={blur("message")} aria-invalid={Boolean(errorFor("message"))} rows={6} maxLength={1000} placeholder="Type your message here" />
-            <div className="flex justify-between text-xs text-muted-foreground">
-              <span className="text-destructive">{errorFor("message")}</span>
-              <span>{values.message.length}/1000</span>
-            </div>
-          </div>
-          <Button type="submit" size="lg" disabled={status === "sending"} className="w-full sm:w-auto">
-            {status === "sending" ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Sending…
-              </>
-            ) : (
-              "Send message"
-            )}
-          </Button>
-        </form>
-        )}
-
-        <div className="space-y-6">
-          <div className="surface-card space-y-4 p-6">
-            <div className="flex gap-3">
-              <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
-              <div>
-                <p className="font-medium">Works & office</p>
-                <p className="text-sm text-muted-foreground">{SUPPORT.address}, India</p>
-              </div>
-            </div>
-            <div className="flex gap-3">
-              <Phone className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
-              <div>
-                <p className="font-medium">Phone</p>
-                <p className="text-sm text-muted-foreground">
-                  <a href={SUPPORT.phoneHref} className="underline-offset-2 hover:underline">
-                    {SUPPORT.phone}
-                  </a>{" "}
-                  · {SUPPORT.hours}
-                </p>
-              </div>
-            </div>
-            <div className="flex gap-3">
-              <Mail className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
-              <div>
-                <p className="font-medium">Email</p>
-                <p className="text-sm text-muted-foreground">
-                  <a href={SUPPORT.emailHref} className="underline-offset-2 hover:underline">
-                    {SUPPORT.email}
-                  </a>
-                </p>
-              </div>
-            </div>
-            <div className="flex gap-3">
-              <MessageCircle className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
-              <div>
-                <p className="font-medium">WhatsApp</p>
-                <p className="text-sm text-muted-foreground">
-                  <a
-                    href={SUPPORT.whatsappHref}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="underline-offset-2 hover:underline"
-                  >
-                    {SUPPORT.whatsapp}
-                  </a>{" "}
-                  · fastest for order updates
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="surface-card flex items-start gap-3 p-6">
-            <MessageSquare className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
-            <div>
-              <p className="font-medium">Quick answers, right now</p>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Tap the FAQ helper at the bottom-right of any page. It is a simple rule-based bot
-                for common questions — for anything account or order specific, our team here will
-                take over.
-              </p>
-            </div>
-          </div>
-
-          <div className="surface-card p-6">
-            <h2 className="text-lg font-semibold">Common questions</h2>
-            <Accordion type="single" collapsible className="mt-2">
-              {faqs.slice(0, 8).map((f) => (
-                <AccordionItem key={f.id} value={f.id}>
-                  <AccordionTrigger className="text-left">{f.question}</AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground">{f.answer}</AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </div>
+          <span className="hidden sm:inline-block text-xs font-semibold text-[#181206] bg-[#FFC700]/10 px-2.5 py-0.5 rounded-[4px]">
+            Support Desk · Tirunelveli
+          </span>
         </div>
       </div>
 
-      <section className="mt-14">
-        <h2 className="text-2xl font-semibold">Find us in Tirunelveli</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          YG Hing · Mayil Agro Foods — our works and office. Drop in {SUPPORT.hours}.
-        </p>
-        <div className="surface-card mt-5 overflow-hidden">
-          <iframe
-            title="Map showing Y.G Hing (Mayil Agro Foods), Tirunelveli"
-            src="https://www.google.com/maps?q=8.7547861,77.6503488&z=16&hl=en&output=embed"
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            allowFullScreen
-            className="h-[320px] w-full border-0 sm:h-[420px]"
-          />
+      <div className="container-page pt-8 sm:pt-12">
+        <header className="max-w-2xl">
+          <span className="text-xs font-bold uppercase tracking-wider text-[#181206]">
+            We're Here For You
+          </span>
+          <h1 className="mt-1 text-3xl font-bold sm:text-4xl text-[#181206] tracking-tight">
+            Contact & Support
+          </h1>
+          <p className="mt-2 text-sm text-[#6E777D]">
+            Order questions, bulk supply, or culinary advice on which hing format suits your cooking — write to us and we reply within one business day.
+          </p>
+        </header>
+
+        <div className="mt-8 grid items-start gap-8 lg:grid-cols-[1.2fr_1fr]">
+          {status === "sent" ? (
+            <div className="rounded-[6px] border border-[#E8DEC8] bg-white p-6 sm:p-8 shadow-xs flex flex-col items-start">
+              <CheckCircle2 className="h-10 w-10 text-[#181206]" />
+              <h2 className="mt-4 text-2xl font-bold text-[#181206]">
+                Thank you, {values.name.split(" ")[0]}!
+              </h2>
+              <p className="mt-2 text-sm text-[#6E777D]">
+                Your message regarding &ldquo;{values.subject}&rdquo; has been received by our Tirunelveli team. We will reply to {values.email} within one working day.
+              </p>
+              <Button
+                variant="outline"
+                className="mt-6 rounded-[6px] border-[#FFC700] text-[#181206] hover:bg-[#FFC700] hover:text-white cursor-pointer"
+                onClick={() => {
+                  setValues({ name: "", email: "", subject: "", message: "" });
+                  setTouched({});
+                  setStatus("idle");
+                }}
+              >
+                Send Another Message
+              </Button>
+            </div>
+          ) : (
+            <form
+              className="rounded-[6px] border border-[#E8DEC8] bg-white p-6 sm:p-8 shadow-xs space-y-4"
+              noValidate
+              onSubmit={onSubmit}
+            >
+              <h3 className="text-base font-bold text-[#181206] border-b border-[#E8DEC8] pb-3">
+                Send Us a Message
+              </h3>
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-1.5">
+                  <Label htmlFor="name" className="text-xs font-semibold text-[#181206]">
+                    Your Name <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
+                    id="name"
+                    value={values.name}
+                    onChange={set("name")}
+                    onBlur={blur("name")}
+                    aria-invalid={Boolean(errorFor("name"))}
+                    placeholder="e.g. Anand Kumar"
+                    className="min-h-10 text-xs rounded-[6px] border-[#E8DEC8]"
+                  />
+                  {errorFor("name") && <p className="text-[11px] text-red-500">{errorFor("name")}</p>}
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="email" className="text-xs font-semibold text-[#181206]">
+                    Email Address <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={values.email}
+                    onChange={set("email")}
+                    onBlur={blur("email")}
+                    aria-invalid={Boolean(errorFor("email"))}
+                    placeholder="e.g. anand@example.com"
+                    className="min-h-10 text-xs rounded-[6px] border-[#E8DEC8]"
+                  />
+                  {errorFor("email") && <p className="text-[11px] text-red-500">{errorFor("email")}</p>}
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <Label htmlFor="subject" className="text-xs font-semibold text-[#181206]">
+                  Subject <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="subject"
+                  value={values.subject}
+                  onChange={set("subject")}
+                  onBlur={blur("subject")}
+                  aria-invalid={Boolean(errorFor("subject"))}
+                  placeholder="Order inquiry, bulk supply, product advice..."
+                  className="min-h-10 text-xs rounded-[6px] border-[#E8DEC8]"
+                />
+                {errorFor("subject") && <p className="text-[11px] text-red-500">{errorFor("subject")}</p>}
+              </div>
+
+              <div className="space-y-1.5">
+                <Label htmlFor="message" className="text-xs font-semibold text-[#181206]">
+                  Message <span className="text-red-500">*</span>
+                </Label>
+                <Textarea
+                  id="message"
+                  value={values.message}
+                  onChange={set("message")}
+                  onBlur={blur("message")}
+                  aria-invalid={Boolean(errorFor("message"))}
+                  rows={5}
+                  maxLength={1000}
+                  placeholder="Tell us how we can assist you..."
+                  className="text-xs rounded-[6px] border-[#E8DEC8]"
+                />
+                <div className="flex justify-between text-[11px] text-[#6E777D]">
+                  <span className="text-red-500">{errorFor("message")}</span>
+                  <span>{values.message.length}/1000</span>
+                </div>
+              </div>
+
+              <Button
+                type="submit"
+                size="lg"
+                disabled={status === "sending"}
+                className="w-full sm:w-auto h-11 px-8 rounded-[6px] bg-[#FFC700] hover:bg-[#E6B000] text-[#181206] font-black font-bold text-xs shadow-xs cursor-pointer"
+              >
+                {status === "sending" ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Sending…
+                  </>
+                ) : (
+                  "Send Message"
+                )}
+              </Button>
+            </form>
+          )}
+
+          {/* Right Info Cards */}
+          <div className="space-y-4">
+            <div className="rounded-[6px] border border-[#E8DEC8] bg-white p-6 shadow-xs space-y-4">
+              <h3 className="text-sm font-bold text-[#181206] uppercase tracking-wider pb-2 border-b border-[#E8DEC8]">
+                Our Location & Contact
+              </h3>
+
+              <div className="flex gap-3">
+                <div className="w-8 h-8 rounded-full bg-[#FFC700]/10 flex items-center justify-center text-[#181206] shrink-0 mt-0.5">
+                  <MapPin className="h-4 w-4" />
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-[#181206]">Works & Office</p>
+                  <p className="text-xs text-[#6E777D] mt-0.5">{SUPPORT.address}, India</p>
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <div className="w-8 h-8 rounded-full bg-[#FFC700]/10 flex items-center justify-center text-[#181206] shrink-0 mt-0.5">
+                  <Phone className="h-4 w-4" />
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-[#181206]">Phone Support</p>
+                  <p className="text-xs text-[#6E777D] mt-0.5">
+                    <a href={SUPPORT.phoneHref} className="text-[#181206] font-semibold hover:underline">
+                      {SUPPORT.phone}
+                    </a>{" "}
+                    · {SUPPORT.hours}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <div className="w-8 h-8 rounded-full bg-[#FFC700]/10 flex items-center justify-center text-[#181206] shrink-0 mt-0.5">
+                  <Mail className="h-4 w-4" />
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-[#181206]">Email Desk</p>
+                  <p className="text-xs text-[#6E777D] mt-0.5">
+                    <a href={SUPPORT.emailHref} className="text-[#181206] font-semibold hover:underline">
+                      {SUPPORT.email}
+                    </a>
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <div className="w-8 h-8 rounded-full bg-[#FFC700]/10 flex items-center justify-center text-[#181206] shrink-0 mt-0.5">
+                  <MessageCircle className="h-4 w-4" />
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-[#181206]">WhatsApp Help</p>
+                  <p className="text-xs text-[#6E777D] mt-0.5">
+                    <a
+                      href={SUPPORT.whatsappHref}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-[#181206] font-semibold hover:underline"
+                    >
+                      {SUPPORT.whatsapp}
+                    </a>{" "}
+                    · Fastest for order updates
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Bot Callout */}
+            <div className="rounded-[6px] border border-[#FFC700]/20 bg-[#FAF3D6] p-4 flex items-start gap-3">
+              <MessageSquare className="h-5 w-5 text-[#181206] shrink-0 mt-0.5" />
+              <div>
+                <p className="text-xs font-bold text-[#181206]">Quick answers, right now</p>
+                <p className="text-[11px] text-[#6E777D] mt-0.5 leading-relaxed">
+                  Tap the FAQ helper button at the bottom-right of any page for instant answers to common delivery, dosage, and shelf-life questions.
+                </p>
+              </div>
+            </div>
+
+            {/* FAQ Accordion (Ekomart faq.html style) */}
+            <div className="rounded-[6px] border border-[#E8DEC8] bg-white p-5 shadow-xs">
+              <h3 className="text-sm font-bold text-[#181206] uppercase tracking-wider pb-2 border-b border-[#E8DEC8]">
+                Frequently Asked Questions
+              </h3>
+              <Accordion type="single" collapsible className="mt-2 text-xs">
+                {faqs.slice(0, 6).map((f) => (
+                  <AccordionItem key={f.id} value={f.id} className="border-b border-[#E8DEC8]">
+                    <AccordionTrigger className="text-left text-xs font-medium text-[#181206] hover:text-[#181206] py-2.5">
+                      {f.question}
+                    </AccordionTrigger>
+                    <AccordionContent className="text-xs text-[#6E777D] leading-relaxed">
+                      {f.answer}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </div>
+          </div>
         </div>
-        <a
-          href="https://www.google.com/maps/place/YG+Hing+%7C+MAYIL+AGRO+FOODS/@8.7547861,77.6503488,17z/data=!3m1!4b1!4m6!3m5!1s0x3b0417536ecdbe63:0xf42c2705a49b2faa!8m2!3d8.7547861!4d77.6503488"
-          target="_blank"
-          rel="noreferrer"
-          className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary underline-offset-4 hover:underline"
-        >
-          <MapPin className="h-4 w-4" /> Open in Google Maps
-        </a>
-      </section>
+
+        {/* Map Section */}
+        <section className="mt-12">
+          <h2 className="text-xl font-bold text-[#181206]">Find Us in Tirunelveli</h2>
+          <p className="mt-1 text-xs text-[#6E777D]">
+            YG Hing · Mayil Agro Foods — our factory works and registered office. Drop in {SUPPORT.hours}.
+          </p>
+          <div className="mt-4 overflow-hidden rounded-[6px] border border-[#E8DEC8] shadow-xs">
+            <iframe
+              title="Map showing Y.G Hing (Mayil Agro Foods), Tirunelveli"
+              src="https://www.google.com/maps?q=8.7547861,77.6503488&z=16&hl=en&output=embed"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              allowFullScreen
+              className="h-[300px] w-full border-0 sm:h-[380px]"
+            />
+          </div>
+          <a
+            href="https://www.google.com/maps/place/YG+Hing+%7C+MAYIL+AGRO+FOODS/@8.7547861,77.6503488,17z/data=!3m1!4b1!4m6!3m5!1s0x3b0417536ecdbe63:0xf42c2705a49b2faa!8m2!3d8.7547861!4d77.6503488"
+            target="_blank"
+            rel="noreferrer"
+            className="mt-2.5 inline-flex items-center gap-1.5 text-xs font-bold text-[#181206] hover:underline"
+          >
+            <MapPin className="h-3.5 w-3.5" /> Open in Google Maps
+          </a>
+        </section>
+      </div>
     </div>
   );
 }

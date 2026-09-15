@@ -7,7 +7,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { subscribeStockAlertServerFn } from "@/functions/alerts";
+import { apiFetch } from "@/lib/api-client";
 
 /**
  * Saved items ("Kitchen list") and back-in-stock alerts.
@@ -97,13 +97,17 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
   const hasAlert = useCallback((slug: string) => alerts.some((a) => a.slug === slug), [alerts]);
 
   const addAlert = useCallback((slug: string, contact: string) => {
+    void apiFetch("/api/alerts", {
+      method: "POST",
+      body: JSON.stringify({ slug, contact }),
+    }).catch((err) => {
+      console.error("Failed to post stock alert to server:", err);
+    });
+
     setAlerts((prev) => [
       ...prev.filter((a) => a.slug !== slug),
       { slug, contact, createdAt: Date.now() },
     ]);
-    subscribeStockAlertServerFn({ data: { slug, contact } }).catch((err) => {
-      console.warn("subscribeStockAlertServerFn error:", err);
-    });
   }, []);
 
   const value = useMemo<WishlistValue>(

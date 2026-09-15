@@ -2,28 +2,23 @@ import { useEffect, useRef, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
-  Award,
-  CheckCircle2,
   ChevronLeft,
   ChevronRight,
-  Clock,
-  Heart,
-  Leaf,
-  Play,
-  ShieldCheck,
-  ShoppingBag,
-  Sparkles,
+  ChevronUp,
+  CreditCard,
+  MapPin,
+  Smile,
   Star,
   Truck,
   Volume2,
   VolumeX,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { SectionHeading } from "@/components/site/SectionHeading";
 import { ProductCard } from "@/components/site/ProductCard";
 import { SmartImage } from "@/components/site/SmartImage";
-import { products, type Format } from "@/data/products";
+import { formatLabels, products, type Format } from "@/data/products";
 import { storyShopImage } from "@/assets/images";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -73,111 +68,53 @@ export const Route = createFileRoute("/")({
           }
         }),
       },
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          "mainEntity": [
-            {
-              "@type": "Question",
-              "name": "What makes Y.G Asafoetida different from commercial hing?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Y.G has been compounding hing in Tirunelveli since 1932 using high-grade mountain Ferula oleoresin and natural carriers, stone-milled in small batches without artificial colors, chemical preservatives, or synthetic aromas."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "Do you have a gluten-free asafoetida option?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Yes! Our Y.G Gluten-Free Asafoetida Powder is formulated with 100% pure rice starch in a dedicated celiac-safe line."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "What is the shelf life of Y.G Asafoetida?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Our compounded powders retain their robust aroma for 18 months from packing. Solid cakes and granules can last up to 24 months when stored airtight in a cool, dry cupboard."
-              }
-            }
-          ]
-        }),
-      },
     ],
   }),
   component: HomePage,
 });
 
-const trustPillars = [
+const featuredCategories = [
   {
-    icon: Award,
-    title: "92+ Years Legacy",
-    body: "Compounded in Tirunelveli since 1932.",
-  },
-  {
-    icon: Leaf,
-    title: "100% Celiac Safe",
-    body: "Dedicated pure rice-starch carrier.",
-  },
-  {
-    icon: Sparkles,
-    title: "High Resin Purity",
-    body: "Rich natural Ferula oleoresin concentration.",
-  },
-  {
-    icon: Truck,
-    title: "Free Shipping",
-    body: "On orders above ₹499 across India.",
-  },
-];
-
-const formatGuides = [
-  {
-    slug: "gold-asafoetida-powder",
-    format: "Powder",
-    title: "Gold & Premium Powder",
-    tagline: "Instant Dissolving · Daily Tadka",
-    description:
-      "Dissolves instantly in hot ghee for fragrant sambar, rasam, and dal tadka.",
-    bestFor: "Sambar, Rasam, Dal",
+    id: "powder" as const,
+    title: formatLabels.powder, // "Powder"
     image: "/products/100g-gold-asafoetida-powder/img-1.jpg",
-    price: "From ₹175",
+    itemCount: products.filter((p) => p.format === "powder").length,
   },
   {
-    slug: "hing-chips",
-    format: "Granules & Chips",
-    title: "Crunchy Pellets & Chips",
-    tagline: "Slow-Blooming · Non-Burning",
-    description:
-      "Coarse granules that bloom slowly without scorching in curds and rice dishes.",
-    bestFor: "Curd Rice, Pickles",
+    id: "granules" as const,
+    title: formatLabels.granules, // "Granules"
     image: "/products/hing-pellets/img-1.jpg",
-    price: "From ₹250",
+    itemCount: products.filter((p) => p.format === "granules").length,
   },
   {
-    slug: "asafoetida-gold-cake",
-    format: "Cake & Lump",
-    title: "Pure Gold Cake & Raw Lump",
-    tagline: "Concentrated · Traditional Strength",
-    description:
-      "Solid block. Shave a pea-sized piece into tempering or dissolve in warm water for festive gravies.",
-    bestFor: "Festive Kuzhambu, Pickles",
+    id: "cake" as const,
+    title: formatLabels.cake, // "Cake"
     image: "/products/100g-asafoetida-gold-cake/img-1.jpg",
-    price: "From ₹240",
+    itemCount: products.filter((p) => p.format === "cake").length,
   },
   {
-    slug: "all-product-heritage-combo",
-    format: "Gift & Combo",
-    title: "Heritage Box & Glass Jars",
-    tagline: "Collector's Sets · Gifting",
-    description:
-      "4-in-1 collection box with brass spoon and hermetic glass bottle jars to seal aroma.",
-    bestFor: "Gourmet Gifting",
+    id: "combo" as const,
+    title: formatLabels.combo, // "Gift & combo"
     image: "/products/all-product/img-1.jpg",
-    price: "From ₹380",
+    itemCount: products.filter((p) => p.format === "combo").length,
+  },
+  {
+    id: "wellness" as const,
+    title: formatLabels.wellness, // "Health Mix"
+    image: "/products/traditional-health-mix/img-1.jpg",
+    itemCount: products.filter((p) => p.format === "wellness").length,
+  },
+  {
+    id: "pooja" as const,
+    title: formatLabels.pooja, // "Pooja Sambrani"
+    image: "/products/pure-benzoin-sambrani/img-1.png",
+    itemCount: products.filter((p) => p.format === "pooja").length,
+  },
+  {
+    id: "gf" as const,
+    title: "Gluten-Free Pure",
+    image: "/products/50g-gluten-free-asafoetida-powder/img-1.jpg",
+    itemCount: products.filter((p) => p.glutenFree).length,
   },
 ];
 
@@ -291,11 +228,21 @@ const HERO_VIDEOS = [
 
 function HomePage() {
   const [activeCatalogTab, setActiveCatalogTab] = useState<Format | "all">("all");
+  const [activeCategoryIdx, setActiveCategoryIdx] = useState(2);
+  const [showBackToTop, setShowBackToTop] = useState(false);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const soundPlayCountRef = useRef(0);
   const [isMuted, setIsMuted] = useState(true);
   const [isFading, setIsFading] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowBackToTop(window.scrollY > 300);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // Smoothly transition video source without destroying video DOM node
   useEffect(() => {
@@ -336,44 +283,15 @@ function HomePage() {
     if (playPromise !== undefined) {
       playPromise.catch(() => {});
     }
-
-    // Automatically unmute sound when the user interacts on the page
-    const activateSound = () => {
-      if (video && soundPlayCountRef.current < 2) {
-        video.muted = false;
-        video.volume = 1.0;
-        setIsMuted(false);
-        video.play().catch(() => {});
-      }
-    };
-
-    window.addEventListener("click", activateSound, { once: true });
-    window.addEventListener("touchstart", activateSound, { once: true });
-    window.addEventListener("pointerdown", activateSound, { once: true });
-    window.addEventListener("keydown", activateSound, { once: true });
-
-    return () => {
-      window.removeEventListener("click", activateSound);
-      window.removeEventListener("touchstart", activateSound);
-      window.removeEventListener("pointerdown", activateSound);
-      window.removeEventListener("keydown", activateSound);
-      if (video) {
-        video.pause();
-        video.removeAttribute("src");
-        video.load();
-      }
-    };
   }, []);
 
   const handleVideoEnded = () => {
     const video = videoRef.current;
     if (!video) return;
 
-    // Only count as a completed cycle after the entire reel sequence completes the last video
     if (currentVideoIndex === HERO_VIDEOS.length - 1) {
       if (!isMuted) {
         soundPlayCountRef.current += 1;
-        // After playing the full sequence 2 times with sound, automatically mute
         if (soundPlayCountRef.current >= 2) {
           video.muted = true;
           setIsMuted(true);
@@ -381,7 +299,6 @@ function HomePage() {
       }
     }
 
-    // Automatically advance to the next video in sequence
     setCurrentVideoIndex((prev) => (prev + 1) % HERO_VIDEOS.length);
   };
 
@@ -415,8 +332,8 @@ function HomePage() {
   const nextVideoItem = HERO_VIDEOS[(currentVideoIndex + 1) % HERO_VIDEOS.length];
 
   return (
-    <div className="space-y-0">
-      {/* Hidden pre-buffering video element for instant, zero-lag transitions */}
+    <div className="space-y-0 relative">
+      {/* Hidden pre-buffering video element */}
       {nextVideoItem ? (
         <video
           src={nextVideoItem.src}
@@ -429,7 +346,7 @@ function HomePage() {
       ) : null}
 
       {/* ======================================================== */}
-      {/* 1. CINEMATIC MULTI-VIDEO HERO BANNER (8 REELS)           */}
+      {/* 1. CINEMATIC HERO BANNER (Screenshot 3 background)       */}
       {/* ======================================================== */}
       <section className="group relative overflow-hidden border-b border-border aspect-[16/9] sm:aspect-[21/9] max-h-[78vh] w-full bg-black select-none">
         <video
@@ -450,38 +367,38 @@ function HomePage() {
           style={{ willChange: "transform, opacity", transform: "translateZ(0)" }}
         />
 
-        {/* Subtle Vignette Gradient for extra readability */}
+        {/* Subtle Vignette Gradient */}
         <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/60 via-transparent to-black/30" />
 
-        {/* Top-Left: Active Reel Badge & Progress */}
-        <div className="absolute top-3 sm:top-5 left-3 sm:left-5 z-20 pointer-events-none flex items-center gap-2">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-md border border-white/20 text-white shadow-xl">
-            <span className="h-2 w-2 rounded-full bg-amber-400 animate-pulse" />
-            <span className="text-[11px] sm:text-xs font-bold tracking-wider uppercase">{currentVideo.title}</span>
+        {/* Top-Left: Active Reel Badge */}
+        <div className="absolute top-2.5 sm:top-5 left-2.5 sm:left-5 z-20 pointer-events-none flex items-center gap-2">
+          <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white shadow-xl">
+            <span className="h-2 w-2 rounded-full bg-[#FFC700] animate-pulse" />
+            <span className="text-[10px] sm:text-xs font-black tracking-wider uppercase">{currentVideo.title}</span>
             <span className="text-[10px] text-white/70 hidden md:inline">· {currentVideo.subtitle}</span>
           </div>
-          <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-md text-white/90 border border-white/20">
+          <span className="text-[9px] sm:text-[10px] font-mono font-bold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-black/50 backdrop-blur-md text-[#FFC700] border border-white/20">
             {currentVideoIndex + 1} / {HERO_VIDEOS.length}
           </span>
         </div>
 
         {/* Top-Right: Sound Toggle Button */}
-        <div className="absolute top-3 sm:top-5 right-3 sm:right-5 z-20 flex items-center gap-2">
+        <div className="absolute top-2.5 sm:top-5 right-2.5 sm:right-5 z-20 flex items-center gap-2">
           <button
             type="button"
             onClick={() => setIsMuted((m) => !m)}
-            className="h-8 sm:h-9 px-3 rounded-full bg-black/50 backdrop-blur-md border border-white/20 text-white flex items-center gap-1.5 text-xs font-medium hover:bg-black/75 transition-all shadow-xl cursor-pointer active:scale-95"
+            className="h-7 sm:h-9 px-2.5 sm:px-3 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white flex items-center gap-1.5 text-[10px] sm:text-xs font-medium hover:bg-black/80 transition-all shadow-xl cursor-pointer active:scale-95"
             aria-label={isMuted ? "Unmute video sound" : "Mute video sound"}
           >
             {isMuted ? (
               <>
-                <VolumeX className="h-3.5 w-3.5 text-white/80" />
+                <VolumeX className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-white/80" />
                 <span className="text-[10px] sm:text-xs font-medium">Sound Off</span>
               </>
             ) : (
               <>
-                <Volume2 className="h-3.5 w-3.5 text-amber-400 animate-pulse" />
-                <span className="text-[10px] sm:text-xs text-amber-400 font-bold">Sound On</span>
+                <Volume2 className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-[#FFC700] animate-pulse" />
+                <span className="text-[10px] sm:text-xs text-[#FFC700] font-bold">Sound On</span>
               </>
             )}
           </button>
@@ -492,9 +409,9 @@ function HomePage() {
           type="button"
           onClick={prevVideo}
           aria-label="Previous video"
-          className="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 h-9 w-9 sm:h-11 sm:w-11 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white flex items-center justify-center shadow-lg transition-all hover:bg-black/70 hover:scale-110 active:scale-95 z-20 opacity-80 sm:opacity-0 group-hover:opacity-100 cursor-pointer"
+          className="absolute left-2.5 sm:left-5 top-1/2 -translate-y-1/2 h-8 w-8 sm:h-11 sm:w-11 rounded-full bg-black/50 backdrop-blur-md border border-white/20 text-white flex items-center justify-center shadow-lg transition-all hover:bg-black/80 hover:scale-110 active:scale-95 z-20 opacity-80 sm:opacity-0 group-hover:opacity-100 cursor-pointer"
         >
-          <ChevronLeft className="h-5 w-5" />
+          <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
         </button>
 
         {/* Navigation Arrow Right */}
@@ -502,15 +419,14 @@ function HomePage() {
           type="button"
           onClick={nextVideo}
           aria-label="Next video"
-          className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 h-9 w-9 sm:h-11 sm:w-11 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white flex items-center justify-center shadow-lg transition-all hover:bg-black/70 hover:scale-110 active:scale-95 z-20 opacity-80 sm:opacity-0 group-hover:opacity-100 cursor-pointer"
+          className="absolute right-2.5 sm:right-5 top-1/2 -translate-y-1/2 h-8 w-8 sm:h-11 sm:w-11 rounded-full bg-black/50 backdrop-blur-md border border-white/20 text-white flex items-center justify-center shadow-lg transition-all hover:bg-black/80 hover:scale-110 active:scale-95 z-20 opacity-80 sm:opacity-0 group-hover:opacity-100 cursor-pointer"
         >
-          <ChevronRight className="h-5 w-5" />
+          <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
         </button>
 
         {/* Bottom Interactive Video Selector Dock */}
-        <div className="absolute bottom-3 sm:bottom-4 inset-x-0 flex flex-col items-center gap-2 z-20 pointer-events-auto px-4">
-          {/* Desktop & Tablet Reel Pills */}
-          <div className="hidden sm:flex items-center gap-1.5 p-1 rounded-full bg-black/55 backdrop-blur-md border border-white/20 shadow-2xl max-w-full overflow-x-auto scrollbar-none">
+        <div className="absolute bottom-2.5 sm:bottom-4 inset-x-0 flex flex-col items-center gap-2 z-20 pointer-events-auto px-3 sm:px-4">
+          <div className="hidden sm:flex items-center gap-1.5 p-1 rounded-full bg-black/65 backdrop-blur-md border border-white/20 shadow-2xl max-w-full overflow-x-auto scrollbar-none">
             {HERO_VIDEOS.map((v, i) => (
               <button
                 key={v.src}
@@ -518,17 +434,16 @@ function HomePage() {
                 onClick={() => selectVideo(i)}
                 className={`px-3 py-1 rounded-full text-[11px] font-medium transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
                   currentVideoIndex === i
-                    ? "bg-amber-500 text-slate-950 font-bold shadow-md scale-105"
+                    ? "bg-[#FFC700] text-[#181206] font-black shadow-md scale-105"
                     : "text-white/80 hover:text-white hover:bg-white/10"
                 }`}
               >
-                <span className={`h-1.5 w-1.5 rounded-full ${currentVideoIndex === i ? "bg-slate-950" : "bg-white/50"}`} />
+                <span className={`h-1.5 w-1.5 rounded-full ${currentVideoIndex === i ? "bg-[#181206]" : "bg-white/50"}`} />
                 {v.tag || v.title}
               </button>
             ))}
           </div>
 
-          {/* Mobile Indicator Dots */}
           <div className="flex sm:hidden justify-center items-center gap-1.5">
             {HERO_VIDEOS.map((v, i) => (
               <button
@@ -538,7 +453,7 @@ function HomePage() {
                 aria-label={`Switch to video ${i + 1}`}
                 className={`h-1.5 rounded-full transition-all duration-300 ${
                   currentVideoIndex === i
-                    ? "w-7 bg-amber-400 shadow-md"
+                    ? "w-7 bg-[#FFC700] shadow-md"
                     : "w-1.5 bg-white/40 hover:bg-white/70"
                 }`}
               />
@@ -548,120 +463,147 @@ function HomePage() {
       </section>
 
       {/* ======================================================== */}
-      {/* 2. COMPACT TRUST STRIP */}
+      {/* 2. BUYING EASYWAY PROCESS STRIP                          */}
       {/* ======================================================== */}
-      <section className="border-b border-border bg-card">
-        <div className="container-page grid gap-3 py-4 grid-cols-2 md:grid-cols-4">
-          {trustPillars.map((t) => (
-            <div key={t.title} className="flex items-center gap-2.5 p-1.5">
-              <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                <t.icon className="h-4 w-4 text-primary" />
+      <section className="border-b border-[#E8DEC8] bg-[#FAF3D6]/60 py-5 sm:py-6">
+        <div className="container-page px-3 sm:px-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
+            <div className="flex items-center gap-2.5 sm:gap-3.5 p-2.5 sm:p-3 rounded-[8px] border border-[#E8DEC8] bg-white hover:border-[#FFC700] hover:shadow-xs transition-all">
+              <div className="h-9 w-9 sm:h-11 sm:w-11 rounded-full border-2 border-[#FFC700] bg-[#FFC700]/20 flex items-center justify-center shrink-0 text-[#181206]">
+                <CreditCard className="h-4 w-4 sm:h-5 sm:w-5" />
               </div>
               <div className="min-w-0">
-                <p className="text-xs font-semibold text-foreground truncate">{t.title}</p>
-                <p className="text-[11px] text-muted-foreground truncate">{t.body}</p>
+                <h4 className="font-bold text-xs sm:text-sm text-[#181206] leading-tight truncate">Easy Payment</h4>
+                <p className="text-[10px] sm:text-xs text-[#5A6560] mt-0.5 truncate">COD &amp; UPI Available</p>
               </div>
             </div>
-          ))}
+
+            <div className="flex items-center gap-2.5 sm:gap-3.5 p-2.5 sm:p-3 rounded-[8px] border border-[#E8DEC8] bg-white hover:border-[#FFC700] hover:shadow-xs transition-all">
+              <div className="h-9 w-9 sm:h-11 sm:w-11 rounded-full border-2 border-[#FFC700] bg-[#FFC700]/20 flex items-center justify-center shrink-0 text-[#181206]">
+                <MapPin className="h-4 w-4 sm:h-5 sm:w-5" />
+              </div>
+              <div className="min-w-0">
+                <h4 className="font-bold text-xs sm:text-sm text-[#181206] leading-tight truncate">Track Online</h4>
+                <p className="text-[10px] sm:text-xs text-[#5A6560] mt-0.5 truncate">Real-time Location</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2.5 sm:gap-3.5 p-2.5 sm:p-3 rounded-[8px] border border-[#E8DEC8] bg-white hover:border-[#FFC700] hover:shadow-xs transition-all">
+              <div className="h-9 w-9 sm:h-11 sm:w-11 rounded-full border-2 border-[#FFC700] bg-[#FFC700]/20 flex items-center justify-center shrink-0 text-[#181206]">
+                <Smile className="h-4 w-4 sm:h-5 sm:w-5" />
+              </div>
+              <div className="min-w-0">
+                <h4 className="font-bold text-xs sm:text-sm text-[#181206] leading-tight truncate">100% Happy</h4>
+                <p className="text-[10px] sm:text-xs text-[#5A6560] mt-0.5 truncate">90+ Yrs Heritage</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2.5 sm:gap-3.5 p-2.5 sm:p-3 rounded-[8px] border border-[#E8DEC8] bg-white hover:border-[#FFC700] hover:shadow-xs transition-all">
+              <div className="h-9 w-9 sm:h-11 sm:w-11 rounded-full border-2 border-[#FFC700] bg-[#FFC700]/20 flex items-center justify-center shrink-0 text-[#181206]">
+                <Truck className="h-4 w-4 sm:h-5 sm:w-5" />
+              </div>
+              <div className="min-w-0">
+                <h4 className="font-bold text-xs sm:text-sm text-[#181206] leading-tight truncate">Free Shipping</h4>
+                <p className="text-[10px] sm:text-xs text-[#5A6560] mt-0.5 truncate">Orders Above ₹499</p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* ======================================================== */}
-      {/* 3. FOUR ARTISANAL FORMATS SHOWCASE */}
+      {/* 3. FEATURED CATEGORIES                                   */}
       {/* ======================================================== */}
-      <section className="container-page py-8 sm:py-12">
-        <SectionHeading
-          eyebrow="Formulations & Uses"
-          title="Engineered for Every Culinary Style"
-          description="Different culinary traditions call for different bloom speeds and carrier bases."
-          align="center"
-        />
+      <section className="border-b border-[#E8DEC8] bg-white py-8 sm:py-14">
+        <div className="container-page px-3 sm:px-6">
+          <div className="flex items-center justify-between mb-5 sm:mb-8">
+            <h2 className="text-xl sm:text-3xl font-extrabold text-[#181206] tracking-tight">
+              Featured Categories
+            </h2>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setActiveCategoryIdx((i) => (i - 1 + featuredCategories.length) % featuredCategories.length)}
+                className="h-8 w-8 sm:h-9 sm:w-9 rounded-[6px] border border-[#E8DEC8] flex items-center justify-center text-[#181206] hover:border-[#FFC700] hover:bg-[#FFC700] transition-colors cursor-pointer bg-white"
+                aria-label="Previous category"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveCategoryIdx((i) => (i + 1) % featuredCategories.length)}
+                className="h-8 w-8 sm:h-9 sm:w-9 rounded-[6px] border border-[#E8DEC8] flex items-center justify-center text-[#181206] hover:border-[#FFC700] hover:bg-[#FFC700] transition-colors cursor-pointer bg-white"
+                aria-label="Next category"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
 
-        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {formatGuides.map((guide) => (
-            <div
-              key={guide.slug}
-              className="surface-card group relative flex flex-col justify-between overflow-hidden rounded-xl border border-border transition-all duration-300 hover:border-primary/40 hover:shadow-sm"
-            >
-              <div>
-                <div className="relative aspect-4/3 w-full overflow-hidden bg-white p-2 flex items-center justify-center">
+          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-2.5 sm:gap-4">
+            {featuredCategories.map((cat, idx) => (
+              <Link
+                key={`${cat.id}-${idx}`}
+                to="/shop"
+                search={{ category: cat.id }}
+                className={cn(
+                  "bg-white rounded-[10px] p-3 sm:p-4 text-center transition-all flex flex-col items-center justify-between min-h-[150px] sm:min-h-[175px] hover:shadow-md cursor-pointer group",
+                  idx === activeCategoryIdx
+                    ? "border-2 border-[#FFC700] bg-[#FFFBEA] shadow-xs"
+                    : "border border-[#E8DEC8] hover:border-[#FFC700]"
+                )}
+                onClick={() => setActiveCategoryIdx(idx)}
+              >
+                <div className="h-16 w-16 sm:h-20 sm:w-20 flex items-center justify-center p-1 my-auto">
                   <img
-                    src={guide.image}
-                    alt={guide.title}
-                    className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
+                    src={cat.image}
+                    alt={cat.title}
+                    className="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform"
                   />
-                  <div className="absolute top-2 left-2 bg-card/90 backdrop-blur px-2 py-0.5 rounded-full text-[9px] font-bold text-foreground border border-border">
-                    {guide.format}
-                  </div>
-                  <div className="absolute bottom-2 right-2 bg-background/90 backdrop-blur px-1.5 py-0.5 rounded text-[10px] font-bold text-primary">
-                    {guide.price}
-                  </div>
                 </div>
-
-                <div className="p-3 space-y-1">
-                  <p className="text-[10px] font-bold text-primary uppercase tracking-wider">{guide.tagline}</p>
-                  <h3 className="text-sm font-semibold text-foreground leading-snug group-hover:text-primary transition-colors">
-                    {guide.title}
-                  </h3>
-                  <p className="text-[11px] text-muted-foreground leading-relaxed line-clamp-2">{guide.description}</p>
+                <div className="mt-2 sm:mt-3 text-center">
+                  <p className="text-xs sm:text-sm font-bold text-[#181206] group-hover:underline transition-colors leading-tight">
+                    {cat.title}
+                  </p>
+                  <span className="text-[10px] sm:text-[11px] text-[#5A6560] font-medium block mt-0.5">
+                    {cat.itemCount} items
+                  </span>
                 </div>
-              </div>
-
-              <div className="p-3 pt-0 border-t border-border/40 mt-2 flex items-center justify-between text-[10px]">
-                <span className="text-muted-foreground truncate max-w-[130px]">
-                  <span className="font-semibold text-foreground">For: </span>{guide.bestFor}
-                </span>
-                <Link
-                  to="/product/$slug"
-                  params={{ slug: guide.slug }}
-                  className="inline-flex items-center font-bold text-primary hover:underline shrink-0"
-                >
-                  View <ArrowRight className="ml-0.5 h-2.5 w-2.5" />
-                </Link>
-              </div>
-            </div>
-          ))}
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* ======================================================== */}
-      {/* 4. FULL CATALOG GRID WITH COMPACT TABS */}
+      {/* 4. POPULAR PRODUCTS (Screenshot 1)                       */}
       {/* ======================================================== */}
-      <section className="border-t border-border bg-secondary/25 py-8 sm:py-12">
-        <div className="container-page space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
-            <div>
-              <p className="eyebrow">The Complete Collection</p>
-              <h2 className="mt-0.5 text-xl sm:text-2xl md:text-3xl font-bold tracking-tight">
-                Authentic Y.G Heritage Range
-              </h2>
-              <p className="text-xs text-muted-foreground mt-0.5">
-                Hand-compounded hing, roasted sathu maavu, and sacred natural sambrani resins.
-              </p>
-            </div>
+      <section className="border-t border-[#E8DEC8] bg-[#FAF3D6]/50 py-10 sm:py-14">
+        <div className="container-page space-y-5 sm:space-y-6 px-3 sm:px-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 border-b border-[#E8DEC8] pb-3 sm:pb-4">
+            <h2 className="text-xl sm:text-3xl font-extrabold text-[#181206] tracking-tight">
+              Popular Products
+            </h2>
 
-            {/* Filter Pills */}
-            <div className="flex flex-wrap gap-1 p-0.5 bg-muted/60 rounded-lg border border-border w-fit">
-              {(
-                [
-                  { id: "all", label: `All (${products.length})` },
-                  { id: "powder", label: "Powder" },
-                  { id: "granules", label: "Granules" },
-                  { id: "cake", label: "Cake" },
-                  { id: "combo", label: "Gift Sets" },
-                  { id: "wellness", label: "Health Mix" },
-                  { id: "pooja", label: "Sambrani" },
-                ] as const
-              ).map((tab) => (
+            {/* Category Filter Tabs */}
+            <div className="flex flex-wrap items-center gap-3 sm:gap-6 text-xs sm:text-sm font-semibold">
+              {[
+                { id: "all", label: "All" },
+                { id: "powder", label: formatLabels.powder },
+                { id: "cake", label: formatLabels.cake },
+                { id: "granules", label: formatLabels.granules },
+                { id: "wellness", label: formatLabels.wellness },
+              ].map((tab) => (
                 <button
                   key={tab.id}
                   type="button"
                   onClick={() => setActiveCatalogTab(tab.id as any)}
-                  className={`px-2.5 py-1 rounded-md text-xs font-semibold transition-all ${
+                  className={cn(
+                    "cursor-pointer transition-colors pb-1 relative text-xs sm:text-sm",
                     activeCatalogTab === tab.id
-                      ? "bg-card text-foreground shadow-xs font-bold"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
+                      ? "text-[#181206] font-black after:content-[''] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#FFC700]"
+                      : "text-[#5A6560] hover:text-[#181206]"
+                  )}
                 >
                   {tab.label}
                 </button>
@@ -669,17 +611,21 @@ function HomePage() {
             </div>
           </div>
 
-          {/* Compact Product Cards Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4">
+          {/* 2-column mobile / 4-column desktop Product Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-6">
             {displayedProducts.map((p, i) => (
-              <ProductCard key={p.slug} product={p} priority={i < 5} mode="compact" />
+              <ProductCard key={p.slug} product={p} priority={i < 4} />
             ))}
           </div>
 
-          <div className="text-center pt-2">
-            <Button size="sm" variant="outline" className="text-xs font-semibold" asChild>
+          <div className="text-center pt-2 sm:pt-4">
+            <Button
+              size="sm"
+              className="h-10 px-6 sm:px-8 font-extrabold text-xs sm:text-sm rounded-[6px] border border-[#FFC700] bg-[#FFC700] text-[#181206] hover:bg-[#E6B000] transition-all shadow-xs cursor-pointer active:scale-95"
+              asChild
+            >
               <Link to="/shop">
-                Explore Full Shop with Filters & Sorting <ArrowRight className="ml-1 h-3.5 w-3.5" />
+                Explore Full Shop with Filters &amp; Sorting <ArrowRight className="ml-1.5 h-4 w-4" />
               </Link>
             </Button>
           </div>
@@ -687,12 +633,12 @@ function HomePage() {
       </section>
 
       {/* ======================================================== */}
-      {/* 5. HERITAGE STORY & STONE COMPOUNDING SPOTLIGHT */}
+      {/* 5. HERITAGE STORY & STONE COMPOUNDING SPOTLIGHT          */}
       {/* ======================================================== */}
-      <section className="border-y border-border bg-clove text-clove-foreground py-10 sm:py-14">
-        <div className="container-page grid items-center gap-8 lg:grid-cols-12">
+      <section className="border-y border-border bg-clove text-clove-foreground py-8 sm:py-14">
+        <div className="container-page grid items-center gap-6 sm:gap-8 lg:grid-cols-12 px-3 sm:px-6">
           <div className="lg:col-span-5 relative max-w-sm mx-auto lg:max-w-none w-full">
-            <div className="aspect-4/3 rounded-2xl overflow-hidden border border-white/10 shadow-lg bg-black/20">
+            <div className="aspect-4/3 rounded-xl sm:rounded-2xl overflow-hidden border border-white/10 shadow-lg bg-black/20">
               <SmartImage
                 src={storyShopImage}
                 alt="Shri P. Subramanian compounding artisanal hing in 1932 Tirunelveli"
@@ -704,13 +650,13 @@ function HomePage() {
                 className="h-full w-full object-cover"
               />
             </div>
-            <div className="absolute -bottom-2 -left-2 bg-amber-500 text-slate-950 font-bold px-3 py-1 rounded-lg text-[10px] shadow-md">
+            <div className="absolute -bottom-2 -left-2 bg-[#FFC700] text-[#181206] font-black px-3 py-1 rounded-lg text-[10px] shadow-md border border-black/20">
               Estd. 1932 · Tirunelveli
             </div>
           </div>
 
           <div className="lg:col-span-7 space-y-3.5">
-            <p className="text-[11px] font-bold tracking-widest uppercase text-amber-400">
+            <p className="text-[11px] font-extrabold tracking-widest uppercase text-[#FFC700]">
               Preserving A 90-Year Craft
             </p>
             <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold leading-tight">
@@ -724,21 +670,21 @@ function HomePage() {
 
             <div className="grid grid-cols-3 gap-3 pt-2 border-t border-white/10 text-center">
               <div>
-                <p className="text-lg sm:text-xl font-extrabold text-amber-400">1932</p>
+                <p className="text-lg sm:text-xl font-extrabold text-[#FFC700]">1932</p>
                 <p className="opacity-75 text-[10px]">Founding Year</p>
               </div>
               <div>
-                <p className="text-lg sm:text-xl font-extrabold text-amber-400">100%</p>
+                <p className="text-lg sm:text-xl font-extrabold text-[#FFC700]">100%</p>
                 <p className="opacity-75 text-[10px]">Natural Ferula</p>
               </div>
               <div>
-                <p className="text-lg sm:text-xl font-extrabold text-amber-400">0%</p>
+                <p className="text-lg sm:text-xl font-extrabold text-[#FFC700]">0%</p>
                 <p className="opacity-75 text-[10px]">Chemical Additives</p>
               </div>
             </div>
 
             <div className="pt-1">
-              <Button variant="secondary" size="sm" className="font-semibold text-slate-950 text-xs" asChild>
+              <Button size="sm" className="font-bold bg-[#FFC700] text-[#181206] hover:bg-[#E6B000] text-xs border border-black/15 shadow-xs" asChild>
                 <Link to="/story">Read Our Full 1932 Story</Link>
               </Button>
             </div>
@@ -747,90 +693,107 @@ function HomePage() {
       </section>
 
       {/* ======================================================== */}
-      {/* 6. AUTHENTIC VERIFIED REVIEWS GRID */}
+      {/* 6. AUTHENTIC VERIFIED REVIEWS GRID                       */}
       {/* ======================================================== */}
-      <section className="container-page py-10 sm:py-14">
-        <SectionHeading
-          eyebrow="Customer Testimonials"
-          title="Trusted Across 1k+ Kitchens"
-          description="Real verified experiences from traditional cooks and culinary enthusiasts."
-          align="center"
-        />
+      <section className="container-page py-8 sm:py-14 px-3 sm:px-6">
+        <div className="text-center max-w-xl mx-auto mb-6 sm:mb-8">
+          <span className="text-[#181206] font-black text-xs uppercase tracking-wider bg-[#FFC700] px-3 py-1 rounded-[4px] border border-black/10">
+            Customer Testimonials
+          </span>
+          <h2 className="mt-2 text-xl sm:text-3xl font-extrabold text-[#181206] tracking-tight">
+            Trusted Across 1k+ Kitchens
+          </h2>
+          <p className="text-xs sm:text-sm text-[#5A6560] mt-1">
+            Real verified experiences from traditional cooks and culinary enthusiasts.
+          </p>
+        </div>
 
-        <div className="mt-6 flex flex-nowrap overflow-x-auto gap-3.5 pb-4 pt-1 px-4 -mx-4 scroll-smooth snap-x snap-mandatory touch-pan-x scrollbar-none md:grid md:grid-cols-2 lg:grid-cols-3 md:overflow-visible md:p-0 md:m-0 md:gap-4">
+        <div className="mt-4 sm:mt-6 flex flex-nowrap overflow-x-auto gap-3 pb-4 pt-1 px-3 -mx-3 scroll-smooth snap-x snap-mandatory touch-pan-x scrollbar-none md:grid md:grid-cols-2 lg:grid-cols-3 md:overflow-visible md:p-0 md:m-0 md:gap-4">
           {verifiedReviews.map((rev) => (
             <figure
               key={rev.name}
-              className="w-[82vw] max-w-[320px] shrink-0 snap-center md:w-auto md:max-w-none md:shrink surface-card flex flex-col justify-between p-4 sm:p-5 rounded-2xl border border-border shadow-xs hover:border-primary/40 transition-all bg-card"
+              className="w-[82vw] max-w-[300px] sm:max-w-[320px] shrink-0 snap-center md:w-auto md:max-w-none md:shrink single-shopping-card-one flex flex-col justify-between p-3.5 sm:p-5 rounded-[8px] border border-[#E8DEC8] shadow-xs hover:border-[#FFC700] transition-all bg-white"
             >
               <div>
                 <div className="flex items-center justify-between">
-                  <div className="flex text-amber-500">
+                  <div className="flex text-[#EABC5E]">
                     {Array.from({ length: rev.rating }).map((_, i) => (
-                      <Star key={i} className="h-3.5 w-3.5 fill-amber-500 text-amber-500" />
+                      <Star key={i} className="h-3.5 w-3.5 fill-[#EABC5E] text-[#EABC5E]" />
                     ))}
                   </div>
-                  <span className="text-[9px] px-2 py-0.5 bg-primary/10 text-primary font-bold rounded-full">
+                  <span className="text-[9px] sm:text-[10px] px-2 py-0.5 bg-[#FFC700] text-[#181206] font-black rounded-[4px]">
                     Verified Purchase
                   </span>
                 </div>
 
-                <h4 className="mt-2.5 text-sm font-bold text-foreground leading-snug">{rev.title}</h4>
+                <h4 className="mt-2.5 text-xs sm:text-base font-bold text-[#181206] leading-snug">{rev.title}</h4>
 
-                <blockquote className="mt-1.5 text-xs text-muted-foreground leading-relaxed">
+                <blockquote className="mt-1.5 text-xs sm:text-sm text-[#5A6560] leading-relaxed">
                   &ldquo;{rev.comment}&rdquo;
                 </blockquote>
               </div>
 
-              <div className="mt-4 pt-2.5 border-t border-border/60 flex items-center justify-between text-xs">
+              <div className="mt-3 sm:mt-4 pt-2 border-t border-[#E8DEC8] flex items-center justify-between text-xs">
                 <div>
-                  <p className="font-bold text-foreground text-xs">{rev.name}</p>
-                  <p className="text-muted-foreground text-[11px]">{rev.city}</p>
+                  <p className="font-bold text-[#181206] text-xs sm:text-sm">{rev.name}</p>
+                  <p className="text-[#5A6560] text-[10px] sm:text-[11px]">{rev.city}</p>
                 </div>
-                <span className="font-semibold text-primary text-[11px] bg-primary/5 px-2 py-0.5 rounded border border-primary/15">{rev.product}</span>
+                <span className="text-[10px] text-[#181206] font-bold bg-[#FFC700]/40 px-2 py-0.5 rounded">
+                  {rev.product}
+                </span>
               </div>
             </figure>
           ))}
         </div>
-
-        {/* Mobile Swipe Hint */}
-        <div className="flex md:hidden items-center justify-center gap-1.5 pt-2 text-[11px] font-medium text-muted-foreground">
-          <span>← Swipe horizontally to view more reviews →</span>
-        </div>
       </section>
 
       {/* ======================================================== */}
-      {/* 7. PROMO OFFER & CLOSING CTA */}
+      {/* 7. PROMO OFFER & CLOSING CTA                             */}
       {/* ======================================================== */}
-      <section className="container-page py-10 sm:py-14">
-        <div className="relative overflow-hidden gradient-gold rounded-2xl p-6 sm:p-10 text-center text-primary-foreground shadow-lg">
+      <section className="container-page py-8 sm:py-14 px-3 sm:px-6">
+        <div className="relative overflow-hidden bg-[#FFC700] rounded-[10px] sm:rounded-[12px] p-6 sm:p-12 text-center text-[#181206] shadow-md border border-black/10">
           <div className="max-w-xl mx-auto space-y-3">
-            <span className="inline-block px-2.5 py-0.5 bg-black/20 rounded-full text-[10px] font-bold uppercase tracking-wider">
-              Special Code: HERITAGE10
+            <span className="inline-block px-3 py-1 bg-[#181206] text-[#FFC700] rounded-[4px] text-[10px] font-black uppercase tracking-wider">
+              Special Coupon: BULK15
             </span>
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
+            <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-[#181206]">
               Ninety Years of Culinary Purity, One Pinch at a Time
             </h2>
-            <p className="text-xs sm:text-sm opacity-90 leading-relaxed">
-              Free delivery on orders above ₹499 with same-day dispatch from Tirunelveli.
+            <p className="text-xs sm:text-sm text-[#181206]/85 font-medium leading-relaxed">
+              Free delivery on orders above ₹499 with same-day dispatch directly from our works in Tirunelveli.
             </p>
 
-            <div className="pt-2 flex flex-wrap items-center justify-center gap-2.5">
-              <Button size="sm" variant="secondary" className="font-bold text-slate-950 px-5 shadow-xs" asChild>
-                <Link to="/shop">Shop the 9 Formulations</Link>
+            <div className="pt-3 flex flex-wrap items-center justify-center gap-2.5 sm:gap-3">
+              <Button
+                size="sm"
+                className="h-10 px-5 sm:px-6 font-extrabold text-xs sm:text-sm bg-[#181206] text-[#FFC700] hover:bg-black rounded-[6px] shadow-sm transition-all active:scale-95"
+                asChild
+              >
+                <Link to="/shop">Shop All 15 Products</Link>
               </Button>
               <Button
                 size="sm"
-                variant="outline"
-                className="bg-transparent border-white/40 text-white hover:bg-white/10 text-xs"
+                className="h-10 px-5 sm:px-6 font-extrabold text-xs sm:text-sm border-2 border-[#181206] text-[#181206] bg-transparent hover:bg-[#181206]/10 rounded-[6px] transition-all active:scale-95"
                 asChild
               >
-                <Link to="/contact">Ask Specialists</Link>
+                <Link to="/story">Our Heritage Story</Link>
               </Button>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Floating Back to Top Button */}
+      {showBackToTop && (
+        <button
+          type="button"
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          className="fixed bottom-6 right-6 z-50 h-10 w-10 sm:h-11 sm:w-11 rounded-full bg-[#FFC700] border border-black/20 text-[#181206] hover:bg-[#E6B000] flex items-center justify-center shadow-lg transition-all active:scale-95 cursor-pointer"
+          aria-label="Scroll to top"
+        >
+          <ChevronUp className="h-5 w-5" />
+        </button>
+      )}
     </div>
   );
 }

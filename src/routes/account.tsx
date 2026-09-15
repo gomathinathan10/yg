@@ -38,196 +38,279 @@ function AccountPage() {
   const [phone, setPhone] = useState("");
 
   return (
-    <div className="container-page py-10 sm:py-14">
-      <h1 className="text-3xl font-semibold sm:text-4xl">Your account</h1>
-      <p className="mt-2 text-muted-foreground">
-        Orders, tracking and saved addresses — kept on this device so guest checkout stays fast.
-      </p>
+    <div className="min-h-screen bg-[#FAF3D6] font-sans pb-16">
+      {/* Breadcrumb Navigation */}
+      <div className="border-b border-[#E8DEC8] bg-[#F5EAC4] py-3.5">
+        <div className="container-page flex items-center justify-between">
+          <div className="flex items-center gap-2 text-xs text-[#6E777D]">
+            <Link to="/" className="hover:text-[#181206] transition-colors font-medium">
+              Home
+            </Link>
+            <span className="text-[#A0A8B0]">/</span>
+            <span className="font-semibold text-[#181206]">Account</span>
+          </div>
+          <span className="hidden sm:inline-block text-xs font-semibold text-[#181206] bg-[#FFC700]/10 px-2.5 py-0.5 rounded-[4px]">
+            Fast Guest Sync
+          </span>
+        </div>
+      </div>
 
-      <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_1.6fr]">
-        <div className="space-y-6">
-          <section className="surface-card p-6">
-            <h2 className="flex items-center gap-2 text-lg font-semibold">
-              <UserRound className="h-5 w-5 text-primary" /> Profile
+      <div className="container-page pt-8 sm:pt-12">
+        <header className="max-w-2xl">
+          <span className="text-xs font-bold uppercase tracking-wider text-[#181206]">
+            Customer Portal
+          </span>
+          <h1 className="mt-1 text-3xl font-bold sm:text-4xl text-[#181206] tracking-tight">
+            Your Account
+          </h1>
+          <p className="mt-2 text-sm text-[#6E777D]">
+            Orders, live tracking, and saved delivery addresses — preserved safely on this device.
+          </p>
+        </header>
+
+        <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_1.6fr]">
+          <div className="space-y-6">
+            {/* Profile Section */}
+            <section className="rounded-[6px] border border-[#E8DEC8] bg-white p-6 shadow-xs">
+              <h2 className="flex items-center gap-2 text-base font-bold text-[#181206] pb-3 border-b border-[#E8DEC8]">
+                <UserRound className="h-4 w-4 text-[#181206]" /> Profile Details
+              </h2>
+              {profile ? (
+                <div className="mt-4 space-y-1.5 text-xs text-[#6E777D]">
+                  <p className="font-bold text-[#181206] text-sm">{profile.name || "Guest Cook"}</p>
+                  <p>{profile.email}</p>
+                  <p>{profile.phone}</p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="mt-4 rounded-[6px] border-[#E8DEC8] text-xs hover:border-[#FFC700] hover:text-[#181206] cursor-pointer"
+                    onClick={signOut}
+                  >
+                    Sign Out
+                  </Button>
+                </div>
+              ) : (
+                <form
+                  className="mt-4 space-y-3"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    signIn({ name, email, phone });
+                    toast.success("Profile saved successfully");
+                  }}
+                >
+                  <div className="space-y-1.5">
+                    <Label htmlFor="acc-name" className="text-xs font-semibold text-[#181206]">
+                      Full Name
+                    </Label>
+                    <Input
+                      id="acc-name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      required
+                      className="min-h-10 text-xs rounded-[6px] border-[#E8DEC8]"
+                      placeholder="Enter your name"
+                      autoComplete="name"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="acc-email" className="text-xs font-semibold text-[#181206]">
+                      Email Address
+                    </Label>
+                    <Input
+                      id="acc-email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      className="min-h-10 text-xs rounded-[6px] border-[#E8DEC8]"
+                      placeholder="Enter your email"
+                      autoComplete="email"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="acc-phone" className="text-xs font-semibold text-[#181206]">
+                      Mobile Number
+                    </Label>
+                    <Input
+                      id="acc-phone"
+                      type="tel"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      required
+                      className="min-h-10 text-xs rounded-[6px] border-[#E8DEC8]"
+                      placeholder="10-digit mobile number"
+                      autoComplete="tel"
+                    />
+                  </div>
+                  <Button
+                    type="submit"
+                    className="w-full h-10 rounded-[6px] bg-[#FFC700] hover:bg-[#E6B000] text-[#181206] font-black font-bold text-xs shadow-xs cursor-pointer"
+                  >
+                    Save Profile
+                  </Button>
+                </form>
+              )}
+            </section>
+
+            {/* Saved Addresses Section */}
+            <section className="rounded-[6px] border border-[#E8DEC8] bg-white p-6 shadow-xs">
+              <h2 className="flex items-center gap-2 text-base font-bold text-[#181206] pb-3 border-b border-[#E8DEC8]">
+                <MapPin className="h-4 w-4 text-[#181206]" /> Saved Addresses
+              </h2>
+              {addresses.length === 0 ? (
+                <p className="mt-3 text-xs text-[#6E777D]">
+                  Addresses saved during checkout will be shown here.
+                </p>
+              ) : (
+                <ul className="mt-4 space-y-3">
+                  {addresses.map((a) => (
+                    <li
+                      key={a.id}
+                      className="rounded-[6px] border border-[#E8DEC8] p-3 text-xs bg-[#FAF3D6]"
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p className="font-bold text-[#181206]">
+                            {a.firstName} {a.lastName}
+                            {a.isDefault && (
+                              <span className="ml-2 rounded-[4px] bg-[#FFC700]/10 px-2 py-0.5 text-[10px] font-bold text-[#181206] uppercase">
+                                Default
+                              </span>
+                            )}
+                          </p>
+                          <p className="text-[#6E777D] mt-0.5">
+                            {a.line1}, {a.city}, {a.state} {a.pin}
+                          </p>
+                          <p className="text-[#6E777D] mt-0.5 font-mono">{a.phone}</p>
+                        </div>
+                        <button
+                          type="button"
+                          aria-label="Remove address"
+                          onClick={() => removeAddress(a.id)}
+                          className="text-[#6E777D] hover:text-red-500 cursor-pointer p-1"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
+                      {!a.isDefault && (
+                        <button
+                          type="button"
+                          onClick={() => setDefaultAddress(a.id)}
+                          className="mt-2 text-[11px] font-semibold text-[#181206] hover:underline cursor-pointer"
+                        >
+                          Set as Default
+                        </button>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+          </div>
+
+          {/* Orders Section */}
+          <section className="rounded-[6px] border border-[#E8DEC8] bg-white p-6 shadow-xs">
+            <h2 className="flex items-center gap-2 text-base font-bold text-[#181206] pb-3 border-b border-[#E8DEC8]">
+              <Package className="h-4 w-4 text-[#181206]" /> Order History
             </h2>
-            {profile ? (
-              <div className="mt-4 space-y-1 text-sm">
-                <p className="font-medium">{profile.name || "Guest"}</p>
-                <p className="text-muted-foreground">{profile.email}</p>
-                <p className="text-muted-foreground">{profile.phone}</p>
-                <Button variant="outline" size="sm" className="mt-4" onClick={signOut}>
-                  Sign out
+            {orders.length === 0 ? (
+              <div className="mt-8 text-center py-8">
+                <p className="text-xs text-[#6E777D]">No orders placed yet on this device.</p>
+                <Button
+                  asChild
+                  className="mt-4 rounded-[6px] bg-[#FFC700] hover:bg-[#E6B000] text-[#181206] font-black font-bold text-xs shadow-xs"
+                >
+                  <Link to="/shop">Explore Heritage Spices</Link>
                 </Button>
               </div>
             ) : (
-              <form
-                className="mt-4 space-y-3"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  signIn({ name, email, phone });
-                  toast.success("You're signed in on this device");
-                }}
-              >
-                <div className="space-y-2">
-                  <Label htmlFor="acc-name">Name</Label>
-                  <Input id="acc-name" value={name} onChange={(e) => setName(e.target.value)} required className="min-h-11" placeholder="Enter your name" autoComplete="name" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="acc-email">Email</Label>
-                  <Input id="acc-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="min-h-11" placeholder="Enter your email address" autoComplete="email" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="acc-phone">Phone</Label>
-                  <Input id="acc-phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} required className="min-h-11" placeholder="Enter your 10-digit mobile number" autoComplete="tel" />
-                </div>
-                <Button type="submit" className="w-full">
-                  Save profile
-                </Button>
-              </form>
-            )}
-          </section>
-
-          <section className="surface-card p-6">
-            <h2 className="flex items-center gap-2 text-lg font-semibold">
-              <MapPin className="h-5 w-5 text-primary" /> Saved addresses
-            </h2>
-            {addresses.length === 0 ? (
-              <p className="mt-3 text-sm text-muted-foreground">
-                Addresses you save at checkout appear here.
-              </p>
-            ) : (
-              <ul className="mt-4 space-y-3">
-                {addresses.map((a) => (
-                  <li key={a.id} className="rounded-lg border border-border p-3 text-sm">
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <p className="font-medium">
-                          {a.firstName} {a.lastName}
-                          {a.isDefault && (
-                            <span className="ml-2 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] tracking-wide text-primary uppercase">
-                              Default
-                            </span>
-                          )}
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                          {a.line1}, {a.city}, {a.state} {a.pin}
-                        </p>
-                        <p className="text-xs text-muted-foreground">{a.phone}</p>
+              <ul className="mt-4 space-y-4">
+                {orders.map((order) => {
+                  const status = currentStatus(order);
+                  const eligibility = resolutionEligibility(order);
+                  return (
+                    <li
+                      key={order.id}
+                      className="rounded-[6px] border border-[#E8DEC8] p-4 bg-white shadow-xs"
+                    >
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div>
+                          <p className="font-bold text-[#181206] text-sm">Order #{order.id}</p>
+                          <p className="text-[11px] text-[#6E777D]">
+                            {new Date(order.createdAt).toLocaleDateString("en-IN", {
+                              day: "numeric",
+                              month: "short",
+                              year: "numeric",
+                            })}{" "}
+                            · {order.items.reduce((n, i) => n + i.qty, 0)} items
+                          </p>
+                        </div>
+                        <span className="rounded-[4px] bg-[#FFC700]/10 px-2.5 py-1 text-xs font-bold text-[#181206]">
+                          {status.label}
+                        </span>
                       </div>
-                      <button
-                        type="button"
-                        aria-label="Remove address"
-                        onClick={() => removeAddress(a.id)}
-                        className="text-muted-foreground hover:text-destructive"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
-                    </div>
-                    {!a.isDefault && (
-                      <button
-                        type="button"
-                        onClick={() => setDefaultAddress(a.id)}
-                        className="mt-2 text-xs text-primary underline"
-                      >
-                        Make default
-                      </button>
-                    )}
-                  </li>
-                ))}
+                      <Separator className="my-3 bg-[#E2E2E2]" />
+                      <div className="flex flex-wrap items-center gap-3">
+                        {order.items.slice(0, 4).map((item) => (
+                          <SmartImage
+                            key={`${item.slug}-${item.variantId}`}
+                            src={item.image}
+                            alt={item.name}
+                            width={200}
+                            height={200}
+                            wrapperClassName="h-12 w-12 shrink-0 rounded-[4px] border border-[#E8DEC8] bg-[#FAF3D6]"
+                            className="h-full w-full object-cover"
+                          />
+                        ))}
+                        <span className="ml-auto text-sm font-bold text-[#DC2626] font-mono">
+                          {formatPrice(order.totals.total)}
+                        </span>
+                      </div>
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        <Button
+                          asChild
+                          size="sm"
+                          variant="outline"
+                          className="rounded-[6px] border-[#E8DEC8] text-xs hover:border-[#FFC700] hover:text-[#181206]"
+                        >
+                          <Link to="/order/$id" params={{ id: order.id }}>
+                            Track Order
+                          </Link>
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="rounded-[6px] text-xs text-[#181206] hover:text-[#181206]"
+                          onClick={() => {
+                            order.items.forEach((i) => cart.add(i.slug, i.variantId, i.qty));
+                            toast.success("Items added back to your basket");
+                          }}
+                        >
+                          <RotateCcw className="mr-1.5 h-3.5 w-3.5" /> Reorder
+                        </Button>
+                        <OrderResolutionDialog order={order} mode="cancellation" size="sm" />
+                        <OrderResolutionDialog order={order} mode="refund" size="sm" />
+                        <SupportTicketDialog order={order} size="sm" variant="ghost" label="Get Help" />
+                      </div>
+                      {order.resolution ? (
+                        <div className="mt-3">
+                          <ResolutionBanner order={order} />
+                        </div>
+                      ) : (
+                        <details className="mt-2.5">
+                          <summary className="cursor-pointer text-[11px] text-[#6E777D]">
+                            {eligibility.reason} · see return policy
+                          </summary>
+                          <PolicyRules order={order} className="mt-2" />
+                        </details>
+                      )}
+                    </li>
+                  );
+                })}
               </ul>
             )}
           </section>
         </div>
-
-        <section className="surface-card p-6">
-          <h2 className="flex items-center gap-2 text-lg font-semibold">
-            <Package className="h-5 w-5 text-primary" /> Order history
-          </h2>
-          {orders.length === 0 ? (
-            <div className="mt-4">
-              <p className="text-sm text-muted-foreground">No orders yet.</p>
-              <Button asChild className="mt-4">
-                <Link to="/shop">Start shopping</Link>
-              </Button>
-            </div>
-          ) : (
-            <ul className="mt-4 space-y-4">
-              {orders.map((order) => {
-                const status = currentStatus(order);
-                const eligibility = resolutionEligibility(order);
-                return (
-                  <li key={order.id} className="rounded-xl border border-border p-4">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div>
-                        <p className="font-semibold">{order.id}</p>
-                        <p className="text-xs text-muted-foreground">
-                          {new Date(order.createdAt).toLocaleDateString("en-IN", {
-                            day: "numeric",
-                            month: "short",
-                            year: "numeric",
-                          })}{" "}
-                          · {order.items.reduce((n, i) => n + i.qty, 0)} items
-                        </p>
-                      </div>
-                      <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-                        {status.label}
-                      </span>
-                    </div>
-                    <Separator className="my-3" />
-                    <div className="flex flex-wrap items-center gap-3">
-                      {order.items.slice(0, 4).map((item) => (
-                        <SmartImage
-                          key={`${item.slug}-${item.variantId}`}
-                          src={item.image}
-                          alt={item.name}
-                          width={200}
-                          height={200}
-                          wrapperClassName="h-12 w-12 shrink-0 rounded-md border border-border"
-                          className="h-full w-full object-cover"
-                        />
-                      ))}
-                      <span className="ml-auto text-sm font-semibold">
-                        {formatPrice(order.totals.total)}
-                      </span>
-                    </div>
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      <Button asChild size="sm" variant="outline">
-                        <Link to="/order/$id" params={{ id: order.id }}>
-                          Track order
-                        </Link>
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => {
-                          order.items.forEach((i) => cart.add(i.slug, i.variantId, i.qty));
-                          toast.success("Items added back to your basket");
-                        }}
-                      >
-                        <RotateCcw className="mr-1.5 h-4 w-4" /> Reorder
-                      </Button>
-                      <OrderResolutionDialog order={order} mode="cancellation" size="sm" />
-                      <OrderResolutionDialog order={order} mode="refund" size="sm" />
-                      <SupportTicketDialog order={order} size="sm" variant="ghost" label="Get help" />
-                    </div>
-                    {order.resolution ? (
-                      <div className="mt-3">
-                        <ResolutionBanner order={order} />
-                      </div>
-                    ) : (
-                      <details className="mt-2">
-                        <summary className="cursor-pointer text-xs text-muted-foreground">
-                          {eligibility.reason} · see the exact rules
-                        </summary>
-                        <PolicyRules order={order} className="mt-2" />
-                      </details>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
-          )}
-        </section>
       </div>
     </div>
   );

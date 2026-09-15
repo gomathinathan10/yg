@@ -41,12 +41,12 @@ export function WishlistButton({
         onClick={onClick}
         aria-pressed={saved}
         className={cn(
-          "inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border px-4 text-sm font-medium transition-colors hover:bg-secondary",
+          "inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border px-4 text-sm font-medium transition-all duration-150 hover:bg-secondary active:scale-95 cursor-pointer",
           saved && "border-primary/40 bg-primary/5 text-primary",
           className,
         )}
       >
-        <Heart className={cn("h-4 w-4", saved && "fill-primary")} aria-hidden />
+        <Heart className={cn("h-4 w-4 transition-transform duration-200", saved && "fill-primary scale-110")} aria-hidden />
         {saved ? "Saved" : "Save for later"}
       </button>
     );
@@ -59,12 +59,12 @@ export function WishlistButton({
       aria-label={saved ? `Remove ${name} from your list` : `Save ${name} for later`}
       aria-pressed={saved}
       className={cn(
-        "grid h-9 w-9 place-items-center rounded-full border border-border bg-card/90 backdrop-blur transition-colors hover:bg-card",
+        "grid h-9 w-9 place-items-center rounded-full border border-border bg-card/90 backdrop-blur transition-all duration-150 hover:bg-card active:scale-125 cursor-pointer",
         saved && "border-primary/40 text-primary",
         className,
       )}
     >
-      <Heart className={cn("h-4 w-4", saved && "fill-primary")} aria-hidden />
+      <Heart className={cn("h-4 w-4 transition-transform duration-200", saved && "fill-primary scale-110")} aria-hidden />
     </button>
   );
 }

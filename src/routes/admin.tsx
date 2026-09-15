@@ -786,7 +786,7 @@ function AdminDashboardPage() {
             <TabsTrigger value="questions" className="py-2.5 flex items-center gap-1.5 text-xs">
               <HelpCircle className="h-3.5 w-3.5" /> Q&A
               {questions.filter((q) => q.status === "pending" || !q.answer).length > 0 && (
-                <span className="ml-1 rounded-full bg-blue-500 px-1.5 py-0.2 text-[10px] text-white font-semibold">
+                <span className="ml-1 rounded-full bg-[#D4AF37] px-1.5 py-0.2 text-[10px] text-[#181206] font-bold">
                   {questions.filter((q) => q.status === "pending" || !q.answer).length}
                 </span>
               )}
@@ -920,10 +920,10 @@ function AdminDashboardPage() {
 
                     <div className="space-y-3">
                       {[
-                        { key: "placed", label: "New / Placed", color: "bg-blue-500" },
+                        { key: "placed", label: "New / Placed", color: "bg-[#D4AF37]" },
                         { key: "packed", label: "Packed in Works", color: "bg-amber-500" },
                         { key: "shipped", label: "Shipped with Courier", color: "bg-purple-500" },
-                        { key: "out", label: "Out for Delivery", color: "bg-indigo-500" },
+                        { key: "out", label: "Out for Delivery", color: "bg-[#FFC700]" },
                         { key: "delivered", label: "Delivered", color: "bg-emerald-500" },
                         { key: "refund_requested", label: "Refund Requested", color: "bg-rose-500" },
                         { key: "cancelled", label: "Cancelled", color: "bg-zinc-500" },

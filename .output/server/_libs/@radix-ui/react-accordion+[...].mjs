@@ -296,7 +296,6 @@ __name$9(composeContextScopes, "composeContextScopes");
 var useLayoutEffect2 = globalThis?.document ? import_react.useLayoutEffect : () => {};
 //#endregion
 //#region node_modules/@radix-ui/react-id/dist/index.mjs
-var import_react_dom = /* @__PURE__ */ __toESM(require_react_dom(), 1);
 var __defProp$8 = Object.defineProperty;
 var __name$8 = (target, value) => __defProp$8(target, "name", {
 	value,
@@ -439,6 +438,7 @@ function useControllableStateReducer(reducer, userArgs, initialArg, init) {
 __name$6(useControllableStateReducer, "useControllableStateReducer");
 //#endregion
 //#region node_modules/@radix-ui/react-primitive/dist/index.mjs
+var import_react_dom = /* @__PURE__ */ __toESM(require_react_dom(), 1);
 var __defProp$5 = Object.defineProperty;
 var __name$5 = (target, value) => __defProp$5(target, "name", {
 	value,
@@ -1523,4 +1523,4 @@ var Header = AccordionHeader;
 var Trigger2 = AccordionTrigger;
 var Content2 = AccordionContent;
 //#endregion
-export { composeRefs as _, Trigger2 as a, Presence as c, useControllableState as d, useId as f, createSlot as g, Slot as h, Root2 as i, Primitive as l, createContextScope as m, Header as n, useDirection as o, useLayoutEffect2 as p, Item as r, createCollection as s, Content2 as t, dispatchDiscreteCustomEvent as u, useComposedRefs as v, require_jsx_runtime as y };
+export { useComposedRefs as _, Trigger2 as a, Presence as c, useControllableState as d, useId as f, createSlot as g, Slot as h, Root2 as i, Primitive as l, createContextScope as m, Header as n, useDirection as o, useLayoutEffect2 as p, Item as r, createCollection as s, Content2 as t, dispatchDiscreteCustomEvent as u, require_jsx_runtime as v };

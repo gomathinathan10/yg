@@ -1,6 +1,6 @@
 import { n as __require, r as __toESM, t as __commonJSMin } from "../../_runtime.mjs";
 import { l as require_react_dom, u as require_react } from "../@floating-ui/react-dom+[...].mjs";
-import { y as require_jsx_runtime } from "../@radix-ui/react-accordion+[...].mjs";
+import { v as require_jsx_runtime } from "../@radix-ui/react-accordion+[...].mjs";
 import { r as parseHref } from "../tanstack__history.mjs";
 import { PassThrough, Readable } from "node:stream";
 import { ReadableStream as ReadableStream$1 } from "node:stream/web";
@@ -1518,11 +1518,6 @@ function isRedirect(obj) {
 /** True if value is a redirect with a resolved `href` location. */
 function isResolvedRedirect(obj) {
 	return isRedirect(obj) && !!obj.options.href;
-}
-/** Parse a serialized redirect object back into a redirect Response. */
-/** Parse a serialized redirect object back into a redirect Response. */
-function parseRedirect(obj) {
-	if (obj !== null && typeof obj === "object" && obj.isSerializedRedirect) return redirect(obj);
 }
 //#endregion
 //#region node_modules/@tanstack/router-core/dist/esm/rewrite.js
@@ -3599,6 +3594,7 @@ var BaseRootRoute = class extends BaseRoute {
 //#endregion
 //#region node_modules/@tanstack/router-core/dist/esm/ssr/constants.js
 var import_jsx_runtime = require_jsx_runtime();
+require_react_dom();
 var GLOBAL_TSR = "$_TSR";
 var TSR_SCRIPT_BARRIER_ID = "$tsr-stream-barrier";
 //#endregion
@@ -4252,7 +4248,8 @@ function useRouteContext(opts) {
 		select: (match) => opts.select ? opts.select(match.context) : match.context
 	});
 }
-require_react_dom();
+//#endregion
+//#region node_modules/@tanstack/react-router/dist/esm/link.js
 /**
 * Build anchor-like props for declarative navigation and preloading.
 *
@@ -14359,4 +14356,4 @@ var renderRouterToStream = async ({ request, router, responseHeaders, children }
 	throw new Error("No renderToReadableStream or renderToPipeableStream found in react-dom/server. Ensure you are using a version of react-dom that supports streaming.");
 };
 //#endregion
-export { parseRedirect as A, getScriptPreloadAttrs as C, executeRewriteInput as D, resolveManifestCssLink as E, invariant as F, decodePath as I, isNotFound as M, notFound as N, isRedirect as O, createLRUCache as P, createInlineCssStyleAsset as S, resolveManifestAssetLink as T, useNavigate as _, replaceSsrResponse as a, TSR_SCRIPT_BARRIER_ID as b, HeadContent as c, createRouter as d, Outlet as f, Link as g, createRootRouteWithContext as h, normalizeSsrResponse as i, rootRouteId as j, isResolvedRedirect as k, useRouterState as l, createFileRoute as m, defineHandlerCallback as n, stripSsrResponseBody as o, lazyRouteComponent as p, isSsrResponse as r, Scripts as s, renderRouterToStream as t, RouterProvider as u, useRouter as v, getStylesheetHref as w, createInlineCssPlaceholderAsset as x, GLOBAL_TSR as y };
+export { rootRouteId as A, getScriptPreloadAttrs as C, executeRewriteInput as D, resolveManifestCssLink as E, decodePath as F, notFound as M, createLRUCache as N, isRedirect as O, invariant as P, createInlineCssStyleAsset as S, resolveManifestAssetLink as T, useNavigate as _, replaceSsrResponse as a, TSR_SCRIPT_BARRIER_ID as b, HeadContent as c, createRouter as d, Outlet as f, Link as g, createRootRouteWithContext as h, normalizeSsrResponse as i, isNotFound as j, isResolvedRedirect as k, useRouterState as l, createFileRoute as m, defineHandlerCallback as n, stripSsrResponseBody as o, lazyRouteComponent as p, isSsrResponse as r, Scripts as s, renderRouterToStream as t, RouterProvider as u, useRouter as v, getStylesheetHref as w, createInlineCssPlaceholderAsset as x, GLOBAL_TSR as y };

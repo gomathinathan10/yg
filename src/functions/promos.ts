@@ -1,5 +1,4 @@
-import { createServerFn } from "@tanstack/react-start";
-import { getDb } from "@/server/db";
+import { apiFetch } from "@/lib/api-client";
 
 export type DbPromo = {
   code: string;
@@ -14,41 +13,41 @@ export type DbPromo = {
   created_at: number;
 };
 
-export const getPromosServerFn = createServerFn({ method: "GET" })
-  .handler(async (): Promise<DbPromo[]> => {
-    const db = getDb();
-    return db.prepare("SELECT * FROM promos WHERE is_active = 1 ORDER BY automatic DESC, created_at ASC").all() as DbPromo[];
-  });
+export const getPromosServerFn = async (): Promise<DbPromo[]> => {
+  return apiFetch<DbPromo[]>("/api/promos?active=1");
+};
 
-export const validatePromoServerFn = createServerFn({ method: "GET" })
-  .validator((data: { code: string; subtotal: number }) => ({
-    code: String(data?.code ?? "").trim().toUpperCase(),
-    subtotal: Number(data?.subtotal ?? 0),
-  }))
-  .handler(async ({ data }): Promise<{ ok: boolean; promo?: DbPromo; message?: string }> => {
-    if (!data.code) return { ok: false, message: "Enter a promo code" };
-    const db = getDb();
-    const promo = db.prepare("SELECT * FROM promos WHERE code = ? AND is_active = 1").get(data.code) as DbPromo | undefined;
-
-    if (!promo) {
-      return { ok: false, message: `Promo code "${data.code}" is invalid or expired` };
+export const validatePromoServerFn = async ({
+  data,
+}: {
+  data: { code: string; subtotal: number };
+}): Promise<{ ok: boolean; promo?: DbPromo; message?: string }> => {
+  try {
+    const res = await apiFetch<{
+      ok: boolean;
+      promo?: any;
+      reason?: string;
+    }>("/api/promos/validate", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) {
+      return { ok: false, message: res.reason || "Invalid promo code" };
     }
+    return { ok: true, promo: res.promo };
+  } catch (err: any) {
+    return { ok: false, message: err?.message || "Invalid coupon" };
+  }
+};
 
-    if (promo.min_subtotal && data.subtotal < promo.min_subtotal) {
-      return { ok: false, message: `Add ₹${promo.min_subtotal - data.subtotal} more to use code ${promo.code}` };
-    }
+export const adminListPromosServerFn = async (): Promise<DbPromo[]> => {
+  return apiFetch<DbPromo[]>("/api/promos");
+};
 
-    return { ok: true, promo };
-  });
-
-export const adminListPromosServerFn = createServerFn({ method: "GET" })
-  .handler(async (): Promise<DbPromo[]> => {
-    const db = getDb();
-    return db.prepare("SELECT * FROM promos ORDER BY created_at DESC").all() as DbPromo[];
-  });
-
-export const adminSavePromoServerFn = createServerFn({ method: "POST" })
-  .validator((data: {
+export const adminSavePromoServerFn = async ({
+  data,
+}: {
+  data: {
     code: string;
     label: string;
     description: string;
@@ -58,62 +57,32 @@ export const adminSavePromoServerFn = createServerFn({ method: "POST" })
     freeShipping?: boolean;
     automatic?: boolean;
     isActive?: boolean;
-  }) => data)
-  .handler(async ({ data }) => {
-    const db = getDb();
-    const code = data.code.trim().toUpperCase();
-    const now = Date.now();
-
-    const existing = db.prepare("SELECT code FROM promos WHERE code = ?").get(code);
-    if (existing) {
-      db.prepare(`
-        UPDATE promos SET
-          label = ?, description = ?, percent_off = ?, amount_off = ?,
-          min_subtotal = ?, free_shipping = ?, automatic = ?, is_active = ?
-        WHERE code = ?
-      `).run(
-        data.label.trim(),
-        data.description.trim(),
-        data.percentOff ?? null,
-        data.amountOff ?? null,
-        data.minSubtotal ?? null,
-        data.freeShipping ? 1 : 0,
-        data.automatic ? 1 : 0,
-        data.isActive ?? true ? 1 : 0,
-        code
-      );
-    } else {
-      db.prepare(`
-        INSERT INTO promos (code, label, description, percent_off, amount_off, min_subtotal, free_shipping, automatic, is_active, created_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-      `).run(
-        code,
-        data.label.trim(),
-        data.description.trim(),
-        data.percentOff ?? null,
-        data.amountOff ?? null,
-        data.minSubtotal ?? null,
-        data.freeShipping ? 1 : 0,
-        data.automatic ? 1 : 0,
-        data.isActive ?? true ? 1 : 0,
-        now
-      );
-    }
-    return { ok: true, code };
+  };
+}) => {
+  await apiFetch("/api/promos", {
+    method: "POST",
+    body: JSON.stringify(data),
   });
+  return { ok: true, code: data.code };
+};
 
-export const adminTogglePromoServerFn = createServerFn({ method: "POST" })
-  .validator((data: { code: string; isActive: boolean }) => data)
-  .handler(async ({ data }) => {
-    const db = getDb();
-    db.prepare("UPDATE promos SET is_active = ? WHERE code = ?").run(data.isActive ? 1 : 0, data.code);
-    return { ok: true };
+export const adminTogglePromoServerFn = async ({
+  data,
+}: {
+  data: { code: string; isActive: boolean };
+}) => {
+  await apiFetch(`/api/promos/${data.code}`, {
+    method: "PATCH",
+    body: JSON.stringify({ isActive: data.isActive }),
   });
+  return { ok: true };
+};
 
-export const adminDeletePromoServerFn = createServerFn({ method: "POST" })
-  .validator((data: { code: string }) => data)
-  .handler(async ({ data }) => {
-    const db = getDb();
-    db.prepare("DELETE FROM promos WHERE code = ?").run(data.code);
-    return { ok: true };
-  });
+export const adminDeletePromoServerFn = async ({
+  data,
+}: {
+  data: { code: string };
+}) => {
+  await apiFetch(`/api/promos/${data.code}`, { method: "DELETE" });
+  return { ok: true };
+};

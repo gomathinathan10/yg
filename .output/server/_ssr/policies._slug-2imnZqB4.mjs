@@ -1,6 +1,6 @@
-import { y as require_jsx_runtime } from "../_libs/@radix-ui/react-accordion+[...].mjs";
+import { v as require_jsx_runtime } from "../_libs/@radix-ui/react-accordion+[...].mjs";
+import { x as ShieldCheck } from "../_libs/lucide-react.mjs";
 import { g as Link } from "../_libs/@tanstack/react-router+[...].mjs";
-import { _ as ShieldCheck } from "../_libs/lucide-react.mjs";
 import { n as policies, t as Route } from "./policies._slug-CAjdWI3y.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/policies._slug-2imnZqB4.js
 var import_jsx_runtime = require_jsx_runtime();

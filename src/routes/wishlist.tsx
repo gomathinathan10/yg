@@ -35,44 +35,51 @@ function WishlistPage() {
   const items = slugs.map(getProduct).filter((p): p is NonNullable<typeof p> => Boolean(p));
 
   return (
-    <div className="container-page py-10 sm:py-14">
-      <p className="eyebrow">Saved by you</p>
-      <h1 className="mt-2 font-display text-3xl font-semibold tracking-tight sm:text-4xl">
-        Your kitchen list
-      </h1>
-      <p className="mt-3 max-w-xl text-muted-foreground">
-        Nothing here expires and nothing is shared. Move anything to the basket when you're ready
-        to cook.
-      </p>
+    <div className="container-page py-8 sm:py-14 px-3 sm:px-6">
+      {/* Ekomart Breadcrumb */}
+      <nav aria-label="Breadcrumb" className="mb-6 flex items-center gap-2 text-xs text-muted-foreground">
+        <Link to="/" className="hover:text-[#181206] transition-colors">Home</Link>
+        <span>/</span>
+        <span className="font-semibold text-foreground">Wishlist</span>
+      </nav>
+
+      <div className="border-b border-[#E8DEC8] pb-5">
+        <span className="text-[11px] font-bold uppercase tracking-wider text-[#181206]">Saved by you</span>
+        <h1 className="mt-1 text-2xl sm:text-3xl font-bold tracking-tight text-[#181206]">
+          Your Saved Hing &amp; Wishlist
+        </h1>
+        <p className="mt-2 text-sm text-muted-foreground max-w-xl">
+          Nothing here expires and nothing is shared. Move anything to your basket when you&apos;re ready to cook.
+        </p>
+      </div>
 
       {items.length === 0 ? (
-        <div className="surface-card mt-8 flex flex-col items-center px-6 py-14 text-center">
-          <span className="grid h-14 w-14 place-items-center rounded-full bg-secondary">
-            <Heart className="h-6 w-6 text-muted-foreground" aria-hidden />
+        <div className="rounded-[6px] border border-[#E8DEC8] bg-white mt-8 flex flex-col items-center px-6 py-14 text-center shadow-xs">
+          <span className="grid h-16 w-16 place-items-center rounded-full bg-[#FAF3D6] border border-[#E8DEC8]">
+            <Heart className="h-7 w-7 text-muted-foreground" aria-hidden />
           </span>
-          <h2 className="mt-4 text-lg font-semibold">Your list is empty</h2>
+          <h2 className="mt-4 text-lg font-bold text-[#181206]">Your wishlist is currently empty</h2>
           <p className="mt-2 max-w-sm text-sm text-muted-foreground">
-            Tap the heart on any product to keep it here — handy when you're deciding between the
-            powder, the granules and the cake.
+            Tap the heart icon on any authentic formulation to save it here for later.
           </p>
-          <Button asChild className="mt-6">
-            <Link to="/shop">Browse the range</Link>
+          <Button asChild className="mt-6 bg-[#FFC700] hover:bg-[#E6B000] text-[#181206] font-black rounded-[6px] font-bold shadow-xs">
+            <Link to="/shop">Browse the collection</Link>
           </Button>
         </div>
       ) : (
-        <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {items.map((p) => {
             const variant = p.variants[0]!;
             const soldOut = p.inStock === false;
             return (
-              <li key={p.slug} className="surface-card flex gap-4 p-4">
+              <li key={p.slug} className="rounded-[6px] border border-[#E8DEC8] bg-white flex gap-4 p-4 shadow-xs transition-shadow hover:shadow-md">
                 <Link to="/product/$slug" params={{ slug: p.slug }} className="shrink-0">
                   <SmartImage
                     src={p.image}
                     alt={p.name}
                     sizes="96px"
                     fallbackLabel={p.name}
-                    wrapperClassName="h-24 w-24 rounded-lg"
+                    wrapperClassName="h-24 w-24 rounded-[6px] border border-[#E8DEC8] bg-[#FAF3D6]"
                     className="h-full w-full object-cover"
                   />
                 </Link>
@@ -80,17 +87,18 @@ function WishlistPage() {
                   <Link
                     to="/product/$slug"
                     params={{ slug: p.slug }}
-                    className="line-clamp-2 font-medium hover:text-primary"
+                    className="line-clamp-2 font-bold text-sm text-[#181206] hover:text-[#181206] transition-colors"
                   >
                     {p.name}
                   </Link>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    {formatPrice(variant.price)} · {variant.label}
+                  <p className="mt-1 text-sm font-bold text-[#DC2626]">
+                    {formatPrice(variant.price)} <span className="text-xs font-normal text-muted-foreground">· {variant.label}</span>
                   </p>
                   <div className="mt-auto flex flex-wrap gap-2 pt-3">
                     <Button
                       size="sm"
                       disabled={soldOut}
+                      className="bg-[#FFC700] hover:bg-[#E6B000] text-[#181206] font-black rounded-[6px] font-bold text-xs shadow-xs"
                       onClick={() => add(p.slug, variant.id)}
                     >
                       {soldOut ? "Sold out" : "Add to basket"}
@@ -98,6 +106,7 @@ function WishlistPage() {
                     <Button
                       size="sm"
                       variant="ghost"
+                      className="text-muted-foreground hover:text-[#DC2626] rounded-[6px] hover:bg-red-50"
                       onClick={() => {
                         remove(p.slug);
                         toast(`${p.name} removed from your list`);
@@ -116,8 +125,8 @@ function WishlistPage() {
 
       {alerts.length > 0 ? (
         <section className="mt-14" aria-labelledby="alerts">
-          <h2 id="alerts" className="flex items-center gap-2 text-lg font-semibold">
-            <BellRing className="h-4 w-4 text-primary" aria-hidden /> Back-in-stock alerts
+          <h2 id="alerts" className="flex items-center gap-2 text-lg font-bold text-[#181206]">
+            <BellRing className="h-4 w-4 text-[#181206]" aria-hidden /> Back-in-stock alerts
           </h2>
           <ul className="mt-4 grid gap-3 sm:grid-cols-2">
             {alerts.map((a) => {
@@ -125,15 +134,15 @@ function WishlistPage() {
               return (
                 <li
                   key={a.slug}
-                  className="surface-card flex items-center justify-between gap-3 p-4 text-sm"
+                  className="rounded-[6px] border border-[#E8DEC8] bg-white flex items-center justify-between gap-3 p-4 text-sm shadow-xs"
                 >
                   <span className="min-w-0">
-                    <span className="block truncate font-medium">{p?.name ?? a.slug}</span>
-                    <span className="block truncate text-muted-foreground">
-                      We'll message {a.contact}
+                    <span className="block truncate font-bold text-[#181206]">{p?.name ?? a.slug}</span>
+                    <span className="block truncate text-xs text-muted-foreground">
+                      We&apos;ll message {a.contact}
                     </span>
                   </span>
-                  <span className="shrink-0 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+                  <span className="shrink-0 rounded-[4px] bg-[#FFC700]/10 border border-[#FFC700]/20 px-2.5 py-1 text-xs font-bold text-[#181206]">
                     Watching
                   </span>
                 </li>

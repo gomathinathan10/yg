@@ -52,18 +52,18 @@ export function ThemeSwitcher({ className = "" }: { className?: string }) {
         aria-expanded={isOpen}
         aria-haspopup="true"
         aria-label={`Current Theme: ${current.name}. Click to change theme.`}
-        className="flex items-center gap-1.5 sm:gap-2 h-8 sm:h-9 px-2 sm:px-3 rounded-full border border-border bg-background hover:bg-secondary/80 text-foreground transition-all cursor-pointer shadow-xs focus:outline-none focus:ring-2 focus:ring-primary/40"
+        className="flex items-center gap-1 sm:gap-2 h-8 sm:h-9 px-1.5 sm:px-3 rounded-full border border-border bg-background hover:bg-secondary/80 text-foreground transition-all cursor-pointer shadow-xs focus:outline-none focus:ring-2 focus:ring-primary/40"
       >
         <span
           className="h-3 w-3 rounded-full ring-2 ring-background ring-offset-1 ring-offset-border/60 shadow-xs shrink-0"
           style={{ backgroundColor: current.dotColor }}
         />
-        <Palette className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
-        <span className="text-xs font-semibold text-foreground whitespace-nowrap">
+        <Palette className="h-3.5 w-3.5 text-muted-foreground shrink-0 hidden xs:block" />
+        <span className="text-xs font-semibold text-foreground whitespace-nowrap hidden sm:inline">
           {current.name}
         </span>
         <ChevronDown
-          className={`h-3 w-3 text-muted-foreground transition-transform duration-200 ${
+          className={`h-3 w-3 text-muted-foreground transition-transform duration-200 hidden sm:block ${
             isOpen ? "rotate-180 text-primary" : ""
           }`}
         />

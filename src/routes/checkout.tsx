@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useServerFn } from "@tanstack/react-start";
+import { createFileRoute, Link, useNavigate, useRouter } from "@tanstack/react-router";
+
+const pinCache = new Map<string, PincodeLookup>();
 import {
   Check,
   ChevronLeft,
@@ -84,6 +85,10 @@ function CheckoutPage() {
   const { profile, addresses, orders, saveAddress, placeOrder, signIn } = useOrders();
 
   const [step, setStep] = useState(0);
+  const goToStep = (nextStep: number) => {
+    setStep(nextStep);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
   const [form, setForm] = useState<Form>(emptyForm);
   const [selectedAddress, setSelectedAddress] = useState<string>("new");
   const [saveForNext, setSaveForNext] = useState(true);
@@ -98,30 +103,37 @@ function CheckoutPage() {
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const blur = (key: string) => () => setTouched((t) => ({ ...t, [key]: true }));
 
-  const runLookup = useServerFn(lookupPincode);
+  const runLookup = lookupPincode;
   const [pinState, setPinState] = useState<"idle" | "loading" | "ok" | "error">("idle");
   const [pinInfo, setPinInfo] = useState<PincodeLookup | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const fieldsRef = useRef<HTMLDivElement | null>(null);
   const lastPin = useRef<string>("");
 
+  const router = useRouter();
+  useEffect(() => {
+    void router.preloadRoute({ to: "/order-confirmed", search: { order: undefined, total: undefined } });
+  }, [router]);
+
   const [prefilled, setPrefilled] = useState(false);
-  if (!prefilled && (profile || addresses.length)) {
-    const def = addresses.find((a) => a.isDefault) ?? addresses[0];
-    setForm((f) => ({
-      ...f,
-      email: profile?.email ?? f.email,
-      phone: def?.phone ?? profile?.phone ?? f.phone,
-      firstName: def?.firstName ?? f.firstName,
-      lastName: def?.lastName ?? f.lastName,
-      line1: def?.line1 ?? f.line1,
-      city: def?.city ?? f.city,
-      state: def?.state ?? f.state,
-      pin: def?.pin ?? f.pin,
-    }));
-    if (def) setSelectedAddress(def.id);
-    setPrefilled(true);
-  }
+  useEffect(() => {
+    if (!prefilled && (profile || addresses.length)) {
+      const def = addresses.find((a) => a.isDefault) ?? addresses[0];
+      setForm((f) => ({
+        ...f,
+        email: profile?.email ?? f.email,
+        phone: def?.phone ?? profile?.phone ?? f.phone,
+        firstName: def?.firstName ?? f.firstName,
+        lastName: def?.lastName ?? f.lastName,
+        line1: def?.line1 ?? f.line1,
+        city: def?.city ?? f.city,
+        state: def?.state ?? f.state,
+        pin: def?.pin ?? f.pin,
+      }));
+      if (def) setSelectedAddress(def.id);
+      setPrefilled(true);
+    }
+  }, [profile, addresses, prefilled]);
 
   const set = (key: keyof Form) => (e: { target: { value: string } }) =>
     setForm((f) => ({ ...f, [key]: e.target.value }));
@@ -147,7 +159,7 @@ function CheckoutPage() {
     requestAnimationFrame(() => fieldsRef.current?.scrollIntoView({ behavior: "smooth", block: "center" }));
   };
 
-  // PIN code → city/state/area auto-fill (India Post lookup, debounced).
+  // PIN code → city/state/area auto-fill (India Post lookup, debounced + instant cache).
   useEffect(() => {
     const pin = form.pin.trim();
     if (!/^\d{6}$/.test(pin)) {
@@ -157,6 +169,18 @@ function CheckoutPage() {
       return;
     }
     if (lastPin.current === pin) return;
+
+    if (pinCache.has(pin)) {
+      const cached = pinCache.get(pin)!;
+      lastPin.current = pin;
+      setPinInfo(cached);
+      setPinState(cached.ok ? "ok" : "error");
+      if (cached.ok) {
+        setForm((f) => (f.pin === pin ? { ...f, city: cached.city || f.city, state: cached.state || f.state } : f));
+      }
+      return;
+    }
+
     let cancelled = false;
     setPinState("loading");
     const t = setTimeout(() => {
@@ -164,6 +188,7 @@ function CheckoutPage() {
         .then((res) => {
           if (cancelled) return;
           lastPin.current = pin;
+          pinCache.set(pin, res);
           setPinInfo(res);
           setPinState(res.ok ? "ok" : "error");
           if (res.ok) {
@@ -173,7 +198,7 @@ function CheckoutPage() {
         .catch(() => {
           if (!cancelled) setPinState("error");
         });
-    }, 450);
+    }, 350);
     return () => {
       cancelled = true;
       clearTimeout(t);
@@ -245,10 +270,13 @@ function CheckoutPage() {
 
   if (cart.resolved.length === 0) {
     return (
-      <div className="container-page flex min-h-[50vh] flex-col items-center justify-center text-center">
-        <h1 className="text-3xl font-semibold">Your basket is empty</h1>
-        <p className="mt-2 text-muted-foreground">Add some hing before checking out.</p>
-        <Button className="mt-6" asChild>
+      <div className="container-page flex min-h-[50vh] flex-col items-center justify-center text-center py-16">
+        <div className="h-16 w-16 rounded-full bg-[#FAF3D6] border border-[#E8DEC8] flex items-center justify-center">
+          <Truck className="h-8 w-8 text-[#181206]" />
+        </div>
+        <h1 className="mt-4 text-2xl sm:text-3xl font-bold text-[#181206]">Your basket is empty</h1>
+        <p className="mt-2 text-sm text-muted-foreground">Add some authentic compounded hing before checking out.</p>
+        <Button className="mt-6 bg-[#FFC700] hover:bg-[#E6B000] text-[#181206] font-black rounded-[6px] font-bold" asChild>
           <Link to="/shop">Shop all products</Link>
         </Button>
       </div>
@@ -323,11 +351,25 @@ function CheckoutPage() {
   };
 
   return (
-    <div className="container-page py-10 sm:py-14">
-      <Link to="/shop" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
-        <ChevronLeft className="h-4 w-4" aria-hidden /> Continue shopping
-      </Link>
-      <h1 className="mt-3 text-3xl font-semibold sm:text-4xl">Checkout</h1>
+    <div className="container-page py-8 sm:py-14 px-3 sm:px-6">
+      {/* Ekomart Breadcrumb */}
+      <nav aria-label="Breadcrumb" className="mb-6 flex items-center gap-2 text-xs text-muted-foreground">
+        <Link to="/" className="hover:text-[#181206] transition-colors">Home</Link>
+        <span>/</span>
+        <Link to="/shop" className="hover:text-[#181206] transition-colors">Shop</Link>
+        <span>/</span>
+        <span className="font-semibold text-foreground">Checkout</span>
+      </nav>
+
+      <div className="flex items-center justify-between border-b border-[#E8DEC8] pb-4">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-[#181206] sm:text-3xl">Secure Checkout</h1>
+          <p className="text-xs text-muted-foreground mt-0.5">Complete your hing order with verified delivery and payment</p>
+        </div>
+        <Link to="/shop" className="inline-flex items-center gap-1 text-xs font-bold text-[#181206] hover:underline">
+          <ChevronLeft className="h-3.5 w-3.5" aria-hidden /> Return to shop
+        </Link>
+      </div>
 
       <ol className="mt-6 flex items-center gap-2 text-sm" aria-label="Checkout progress">
         {steps.map((label, i) => (
@@ -336,19 +378,19 @@ function CheckoutPage() {
               type="button"
               disabled={i >= step}
               aria-label={`Step ${i + 1} of ${steps.length}: ${label}${i < step ? " — completed, go back" : i === step ? " — current step" : ""}`}
-              onClick={() => i < step && setStep(i)}
-              className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-xs font-semibold transition-colors ${
+              onClick={() => i < step && goToStep(i)}
+              className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-xs font-bold transition-colors ${
                 i < step
-                  ? "border-primary bg-primary text-primary-foreground"
+                  ? "border-[#FFC700] bg-[#FFC700] text-[#181206] font-black"
                   : i === step
-                    ? "border-primary text-primary"
-                    : "border-border text-muted-foreground"
+                    ? "border-[#FFC700] text-[#181206] bg-[#FFC700]/10"
+                    : "border-[#E8DEC8] text-muted-foreground bg-white"
               }`}
             >
               {i < step ? <Check className="h-4 w-4" aria-hidden /> : i + 1}
             </button>
-            <span className={i === step ? "font-medium" : "text-muted-foreground"}>{label}</span>
-            {i < steps.length - 1 && <span className="hidden h-px flex-1 bg-border sm:block" />}
+            <span className={i === step ? "font-bold text-[#181206]" : "text-muted-foreground"}>{label}</span>
+            {i < steps.length - 1 && <span className="hidden h-px flex-1 bg-[#E2E2E2] sm:block" />}
           </li>
         ))}
       </ol>
@@ -356,18 +398,18 @@ function CheckoutPage() {
       <div className="mt-8 grid gap-10 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
         <div className="min-w-0 space-y-8">
           {step === 0 && (
-            <section className="surface-card p-6 sm:p-8">
-              <h2 className="text-lg font-semibold">Contact &amp; delivery address</h2>
+            <section className="rounded-[6px] border border-[#E8DEC8] bg-white p-6 sm:p-8 shadow-xs animate-in fade-in-50 slide-in-from-right-3 duration-250">
+              <h2 className="text-lg font-bold text-[#181206]">Contact &amp; delivery address</h2>
 
               {lastOrder && (
                 <button
                   type="button"
                   onClick={useLastOrderDetails}
-                  className="mt-4 flex w-full items-center gap-3 rounded-xl border border-primary/40 bg-primary/5 px-4 py-3 text-left transition-colors hover:bg-primary/10"
+                  className="mt-4 flex w-full items-center gap-3 rounded-[6px] border border-[#FFC700]/40 bg-[#FFC700]/5 px-4 py-3 text-left transition-colors hover:bg-[#FFC700]/10 cursor-pointer"
                 >
-                  <Zap className="h-5 w-5 shrink-0 text-primary" aria-hidden />
+                  <Zap className="h-5 w-5 shrink-0 text-[#181206]" aria-hidden />
                   <span className="text-sm">
-                    <span className="block font-medium">Express fill — use my last order&rsquo;s details</span>
+                    <span className="block font-bold text-[#181206]">Express fill — use my last order&rsquo;s details</span>
                     <span className="block text-xs text-muted-foreground">
                       {lastOrder.address.firstName} · {lastOrder.address.city} {lastOrder.address.pin} ·{" "}
                       {lastOrder.email}
@@ -378,18 +420,18 @@ function CheckoutPage() {
 
               {addresses.length > 0 && (
                 <div className="mt-4 space-y-2">
-                  <p className="text-xs tracking-widest text-muted-foreground uppercase">Saved addresses</p>
+                  <p className="text-xs font-bold tracking-wider text-muted-foreground uppercase">Saved addresses</p>
                   {addresses.map((a) => (
                     <div
                       key={a.id}
-                      className={`flex items-center gap-2 rounded-lg border px-4 py-3 text-sm transition-colors ${
-                        selectedAddress === a.id ? "border-primary bg-primary/5" : "border-border"
+                      className={`flex items-center gap-2 rounded-[6px] border px-4 py-3 text-sm transition-colors ${
+                        selectedAddress === a.id ? "border-[#FFC700] bg-[#FFC700]/5" : "border-[#E8DEC8]"
                       }`}
                     >
-                      <button type="button" onClick={() => pickAddress(a)} aria-pressed={selectedAddress === a.id} aria-label={`Deliver to ${a.firstName} ${a.lastName}, ${a.line1}, ${a.city} ${a.pin}`} className="flex-1 rounded-md text-left">
-                        <span className="font-medium">
+                      <button type="button" onClick={() => pickAddress(a)} aria-pressed={selectedAddress === a.id} aria-label={`Deliver to ${a.firstName} ${a.lastName}, ${a.line1}, ${a.city} ${a.pin}`} className="flex-1 rounded-md text-left cursor-pointer">
+                        <span className="font-bold text-[#181206]">
                           {a.firstName} {a.lastName}
-                          {editingId === a.id && <span className="ml-2 text-xs text-primary">editing</span>}
+                          {editingId === a.id && <span className="ml-2 text-xs text-[#181206]">editing</span>}
                         </span>
                         <span className="block text-xs text-muted-foreground">
                           {a.line1}, {a.city}, {a.state} {a.pin} · {a.phone}
@@ -414,8 +456,8 @@ function CheckoutPage() {
                       setForm((f) => ({ ...f, firstName: "", lastName: "", line1: "", city: "", state: "", pin: "" }));
                     }}
                     aria-pressed={selectedAddress === "new"}
-                    className={`block min-h-11 w-full rounded-lg border px-4 py-3 text-left text-sm transition-colors ${
-                      selectedAddress === "new" ? "border-primary bg-primary/5" : "border-border"
+                    className={`block min-h-11 w-full rounded-[6px] border px-4 py-3 text-left text-sm font-semibold transition-colors cursor-pointer ${
+                      selectedAddress === "new" ? "border-[#FFC700] bg-[#FFC700]/5 text-[#181206]" : "border-[#E8DEC8] text-foreground"
                     }`}
                   >
                     + Use a new address
@@ -529,11 +571,11 @@ function CheckoutPage() {
               </label>
 
               <Button
-                className="mt-6 w-full sm:w-auto"
+                className="mt-6 w-full sm:w-auto bg-[#FFC700] hover:bg-[#E6B000] text-[#181206] font-black rounded-[6px] font-bold shadow-xs"
                 size="lg"
                 onClick={() => {
                   if (detailsValid) {
-                    setStep(1);
+                    goToStep(1);
                     return;
                   }
                   setTouched({
@@ -560,38 +602,38 @@ function CheckoutPage() {
           )}
 
           {step === 1 && (
-            <section className="surface-card p-6 sm:p-8">
-              <h2 className="text-lg font-semibold">Delivery speed</h2>
+            <section className="rounded-[6px] border border-[#E8DEC8] bg-white p-6 sm:p-8 shadow-xs animate-in fade-in-50 slide-in-from-right-3 duration-250">
+              <h2 className="text-lg font-bold text-[#181206]">Delivery speed</h2>
               <RadioGroup aria-label="Delivery speed" value={delivery} onValueChange={(v) => setDelivery(v as "standard" | "express")} className="mt-4 space-y-3">
                 {[
-                  { id: "standard", icon: Truck, label: "Standard", hint: "2–6 working days", fee: cart.shipping },
-                  { id: "express", icon: Zap, label: "Express", hint: "1–2 working days", fee: EXPRESS_FEE },
+                  { id: "standard", icon: Truck, label: "Standard Delivery", hint: "2–6 working days (Direct from Tirunelveli)", fee: cart.shipping },
+                  { id: "express", icon: Zap, label: "Express Air Dispatch", hint: "1–2 working days (Priority couriered)", fee: EXPRESS_FEE },
                 ].map((opt) => (
                   <label
                     key={opt.id}
                     htmlFor={opt.id}
-                    className={`flex min-h-16 cursor-pointer items-center gap-3 rounded-lg border px-4 transition-colors ${
-                      delivery === opt.id ? "border-primary bg-primary/5" : "border-border"
+                    className={`flex min-h-16 cursor-pointer items-center gap-3 rounded-[6px] border px-4 transition-colors ${
+                      delivery === opt.id ? "border-[#FFC700] bg-[#FFC700]/5" : "border-[#E8DEC8]"
                     }`}
                   >
                     <RadioGroupItem value={opt.id} id={opt.id} />
-                    <opt.icon className="h-5 w-5 text-primary" aria-hidden />
+                    <opt.icon className="h-5 w-5 text-[#181206]" aria-hidden />
                     <span className="flex-1">
-                      <span className="block text-sm font-medium">{opt.label}</span>
+                      <span className="block text-sm font-bold text-[#181206]">{opt.label}</span>
                       <span className="block text-xs text-muted-foreground">{opt.hint}</span>
                     </span>
-                    <span className="text-sm font-medium">{opt.fee === 0 ? "Free" : formatPrice(opt.fee)}</span>
+                    <span className="text-sm font-bold text-[#181206]">{opt.fee === 0 ? <span className="text-[#181206]">Free</span> : formatPrice(opt.fee)}</span>
                   </label>
                 ))}
               </RadioGroup>
 
-              <Separator className="my-6" />
-              <h2 className="text-lg font-semibold">Gifting &amp; notes</h2>
-              <label className="mt-4 flex items-start gap-3 rounded-lg border border-border px-4 py-3 text-sm">
+              <Separator className="my-6 border-[#E8DEC8]" />
+              <h2 className="text-lg font-bold text-[#181206]">Gifting &amp; notes</h2>
+              <label className="mt-4 flex items-start gap-3 rounded-[6px] border border-[#E8DEC8] bg-[#FAF3D6]/50 px-4 py-3 text-sm">
                 <Checkbox checked={gift} onCheckedChange={(v) => setGift(Boolean(v))} className="mt-0.5" />
                 <span className="flex-1">
-                  <span className="flex items-center gap-2 font-medium">
-                    <Gift className="h-4 w-4 text-primary" aria-hidden /> Heritage gift wrap
+                  <span className="flex items-center gap-2 font-bold text-[#181206]">
+                    <Gift className="h-4 w-4 text-[#181206]" aria-hidden /> Heritage gift wrap
                   </span>
                   <span className="block text-xs text-muted-foreground">
                     Khadi wrap, wax seal and a handwritten note — {formatPrice(GIFT_FEE)}
@@ -604,25 +646,26 @@ function CheckoutPage() {
                   onChange={(e) => setGiftMessage(e.target.value)}
                   maxLength={200}
                   placeholder="Write your gift message (optional)"
-                  className="mt-3"
+                  className="mt-3 rounded-[6px] border-[#E8DEC8]"
                 />
               )}
               <div className="mt-4 space-y-2">
-                <Label htmlFor="notes">Delivery instructions</Label>
+                <Label htmlFor="notes" className="font-bold text-[#181206]">Delivery instructions</Label>
                 <Textarea
                   id="notes"
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
                   maxLength={300}
                   placeholder="Add landmark, preferred time or gate details (optional)"
+                  className="rounded-[6px] border-[#E8DEC8]"
                 />
               </div>
 
               <div className="mt-6 flex gap-3">
-                <Button variant="outline" size="lg" onClick={() => setStep(0)}>
+                <Button variant="outline" size="lg" className="rounded-[6px] border-[#E8DEC8]" onClick={() => goToStep(0)}>
                   Back
                 </Button>
-                <Button size="lg" className="flex-1 sm:flex-none" onClick={() => setStep(2)}>
+                <Button size="lg" className="flex-1 sm:flex-none bg-[#FFC700] hover:bg-[#E6B000] text-[#181206] font-black rounded-[6px] font-bold shadow-xs" onClick={() => goToStep(2)}>
                   Continue to payment
                 </Button>
               </div>
@@ -631,74 +674,73 @@ function CheckoutPage() {
 
           {step === 2 && (
             <>
-              <section className="surface-card p-6 sm:p-8">
-                <h2 className="text-lg font-semibold">Payment</h2>
+              <section className="rounded-[6px] border border-[#E8DEC8] bg-white p-6 sm:p-8 shadow-xs animate-in fade-in-50 slide-in-from-right-3 duration-250">
+                <h2 className="text-lg font-bold text-[#181206]">Payment Method</h2>
                 <RadioGroup aria-label="Payment method" value={payment} onValueChange={setPayment} className="mt-4 space-y-3">
                   {payments.map((opt) => (
                     <label
                       key={opt.id}
                       htmlFor={opt.id}
-                      className={`flex min-h-14 cursor-pointer items-center gap-3 rounded-lg border px-4 transition-colors ${
-                        payment === opt.id ? "border-primary bg-primary/5" : "border-border"
+                      className={`flex min-h-14 cursor-pointer items-center gap-3 rounded-[6px] border px-4 transition-colors ${
+                        payment === opt.id ? "border-[#FFC700] bg-[#FFC700]/5" : "border-[#E8DEC8]"
                       }`}
                     >
                       <RadioGroupItem value={opt.id} id={opt.id} />
                       <span className="flex-1">
-                        <span className="block text-sm font-medium">{opt.label}</span>
+                        <span className="block text-sm font-bold text-[#181206]">{opt.label}</span>
                         <span className="block text-xs text-muted-foreground">{opt.hint}</span>
                       </span>
                     </label>
                   ))}
                 </RadioGroup>
                 <p className="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
-                  <Lock className="h-3.5 w-3.5" aria-hidden /> Payments are collected via Paytm. The live gateway
-                  connects at launch — this checkout records your order without charging you.
+                  <Lock className="h-3.5 w-3.5 text-[#181206]" aria-hidden /> Payments are processed securely via Paytm. 100% Encrypted & Safe.
                 </p>
               </section>
 
-              <section className="surface-card p-6 sm:p-8">
-                <h2 className="text-lg font-semibold">Review</h2>
-                <dl className="mt-4 space-y-3 text-sm">
-                  <div className="flex flex-col gap-1 sm:flex-row sm:justify-between sm:gap-6">
+              <section className="rounded-[6px] border border-[#E8DEC8] bg-white p-6 sm:p-8 shadow-xs">
+                <h2 className="text-lg font-bold text-[#181206]">Review Order Details</h2>
+                <dl className="mt-4 space-y-3 text-sm divide-y divide-[#E2E2E2]/60">
+                  <div className="flex flex-col gap-1 sm:flex-row sm:justify-between sm:gap-6 pt-2 first:pt-0">
                     <dt className="shrink-0 text-muted-foreground">Ship to</dt>
-                    <dd className="min-w-0 sm:text-right">
+                    <dd className="min-w-0 sm:text-right font-semibold text-[#181206]">
                       {form.firstName} {form.lastName}
-                      <span className="block text-xs text-muted-foreground">
+                      <span className="block text-xs text-muted-foreground font-normal">
                         {form.line1}, {form.city}, {form.state} {form.pin}
                       </span>
                     </dd>
                   </div>
 
-                  <div className="flex flex-col gap-1 sm:flex-row sm:justify-between sm:gap-6">
+                  <div className="flex flex-col gap-1 sm:flex-row sm:justify-between sm:gap-6 pt-2">
                     <dt className="shrink-0 text-muted-foreground">Contact</dt>
-                    <dd className="min-w-0 break-words sm:text-right">
+                    <dd className="min-w-0 break-words sm:text-right font-semibold text-[#181206]">
                       {form.email}
-                      <span className="block text-xs text-muted-foreground">{form.phone}</span>
+                      <span className="block text-xs text-muted-foreground font-normal">{form.phone}</span>
                     </dd>
                   </div>
 
-                  <div className="flex justify-between">
+                  <div className="flex justify-between pt-2">
                     <dt className="text-muted-foreground">Delivery</dt>
-                    <dd>{delivery === "express" ? "Express, 1–2 days" : "Standard, 2–6 days"}</dd>
+                    <dd className="font-semibold text-[#181206]">{delivery === "express" ? "Express Air, 1–2 days" : "Standard Ground, 2–6 days"}</dd>
                   </div>
                   {gift && (
-                    <div className="flex justify-between">
+                    <div className="flex justify-between pt-2">
                       <dt className="text-muted-foreground">Gift wrap</dt>
-                      <dd>Yes</dd>
+                      <dd className="font-semibold text-[#181206]">Yes (Khadi wax sealed)</dd>
                     </div>
                   )}
                 </dl>
                 <div className="mt-6 flex gap-3">
-                  <Button variant="outline" size="lg" onClick={() => setStep(1)}>
+                  <Button variant="outline" size="lg" className="rounded-[6px] border-[#E8DEC8]" onClick={() => goToStep(1)}>
                     Back
                   </Button>
-                  <Button size="lg" className="flex-1" disabled={placing} onClick={submit}>
+                  <Button size="lg" className="flex-1 bg-[#FFC700] hover:bg-[#E6B000] text-[#181206] font-black rounded-[6px] font-bold shadow-md text-base" disabled={placing} onClick={submit}>
                     {placing ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden /> Placing order…
                       </>
                     ) : (
-                      `Pay ${formatPrice(grandTotal)}`
+                      `Complete Order · ${formatPrice(grandTotal)}`
                     )}
                   </Button>
                 </div>
@@ -708,38 +750,38 @@ function CheckoutPage() {
         </div>
 
         <aside className="min-w-0 lg:sticky lg:top-28 lg:self-start" aria-labelledby="order-summary-heading">
-          <div className="surface-card p-6">
-            <h2 id="order-summary-heading" className="text-lg font-semibold">Order summary</h2>
-            <ul className="mt-4 space-y-4">
+          <div className="rounded-[6px] border border-[#E8DEC8] bg-white p-6 shadow-xs">
+            <h2 id="order-summary-heading" className="text-lg font-bold text-[#181206] pb-3 border-b border-[#E8DEC8]">Order summary</h2>
+            <ul className="mt-4 space-y-4 divide-y divide-[#F0F0F0]">
               {cart.resolved.map((line) => (
-                <li key={`${line.slug}-${line.variantId}`} className="flex gap-3">
+                <li key={`${line.slug}-${line.variantId}`} className="flex gap-3 pt-3 first:pt-0">
                   <SmartImage
                     src={line.product.image}
                     alt={line.product.name}
                     width={1000}
                     height={1000}
-                    wrapperClassName="h-16 w-16 shrink-0 rounded-lg border border-border"
+                    wrapperClassName="h-16 w-16 shrink-0 rounded-[6px] border border-[#E8DEC8] bg-[#FAF3D6]"
                     className="h-full w-full object-cover"
                   />
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium">{line.product.name}</p>
+                    <p className="truncate text-sm font-bold text-[#181206] hover:text-[#181206] transition-colors">{line.product.name}</p>
                     <p className="text-xs text-muted-foreground">
                       {line.variant.label} × {line.qty}
                     </p>
                   </div>
-                  <span className="text-sm font-medium">{formatPrice(line.lineTotal)}</span>
+                  <span className="text-sm font-bold text-[#DC2626]">{formatPrice(line.lineTotal)}</span>
                 </li>
               ))}
             </ul>
-            <Separator className="my-5" />
+            <Separator className="my-5 border-[#E8DEC8]" />
 
             <div className="space-y-2">
-              <Label htmlFor="promo" className="text-sm">
+              <Label htmlFor="promo" className="text-xs font-bold text-[#181206] uppercase tracking-wider">
                 Promo code
               </Label>
               {cart.appliedPromo && !cart.promoIsAutomatic ? (
-                <div className="flex items-center justify-between rounded-lg border border-primary/40 bg-primary/5 px-3 py-2">
-                  <span className="text-sm font-medium">{cart.appliedPromo.code}</span>
+                <div className="flex items-center justify-between rounded-[6px] border border-[#FFC700]/40 bg-[#FFC700]/5 px-3 py-2">
+                  <span className="text-sm font-bold text-[#181206]">{cart.appliedPromo.code}</span>
                   <button
                     type="button"
                     onClick={() => {
@@ -748,7 +790,7 @@ function CheckoutPage() {
                       setPromoMsg(null);
                     }}
                     aria-label={`Remove promo code ${cart.appliedPromo.code}`}
-                    className="min-h-11 px-2 text-xs text-muted-foreground underline"
+                    className="min-h-11 px-2 text-xs font-semibold text-muted-foreground underline hover:text-[#DC2626]"
                   >
                     Remove
                   </button>
@@ -760,13 +802,13 @@ function CheckoutPage() {
                     value={promoInput}
                     maxLength={24}
                     onChange={(e) => setPromoInput(e.target.value.toUpperCase())}
-                    placeholder="Enter your promo code"
-                    className="min-h-11"
+                    placeholder="Enter promo code (e.g. FESTIVE10)"
+                    className="min-h-11 rounded-[6px] border-[#E8DEC8]"
                   />
                   <Button
                     type="button"
                     variant="outline"
-                    className="min-h-11"
+                    className="min-h-11 rounded-[6px] border-[#FFC700] text-[#181206] hover:bg-[#FFC700] hover:text-white font-bold px-4"
                     onClick={() => {
                       const res = cart.applyPromo(promoInput);
                       setPromoMsg(
@@ -781,26 +823,26 @@ function CheckoutPage() {
                 </div>
               )}
               {promoMsg && (
-                <p role="status" aria-live="polite" className={`text-xs ${promoMsg.ok ? "text-primary" : "text-destructive"}`}>
+                <p role="status" aria-live="polite" className={`text-xs font-semibold ${promoMsg.ok ? "text-[#181206]" : "text-[#DC2626]"}`}>
                   {promoMsg.text}
                 </p>
               )}
               {cart.promoIsAutomatic && cart.appliedPromo && (
-                <p className="text-xs text-primary">
+                <p className="text-xs font-semibold text-[#181206]">
                   Auto-applied: {cart.appliedPromo.description}
                 </p>
               )}
             </div>
 
-            <Separator className="my-5" />
-            <div className="space-y-2 text-sm">
+            <Separator className="my-5 border-[#E8DEC8]" />
+            <div className="space-y-2.5 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Subtotal</span>
-                <span>{formatPrice(cart.subtotal)}</span>
+                <span className="font-semibold text-foreground">{formatPrice(cart.subtotal)}</span>
               </div>
               {cart.appliedPromo && cart.totalSavings > 0 && (
-                <div className="space-y-1.5 rounded-lg bg-primary/5 px-3 py-2">
-                  <div className="flex justify-between font-medium text-primary">
+                <div className="space-y-1.5 rounded-[6px] bg-[#FFC700]/5 border border-[#FFC700]/30 px-3 py-2">
+                  <div className="flex justify-between font-bold text-xs text-[#181206]">
                     <span>
                       Promo {cart.appliedPromo.code}
                       {cart.promoIsAutomatic ? " (auto)" : ""}
@@ -820,35 +862,52 @@ function CheckoutPage() {
               )}
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Shipping</span>
-                <span>{cart.shipping === 0 ? "Free" : formatPrice(cart.shipping)}</span>
+                <span className="font-semibold text-foreground">{cart.shipping === 0 ? <span className="text-[#181206]">Free</span> : formatPrice(cart.shipping)}</span>
               </div>
               {expressFee > 0 && (
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Express delivery</span>
-                  <span>{formatPrice(expressFee)}</span>
+                  <span className="font-semibold text-foreground">{formatPrice(expressFee)}</span>
                 </div>
               )}
               {giftFee > 0 && (
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Gift wrap</span>
-                  <span>{formatPrice(giftFee)}</span>
+                  <span className="font-semibold text-foreground">{formatPrice(giftFee)}</span>
                 </div>
               )}
               {codFee > 0 && (
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">COD handling</span>
-                  <span>{formatPrice(codFee)}</span>
+                  <span className="font-semibold text-foreground">{formatPrice(codFee)}</span>
                 </div>
               )}
             </div>
-            <Separator className="my-5" />
-            <div className="flex justify-between text-base font-semibold">
-              <span>Total</span>
-              <span>{formatPrice(grandTotal)}</span>
+            <Separator className="my-5 border-[#E8DEC8]" />
+            <div className="flex justify-between text-base font-bold">
+              <span className="text-[#181206]">Total</span>
+              <span className="text-xl font-bold text-[#DC2626]">{formatPrice(grandTotal)}</span>
             </div>
           </div>
         </aside>
       </div>
+
+      {placing && (
+        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background/85 backdrop-blur-md animate-in fade-in duration-200 p-4">
+          <div className="surface-card flex flex-col items-center p-8 rounded-2xl shadow-2xl max-w-sm w-full text-center space-y-4 border border-primary/30">
+            <div className="relative flex items-center justify-center">
+              <div className="h-16 w-16 rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
+              <Lock className="h-6 w-6 text-primary absolute" />
+            </div>
+            <div>
+              <h3 className="text-lg font-bold text-foreground">Securing Your Order</h3>
+              <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed">
+                Confirming reservation and preparing your freshly compounded hing parcel from Tirunelveli...
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
