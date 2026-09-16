@@ -277,7 +277,7 @@ function ProductPage() {
               Shop
             </Link>
             <ChevronRight className="h-3 w-3 text-[#A0A8B0] shrink-0" aria-hidden />
-            <span className="capitalize text-[#6E777D] shrink-0">{product.format}</span>
+            <span className="capitalize text-[#6E777D] shrink-0">{formatLabels[product.format] || product.format}</span>
             <ChevronRight className="h-3 w-3 text-[#A0A8B0] shrink-0" aria-hidden />
             <span aria-current="page" className="truncate font-semibold text-[#181206] min-w-0">
               {product.name}

@@ -86,7 +86,7 @@ function OrderTrackingPage() {
   const eligibility = resolutionEligibility(order);
 
   return (
-    <div className="min-h-screen bg-[#FAF3D6] font-sans pb-16">
+    <div className="min-h-screen bg-white font-sans pb-16">
       {/* Breadcrumb Navigation */}
       <div className="border-b border-[#E8DEC8] bg-[#F5EAC4] py-3.5 no-print">
         <div className="container-page flex items-center justify-between">

@@ -25,7 +25,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { TradePriceMatrix } from "@/components/site/TradePriceMatrix";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/custom-branding")({
@@ -153,7 +152,7 @@ const WORKFLOW_STEPS = [
   },
   {
     step: "03",
-    title: "Batch Production & Nitrogen Sealing",
+    title: "Batch Production & Induction Sealing",
     description:
       "Fresh batches are compounded on our specialized stone mills, induction sealed for 100% moisture barrier protection, and packed under sterile conditions.",
   },
@@ -200,7 +199,7 @@ function CustomBrandingPage() {
     phone: "",
     businessType: "brand_owner",
     productInterest: "compounded_powder",
-    estimatedVolume: "100kg_500kg",
+    estimatedVolume: "25kg_100kg",
     packagingType: "hdpe_jar",
     notes: "",
   });
@@ -224,9 +223,9 @@ function CustomBrandingPage() {
 
   const openWhatsApp = () => {
     const text = encodeURIComponent(
-      `Hello Y.G Asafoetida Team, I am interested in White Labelling & Custom Branding for ${form.companyName || "my company"}. Please share your B2B wholesale catalog and quotation.`
+      `Hello Mayil Agro Foods / YG Team, I am interested in White Labelling & Custom Branding for ${form.companyName || "my company"}. Please share your B2B wholesale catalog and quotation.`
     );
-    window.open(`https://wa.me/919842100000?text=${text}`, "_blank");
+    window.open(`https://wa.me/917200622221?text=${text}`, "_blank");
   };
 
   return (
@@ -238,33 +237,23 @@ function CustomBrandingPage() {
         <div className="container-page relative z-10 space-y-6">
           <div className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/10 px-3.5 py-1 text-xs font-bold text-primary uppercase shadow-xs">
             <Building2 className="h-3.5 w-3.5" />
-            <span>Turnkey OEM & Private Label Solutions</span>
+            <span>Turnkey OEM &amp; Private Label Solutions</span>
           </div>
 
           <div className="max-w-3xl space-y-3.5">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-foreground leading-[1.15]">
-              Custom Branding & White Labelling 
+              White Labelling &amp; Custom Branding 
             </h1>
             <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-              Harness 92 years of generational stone-milling heritage. We formulate, lab-certify, package,
-              and brand authentic Asafoetida (Hing), Idli Chutney Podis, and Heritage Millet Blends under your own brand identity.
+              Harness over 90 years of generational stone-milling heritage. We formulate, lab-certify, package,
+              and brand authentic Asafoetida (Hing), Vismaya Idli Chutney Podis, Rice Mixes, and Heritage Millet Blends under your own brand identity.
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-3 pt-2">
-            <Button size="lg" className="font-bold shadow-md gap-2 h-11 px-6 text-sm" asChild>
+            <Button size="lg" className="font-bold shadow-md gap-2 h-11 px-6 text-sm bg-primary text-primary-foreground" asChild>
               <a href="#inquiry-form">
-                Request Custom Quotation <ArrowRight className="h-4 w-4" />
-              </a>
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="font-bold border-amber-500/30 bg-amber-500/5 hover:bg-amber-500/10 text-amber-900 dark:text-amber-300 h-11 px-6 text-sm gap-2"
-              asChild
-            >
-              <a href="#trade-pricing">
-                <Tag className="h-4 w-4" /> Wholesale Price Matrix
+                Enquire for Bulk Order <ArrowRight className="h-4 w-4" />
               </a>
             </Button>
             <Button
@@ -281,19 +270,19 @@ function CustomBrandingPage() {
           {/* Quick Metrics */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-8 border-t border-border/80">
             <div className="rounded-xl border border-border/80 bg-card p-4 text-center">
-              <p className="text-2xl sm:text-3xl font-extrabold text-foreground">92+</p>
+              <p className="text-2xl sm:text-3xl font-extrabold text-foreground">90+</p>
               <p className="text-xs text-muted-foreground font-medium mt-0.5">Years Compounding Mastery</p>
             </div>
             <div className="rounded-xl border border-border/80 bg-card p-4 text-center">
-              <p className="text-2xl sm:text-3xl font-extrabold text-foreground">50 kg</p>
+              <p className="text-2xl sm:text-3xl font-extrabold text-foreground">25 kg</p>
               <p className="text-xs text-muted-foreground font-medium mt-0.5">Flexible Low Starting MOQ</p>
             </div>
             <div className="rounded-xl border border-border/80 bg-card p-4 text-center">
               <p className="text-2xl sm:text-3xl font-extrabold text-foreground">100%</p>
-              <p className="text-xs text-muted-foreground font-medium mt-0.5">Natural Resin & Starches</p>
+              <p className="text-xs text-muted-foreground font-medium mt-0.5">Natural Resin &amp; Starches</p>
             </div>
             <div className="rounded-xl border border-border/80 bg-card p-4 text-center">
-              <p className="text-2xl sm:text-3xl font-extrabold text-foreground">14+ Countries</p>
+              <p className="text-2xl sm:text-3xl font-extrabold text-foreground">6+ Countries</p>
               <p className="text-xs text-muted-foreground font-medium mt-0.5">Global Export Capability</p>
             </div>
           </div>
@@ -390,11 +379,6 @@ function CustomBrandingPage() {
       </section>
 
       {/* ======================================================== */}
-      {/* 3.5. OFFICIAL WHOLESALE & TRADE PRICE MATRIX */}
-      {/* ======================================================== */}
-      <TradePriceMatrix />
-
-      {/* ======================================================== */}
       {/* 4. FOUR-STEP PRIVATE LABEL ONBOARDING */}
       {/* ======================================================== */}
       <section className="py-12 sm:py-16 bg-card border-b border-border">
@@ -405,7 +389,7 @@ function CustomBrandingPage() {
               From Recipe Prototype to Market Shelf in 4 Steps
             </h2>
             <p className="text-xs sm:text-sm text-muted-foreground">
-              Streamlined agile process designed for rapid launch without minimum order gridlocks.
+              Streamlined agile process designed for rapid launch with flexible low starting MOQ from 25 kg.
             </p>
           </div>
 
@@ -432,7 +416,7 @@ function CustomBrandingPage() {
           {/* Left Info Box */}
           <div className="lg:col-span-5 space-y-6">
             <div>
-              <p className="eyebrow">Institutional & B2B Inquiries</p>
+              <p className="eyebrow">Institutional &amp; B2B Inquiries</p>
               <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground mt-0.5">
                 Ready to Launch Your Custom Branded Spice Line?
               </h2>
@@ -445,18 +429,29 @@ function CustomBrandingPage() {
               <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
                 <Sparkles className="h-4 w-4 text-primary" /> Direct B2B Institutional Helpdesk
               </h3>
-              <div className="space-y-2.5 text-xs text-muted-foreground">
+              <div className="space-y-3 text-xs text-muted-foreground">
+                <div className="flex items-start gap-2.5">
+                  <Globe2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                  <span>
+                    <strong>Mayil Agro Foods</strong><br />
+                    1/303, M.K. Nagar, Near to HP Fuel Station, Abhisekapatti, Tirunelveli - Tenkasi Main Road, Tirunelveli - 627 012
+                  </span>
+                </div>
                 <div className="flex items-center gap-2.5">
                   <Phone className="h-4 w-4 text-primary shrink-0" />
-                  <span>+91 98421 00000 / +91 462 2330000</span>
+                  <span>Tel: 0462 - 233 5555 · Mob: +91 7200622221</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <Phone className="h-4 w-4 text-primary shrink-0" />
+                  <span>Sales Desk: +91 7904567979</span>
                 </div>
                 <div className="flex items-center gap-2.5">
                   <Mail className="h-4 w-4 text-primary shrink-0" />
-                  <span>b2b@ygasafoetida.in / private-label@ygasafoetida.in</span>
+                  <span>White Labelling: <a href="mailto:b2bsales@yghing.com" className="font-semibold text-foreground underline">b2bsales@yghing.com</a></span>
                 </div>
                 <div className="flex items-center gap-2.5">
-                  <Globe2 className="h-4 w-4 text-primary shrink-0" />
-                  <span>Works: Tirunelveli Industrial Corridor, Tamil Nadu 627001</span>
+                  <Mail className="h-4 w-4 text-primary shrink-0" />
+                  <span>General Sales: <a href="mailto:Sales@yghing.com" className="font-semibold text-foreground underline">Sales@yghing.com</a></span>
                 </div>
               </div>
             </div>
@@ -620,7 +615,7 @@ function CustomBrandingPage() {
                         onChange={(e) => setForm({ ...form, estimatedVolume: e.target.value })}
                         className="w-full h-9 rounded-md border border-input bg-background px-3 py-1 text-xs shadow-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                       >
-                        <option value="trial_50kg">Trial Pilot Batch (50 kg – 100 kg)</option>
+                        <option value="trial_25kg">Trial Pilot Batch (25 kg – 100 kg)</option>
                         <option value="100kg_500kg">Standard Batch (100 kg – 500 kg)</option>
                         <option value="500kg_2000kg">Large Scale (500 kg – 2,000 kg)</option>
                         <option value="above_2000kg">Enterprise Contract (2,000+ kg / Monthly)</option>

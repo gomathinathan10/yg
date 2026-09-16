@@ -120,7 +120,6 @@ const filterCategories: Array<{ id: Format | "all" | "gf"; label: string }> = [
   { id: "granules", label: formatLabels.granules },
   { id: "cake", label: formatLabels.cake },
   { id: "combo", label: formatLabels.combo },
-  { id: "wellness", label: formatLabels.wellness },
   { id: "pooja", label: formatLabels.pooja },
 ];
 
@@ -222,7 +221,7 @@ function ShopPage() {
   }, [filter, sort, minPrice, maxPrice]);
 
   return (
-    <div className="min-h-screen bg-[#FAF3D6] font-sans pb-16">
+    <div className="min-h-screen bg-white font-sans pb-16">
       {/* Ekomart Breadcrumb Bar */}
       <div className="border-b border-[#E8DEC8] bg-[#F5EAC4] py-3.5">
         <div className="container-page flex items-center justify-between">
@@ -423,9 +422,9 @@ function ShopPage() {
                 <div className="w-10 h-10 mx-auto rounded-full bg-[#FFC700] text-[#181206] font-black flex items-center justify-center font-bold text-lg mb-2 shadow-xs">
                   YG
                 </div>
-                <h4 className="text-xs font-bold text-[#181206]">Direct From Kumbakonam</h4>
+                <h4 className="text-xs font-bold text-[#181206]">Direct From Tirunelveli</h4>
                 <p className="text-[11px] text-[#6E777D] mt-1 leading-relaxed">
-                  Every product is packaged fresh with batch serial numbers & tamper-evident safety seals.
+                  Every product is packaged fresh with batch serial numbers &amp; tamper-evident safety seals.
                 </p>
               </div>
             </div>

@@ -73,9 +73,9 @@ html[data-theme="ekomart"],
 :root[data-theme="ekomart"] {
   --radius: 0.375rem; /* 6px uniform Ekomart radius */
 
-  --background: #FAF3D6; /* Mild luminous Neon Gold tint */
+  --background: #ffffff; /* Clean white page background */
   --foreground: #181206; /* Deep rich charcoal with warm golden undertone */
-  --card: #FFFDF8;
+  --card: #ffffff;
   --card-foreground: #181206;
   --popover: #FFFDF8;
   --popover-foreground: #181206;
@@ -460,9 +460,9 @@ html[data-theme="indigo"],
 [data-theme="indigo"] {
   --radius: 0.625rem;
 
-  --background: #FAF3D6; /* Mild luminous gold background */
+  --background: #ffffff; /* Clean white page background */
   --foreground: #181206; /* Deep warm charcoal */
-  --card: #FFFDF8;
+  --card: #ffffff;
   --card-foreground: #181206;
   --popover: #FFFDF8;
   --popover-foreground: #181206;
@@ -987,6 +987,132 @@ html[data-theme="copper"],
   transform: translate(-50%, -50%) scale(0.2);
   animation: clickRipplePulse 450ms cubic-bezier(0.1, 0.8, 0.25, 1) forwards;
   z-index: 999999;
+}
+
+/* ======================================================== */
+/* GLOBAL POINTING ANIMATIONS (Micro-Interactions on Hover) */
+/* ======================================================== */
+@media (hover: hover) and (pointer: fine) {
+  /* 1. Buttons & Action Elements: Smooth spring lift, gold rim aura & icon nudge */
+  button,
+  .rts-btn,
+  [role="button"],
+  input[type="submit"],
+  input[type="button"] {
+    position: relative;
+    transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow 0.22s ease,
+                background-color 0.2s ease,
+                border-color 0.2s ease,
+                filter 0.2s ease !important;
+  }
+
+  button:hover:not(:disabled),
+  .rts-btn:hover:not(:disabled),
+  [role="button"]:hover {
+    transform: translateY(-2.5px) scale(1.02);
+    box-shadow: 0 8px 22px -4px rgba(255, 199, 0, 0.45);
+  }
+
+  button:active:not(:disabled),
+  .rts-btn:active:not(:disabled),
+  [role="button"]:active {
+    transform: translateY(1px) scale(0.98);
+    box-shadow: 0 2px 8px rgba(255, 199, 0, 0.2);
+  }
+
+  /* Pointing at button nudges its inner icon */
+  button:hover:not(:disabled) svg,
+  .rts-btn:hover:not(:disabled) svg,
+  [role="button"]:hover svg {
+    transform: translateX(2.5px) scale(1.08);
+    transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  /* 2. Interactive Product Cards & Feature Cards: 3D Lift & Gold Glow */
+  .single-shopping-card-one,
+  [data-card],
+  .hover-lift {
+    transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1),
+                box-shadow 0.28s cubic-bezier(0.2, 0.8, 0.2, 1),
+                border-color 0.28s ease !important;
+    will-change: transform, box-shadow;
+  }
+
+  .single-shopping-card-one:hover,
+  [data-card]:hover,
+  .hover-lift:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 16px 36px -8px rgba(255, 199, 0, 0.32), 0 4px 14px rgba(0, 0, 0, 0.05);
+    border-color: #FFC700 !important;
+  }
+
+  /* Pointing at product cards smoothly magnifies the image */
+  .single-shopping-card-one .thumbnail-preview img {
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease;
+  }
+
+  .single-shopping-card-one:hover .thumbnail-preview img {
+    transform: scale(1.08);
+    filter: brightness(1.03);
+  }
+
+  /* 3. Action Badges & Circular Buttons: Spring pop & glow */
+  .bookmark-badge,
+  .ekomart-action-btn,
+  .ekomart-action-pill {
+    transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow 0.22s ease,
+                background-color 0.2s ease !important;
+  }
+
+  .ekomart-action-btn:hover {
+    transform: scale(1.2) rotate(4deg) !important;
+    box-shadow: 0 0 14px rgba(255, 199, 0, 0.7);
+    border-color: #181206 !important;
+  }
+
+  .ekomart-action-pill:hover {
+    transform: translateX(-50%) translateY(-2px) scale(1.04);
+    box-shadow: 0 8px 20px rgba(255, 199, 0, 0.6);
+  }
+
+  /* 4. Navigation Links & Header Links: Subtle lift & text glow */
+  nav a,
+  header a {
+    transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1),
+                color 0.18s ease,
+                text-shadow 0.18s ease !important;
+  }
+
+  nav a:hover,
+  header a:hover {
+    transform: translateY(-1.5px);
+    text-shadow: 0 0 10px rgba(255, 199, 0, 0.45);
+  }
+
+  /* 5. Inputs, Selects & Search Boxes on Pointing */
+  input:hover:not(:disabled),
+  select:hover:not(:disabled),
+  textarea:hover:not(:disabled) {
+    border-color: #FFC700 !important;
+    box-shadow: 0 0 0 3px rgba(255, 199, 0, 0.18);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  /* 6. Feature Cards & Certified Badges on Pointing */
+  .grid > div.rounded-2xl:hover,
+  .grid > div.rounded-xl:hover {
+    border-color: #FFC700;
+    box-shadow: 0 10px 24px -6px rgba(255, 199, 0, 0.25);
+    transition: all 0.25s ease;
+  }
+
+  .grid > div.rounded-2xl:hover svg,
+  .grid > div.rounded-xl:hover svg {
+    transform: scale(1.12) rotate(4deg);
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
 }
 
 /* ======================================================== */

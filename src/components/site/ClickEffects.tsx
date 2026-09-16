@@ -4,6 +4,7 @@ import { useEffect } from "react";
  * Global tactile click feedback component.
  * Provides micro-animations (visual primary-tinted ripple burst) and optional haptic
  * feedback on every interactive click across buttons, links, cards, tabs, and toggles.
+ * (Custom mouse pointer has been removed as requested; natural browser cursor is preserved).
  */
 export function ClickEffects() {
   useEffect(() => {
@@ -17,7 +18,7 @@ export function ClickEffects() {
       // Identify interactive targets
       const isClickable = Boolean(
         target.closest(
-          "button, a, input, select, textarea, [role='button'], [role='tab'], [role='menuitem'], [data-clickable], .clickable, summary, label, .surface-card"
+          "button, a, input, select, textarea, [role='button'], [role='tab'], [role='menuitem'], [data-clickable], .clickable, summary, label, .single-shopping-card-one, .ekomart-action-btn, .rts-btn"
         )
       );
 

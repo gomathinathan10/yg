@@ -159,12 +159,17 @@ export function Footer() {
           <ul className="space-y-2.5 text-xs sm:text-sm text-white/80">
             <li>
               <Link to="/story" className="hover:text-[#FFC700] transition-colors">
-                Our 1932 Story
+                Our 1931 Story
               </Link>
             </li>
             <li>
               <Link to="/custom-branding" className="hover:text-[#FFC700] transition-colors">
-                Custom Branding &amp; Bulk
+                White Labelling &amp; Bulk
+              </Link>
+            </li>
+            <li>
+              <Link to="/exports" className="hover:text-[#FFC700] transition-colors">
+                Global Exports
               </Link>
             </li>
             <li>
@@ -193,20 +198,35 @@ export function Footer() {
         {/* Col 4: Reach Us */}
         <div>
           <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-4 border-l-2 border-[#FFC700] pl-2.5">
-            Contact Store
+            Contact &amp; Works
           </h4>
           <ul className="space-y-3 text-xs sm:text-sm text-white/80">
             <li className="flex items-start gap-2.5">
               <MapPin className="h-4 w-4 text-[#FFC700] shrink-0 mt-0.5" />
-              <span>Y.G Asafoetida Works, Town Car Street, Tirunelveli, Tamil Nadu 627006</span>
+              <span className="leading-snug">
+                <strong>Mayil Agro Foods</strong><br />
+                1/303, M.K. Nagar, Near to HP Fuel Station, Abhisekapatti, Tirunelveli - Tenkasi Main Road, Tirunelveli - 627 012
+              </span>
             </li>
             <li className="flex items-center gap-2.5">
               <Phone className="h-4 w-4 text-[#FFC700] shrink-0" />
-              <span>+91 98765 43210</span>
+              <span>Tel: <a href="tel:04622335555" className="hover:text-[#FFC700]">0462 - 233 5555</a></span>
+            </li>
+            <li className="flex items-center gap-2.5">
+              <Phone className="h-4 w-4 text-[#FFC700] shrink-0" />
+              <span>Mobile: <a href="tel:+917200622221" className="hover:text-[#FFC700]">+91 7200622221</a></span>
+            </li>
+            <li className="flex items-center gap-2.5">
+              <Phone className="h-4 w-4 text-[#FFC700] shrink-0" />
+              <span>Sales Desk: <a href="tel:+917904567979" className="hover:text-[#FFC700]">+91 7904567979</a></span>
             </li>
             <li className="flex items-center gap-2.5">
               <Mail className="h-4 w-4 text-[#FFC700] shrink-0" />
-              <span>care@ygasafoetida.in</span>
+              <span><a href="mailto:Sales@yghing.com" className="hover:text-[#FFC700]">Sales@yghing.com</a></span>
+            </li>
+            <li className="flex items-center gap-2.5 text-[11px] text-white/70">
+              <Mail className="h-3.5 w-3.5 text-[#FFC700] shrink-0" />
+              <span>White Labelling: <a href="mailto:b2bsales@yghing.com" className="hover:text-[#FFC700] text-white/90">b2bsales@yghing.com</a></span>
             </li>
           </ul>
           <div className="mt-4 p-3 bg-white/5 rounded-[6px] border border-white/10 text-[11px] text-white/70">

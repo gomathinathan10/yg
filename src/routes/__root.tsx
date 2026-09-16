@@ -226,8 +226,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <style
           dangerouslySetInnerHTML={{
             __html: `
-              html { background-color: #FAF3D6; color: #181206; font-family: "Barlow", sans-serif; overflow-x: hidden; }
-              body { margin: 0; background-color: #FAF3D6; color: #181206; font-family: "Barlow", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+              html { background-color: #ffffff; color: #181206; font-family: "Barlow", sans-serif; overflow-x: hidden; }
+              body { margin: 0; background-color: #ffffff; color: #181206; font-family: "Barlow", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
               header.sticky { background-color: #FAF3D6; }
               img { content-visibility: auto; }
             `,
@@ -235,7 +235,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         />
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{var t=localStorage.getItem('yg-palette-theme-v1')||'saffron';document.documentElement.setAttribute('data-theme',t);var c={saffron:'#FFC700',emerald:'#FFAE00',indigo:'#D4AF37',plum:'#7289da'};if(c[t]){document.documentElement.style.setProperty('--primary',c[t]);document.documentElement.style.setProperty('--color-primary',c[t]);document.documentElement.style.setProperty('--primary-foreground','#181206');}}catch(e){}`,
+            __html: `try{var t=localStorage.getItem('yg-palette-theme-v1')||'saffron';document.documentElement.setAttribute('data-theme',t);var c={saffron:'#FFC700',emerald:'#FFAE00',indigo:'#D4AF37',plum:'#7289da'};if(c[t]){document.documentElement.style.setProperty('--primary',c[t]);document.documentElement.style.setProperty('--color-primary',c[t]);document.documentElement.style.setProperty('--primary-foreground','#181206');document.documentElement.style.setProperty('--background','#ffffff');document.documentElement.style.setProperty('--color-background','#ffffff');}}catch(e){}`,
           }}
         />
         <HeadContent />
@@ -267,7 +267,7 @@ function RootComponent() {
       <WishlistProvider>
       <OrdersProvider>
       <CartProvider>
-        <div className="flex min-h-screen flex-col bg-background text-foreground transition-colors duration-300">
+        <div className="flex min-h-screen flex-col bg-white text-foreground transition-colors duration-300">
           <a
             href="#main"
             className="sr-only rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-50"
@@ -275,7 +275,7 @@ function RootComponent() {
             Skip to main content
           </a>
           <Header />
-          <main id="main" className="flex-1">
+          <main id="main" className="flex-1 bg-white">
             {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
             <Outlet />
           </main>

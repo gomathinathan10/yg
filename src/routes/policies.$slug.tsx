@@ -91,8 +91,8 @@ function PolicyPage() {
             <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden />
             <p className="text-sm text-muted-foreground">
               Something here unclear? Write to{" "}
-              <a className="font-medium text-foreground underline" href="mailto:care@ygasafoetida.in">
-                care@ygasafoetida.in
+              <a className="font-medium text-foreground underline" href="mailto:Sales@yghing.com">
+                Sales@yghing.com
               </a>{" "}
               or use the{" "}
               <Link to="/contact" className="font-medium text-foreground underline">

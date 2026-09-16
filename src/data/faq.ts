@@ -4,14 +4,23 @@
  */
 
 export const SUPPORT = {
-  phone: "+91 462 000 1932",
-  phoneHref: "tel:+914620001932",
-  whatsapp: "+91 98765 01932",
-  whatsappHref: "https://wa.me/919876501932",
-  email: "care@ygasafoetida.in",
-  emailHref: "mailto:care@ygasafoetida.in",
-  hours: "Mon–Sat, 9am–6pm IST",
-  address: "Y.G Asafoetida Works, Tirunelveli, Tamil Nadu 627001",
+  company: "Mayil Agro Foods",
+  phone: "0462 - 233 5555",
+  phoneHref: "tel:04622335555",
+  mobile: "+91 7200622221",
+  mobileHref: "tel:+917200622221",
+  salesDesk: "+91 7904567979",
+  salesDeskHref: "tel:+917904567979",
+  whatsapp: "+91 7200622221",
+  whatsappHref: "https://wa.me/917200622221",
+  email: "Sales@yghing.com",
+  emailHref: "mailto:Sales@yghing.com",
+  exportEmail: "Exports@yghing.com",
+  exportEmailHref: "mailto:Exports@yghing.com",
+  whiteLabellingEmail: "b2bsales@yghing.com",
+  whiteLabellingEmailHref: "mailto:b2bsales@yghing.com",
+  hours: "Mon–Sat, 9:00 AM – 7:00 PM IST",
+  address: "Mayil Agro Foods, 1/303, M.K. Nagar, Near to HP Fuel Station, Abhisekapatti, Tirunelveli - Tenkasi Main Road, Tirunelveli - 627 012",
 };
 
 export type FaqEntry = {

@@ -23,7 +23,8 @@ const nav = [
   { to: "/", label: "Home" },
   { to: "/story", label: "About" },
   { to: "/shop", label: "Shop" },
-  { to: "/custom-branding", label: "Brand" },
+  { to: "/custom-branding", label: "White Labelling" },
+  { to: "/exports", label: "Exports" },
   { to: "/account", label: "Orders" },
   { to: "/contact", label: "Contact" },
 ] as const;
@@ -66,37 +67,43 @@ export function Header() {
   return (
     <header className="w-full relative z-40">
       {/* ======================================================== */}
-      {/* 1. TOP ANNOUNCEMENT STRIP                                */}
+      {/* 1. TOP ANNOUNCEMENT STRIP (Neon Gold)                    */}
       {/* ======================================================== */}
-      <div className="bg-[#0F140D] text-white py-1.5 sm:py-2 text-[11px] sm:text-xs border-b border-[#FFC700]/20">
+      <div className="bg-[#FFC700] text-[#181206] py-1.5 sm:py-2 text-[11px] sm:text-xs border-b border-[#D8A700] font-medium">
         <div className="container-page flex flex-col sm:flex-row items-center justify-between gap-1.5 sm:gap-2 px-3 sm:px-6">
           <div className="flex items-center gap-2 text-center sm:text-left">
-            <span className="inline-flex items-center gap-1 bg-[#FFC700] text-[#181206] font-black text-[9px] sm:text-[10px] px-2 py-0.5 rounded uppercase tracking-wider">
+            <span className="inline-flex items-center gap-1 bg-[#181206] text-[#FFC700] font-black text-[9px] sm:text-[10px] px-2 py-0.5 rounded uppercase tracking-wider">
               <Sparkles className="h-3 w-3" /> Special
             </span>
-            <p className="text-white/95 text-[11px] sm:text-xs font-medium">
+            <p className="text-[#181206] text-[11px] sm:text-xs font-semibold">
               FREE delivery &amp; 40% Discount for next 3 orders! Place your 1st order in.
             </p>
-            <span className="hidden md:inline text-white/60">
+            <span className="hidden md:inline text-[#181206]/75 font-normal">
               · Limited time festive offer
             </span>
           </div>
-          <div className="flex items-center gap-4 text-white/90">
-            <a
-              href="tel:+919443152852"
-              className="flex items-center gap-1.5 hover:text-[#FFC700] transition-colors"
+          <div className="flex items-center gap-4 text-[#181206] text-xs font-semibold">
+            <Link
+              to="/custom-branding"
+              className="hidden md:inline-flex items-center gap-1 bg-[#181206]/10 hover:bg-[#181206]/20 text-[#181206] border border-[#181206]/20 px-2.5 py-0.5 rounded text-[11px] font-bold transition-colors"
             >
-              <Phone className="h-3 w-3 text-[#FFC700]" />
-              <span>Need help? Call Us: <strong className="text-white">+91 94431 52852</strong></span>
+              Enquire for Bulk Order
+            </Link>
+            <a
+              href="tel:04622335555"
+              className="flex items-center gap-1.5 hover:text-black transition-colors"
+            >
+              <Phone className="h-3 w-3 text-[#181206]" />
+              <span>Call: <strong className="text-[#181206]">0462 - 233 5555</strong></span>
             </a>
           </div>
         </div>
       </div>
 
       {/* ======================================================== */}
-      {/* 2. MAIN Neon Gold HEADER BAR                           */}
+      {/* 2. MAIN HEADER BAR (Mild Yellow Below Neon Gold)         */}
       {/* ======================================================== */}
-      <div className="bg-[#FFC700] text-[#181206] py-2.5 sm:py-3.5 border-b border-black/10 shadow-xs">
+      <div className="bg-[#FAF3D6] text-[#181206] py-2.5 sm:py-3.5 border-b border-[#E8DEC8] shadow-xs">
         <div className="container-page flex items-center justify-between gap-2.5 sm:gap-6 px-3 sm:px-6">
           {/* Mobile Hamburger */}
           <div className="flex items-center lg:hidden">
@@ -106,27 +113,19 @@ export function Header() {
                   variant="ghost"
                   size="icon"
                   aria-label="Open navigation menu"
-                  className="h-9 w-9 text-[#181206] hover:bg-black/10 active:scale-95"
+                  className="h-9 w-9 text-[#181206] hover:bg-[#FFC700]/30 active:scale-95"
                 >
                   <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
               <SheetContent side="left" className="w-72 p-5 sm:p-6 flex flex-col justify-between bg-white text-[#181206]">
                 <div>
-                  <div className="flex items-center gap-2.5 pb-4 border-b border-[#E8DEC8]">
+                  <div className="flex items-center pb-4 border-b border-[#E8DEC8]">
                     <img
                       src="/logo.png"
-                      alt="Y.G Asafoetida Logo"
-                      className="h-10 w-10 rounded-[6px] object-contain shadow-xs border border-[#E8DEC8]"
+                      alt="Logo"
+                      className="h-12 w-auto object-contain"
                     />
-                    <div>
-                      <SheetTitle className="font-bold text-base leading-tight text-[#181206] flex items-center gap-1">
-                        Y.G ASAFOETIDA
-                      </SheetTitle>
-                      <p className="text-[10px] text-[#5A6560] tracking-wider uppercase font-semibold">
-                        Tirunelveli · Est. 1932
-                      </p>
-                    </div>
                   </div>
 
                   <nav className="mt-5 flex flex-col gap-1 font-semibold">
@@ -141,6 +140,13 @@ export function Header() {
                         {item.label}
                       </Link>
                     ))}
+                    <Link
+                      to="/custom-branding"
+                      onClick={() => setMenuOpen(false)}
+                      className="rounded-[6px] px-3 py-2.5 text-sm font-bold text-[#8C5921] bg-[#FAF3D6] border border-[#E8DEC8] mt-2 flex items-center justify-between"
+                    >
+                      <span>Enquire for Bulk Order</span>
+                    </Link>
                     <Link
                       to="/wishlist"
                       onClick={() => setMenuOpen(false)}
@@ -173,27 +179,19 @@ export function Header() {
             </Sheet>
           </div>
 
-          {/* Logo & Brand Name */}
-          <Link to="/" className="flex items-center gap-2 sm:gap-2.5 shrink-0 group">
-            <div className="h-9 w-9 sm:h-11 sm:w-11 rounded-full bg-white p-1 sm:p-1.5 flex items-center justify-center shadow-xs border border-black/10">
+          {/* Logo prominently sized to fill the header space */}
+          <Link to="/" className="flex items-center shrink-0 group py-1" title="Y.G Asafoetida Home">
+            <div className="h-14 sm:h-16 md:h-20 lg:h-22 w-auto flex items-center justify-center">
               <img
                 src="/logo.png"
                 alt="Y.G Asafoetida Logo"
-                className="h-full w-full object-contain"
+                className="h-14 sm:h-16 md:h-20 lg:h-22 w-auto object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-2xs"
               />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-base sm:text-2xl font-black tracking-tight text-[#181206] leading-none uppercase">
-                Y.G ASAFOETIDA
-              </span>
-              <span className="text-[9px] sm:text-[11px] text-[#181206]/80 font-bold tracking-wider uppercase mt-0.5">
-                Heritage Pure Hing · Est. 1932
-              </span>
             </div>
           </Link>
 
           {/* Desktop Search Bar */}
-          <div className="hidden lg:flex items-center flex-1 max-w-xl mx-4">
+          <div className="hidden lg:flex items-center flex-1 max-w-2xl mx-4">
             <div className="flex w-full items-center bg-white rounded-[6px] overflow-hidden p-1 shadow-xs border border-black/15 relative">
               <div className="relative">
                 <button
@@ -269,10 +267,10 @@ export function Header() {
               <button
                 type="button"
                 onClick={() => setSearchOpen(true)}
-                className="bg-[#181206] hover:bg-black text-[#FFC700] px-5 py-2.5 rounded-[4px] text-xs font-bold flex items-center gap-1.5 transition-colors shrink-0 shadow-xs cursor-pointer active:scale-95"
+                className="bg-[#FFC700] hover:bg-[#F0B800] text-[#181206] px-5 py-2.5 rounded-[4px] text-xs font-bold flex items-center gap-1.5 transition-all shrink-0 shadow-xs cursor-pointer active:scale-95 border border-[#D8A700]"
               >
                 <span>Search</span>
-                <Search className="h-3.5 w-3.5" />
+                <Search className="h-3.5 w-3.5 text-[#181206]" />
               </button>
             </div>
           </div>
@@ -283,7 +281,7 @@ export function Header() {
             <button
               type="button"
               onClick={() => setSearchOpen(true)}
-              className="lg:hidden h-9 w-9 flex items-center justify-center text-[#181206] hover:bg-black/10 rounded-[6px] transition-colors active:scale-95"
+              className="lg:hidden h-9 w-9 flex items-center justify-center text-[#181206] hover:bg-[#FFC700]/30 rounded-[6px] transition-colors active:scale-95"
               aria-label="Search"
             >
               <Search className="h-5 w-5" />
@@ -292,23 +290,23 @@ export function Header() {
             {/* 1. Account Button */}
             <Link
               to="/account"
-              className="bg-[#181206] text-[#FFC700] hover:bg-black h-9 px-2.5 sm:px-3.5 rounded-[6px] text-xs sm:text-sm font-bold flex items-center gap-1.5 shadow-xs border border-black/20 transition-all cursor-pointer active:scale-95"
+              className="bg-[#FFC700] text-[#181206] hover:bg-[#F0B800] h-9 px-2.5 sm:px-3.5 rounded-[6px] text-xs sm:text-sm font-bold flex items-center gap-1.5 shadow-xs border border-[#D8A700] transition-all cursor-pointer active:scale-95"
               title="Account"
             >
-              <UserRound className="h-4 w-4 text-[#FFC700]" />
+              <UserRound className="h-4 w-4 text-[#181206]" />
               <span className="hidden sm:inline">Account</span>
             </Link>
 
             {/* 2. Wishlist Button with High-Contrast Count Badge */}
             <Link
               to="/wishlist"
-              className="bg-[#181206] text-[#FFC700] hover:bg-black h-9 px-2.5 sm:px-3.5 rounded-[6px] text-xs sm:text-sm font-bold flex items-center gap-1.5 shadow-xs border border-black/20 transition-all relative cursor-pointer active:scale-95"
+              className="bg-[#FFC700] text-[#181206] hover:bg-[#F0B800] h-9 px-2.5 sm:px-3.5 rounded-[6px] text-xs sm:text-sm font-bold flex items-center gap-1.5 shadow-xs border border-[#D8A700] transition-all relative cursor-pointer active:scale-95"
               aria-label="Wishlist"
               title="Wishlist"
             >
               <div className="relative flex items-center">
-                <Heart className="h-4 w-4 text-[#FFC700]" />
-                <span className="absolute -top-3.5 -right-3 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#FFC700] text-[#181206] text-[9px] font-black px-1 shadow-xs">
+                <Heart className="h-4 w-4 text-[#181206]" />
+                <span className="absolute -top-3.5 -right-3 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#181206] text-[#FFC700] text-[9px] font-black px-1 shadow-xs">
                   {wishlist.slugs.length || 0}
                 </span>
               </div>
@@ -319,13 +317,13 @@ export function Header() {
             <button
               type="button"
               onClick={() => cart.setOpen(true)}
-              className="bg-[#181206] text-[#FFC700] hover:bg-black h-9 px-2.5 sm:px-3.5 rounded-[6px] text-xs sm:text-sm font-bold flex items-center gap-1.5 shadow-xs border border-black/20 transition-all relative cursor-pointer active:scale-95"
+              className="bg-[#FFC700] text-[#181206] hover:bg-[#F0B800] h-9 px-2.5 sm:px-3.5 rounded-[6px] text-xs sm:text-sm font-bold flex items-center gap-1.5 shadow-xs border border-[#D8A700] transition-all relative cursor-pointer active:scale-95"
               aria-label="Open cart"
               title="Cart"
             >
               <div className="relative flex items-center">
-                <ShoppingBag className="h-4 w-4 text-[#FFC700]" />
-                <span className="absolute -top-3.5 -right-3 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#FFC700] text-[#181206] text-[9px] font-black px-1 shadow-xs">
+                <ShoppingBag className="h-4 w-4 text-[#181206]" />
+                <span className="absolute -top-3.5 -right-3 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#181206] text-[#FFC700] text-[9px] font-black px-1 shadow-xs">
                   {cart.count}
                 </span>
               </div>
@@ -336,17 +334,17 @@ export function Header() {
       </div>
 
       {/* ======================================================== */}
-      {/* 3. LOWER NAVIGATION BAR (Neon Accent Strip)              */}
+      {/* 3. LOWER NAVIGATION BAR (Mild Yellow with Crisp Links)   */}
       {/* ======================================================== */}
-      <div className="sticky top-0 bg-[#F0B800] border-t border-b border-black/10 shadow-xs z-30">
+      <div className="sticky top-0 bg-[#FAF3D6]/95 backdrop-blur-xs border-t border-b border-[#E8DEC8] shadow-xs z-30">
         <div className="container-page flex items-center justify-between h-10 sm:h-11 px-3 sm:px-6">
           <nav className="flex items-center gap-4 sm:gap-7 overflow-x-auto scrollbar-none py-1">
             {nav.map((item) => (
               <Link
                 key={item.to}
                 to={item.to}
-                className="text-[#181206] hover:text-black font-extrabold text-xs sm:text-sm tracking-wide whitespace-nowrap transition-colors"
-                activeProps={{ className: "text-black underline underline-offset-4 decoration-2" }}
+                className="text-[#181206] hover:text-[#8C5921] font-bold text-xs sm:text-sm tracking-wide whitespace-nowrap transition-colors"
+                activeProps={{ className: "text-[#8C5921] underline underline-offset-4 decoration-[#FFC700] decoration-2 font-black" }}
               >
                 {item.label}
               </Link>
@@ -355,7 +353,7 @@ export function Header() {
 
           {/* Right Delivery Location */}
           <div className="hidden md:flex items-center gap-1.5 text-xs text-[#181206] shrink-0 font-bold">
-            <MapPin className="h-3.5 w-3.5 text-[#181206]" />
+            <MapPin className="h-3.5 w-3.5 text-[#8C5921]" />
             <span>Delivery: <strong>Tamil Nadu &amp; All India Direct Dispatch</strong></span>
           </div>
         </div>

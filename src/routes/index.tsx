@@ -8,6 +8,7 @@ import {
   CreditCard,
   MapPin,
   Smile,
+  Sparkles,
   Star,
   Truck,
   Volume2,
@@ -348,7 +349,10 @@ function HomePage() {
       {/* ======================================================== */}
       {/* 1. CINEMATIC HERO BANNER (Screenshot 3 background)       */}
       {/* ======================================================== */}
-      <section className="group relative overflow-hidden border-b border-border aspect-[16/9] sm:aspect-[21/9] max-h-[78vh] w-full bg-black select-none">
+      <section className="group relative overflow-hidden border-b border-border min-h-[380px] sm:min-h-[460px] max-h-[75vh] w-full bg-neutral-950 flex items-center justify-center select-none">
+        {/* Cinematic Backdrop Glow */}
+        <div className="absolute inset-0 bg-radial from-neutral-900 to-black opacity-80" />
+
         <video
           ref={videoRef}
           src={currentVideo.src}
@@ -361,10 +365,10 @@ function HomePage() {
             setIsFading(false);
             videoRef.current?.play().catch(() => {});
           }}
-          className={`h-full w-full object-cover object-center transition-opacity duration-300 ${
-            isFading ? "opacity-75" : "opacity-100"
+          className={`h-full w-full max-h-[75vh] object-contain object-center relative z-10 transition-all duration-500 ${
+            isFading ? "opacity-75 scale-98" : "opacity-100 scale-100"
           }`}
-          style={{ willChange: "transform, opacity", transform: "translateZ(0)" }}
+          style={{ willChange: "transform, opacity" }}
         />
 
         {/* Subtle Vignette Gradient */}
@@ -514,17 +518,22 @@ function HomePage() {
       {/* ======================================================== */}
       {/* 3. FEATURED CATEGORIES                                   */}
       {/* ======================================================== */}
-      <section className="border-b border-[#E8DEC8] bg-white py-8 sm:py-14">
+      <section className="border-b border-[#E8DEC8] bg-white py-8 sm:py-14 overflow-hidden">
         <div className="container-page px-3 sm:px-6">
           <div className="flex items-center justify-between mb-5 sm:mb-8">
-            <h2 className="text-xl sm:text-3xl font-extrabold text-[#181206] tracking-tight">
-              Featured Categories
-            </h2>
+            <div>
+              <span className="text-[11px] font-black uppercase tracking-wider text-[#8C5921] bg-[#FAF3D6] px-2.5 py-0.5 rounded border border-[#E8DEC8]">
+                Explore Collections
+              </span>
+              <h2 className="text-xl sm:text-3xl font-extrabold text-[#181206] tracking-tight mt-1">
+                Featured Categories
+              </h2>
+            </div>
             <div className="flex items-center gap-2">
               <button
                 type="button"
                 onClick={() => setActiveCategoryIdx((i) => (i - 1 + featuredCategories.length) % featuredCategories.length)}
-                className="h-8 w-8 sm:h-9 sm:w-9 rounded-[6px] border border-[#E8DEC8] flex items-center justify-center text-[#181206] hover:border-[#FFC700] hover:bg-[#FFC700] transition-colors cursor-pointer bg-white"
+                className="h-8 w-8 sm:h-9 sm:w-9 rounded-[6px] border border-[#E8DEC8] flex items-center justify-center text-[#181206] hover:border-[#FFC700] hover:bg-[#FFC700] transition-all cursor-pointer bg-white active:scale-95 shadow-xs"
                 aria-label="Previous category"
               >
                 <ChevronLeft className="h-4 w-4" />
@@ -532,7 +541,7 @@ function HomePage() {
               <button
                 type="button"
                 onClick={() => setActiveCategoryIdx((i) => (i + 1) % featuredCategories.length)}
-                className="h-8 w-8 sm:h-9 sm:w-9 rounded-[6px] border border-[#E8DEC8] flex items-center justify-center text-[#181206] hover:border-[#FFC700] hover:bg-[#FFC700] transition-colors cursor-pointer bg-white"
+                className="h-8 w-8 sm:h-9 sm:w-9 rounded-[6px] border border-[#E8DEC8] flex items-center justify-center text-[#181206] hover:border-[#FFC700] hover:bg-[#FFC700] transition-all cursor-pointer bg-white active:scale-95 shadow-xs"
                 aria-label="Next category"
               >
                 <ChevronRight className="h-4 w-4" />
@@ -547,22 +556,30 @@ function HomePage() {
                 to="/shop"
                 search={{ category: cat.id }}
                 className={cn(
-                  "bg-white rounded-[10px] p-3 sm:p-4 text-center transition-all flex flex-col items-center justify-between min-h-[150px] sm:min-h-[175px] hover:shadow-md cursor-pointer group",
+                  "bg-white rounded-[10px] p-3 sm:p-4 text-center transition-all duration-300 flex flex-col items-center justify-between min-h-[150px] sm:min-h-[175px] hover:-translate-y-1.5 hover:shadow-lg cursor-pointer group relative overflow-hidden border",
                   idx === activeCategoryIdx
-                    ? "border-2 border-[#FFC700] bg-[#FFFBEA] shadow-xs"
-                    : "border border-[#E8DEC8] hover:border-[#FFC700]"
+                    ? "border-2 border-[#FFC700] bg-[#FFFBEA] shadow-md ring-2 ring-[#FFC700]/25"
+                    : "border-[#E8DEC8] hover:border-[#FFC700] hover:ring-1 hover:ring-[#FFC700]/30"
                 )}
+                style={{
+                  transitionDelay: `${idx * 40}ms`,
+                }}
                 onClick={() => setActiveCategoryIdx(idx)}
               >
-                <div className="h-16 w-16 sm:h-20 sm:w-20 flex items-center justify-center p-1 my-auto">
+                {/* Subtle top active indicator badge */}
+                {idx === activeCategoryIdx && (
+                  <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-[#FFC700] animate-ping" />
+                )}
+
+                <div className="h-16 w-16 sm:h-20 sm:w-20 flex items-center justify-center p-1 my-auto transition-transform duration-300 group-hover:scale-110">
                   <img
                     src={cat.image}
                     alt={cat.title}
-                    className="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform"
+                    className="max-h-full max-w-full object-contain drop-shadow-xs transition-all duration-300 group-hover:rotate-1"
                   />
                 </div>
-                <div className="mt-2 sm:mt-3 text-center">
-                  <p className="text-xs sm:text-sm font-bold text-[#181206] group-hover:underline transition-colors leading-tight">
+                <div className="mt-2 sm:mt-3 text-center w-full">
+                  <p className="text-xs sm:text-sm font-bold text-[#181206] group-hover:text-[#8C5921] transition-colors leading-tight">
                     {cat.title}
                   </p>
                   <span className="text-[10px] sm:text-[11px] text-[#5A6560] font-medium block mt-0.5">
@@ -571,6 +588,30 @@ function HomePage() {
                 </div>
               </Link>
             ))}
+          </div>
+
+          {/* Enquire for Bulk Order Action Banner */}
+          <div className="mt-6 sm:mt-8 rounded-xl border border-[#FFC700]/40 bg-gradient-to-r from-[#FFFBEA] via-white to-[#FAF3D6] p-3.5 sm:p-4.5 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xs">
+            <div className="flex items-center gap-3 text-center sm:text-left">
+              <div className="h-10 w-10 rounded-full bg-[#FFC700] text-[#181206] flex items-center justify-center shrink-0 font-black shadow-xs">
+                <Sparkles className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="text-xs sm:text-sm font-black text-[#181206] uppercase tracking-wide">
+                  Looking for Bulk Supply or Private Label Compounding?
+                </p>
+                <p className="text-[11px] sm:text-xs text-[#6E777D] mt-0.5">
+                  Flexible low starting MOQ from 25 kg · Exported to 6+ countries · Direct factory works dispatch
+                </p>
+              </div>
+            </div>
+            <Link
+              to="/custom-branding"
+              className="bg-[#181206] hover:bg-black text-[#FFC700] font-bold text-xs px-5 py-2.5 rounded-[6px] transition-all shrink-0 shadow-xs hover:scale-105 active:scale-95 flex items-center gap-1.5"
+            >
+              <span>Enquire for Bulk Order</span>
+              <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
           </div>
         </div>
       </section>
@@ -592,7 +633,6 @@ function HomePage() {
                 { id: "powder", label: formatLabels.powder },
                 { id: "cake", label: formatLabels.cake },
                 { id: "granules", label: formatLabels.granules },
-                { id: "wellness", label: formatLabels.wellness },
               ].map((tab) => (
                 <button
                   key={tab.id}

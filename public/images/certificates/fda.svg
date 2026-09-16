@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 90" width="100%" height="100%" fill="none">
+  <!-- FDA Stencil/Modern Logo -->
+  <g fill="#005EA2">
+    <!-- F -->
+    <path d="M40 18 L68 18 L68 26 L48 26 L48 35 L64 35 L64 43 L48 43 L48 58 L40 58 Z"/>
+    <!-- D -->
+    <path d="M74 18 L92 18 C104 18 111 25 111 38 C111 51 104 58 92 58 L74 58 Z M82 26 L82 50 L91 50 C98 50 102 46 102 38 C102 30 98 26 91 26 Z"/>
+    <!-- A -->
+    <path d="M129 18 L139 18 L155 58 L146 58 L142 48 L126 48 L122 58 L113 58 Z M134 27 L128 41 L140 41 Z"/>
+  </g>
+  
+  <!-- REGISTERED Pill Badge underneath -->
+  <rect x="36" y="64" width="128" height="18" rx="4" fill="#005EA2"/>
+  <text x="100" y="77" font-family="'Segoe UI', Arial, sans-serif" font-size="9" font-weight="900" fill="#FFFFFF" text-anchor="middle" letter-spacing="2.5">REGISTERED</text>
+</svg>

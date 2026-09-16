@@ -115,7 +115,7 @@ function StoryPage() {
             <span className="font-semibold text-[#181206]">Our Heritage</span>
           </div>
           <span className="text-[11px] font-bold text-[#6D4918] bg-[#E8DCB8] px-3 py-0.5 rounded-full border border-[#D5C294]">
-            Est. 1932 · Tirunelveli
+            Est. 1931 · Tirunelveli
           </span>
         </div>
       </div>
@@ -144,74 +144,94 @@ function StoryPage() {
             </p>
           </div>
 
-          {/* Right Column: Hero Illustration */}
+          {/* Right Column: Hero Illustration with Tamil Branding */}
           <div className="lg:col-span-6 flex justify-center">
-            <div className="relative w-full max-w-lg lg:max-w-none rounded-2xl overflow-hidden shadow-lg border-2 border-[#E5D7B7] bg-[#F2E8CE] transition-transform hover:scale-[1.01] duration-300">
+            <div className="relative w-full max-w-lg lg:max-w-none rounded-2xl overflow-hidden shadow-lg border-2 border-[#E5D7B7] bg-[#F2E8CE] transition-transform hover:scale-[1.01] duration-300 group">
               <img
                 src="/images/story-hero-harvest.jpg"
-                alt="South Indian farmer harvesting golden ferula asafoetida gum resin tears and Y.G. Asafoetida Works facility"
+                alt="YG பெருங்காயம் - Tirunelveli South Car Street Heritage"
                 className="w-full h-auto object-cover max-h-[380px] sm:max-h-[420px]"
                 loading="eager"
               />
+              {/* Prominent Tamil Typography Overlay */}
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-5 sm:p-6 text-white text-center sm:text-left">
+                <span className="text-amber-400 font-bold text-[11px] sm:text-xs uppercase tracking-widest block mb-1">
+                  திருநெல்வேலி பாரம்பரியம் · Est. 1931
+                </span>
+                <p className="font-serif text-2xl sm:text-4xl font-black text-[#FFC700] tracking-wide drop-shadow-md">
+                  YG பெருங்காயம்
+                </p>
+                <p className="text-white/85 text-xs sm:text-sm mt-1 leading-relaxed">
+                  90+ வருடங்களாக மாறாத பாரம்பரிய தூய்மை மற்றும் நறுமணத்தின் அடையாளம்
+                </p>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Scroll Down Indicator */}
+        {/* Scroll Down Interactive Button */}
         <div className="mt-8 sm:mt-12 flex flex-col items-center justify-center text-center">
-          <span className="text-[11px] uppercase tracking-widest font-semibold text-[#8C5921]">
-            Scroll Down
-          </span>
-          <div className="mt-1 h-8 w-5 rounded-full border-2 border-[#C59B27] flex items-center justify-center p-0.5">
-            <div className="h-1.5 w-1 bg-[#8C5921] rounded-full animate-bounce" />
-          </div>
-          <ChevronDown className="h-4 w-4 text-[#8C5921] -mt-0.5 animate-pulse" />
+          <button
+            type="button"
+            onClick={() => {
+              const target = document.getElementById("chapter-1");
+              if (target) {
+                target.scrollIntoView({ behavior: "smooth", block: "start" });
+              }
+            }}
+            className="group inline-flex flex-col items-center justify-center gap-1.5 text-[#8C5921] hover:text-[#181206] transition-all cursor-pointer p-2 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFC700] active:scale-95"
+            aria-label="Scroll down to Chapter 1: 1931 South Car Street"
+          >
+            <span className="text-[11px] uppercase tracking-widest font-bold group-hover:tracking-wider transition-all">
+              Scroll Down
+            </span>
+            <div className="h-8 w-5 rounded-full border-2 border-[#C59B27] group-hover:border-[#FFC700] group-hover:bg-[#FFC700]/15 flex items-center justify-center p-0.5 transition-colors shadow-2xs">
+              <div className="h-1.5 w-1 bg-[#8C5921] group-hover:bg-[#181206] rounded-full animate-bounce" />
+            </div>
+            <ChevronDown className="h-4 w-4 text-[#8C5921] group-hover:text-[#181206] -mt-0.5 group-hover:translate-y-1 transition-transform animate-pulse" />
+          </button>
         </div>
       </section>
 
       {/* ======================================================== */}
-      {/* 2. THE 4 CHAPTERS TIMELINE (Alternating Zig-Zag with Ribbon) */}
+      {/* 2. THE CHAPTERS TIMELINE (Alternating Zig-Zag with Ribbon) */}
       {/* ======================================================== */}
-      <section className="container-page py-6 sm:py-12 px-4 sm:px-8 relative">
+      <section id="story-timeline" className="container-page py-6 sm:py-12 px-4 sm:px-8 relative">
         <div className="space-y-16 sm:space-y-24 relative">
 
           {/* ================= CHAPTER 1 ================= */}
-          <div className="relative grid lg:grid-cols-12 gap-6 sm:gap-10 items-center">
-            {/* Left Content */}
-            <div className="lg:col-span-6 space-y-4 order-1 lg:order-1">
+          <div id="chapter-1" className="relative grid lg:grid-cols-12 gap-6 sm:gap-10 items-center scroll-mt-28">
+            <div className="lg:col-span-6 space-y-3.5 order-1 lg:order-1">
               <div className="flex items-center gap-3">
-                {/* Milestone Node 1 */}
                 <div className="h-9 w-9 sm:h-11 sm:w-11 rounded-full bg-[#8C5921] border-2 border-[#D4AF37] text-white font-serif font-black flex items-center justify-center text-base sm:text-lg shadow-md shrink-0">
                   1
                 </div>
                 <span className="px-3 py-1 rounded-full border border-[#C59B27]/60 bg-[#FAF4E5] text-[10px] sm:text-xs font-bold text-[#8C5921] uppercase tracking-wider shadow-xs">
-                  Chapter 1 · 1932
+                  Chapter 1 · 1931
                 </span>
               </div>
 
               <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#2A1806] leading-snug">
-                The Little Shop on South Car Street
+                Starts in 1931 on South Car Street
               </h2>
 
               <p className="text-xs sm:text-sm text-[#5D4730] leading-relaxed">
-                In 1932, Y.G. Asafoetida was founded on South Car Street in Tirunelveli. What started as a humble shop, soon became a trusted name in the world of asafoetida, built on quality, hard work and a deep commitment to purity.
+                The journey began in 1931 on South Car Street in Tirunelveli. What started as a humble shop quickly earned lifelong customer trust through genuine mountain ferula resin, uncompromising quality, and cold granite stone-compounding.
               </p>
 
-              {/* Quote Pill Box */}
               <div className="rounded-xl border border-[#C59B27]/60 bg-[#FAF4E5] p-3.5 sm:p-4 flex items-start gap-3 shadow-xs">
                 <Wheat className="h-4 w-4 text-[#8C5921] shrink-0 mt-0.5" />
                 <p className="font-serif italic text-xs sm:text-[13px] text-[#4A3724] leading-relaxed">
-                  &ldquo;The very first formula created on those brass scales in 1932 remains the unbroken foundation of every jar we seal today.&rdquo;
+                  &ldquo;A small artisanal shop on Tirunelveli South Car Street that laid the foundation for 90+ years of unadulterated aroma.&rdquo;
                 </p>
               </div>
             </div>
 
-            {/* Right Image */}
             <div className="lg:col-span-6 flex justify-center order-2 lg:order-2">
               <div className="w-full max-w-lg lg:max-w-none rounded-2xl overflow-hidden border-2 border-[#E5D7B7] shadow-md bg-[#F2E8CE] transition-transform hover:scale-[1.01] duration-300">
                 <img
                   src={storyShopImage}
-                  alt="Y.G. Asafoetida Works established 1932 traditional compounding facility"
+                  alt="Chapter 1: 1931 Starts in South Car Street Tirunelveli"
                   className="w-full h-auto object-cover max-h-[340px] sm:max-h-[380px]"
                   loading="lazy"
                 />
@@ -219,199 +239,105 @@ function StoryPage() {
             </div>
           </div>
 
-          {/* Curly Drawing Connector 1 -> 2: Starts from Picture 1 (Right), arrows towards Number 2 (Right) */}
-          <div className="relative py-2 sm:py-6 my-2">
-            {/* Desktop Curly Drawing Flow */}
-            <div className="hidden lg:flex flex-col items-center justify-center relative">
-              <svg className="w-full max-w-5xl h-28 sm:h-36 overflow-visible" viewBox="0 0 1000 130" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <marker id="curly-arrow-1-2" markerWidth="14" markerHeight="14" refX="8" refY="5" orient="auto">
-                    <path d="M 0 1.5 L 9 5 L 0 8.5 L 2.5 5 z" fill="#8C5921" />
-                  </marker>
-                </defs>
-                {/* Starting anchor under Picture 1 */}
-                <circle cx="760" cy="5" r="4.5" fill="#C59B27" />
-                <path
-                  d="M 760 5 C 835 25, 845 70, 785 80 C 720 90, 680 40, 645 50 C 585 68, 570 95, 545 125"
-                  stroke="#C59B27"
-                  strokeWidth="3.5"
-                  strokeDasharray="10 14"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  markerEnd="url(#curly-arrow-1-2)"
-                />
-              </svg>
-            </div>
-
-            {/* Mobile Curly Drawing Flow */}
-            <div className="flex lg:hidden flex-col items-center justify-center my-2">
-              <svg className="w-full max-w-xs h-28 overflow-visible" viewBox="0 0 320 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <marker id="curly-arrow-mobile-1" markerWidth="12" markerHeight="12" refX="7" refY="4" orient="auto">
-                    <path d="M 0 1 L 8 4 L 0 7 L 2 4 z" fill="#8C5921" />
-                  </marker>
-                </defs>
-                <circle cx="160" cy="5" r="3.5" fill="#C59B27" />
-                <path
-                  d="M 160 5 C 230 20, 240 60, 185 70 C 135 80, 105 45, 78 58 C 50 72, 42 92, 36 115"
-                  stroke="#C59B27"
-                  strokeWidth="3"
-                  strokeDasharray="9 12"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  markerEnd="url(#curly-arrow-mobile-1)"
-                />
-              </svg>
-            </div>
+          {/* Ribbon Connector 1 -> 2 */}
+          <div className="relative py-2 sm:py-4 my-2 hidden lg:flex flex-col items-center justify-center">
+            <svg className="w-full max-w-4xl h-24 overflow-visible" viewBox="0 0 1000 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="curly-arrow-1" markerWidth="14" markerHeight="14" refX="8" refY="5" orient="auto">
+                  <path d="M 0 1.5 L 9 5 L 0 8.5 L 2.5 5 z" fill="#8C5921" />
+                </marker>
+              </defs>
+              <circle cx="760" cy="5" r="4" fill="#C59B27" />
+              <path d="M 760 5 C 830 20, 840 60, 780 70 C 710 80, 680 35, 640 45 C 580 60, 560 85, 540 105" stroke="#C59B27" strokeWidth="3" strokeDasharray="8 12" strokeLinecap="round" markerEnd="url(#curly-arrow-1)" />
+            </svg>
           </div>
 
           {/* ================= CHAPTER 2 ================= */}
           <div className="relative grid lg:grid-cols-12 gap-6 sm:gap-10 items-center">
-            {/* Left Image (Desktop left, mobile below content) */}
             <div className="lg:col-span-6 flex justify-center order-2 lg:order-1">
               <div className="w-full max-w-lg lg:max-w-none rounded-2xl overflow-hidden border-2 border-[#E5D7B7] shadow-md bg-[#F2E8CE] transition-transform hover:scale-[1.01] duration-300">
                 <img
                   src={storyCookingImage}
-                  alt="Mother tempering sambar with pure asafoetida in a traditional South Indian kitchen"
+                  alt="Chapter 2: Named as YG"
                   className="w-full h-auto object-cover max-h-[340px] sm:max-h-[380px]"
                   loading="lazy"
                 />
               </div>
             </div>
 
-            {/* Right Content */}
-            <div className="lg:col-span-6 space-y-4 order-1 lg:order-2">
+            <div className="lg:col-span-6 space-y-3.5 order-1 lg:order-2">
               <div className="flex items-center gap-3">
-                {/* Milestone Node 2 */}
                 <div className="h-9 w-9 sm:h-11 sm:w-11 rounded-full bg-[#8C5921] border-2 border-[#D4AF37] text-white font-serif font-black flex items-center justify-center text-base sm:text-lg shadow-md shrink-0">
                   2
                 </div>
                 <span className="px-3 py-1 rounded-full border border-[#C59B27]/60 bg-[#FAF4E5] text-[10px] sm:text-xs font-bold text-[#8C5921] uppercase tracking-wider shadow-xs">
-                  Chapter 2 · Tradition
+                  Chapter 2 · The Name
                 </span>
               </div>
 
               <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#2A1806] leading-snug">
-                Tuning the Recipe to Sing in South Indian Kitchens
+                Named as YG
               </h2>
 
               <p className="text-xs sm:text-sm text-[#5D4730] leading-relaxed">
-                Y.G. asafoetida is trusted in South Indian cooking for generations, because it brings out the authentic flavour, aroma and taste. From traditional recipes to modern kitchens, it continues to be an essential ingredient in every home.
+                As demand and culinary acclaim spread across towns and villages, the brand was officially christened as YG. A household name symbolizing authentic aroma, sacred temple cooking, and unbending purity.
               </p>
 
-              {/* Quote Pill Box */}
               <div className="rounded-xl border border-[#C59B27]/60 bg-[#FAF4E5] p-3.5 sm:p-4 flex items-start gap-3 shadow-xs">
                 <Wheat className="h-4 w-4 text-[#8C5921] shrink-0 mt-0.5" />
                 <p className="font-serif italic text-xs sm:text-[13px] text-[#4A3724] leading-relaxed">
-                  &ldquo;Stone-milled at low temperatures so essential natural aromas remain intact until they touch your hot pan.&rdquo;
+                  &ldquo;YG became the trusted signature of authentic aroma across South Indian homes.&rdquo;
                 </p>
               </div>
             </div>
           </div>
 
-          {/* Curly Drawing Connector 2 -> 3: Starts from Picture 2 (Left), arrows towards Number 3 (Left) */}
-          <div className="relative py-2 sm:py-6 my-2">
-            {/* Desktop Curly Drawing Flow */}
-            <div className="hidden lg:flex flex-col items-center justify-center relative">
-              <svg className="w-full max-w-5xl h-28 sm:h-36 overflow-visible" viewBox="0 0 1000 130" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <marker id="curly-arrow-2-3" markerWidth="14" markerHeight="14" refX="8" refY="5" orient="auto">
-                    <path d="M 0 1.5 L 9 5 L 0 8.5 L 2.5 5 z" fill="#8C5921" />
-                  </marker>
-                </defs>
-                {/* Starting anchor under Picture 2 */}
-                <circle cx="240" cy="5" r="4.5" fill="#C59B27" />
-                <path
-                  d="M 240 5 C 315 25, 325 70, 265 80 C 200 90, 160 40, 125 50 C 75 68, 65 95, 45 125"
-                  stroke="#C59B27"
-                  strokeWidth="3.5"
-                  strokeDasharray="10 14"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  markerEnd="url(#curly-arrow-2-3)"
-                />
-              </svg>
-            </div>
-
-            {/* Mobile Curly Drawing Flow */}
-            <div className="flex lg:hidden flex-col items-center justify-center my-2">
-              <svg className="w-full max-w-xs h-28 overflow-visible" viewBox="0 0 320 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <marker id="curly-arrow-mobile-2" markerWidth="12" markerHeight="12" refX="7" refY="4" orient="auto">
-                    <path d="M 0 1 L 8 4 L 0 7 L 2 4 z" fill="#8C5921" />
-                  </marker>
-                </defs>
-                <circle cx="160" cy="5" r="3.5" fill="#C59B27" />
-                <path
-                  d="M 160 5 C 230 20, 240 60, 185 70 C 135 80, 105 45, 78 58 C 50 72, 42 92, 36 115"
-                  stroke="#C59B27"
-                  strokeWidth="3"
-                  strokeDasharray="9 12"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  markerEnd="url(#curly-arrow-mobile-2)"
-                />
-              </svg>
-            </div>
+          {/* Ribbon Connector 2 -> 3 */}
+          <div className="relative py-2 sm:py-4 my-2 hidden lg:flex flex-col items-center justify-center">
+            <svg className="w-full max-w-4xl h-24 overflow-visible" viewBox="0 0 1000 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="curly-arrow-2" markerWidth="14" markerHeight="14" refX="8" refY="5" orient="auto">
+                  <path d="M 0 1.5 L 9 5 L 0 8.5 L 2.5 5 z" fill="#8C5921" />
+                </marker>
+              </defs>
+              <circle cx="240" cy="5" r="4" fill="#C59B27" />
+              <path d="M 240 5 C 310 20, 320 60, 260 70 C 190 80, 160 35, 120 45 C 70 60, 60 85, 40 105" stroke="#C59B27" strokeWidth="3" strokeDasharray="8 12" strokeLinecap="round" markerEnd="url(#curly-arrow-2)" />
+            </svg>
           </div>
 
           {/* ================= CHAPTER 3 ================= */}
           <div className="relative grid lg:grid-cols-12 gap-6 sm:gap-10 items-center">
-            {/* Left Content */}
-            <div className="lg:col-span-6 space-y-4 order-1 lg:order-1">
+            <div className="lg:col-span-6 space-y-3.5 order-1 lg:order-1">
               <div className="flex items-center gap-3">
-                {/* Milestone Node 3 */}
                 <div className="h-9 w-9 sm:h-11 sm:w-11 rounded-full bg-[#8C5921] border-2 border-[#D4AF37] text-white font-serif font-black flex items-center justify-center text-base sm:text-lg shadow-md shrink-0">
                   3
                 </div>
                 <span className="px-3 py-1 rounded-full border border-[#C59B27]/60 bg-[#FAF4E5] text-[10px] sm:text-xs font-bold text-[#8C5921] uppercase tracking-wider shadow-xs">
-                  Chapter 3 · Today
+                  Chapter 3 · 1980 &amp; 1982
                 </span>
               </div>
 
               <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#2A1806] leading-snug">
-                Third Generation, Same Uncompromising Integrity
+                1980: 2nd Gen Enters (Cake to Powder) · 1982: India&apos;s First Sachet
               </h2>
 
               <p className="text-xs sm:text-sm text-[#5D4730] leading-relaxed">
-                Y.G. Asafoetida&apos;s third generation continues to uphold the same values, bringing the best of tradition and innovation to kitchens across the world. With a focus on quality, consistency and customer trust, the legacy grows stronger every day.
+                In 1980, the second generation took charge, engineering a historic shift from heavy solid cakes to ultra-fine, quick-dissolving compounded powder. In 1982, YG made history by launching India&apos;s very first asafoetida sachet pack — making premium hing accessible to every family.
               </p>
 
-              {/* 4-Column Stats Box (Embedded Inside Chapter 3 Card) */}
-              <div className="rounded-xl border border-[#D5C294] bg-[#F4E8D0] p-4 grid grid-cols-2 sm:grid-cols-4 gap-3 text-center shadow-xs">
-                <div className="border-r border-[#E5D7B7] last:border-r-0">
-                  <p className="text-xl sm:text-2xl font-serif font-extrabold text-[#2A1806]">1932</p>
-                  <p className="text-[10px] sm:text-[11px] font-bold text-[#7A5623] uppercase tracking-wider mt-0.5">
-                    Founding Year
-                  </p>
-                </div>
-                <div className="sm:border-r border-[#E5D7B7] last:border-r-0">
-                  <p className="text-xl sm:text-2xl font-serif font-extrabold text-[#2A1806]">92+</p>
-                  <p className="text-[10px] sm:text-[11px] font-bold text-[#7A5623] uppercase tracking-wider mt-0.5">
-                    Years of Craft
-                  </p>
-                </div>
-                <div className="border-r border-[#E5D7B7] last:border-r-0">
-                  <p className="text-xl sm:text-2xl font-serif font-extrabold text-[#2A1806]">15</p>
-                  <p className="text-[10px] sm:text-[11px] font-bold text-[#7A5623] uppercase tracking-wider mt-0.5">
-                    Products
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xl sm:text-2xl font-serif font-extrabold text-[#2A1806]">48,000+</p>
-                  <p className="text-[10px] sm:text-[11px] font-bold text-[#7A5623] uppercase tracking-wider mt-0.5">
-                    Kitchens Served
-                  </p>
-                </div>
+              <div className="rounded-xl border border-[#C59B27]/60 bg-[#FAF4E5] p-3.5 sm:p-4 flex items-start gap-3 shadow-xs">
+                <Wheat className="h-4 w-4 text-[#8C5921] shrink-0 mt-0.5" />
+                <p className="font-serif italic text-xs sm:text-[13px] text-[#4A3724] leading-relaxed">
+                  &ldquo;A double milestone: transforming solid cake to fine powder in 1980, followed by India&apos;s pioneer sachet in 1982.&rdquo;
+                </p>
               </div>
             </div>
 
-            {/* Right Image */}
             <div className="lg:col-span-6 flex justify-center order-2 lg:order-2">
               <div className="w-full max-w-lg lg:max-w-none rounded-2xl overflow-hidden border-2 border-[#E5D7B7] shadow-md bg-[#F2E8CE] transition-transform hover:scale-[1.01] duration-300">
                 <img
-                  src={storyPackingImage}
-                  alt="The third generation in Tirunelveli packing fresh jars with modern quality controls"
+                  src="/products/100g-gold-asafoetida-powder/img-1.jpg"
+                  alt="Chapter 3: Cake to Powder and India's First Sachet"
                   className="w-full h-auto object-cover max-h-[340px] sm:max-h-[380px]"
                   loading="lazy"
                 />
@@ -419,96 +345,218 @@ function StoryPage() {
             </div>
           </div>
 
-          {/* Curly Drawing Connector 3 -> 4: Starts from Picture 3 (Right), arrows towards Number 4 (Right) */}
-          <div className="relative py-2 sm:py-6 my-2">
-            {/* Desktop Curly Drawing Flow */}
-            <div className="hidden lg:flex flex-col items-center justify-center relative">
-              <svg className="w-full max-w-5xl h-28 sm:h-36 overflow-visible" viewBox="0 0 1000 130" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <marker id="curly-arrow-3-4" markerWidth="14" markerHeight="14" refX="8" refY="5" orient="auto">
-                    <path d="M 0 1.5 L 9 5 L 0 8.5 L 2.5 5 z" fill="#8C5921" />
-                  </marker>
-                </defs>
-                {/* Starting anchor under Picture 3 */}
-                <circle cx="760" cy="5" r="4.5" fill="#C59B27" />
-                <path
-                  d="M 760 5 C 835 25, 845 70, 785 80 C 720 90, 680 40, 645 50 C 585 68, 570 95, 545 125"
-                  stroke="#C59B27"
-                  strokeWidth="3.5"
-                  strokeDasharray="10 14"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  markerEnd="url(#curly-arrow-3-4)"
-                />
-              </svg>
-            </div>
-
-            {/* Mobile Curly Drawing Flow */}
-            <div className="flex lg:hidden flex-col items-center justify-center my-2">
-              <svg className="w-full max-w-xs h-28 overflow-visible" viewBox="0 0 320 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <marker id="curly-arrow-mobile-3" markerWidth="12" markerHeight="12" refX="7" refY="4" orient="auto">
-                    <path d="M 0 1 L 8 4 L 0 7 L 2 4 z" fill="#8C5921" />
-                  </marker>
-                </defs>
-                <circle cx="160" cy="5" r="3.5" fill="#C59B27" />
-                <path
-                  d="M 160 5 C 230 20, 240 60, 185 70 C 135 80, 105 45, 78 58 C 50 72, 42 92, 36 115"
-                  stroke="#C59B27"
-                  strokeWidth="3"
-                  strokeDasharray="9 12"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  markerEnd="url(#curly-arrow-mobile-3)"
-                />
-              </svg>
-            </div>
+          {/* Ribbon Connector 3 -> 4 */}
+          <div className="relative py-2 sm:py-4 my-2 hidden lg:flex flex-col items-center justify-center">
+            <svg className="w-full max-w-4xl h-24 overflow-visible" viewBox="0 0 1000 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="curly-arrow-3" markerWidth="14" markerHeight="14" refX="8" refY="5" orient="auto">
+                  <path d="M 0 1.5 L 9 5 L 0 8.5 L 2.5 5 z" fill="#8C5921" />
+                </marker>
+              </defs>
+              <circle cx="760" cy="5" r="4" fill="#C59B27" />
+              <path d="M 760 5 C 830 20, 840 60, 780 70 C 710 80, 680 35, 640 45 C 580 60, 560 85, 540 105" stroke="#C59B27" strokeWidth="3" strokeDasharray="8 12" strokeLinecap="round" markerEnd="url(#curly-arrow-3)" />
+            </svg>
           </div>
 
           {/* ================= CHAPTER 4 ================= */}
           <div className="relative grid lg:grid-cols-12 gap-6 sm:gap-10 items-center">
-            {/* Left Image */}
             <div className="lg:col-span-6 flex justify-center order-2 lg:order-1">
               <div className="w-full max-w-lg lg:max-w-none rounded-2xl overflow-hidden border-2 border-[#E5D7B7] shadow-md bg-[#F2E8CE] transition-transform hover:scale-[1.01] duration-300">
                 <img
-                  src="/images/story-chapter4-global.jpg"
-                  alt="Y.G Asafoetida range of spice bottles with global export map and South Indian temples"
+                  src="/images/story-3-modern-colorful.jpg"
+                  alt="Chapter 4: 2013 3rd Gen Enters and 2016 Appalam Launch"
                   className="w-full h-auto object-cover max-h-[340px] sm:max-h-[380px]"
                   loading="lazy"
                 />
               </div>
             </div>
 
-            {/* Right Content */}
-            <div className="lg:col-span-6 space-y-4 order-1 lg:order-2">
+            <div className="lg:col-span-6 space-y-3.5 order-1 lg:order-2">
               <div className="flex items-center gap-3">
-                {/* Milestone Node 4 */}
                 <div className="h-9 w-9 sm:h-11 sm:w-11 rounded-full bg-[#8C5921] border-2 border-[#D4AF37] text-white font-serif font-black flex items-center justify-center text-base sm:text-lg shadow-md shrink-0">
                   4
                 </div>
                 <span className="px-3 py-1 rounded-full border border-[#C59B27]/60 bg-[#FAF4E5] text-[10px] sm:text-xs font-bold text-[#8C5921] uppercase tracking-wider shadow-xs">
-                  Chapter 4 · Tomorrow
+                  Chapter 4 · 2013 &amp; 2016
                 </span>
               </div>
 
               <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#2A1806] leading-snug">
-                From Our Family to Your Family
+                2013: 3rd Gen Enters · 2016: Launching Handmade Appalam
               </h2>
 
               <p className="text-xs sm:text-sm text-[#5D4730] leading-relaxed">
-                Today, Y.G. Asafoetida is more than just a product — it&apos;s a legacy of purity, tradition and trust, reaching homes across the world.
+                In 2013, the energetic 3rd generation entered with modern quality controls and international export ambitions. In 2016, YG launched traditional appalam, carefully handcrafted in authentic small patches for unparalleled crispness and aroma.
               </p>
 
-              {/* Sub-Badges */}
+              <div className="rounded-xl border border-[#C59B27]/60 bg-[#FAF4E5] p-3.5 sm:p-4 flex items-start gap-3 shadow-xs">
+                <Wheat className="h-4 w-4 text-[#8C5921] shrink-0 mt-0.5" />
+                <p className="font-serif italic text-xs sm:text-[13px] text-[#4A3724] leading-relaxed">
+                  &ldquo;Handmade in artisanal batches, preserving the golden crisp texture South India loves.&rdquo;
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Ribbon Connector 4 -> 5 */}
+          <div className="relative py-2 sm:py-4 my-2 hidden lg:flex flex-col items-center justify-center">
+            <svg className="w-full max-w-4xl h-24 overflow-visible" viewBox="0 0 1000 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="curly-arrow-4" markerWidth="14" markerHeight="14" refX="8" refY="5" orient="auto">
+                  <path d="M 0 1.5 L 9 5 L 0 8.5 L 2.5 5 z" fill="#8C5921" />
+                </marker>
+              </defs>
+              <circle cx="240" cy="5" r="4" fill="#C59B27" />
+              <path d="M 240 5 C 310 20, 320 60, 260 70 C 190 80, 160 35, 120 45 C 70 60, 60 85, 40 105" stroke="#C59B27" strokeWidth="3" strokeDasharray="8 12" strokeLinecap="round" markerEnd="url(#curly-arrow-4)" />
+            </svg>
+          </div>
+
+          {/* ================= CHAPTER 5 ================= */}
+          <div className="relative grid lg:grid-cols-12 gap-6 sm:gap-10 items-center">
+            <div className="lg:col-span-6 space-y-3.5 order-1 lg:order-1">
+              <div className="flex items-center gap-3">
+                <div className="h-9 w-9 sm:h-11 sm:w-11 rounded-full bg-[#8C5921] border-2 border-[#D4AF37] text-white font-serif font-black flex items-center justify-center text-base sm:text-lg shadow-md shrink-0">
+                  5
+                </div>
+                <span className="px-3 py-1 rounded-full border border-[#C59B27]/60 bg-[#FAF4E5] text-[10px] sm:text-xs font-bold text-[#8C5921] uppercase tracking-wider shadow-xs">
+                  Chapter 5 · 2019
+                </span>
+              </div>
+
+              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#2A1806] leading-snug">
+                2019: Launching Health Mix &amp; Millet Nutrition
+              </h2>
+
+              <p className="text-xs sm:text-sm text-[#5D4730] leading-relaxed">
+                In 2019, YG introduced traditional Sathu Maavu Health Mix and native millet-based foods. Blending ancient sprouted grains, pulses, and nuts, this wholesome formula brought holistic South Indian nutrition back to modern tables.
+              </p>
+
+              <div className="rounded-xl border border-[#C59B27]/60 bg-[#FAF4E5] p-3.5 sm:p-4 flex items-start gap-3 shadow-xs">
+                <Wheat className="h-4 w-4 text-[#8C5921] shrink-0 mt-0.5" />
+                <p className="font-serif italic text-xs sm:text-[13px] text-[#4A3724] leading-relaxed">
+                  &ldquo;Wholesome native millets and multigrain health mixes rooted in grandmother&apos;s nutritional wisdom.&rdquo;
+                </p>
+              </div>
+            </div>
+
+            <div className="lg:col-span-6 flex justify-center order-2 lg:order-2">
+              <div className="w-full max-w-lg lg:max-w-none rounded-2xl overflow-hidden border-2 border-[#E5D7B7] shadow-md bg-[#F2E8CE] transition-transform hover:scale-[1.01] duration-300">
+                <img
+                  src="/products/traditional-health-mix/img-1.jpg"
+                  alt="Chapter 5: 2019 Health Mix and Millet Based Products"
+                  className="w-full h-auto object-cover max-h-[340px] sm:max-h-[380px]"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Ribbon Connector 5 -> 6 */}
+          <div className="relative py-2 sm:py-4 my-2 hidden lg:flex flex-col items-center justify-center">
+            <svg className="w-full max-w-4xl h-24 overflow-visible" viewBox="0 0 1000 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="curly-arrow-5" markerWidth="14" markerHeight="14" refX="8" refY="5" orient="auto">
+                  <path d="M 0 1.5 L 9 5 L 0 8.5 L 2.5 5 z" fill="#8C5921" />
+                </marker>
+              </defs>
+              <circle cx="760" cy="5" r="4" fill="#C59B27" />
+              <path d="M 760 5 C 830 20, 840 60, 780 70 C 710 80, 680 35, 640 45 C 580 60, 560 85, 540 105" stroke="#C59B27" strokeWidth="3" strokeDasharray="8 12" strokeLinecap="round" markerEnd="url(#curly-arrow-5)" />
+            </svg>
+          </div>
+
+          {/* ================= CHAPTER 6 ================= */}
+          <div className="relative grid lg:grid-cols-12 gap-6 sm:gap-10 items-center">
+            <div className="lg:col-span-6 flex justify-center order-2 lg:order-1">
+              <div className="w-full max-w-lg lg:max-w-none rounded-2xl overflow-hidden border-2 border-[#E5D7B7] shadow-md bg-[#F2E8CE] transition-transform hover:scale-[1.01] duration-300">
+                <img
+                  src="/products/all-product/img-1.jpg"
+                  alt="Chapter 6: 2025 Vismaya Products and Ready to Cook Research"
+                  className="w-full h-auto object-cover max-h-[340px] sm:max-h-[380px]"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+
+            <div className="lg:col-span-6 space-y-3.5 order-1 lg:order-2">
+              <div className="flex items-center gap-3">
+                <div className="h-9 w-9 sm:h-11 sm:w-11 rounded-full bg-[#8C5921] border-2 border-[#D4AF37] text-white font-serif font-black flex items-center justify-center text-base sm:text-lg shadow-md shrink-0">
+                  6
+                </div>
+                <span className="px-3 py-1 rounded-full border border-[#C59B27]/60 bg-[#FAF4E5] text-[10px] sm:text-xs font-bold text-[#8C5921] uppercase tracking-wider shadow-xs">
+                  Chapter 6 · 2025
+                </span>
+              </div>
+
+              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#2A1806] leading-snug">
+                2025: Launching Vismaya Products &amp; Ready-to-Cook Concepts
+              </h2>
+
+              <p className="text-xs sm:text-sm text-[#5D4730] leading-relaxed">
+                In 2025, YG unveiled the Vismaya culinary lineup: wood-roasted Idly Podi, fragrant Ellu Podi, classic Paruppu Podi, Andhra Special Paruppu Podi, and all traditional rice mix powders. Concurrently, in-depth research was conducted into native millets and next-generation ready-to-cook concepts.
+              </p>
+
+              <div className="rounded-xl border border-[#C59B27]/60 bg-[#FAF4E5] p-3.5 sm:p-4 flex items-start gap-3 shadow-xs">
+                <Wheat className="h-4 w-4 text-[#8C5921] shrink-0 mt-0.5" />
+                <p className="font-serif italic text-xs sm:text-[13px] text-[#4A3724] leading-relaxed">
+                  &ldquo;Idly Podi, Ellu Podi, Andhra Paruppu Podi &amp; rice mixes — crafted to recreate festive grandmother recipes in seconds.&rdquo;
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Ribbon Connector 6 -> 7 */}
+          <div className="relative py-2 sm:py-4 my-2 hidden lg:flex flex-col items-center justify-center">
+            <svg className="w-full max-w-4xl h-24 overflow-visible" viewBox="0 0 1000 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="curly-arrow-6" markerWidth="14" markerHeight="14" refX="8" refY="5" orient="auto">
+                  <path d="M 0 1.5 L 9 5 L 0 8.5 L 2.5 5 z" fill="#8C5921" />
+                </marker>
+              </defs>
+              <circle cx="240" cy="5" r="4" fill="#C59B27" />
+              <path d="M 240 5 C 310 20, 320 60, 260 70 C 190 80, 160 35, 120 45 C 70 60, 60 85, 40 105" stroke="#C59B27" strokeWidth="3" strokeDasharray="8 12" strokeLinecap="round" markerEnd="url(#curly-arrow-6)" />
+            </svg>
+          </div>
+
+          {/* ================= CHAPTER 7 ================= */}
+          <div className="relative grid lg:grid-cols-12 gap-6 sm:gap-10 items-center">
+            <div className="lg:col-span-6 space-y-3.5 order-1 lg:order-1">
+              <div className="flex items-center gap-3">
+                <div className="h-9 w-9 sm:h-11 sm:w-11 rounded-full bg-[#8C5921] border-2 border-[#D4AF37] text-white font-serif font-black flex items-center justify-center text-base sm:text-lg shadow-md shrink-0">
+                  7
+                </div>
+                <span className="px-3 py-1 rounded-full border border-[#C59B27]/60 bg-[#FAF4E5] text-[10px] sm:text-xs font-bold text-[#8C5921] uppercase tracking-wider shadow-xs">
+                  Chapter 7 · 2026
+                </span>
+              </div>
+
+              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#2A1806] leading-snug">
+                2026: Launching Brand New Vismaya Ready-to-Cook Products
+              </h2>
+
+              <p className="text-xs sm:text-sm text-[#5D4730] leading-relaxed">
+                In 2026, YG enters a brand-new frontier, launching the official Vismaya Ready-to-Cook range. Designed for today&apos;s fast-paced kitchens, these revolutionary traditional preparations deliver pure heritage flavour with absolute zero chemical preservatives.
+              </p>
+
               <div className="pt-2 flex flex-wrap items-center gap-3">
                 <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[#C59B27]/70 bg-[#FAF4E5] text-xs font-bold text-[#6D4918] shadow-xs">
                   <Globe className="h-3.5 w-3.5 text-[#8C5921]" />
-                  <span>Across Borders</span>
+                  <span>Ready-to-Cook Innovation</span>
                 </div>
                 <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[#C59B27]/70 bg-[#FAF4E5] text-xs font-bold text-[#6D4918] shadow-xs">
                   <Wheat className="h-3.5 w-3.5 text-[#8C5921]" />
-                  <span>Across Generations</span>
+                  <span>100% Preservative-Free</span>
                 </div>
+              </div>
+            </div>
+
+            <div className="lg:col-span-6 flex justify-center order-2 lg:order-2">
+              <div className="w-full max-w-lg lg:max-w-none rounded-2xl overflow-hidden border-2 border-[#E5D7B7] shadow-md bg-[#F2E8CE] transition-transform hover:scale-[1.01] duration-300">
+                <img
+                  src="/images/story-chapter4-global.jpg"
+                  alt="Chapter 7: 2026 Brand New Vismaya Ready-to-Cook Products"
+                  className="w-full h-auto object-cover max-h-[340px] sm:max-h-[380px]"
+                  loading="lazy"
+                />
               </div>
             </div>
           </div>

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 90" width="100%" height="100%" fill="none">
+  <!-- National Emblem Stylized Silhouette (Lion Capital) -->
+  <g transform="translate(14, 12)" fill="#1A1A1A">
+    <!-- Emblem Top Lions -->
+    <path d="M16 6 C12 6, 8 10, 8 16 C8 20, 10 23, 13 25 L10 32 L22 32 L19 25 C22 23, 24 20, 24 16 C24 10, 20 6, 16 6 Z"/>
+    <path d="M7 16 C5 16, 2 19, 2 23 C2 27, 4 30, 7 31 L8 35 L12 35 L10 30 C8 29, 6 26, 6 23 C6 19, 7 16, 7 16 Z"/>
+    <path d="M25 16 C27 16, 30 19, 30 23 C30 27, 28 30, 25 31 L24 35 L20 35 L22 30 C24 29, 26 26, 26 23 C26 19, 25 16, 25 16 Z"/>
+    <!-- Capital Base & Chakra -->
+    <rect x="5" y="36" width="22" height="4" rx="1"/>
+    <circle cx="16" cy="45" r="4" fill="none" stroke="#1A1A1A" stroke-width="1.5"/>
+    <rect x="4" y="52" width="24" height="3" rx="1"/>
+    <text x="16" y="63" font-family="'Segoe UI', Arial, sans-serif" font-size="5" font-weight="700" text-anchor="middle" fill="#222">सत्यमेव जयते</text>
+  </g>
+  
+  <!-- Divider -->
+  <line x1="52" y1="16" x2="52" y2="74" stroke="#D1D5DB" stroke-width="1"/>
+  
+  <!-- MSME Bold Typography Lockup matching Govt Emblem -->
+  <g transform="translate(62, 10)">
+    <!-- Hindi Subtitle -->
+    <text x="2" y="16" font-family="'Segoe UI', Arial, sans-serif" font-size="9" font-weight="600" fill="#374151">सूक्ष्म, लघु एवं मध्यम उद्यम</text>
+    
+    <!-- Bold MSME Letters with horizontal cutouts -->
+    <g fill="#1F2937">
+      <text x="0" y="47" font-family="'Segoe UI', Impact, Arial, sans-serif" font-size="34" font-weight="900" letter-spacing="3.5">MSME</text>
+    </g>
+    
+    <!-- English Subtitle -->
+    <text x="2" y="62" font-family="'Segoe UI', Arial, sans-serif" font-size="8" font-weight="700" fill="#4B5563">Ministry of MSME, Govt. of India</text>
+  </g>
+</svg>

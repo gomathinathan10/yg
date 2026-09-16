@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { CheckCircle2, Loader2, Mail, MapPin, MessageCircle, MessageSquare, Phone } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -57,15 +57,15 @@ export const Route = createFileRoute("/contact")({
           "description": "Customer support, order resolutions, and wholesale bulk enquiries for Y.G Asafoetida.",
           "mainEntity": {
             "@type": "LocalBusiness",
-            "name": "Y.G Asafoetida",
-            "telephone": "+91 98765 43210",
-            "email": "care@ygasafoetida.in",
+            "name": "Mayil Agro Foods (Y.G Asafoetida)",
+            "telephone": "0462 - 233 5555",
+            "email": "Sales@yghing.com",
             "address": {
               "@type": "PostalAddress",
-              "streetAddress": "Town Car Street",
+              "streetAddress": "1/303, M.K. Nagar, Near to HP Fuel Station, Abhisekapatti, Tirunelveli - Tenkasi Main Road",
               "addressLocality": "Tirunelveli",
               "addressRegion": "Tamil Nadu",
-              "postalCode": "627006",
+              "postalCode": "627012",
               "addressCountry": "IN"
             }
           }
@@ -118,7 +118,7 @@ function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF3D6] font-sans pb-16">
+    <div className="min-h-screen bg-white font-sans pb-16">
       {/* Breadcrumb Navigation */}
       <div className="border-b border-[#E8DEC8] bg-[#F5EAC4] py-3.5">
         <div className="container-page flex items-center justify-between">
@@ -280,8 +280,11 @@ function ContactPage() {
                   <MapPin className="h-4 w-4" />
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-[#181206]">Works & Office</p>
-                  <p className="text-xs text-[#6E777D] mt-0.5">{SUPPORT.address}, India</p>
+                  <p className="text-xs font-bold text-[#181206]">Works &amp; Registered Office</p>
+                  <p className="text-xs text-[#6E777D] mt-0.5 leading-relaxed">
+                    <strong>Mayil Agro Foods</strong><br />
+                    1/303, M.K. Nagar, Near to HP Fuel Station, Abhisekapatti, Tirunelveli - Tenkasi Main Road, Tirunelveli - 627 012, Tamil Nadu, India
+                  </p>
                 </div>
               </div>
 
@@ -290,12 +293,40 @@ function ContactPage() {
                   <Phone className="h-4 w-4" />
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-[#181206]">Phone Support</p>
+                  <p className="text-xs font-bold text-[#181206]">Telephone Support</p>
                   <p className="text-xs text-[#6E777D] mt-0.5">
-                    <a href={SUPPORT.phoneHref} className="text-[#181206] font-semibold hover:underline">
-                      {SUPPORT.phone}
+                    <a href="tel:04622335555" className="text-[#181206] font-semibold hover:underline">
+                      0462 - 233 5555
                     </a>{" "}
                     · {SUPPORT.hours}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <div className="w-8 h-8 rounded-full bg-[#FFC700]/10 flex items-center justify-center text-[#181206] shrink-0 mt-0.5">
+                  <Phone className="h-4 w-4" />
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-[#181206]">Direct Mobile</p>
+                  <p className="text-xs text-[#6E777D] mt-0.5">
+                    <a href="tel:+917200622221" className="text-[#181206] font-semibold hover:underline">
+                      +91 7200622221
+                    </a>
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <div className="w-8 h-8 rounded-full bg-[#FFC700]/10 flex items-center justify-center text-[#181206] shrink-0 mt-0.5">
+                  <Phone className="h-4 w-4" />
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-[#181206]">Sales Desk</p>
+                  <p className="text-xs text-[#6E777D] mt-0.5">
+                    <a href="tel:+917904567979" className="text-[#181206] font-semibold hover:underline">
+                      +91 7904567979
+                    </a>
                   </p>
                 </div>
               </div>
@@ -305,11 +336,11 @@ function ContactPage() {
                   <Mail className="h-4 w-4" />
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-[#181206]">Email Desk</p>
-                  <p className="text-xs text-[#6E777D] mt-0.5">
-                    <a href={SUPPORT.emailHref} className="text-[#181206] font-semibold hover:underline">
-                      {SUPPORT.email}
-                    </a>
+                  <p className="text-xs font-bold text-[#181206]">Email Contacts</p>
+                  <p className="text-xs text-[#6E777D] mt-0.5 space-y-1 flex flex-col">
+                    <span>General &amp; Sales: <a href="mailto:Sales@yghing.com" className="text-[#181206] font-semibold hover:underline">Sales@yghing.com</a></span>
+                    <span>White Labelling &amp; B2B: <a href="mailto:b2bsales@yghing.com" className="text-[#181206] font-semibold hover:underline">b2bsales@yghing.com</a></span>
+                    <span>International Trade: <Link to="/exports" className="text-[#8C5921] font-semibold hover:underline">Visit Global Exports Desk →</Link></span>
                   </p>
                 </div>
               </div>
@@ -319,17 +350,17 @@ function ContactPage() {
                   <MessageCircle className="h-4 w-4" />
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-[#181206]">WhatsApp Help</p>
+                  <p className="text-xs font-bold text-[#181206]">WhatsApp Support Desk</p>
                   <p className="text-xs text-[#6E777D] mt-0.5">
                     <a
-                      href={SUPPORT.whatsappHref}
+                      href="https://wa.me/917200622221"
                       target="_blank"
                       rel="noreferrer"
                       className="text-[#181206] font-semibold hover:underline"
                     >
-                      {SUPPORT.whatsapp}
+                      +91 7200622221
                     </a>{" "}
-                    · Fastest for order updates
+                    · Fastest for orders &amp; inquiries
                   </p>
                 </div>
               </div>
