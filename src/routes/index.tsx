@@ -3,7 +3,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
   ChevronRight,
-  ChevronUp,
   CreditCard,
   MapPin,
   Smile,
@@ -234,20 +233,11 @@ const HERO_VIDEOS = [
 
 function HomePage() {
   const [activeCatalogTab, setActiveCatalogTab] = useState<Format | "all">("all");
-  const [showBackToTop, setShowBackToTop] = useState(false);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const soundPlayCountRef = useRef(0);
   const [isMuted, setIsMuted] = useState(true);
   const [isFading, setIsFading] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setShowBackToTop(window.scrollY > 300);
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   // Smoothly transition video source without destroying video DOM node
   useEffect(() => {
@@ -793,20 +783,6 @@ function HomePage() {
           </div>
         </div>
       </section>
-
-      {/* Floating Back to Top Button */}
-      {showBackToTop && (
-        <button
-          type="button"
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          style={{ bottom: "calc(4.75rem + var(--fab-offset, 0px))" }}
-          className="fixed right-4 sm:right-6 z-30 h-10 w-10 sm:h-11 sm:w-11 rounded-full bg-white border border-[#E8DEC8] text-[#181206] hover:bg-[#FFC700] hover:border-[#D8A700] flex items-center justify-center shadow-md transition-all active:scale-95 cursor-pointer"
-          aria-label="Scroll to top"
-          title="Back to top"
-        >
-          <ChevronUp className="h-5 w-5" />
-        </button>
-      )}
     </div>
   );
 }

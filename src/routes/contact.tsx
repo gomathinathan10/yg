@@ -150,17 +150,17 @@ function ContactPage() {
 
         <div className="mt-8 grid items-start gap-8 lg:grid-cols-[1.2fr_1fr]">
           {status === "sent" ? (
-            <div className="rounded-[6px] border border-[#E8DEC8] bg-white p-6 sm:p-8 shadow-xs flex flex-col items-start">
-              <CheckCircle2 className="h-10 w-10 text-[#181206]" />
+            <div className="rounded-2xl border-2 border-[#FFC700] bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6] p-6 sm:p-8 shadow-md ring-1 ring-[#FFC700]/30 flex flex-col items-start">
+              <CheckCircle2 className="h-10 w-10 text-[#8C5921]" />
               <h2 className="mt-4 text-2xl font-bold text-[#181206]">
                 Thank you, {values.name.split(" ")[0]}!
               </h2>
-              <p className="mt-2 text-sm text-[#6E777D]">
+              <p className="mt-2 text-sm text-[#5A6560]">
                 Your message regarding &ldquo;{values.subject}&rdquo; has been received by our Tirunelveli team. We will reply to {values.email} within one working day.
               </p>
               <Button
                 variant="outline"
-                className="mt-6 rounded-[6px] border-[#FFC700] text-[#181206] hover:bg-[#FFC700] hover:text-white cursor-pointer"
+                className="mt-6 rounded-[6px] border-[#D8A700] bg-white text-[#181206] hover:bg-[#FFC700] hover:border-[#D8A700] cursor-pointer"
                 onClick={() => {
                   setValues({ name: "", email: "", subject: "", message: "" });
                   setTouched({});
@@ -172,13 +172,18 @@ function ContactPage() {
             </div>
           ) : (
             <form
-              className="rounded-[6px] border border-[#E8DEC8] bg-white p-6 sm:p-8 shadow-xs space-y-4"
+              className="rounded-2xl border-2 border-[#FFC700] bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6] p-6 sm:p-8 shadow-md ring-1 ring-[#FFC700]/30 space-y-4"
               noValidate
               onSubmit={onSubmit}
             >
-              <h3 className="text-base font-bold text-[#181206] border-b border-[#E8DEC8] pb-3">
-                Send Us a Message
-              </h3>
+              <div className="flex items-center gap-2 border-b border-[#E8DEC8] pb-3">
+                <span className="p-1 rounded bg-[#FFC700] text-[#181206] border border-[#D8A700]">
+                  <Mail className="h-4 w-4" />
+                </span>
+                <h3 className="text-base font-bold text-[#181206]">
+                  Send Us a Message
+                </h3>
+              </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-1.5">
@@ -255,7 +260,7 @@ function ContactPage() {
                 type="submit"
                 size="lg"
                 disabled={status === "sending"}
-                className="w-full sm:w-auto h-11 px-8 rounded-[6px] bg-[#FFC700] hover:bg-[#E6B000] text-[#181206] font-black font-bold text-xs shadow-xs cursor-pointer"
+                className="w-full sm:w-auto h-11 px-8 rounded-[6px] bg-[#FFC700] hover:bg-[#181206] text-[#181206] hover:text-[#FFC700] border border-[#D8A700] hover:border-[#181206] font-black text-xs shadow-xs cursor-pointer active:scale-95 transition-all"
               >
                 {status === "sending" ? (
                   <>
@@ -270,13 +275,13 @@ function ContactPage() {
 
           {/* Right Info Cards */}
           <div className="space-y-4">
-            <div className="rounded-[6px] border border-[#E8DEC8] bg-white p-6 shadow-xs space-y-4">
+            <div className="rounded-2xl border-2 border-[#E8DEC8] hover:border-[#FFC700] bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6] p-6 shadow-xs space-y-4 transition-all">
               <h3 className="text-sm font-bold text-[#181206] uppercase tracking-wider pb-2 border-b border-[#E8DEC8]">
-                Our Location & Contact
+                Our Location &amp; Contact
               </h3>
 
               <div className="flex gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#FFC700]/10 flex items-center justify-center text-[#181206] shrink-0 mt-0.5">
+                <div className="w-8 h-8 rounded-full bg-[#FFC700] flex items-center justify-center text-[#181206] shrink-0 mt-0.5 border border-[#D8A700] shadow-2xs">
                   <MapPin className="h-4 w-4" />
                 </div>
                 <div>

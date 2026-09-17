@@ -21,9 +21,11 @@ import { CartDrawer } from "@/components/site/CartDrawer";
 import { MobileCartBar } from "@/components/site/MobileCartBar";
 import { Toaster } from "@/components/ui/sonner";
 import { ClickEffects } from "@/components/site/ClickEffects";
-// The FAQ bot is a floating helper: keep it out of the first paint bundle.
 const FaqBot = lazy(() =>
   import("@/components/site/FaqBot").then((m) => ({ default: m.FaqBot })),
+);
+const BackToTop = lazy(() =>
+  import("@/components/site/BackToTop").then((m) => ({ default: m.BackToTop })),
 );
 
 /** Mounts children only once the browser is idle, after the page is interactive. */
@@ -286,6 +288,7 @@ function RootComponent() {
         <ClickEffects />
         <DeferUntilIdle>
           <FaqBot />
+          <BackToTop />
         </DeferUntilIdle>
         <Toaster position="top-center" />
       </CartProvider>

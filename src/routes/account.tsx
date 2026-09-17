@@ -71,19 +71,22 @@ function AccountPage() {
         <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_1.6fr]">
           <div className="space-y-6">
             {/* Profile Section */}
-            <section className="rounded-[6px] border border-[#E8DEC8] bg-white p-6 shadow-xs">
+            <section className="rounded-2xl border-2 border-[#FFC700] bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6] p-6 shadow-md ring-1 ring-[#FFC700]/30">
               <h2 className="flex items-center gap-2 text-base font-bold text-[#181206] pb-3 border-b border-[#E8DEC8]">
-                <UserRound className="h-4 w-4 text-[#181206]" /> Profile Details
+                <span className="p-1 rounded bg-[#FFC700] text-[#181206] border border-[#D8A700]">
+                  <UserRound className="h-4 w-4" />
+                </span>
+                <span>Profile Details</span>
               </h2>
               {profile ? (
-                <div className="mt-4 space-y-1.5 text-xs text-[#6E777D]">
+                <div className="mt-4 space-y-1.5 text-xs text-[#5A6560]">
                   <p className="font-bold text-[#181206] text-sm">{profile.name || "Guest Cook"}</p>
                   <p>{profile.email}</p>
                   <p>{profile.phone}</p>
                   <Button
                     variant="outline"
                     size="sm"
-                    className="mt-4 rounded-[6px] border-[#E8DEC8] text-xs hover:border-[#FFC700] hover:text-[#181206] cursor-pointer"
+                    className="mt-4 rounded-[6px] border-[#D8A700] bg-white text-[#181206] text-xs hover:bg-[#FFC700] hover:border-[#D8A700] cursor-pointer"
                     onClick={signOut}
                   >
                     Sign Out
@@ -144,7 +147,7 @@ function AccountPage() {
                   </div>
                   <Button
                     type="submit"
-                    className="w-full h-10 rounded-[6px] bg-[#FFC700] hover:bg-[#E6B000] text-[#181206] font-black font-bold text-xs shadow-xs cursor-pointer"
+                    className="w-full h-10 rounded-[6px] bg-[#FFC700] hover:bg-[#181206] text-[#181206] hover:text-[#FFC700] border border-[#D8A700] hover:border-[#181206] font-black text-xs shadow-xs cursor-pointer active:scale-95 transition-all"
                   >
                     Save Profile
                   </Button>
@@ -153,9 +156,12 @@ function AccountPage() {
             </section>
 
             {/* Saved Addresses Section */}
-            <section className="rounded-[6px] border border-[#E8DEC8] bg-white p-6 shadow-xs">
+            <section className="rounded-2xl border-2 border-[#E8DEC8] hover:border-[#FFC700] bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6] p-6 shadow-xs transition-all">
               <h2 className="flex items-center gap-2 text-base font-bold text-[#181206] pb-3 border-b border-[#E8DEC8]">
-                <MapPin className="h-4 w-4 text-[#181206]" /> Saved Addresses
+                <span className="p-1 rounded bg-[#FFC700] text-[#181206] border border-[#D8A700]">
+                  <MapPin className="h-4 w-4" />
+                </span>
+                <span>Saved Addresses</span>
               </h2>
               {addresses.length === 0 ? (
                 <p className="mt-3 text-xs text-[#6E777D]">
@@ -209,9 +215,12 @@ function AccountPage() {
           </div>
 
           {/* Orders Section */}
-          <section className="rounded-[6px] border border-[#E8DEC8] bg-white p-6 shadow-xs">
+          <section className="rounded-2xl border-2 border-[#E8DEC8] hover:border-[#FFC700] bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6] p-6 shadow-xs transition-all">
             <h2 className="flex items-center gap-2 text-base font-bold text-[#181206] pb-3 border-b border-[#E8DEC8]">
-              <Package className="h-4 w-4 text-[#181206]" /> Order History
+              <span className="p-1 rounded bg-[#FFC700] text-[#181206] border border-[#D8A700]">
+                <Package className="h-4 w-4" />
+              </span>
+              <span>Order History</span>
             </h2>
             {orders.length === 0 ? (
               <div className="mt-8 text-center py-8">

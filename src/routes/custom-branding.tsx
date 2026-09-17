@@ -268,22 +268,22 @@ function CustomBrandingPage() {
           </div>
 
           {/* Quick Metrics */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-8 border-t border-border/80">
-            <div className="rounded-xl border border-border/80 bg-card p-4 text-center">
-              <p className="text-2xl sm:text-3xl font-extrabold text-foreground">94</p>
-              <p className="text-xs text-muted-foreground font-medium mt-0.5">Years Compounding Mastery</p>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-8 border-t border-[#E8DEC8]">
+            <div className="rounded-xl border border-[#E8DEC8] bg-[#FAF3D6] p-4 text-center shadow-xs">
+              <p className="text-2xl sm:text-3xl font-extrabold text-[#181206]">94</p>
+              <p className="text-xs text-[#5A6560] font-medium mt-0.5">Years Compounding Mastery</p>
             </div>
-            <div className="rounded-xl border border-border/80 bg-card p-4 text-center">
-              <p className="text-2xl sm:text-3xl font-extrabold text-foreground">25 kg</p>
-              <p className="text-xs text-muted-foreground font-medium mt-0.5">Flexible Low Starting MOQ</p>
+            <div className="rounded-xl border border-[#E8DEC8] bg-[#FAF3D6] p-4 text-center shadow-xs">
+              <p className="text-2xl sm:text-3xl font-extrabold text-[#181206]">25 kg</p>
+              <p className="text-xs text-[#5A6560] font-medium mt-0.5">Flexible Low Starting MOQ</p>
             </div>
-            <div className="rounded-xl border border-border/80 bg-card p-4 text-center">
-              <p className="text-2xl sm:text-3xl font-extrabold text-foreground">100%</p>
-              <p className="text-xs text-muted-foreground font-medium mt-0.5">Natural Resin &amp; Starches</p>
+            <div className="rounded-xl border border-[#E8DEC8] bg-[#FAF3D6] p-4 text-center shadow-xs">
+              <p className="text-2xl sm:text-3xl font-extrabold text-[#181206]">100%</p>
+              <p className="text-xs text-[#5A6560] font-medium mt-0.5">Natural Resin &amp; Starches</p>
             </div>
-            <div className="rounded-xl border border-border/80 bg-card p-4 text-center">
-              <p className="text-2xl sm:text-3xl font-extrabold text-foreground">6+ Countries</p>
-              <p className="text-xs text-muted-foreground font-medium mt-0.5">Global Export Capability</p>
+            <div className="rounded-xl border border-[#E8DEC8] bg-[#FAF3D6] p-4 text-center shadow-xs">
+              <p className="text-2xl sm:text-3xl font-extrabold text-[#181206]">6+ Countries</p>
+              <p className="text-xs text-[#5A6560] font-medium mt-0.5">Global Export Capability</p>
             </div>
           </div>
         </div>
@@ -308,23 +308,23 @@ function CustomBrandingPage() {
             {CAPABILITIES.map((cap) => (
               <div
                 key={cap.title}
-                className="surface-card rounded-2xl border border-border/80 p-6 sm:p-7 space-y-4 hover:border-primary/40 transition-colors shadow-xs"
+                className="rounded-2xl border-2 border-[#E8DEC8] p-6 sm:p-7 space-y-4 hover:border-[#FFC700] transition-all duration-300 shadow-xs hover:shadow-md bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6]"
               >
                 <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                  <div className="h-10 w-10 rounded-xl bg-[#FFC700] flex items-center justify-center text-[#181206] shrink-0 border border-[#D8A700] shadow-2xs">
                     <cap.icon className="h-5 w-5" />
                   </div>
-                  <h3 className="text-lg font-bold text-foreground">{cap.title}</h3>
+                  <h3 className="text-lg font-bold text-[#181206]">{cap.title}</h3>
                 </div>
 
-                <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                <p className="text-xs sm:text-sm text-[#5A6560] leading-relaxed">
                   {cap.description}
                 </p>
 
-                <ul className="space-y-2 border-t border-border/60 pt-3">
+                <ul className="space-y-2 border-t border-[#E8DEC8] pt-3">
                   {cap.points.map((pt) => (
-                    <li key={pt} className="text-xs text-foreground/90 flex items-start gap-2">
-                      <CheckCircle2 className="h-3.5 w-3.5 text-primary shrink-0 mt-0.5" />
+                    <li key={pt} className="text-xs text-[#181206] flex items-start gap-2">
+                      <CheckCircle2 className="h-3.5 w-3.5 text-[#8C5921] shrink-0 mt-0.5" />
                       <span>{pt}</span>
                     </li>
                   ))}
@@ -359,17 +359,17 @@ function CustomBrandingPage() {
             {PACKAGING_FORMATS.map((pkg) => (
               <div
                 key={pkg.name}
-                className="surface-card rounded-2xl border border-border/80 p-5 flex flex-col justify-between space-y-3 bg-card"
+                className="rounded-2xl border-2 border-[#E8DEC8] hover:border-[#FFC700] p-5 flex flex-col justify-between space-y-3 bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6] shadow-xs hover:shadow-md transition-all duration-300"
               >
                 <div className="space-y-2">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-2 py-0.5 rounded-full">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-[#181206] bg-[#FFC700] border border-[#D8A700] px-2.5 py-0.5 rounded-full shadow-2xs">
                     {pkg.sizes}
                   </span>
-                  <h3 className="text-base font-bold text-foreground leading-snug">{pkg.name}</h3>
-                  <p className="text-xs text-muted-foreground leading-relaxed">{pkg.features}</p>
+                  <h3 className="text-base font-bold text-[#181206] leading-snug">{pkg.name}</h3>
+                  <p className="text-xs text-[#5A6560] leading-relaxed">{pkg.features}</p>
                 </div>
-                <div className="border-t border-border/60 pt-2.5 text-[11px] text-foreground/80">
-                  <span className="font-semibold text-primary">Best for: </span>
+                <div className="border-t border-[#E8DEC8] pt-2.5 text-[11px] text-[#181206]">
+                  <span className="font-bold text-[#8C5921]">Best for: </span>
                   {pkg.idealFor}
                 </div>
               </div>
@@ -397,11 +397,11 @@ function CustomBrandingPage() {
             {WORKFLOW_STEPS.map((wf) => (
               <div
                 key={wf.step}
-                className="relative rounded-2xl border border-border/80 bg-background p-5 space-y-2.5 shadow-xs"
+                className="relative rounded-2xl border-2 border-[#E8DEC8] hover:border-[#FFC700] bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6] p-5 space-y-2.5 shadow-xs hover:shadow-md transition-all duration-300"
               >
-                <span className="text-3xl font-black text-primary/30">{wf.step}</span>
-                <h3 className="text-base font-bold text-foreground leading-snug">{wf.title}</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">{wf.description}</p>
+                <span className="text-3xl font-black text-[#FFC700] drop-shadow-2xs">{wf.step}</span>
+                <h3 className="text-base font-bold text-[#181206] leading-snug">{wf.title}</h3>
+                <p className="text-xs text-[#5A6560] leading-relaxed">{wf.description}</p>
               </div>
             ))}
           </div>
@@ -425,42 +425,42 @@ function CustomBrandingPage() {
               </p>
             </div>
 
-            <div className="rounded-2xl border border-border bg-card p-5 space-y-4 shadow-xs">
-              <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-primary" /> Direct B2B Institutional Helpdesk
+            <div className="rounded-2xl border-2 border-[#E8DEC8] bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6] p-5 space-y-4 shadow-sm">
+              <h3 className="text-sm font-bold text-[#181206] flex items-center gap-2 border-b border-[#E8DEC8] pb-2">
+                <Sparkles className="h-4 w-4 text-[#8C5921]" /> Direct B2B Institutional Helpdesk
               </h3>
-              <div className="space-y-3 text-xs text-muted-foreground">
+              <div className="space-y-3 text-xs text-[#5A6560]">
                 <div className="flex items-start gap-2.5">
-                  <Globe2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                  <Globe2 className="h-4 w-4 text-[#8C5921] shrink-0 mt-0.5" />
                   <span>
-                    <strong>Mayil Agro Foods</strong><br />
+                    <strong className="text-[#181206]">Mayil Agro Foods</strong><br />
                     1/303, M.K. Nagar, Near to HP Fuel Station, Abhisekapatti, Tirunelveli - Tenkasi Main Road, Tirunelveli - 627 012
                   </span>
                 </div>
                 <div className="flex items-center gap-2.5">
-                  <Phone className="h-4 w-4 text-primary shrink-0" />
+                  <Phone className="h-4 w-4 text-[#8C5921] shrink-0" />
                   <span>Tel: 0462 - 233 5555 · Mob: +91 7200622221</span>
                 </div>
                 <div className="flex items-center gap-2.5">
-                  <Phone className="h-4 w-4 text-primary shrink-0" />
+                  <Phone className="h-4 w-4 text-[#8C5921] shrink-0" />
                   <span>Sales Desk: +91 7904567979</span>
                 </div>
                 <div className="flex items-center gap-2.5">
-                  <Mail className="h-4 w-4 text-primary shrink-0" />
-                  <span>White Labelling: <a href="mailto:b2bsales@yghing.com" className="font-semibold text-foreground underline">b2bsales@yghing.com</a></span>
+                  <Mail className="h-4 w-4 text-[#8C5921] shrink-0" />
+                  <span>White Labelling: <a href="mailto:b2bsales@yghing.com" className="font-semibold text-[#181206] underline">b2bsales@yghing.com</a></span>
                 </div>
                 <div className="flex items-center gap-2.5">
-                  <Mail className="h-4 w-4 text-primary shrink-0" />
-                  <span>General Sales: <a href="mailto:Sales@yghing.com" className="font-semibold text-foreground underline">Sales@yghing.com</a></span>
+                  <Mail className="h-4 w-4 text-[#8C5921] shrink-0" />
+                  <span>General Sales: <a href="mailto:Sales@yghing.com" className="font-semibold text-[#181206] underline">Sales@yghing.com</a></span>
                 </div>
               </div>
             </div>
 
-            <div className="rounded-2xl border border-primary/20 bg-primary/5 p-4 text-xs space-y-1.5">
-              <p className="font-bold text-primary flex items-center gap-1.5">
-                <ShieldCheck className="h-4 w-4" /> Comprehensive Quality Assurances
+            <div className="rounded-2xl border border-[#D8A700] bg-[#FFC700]/15 p-4 text-xs space-y-1.5 shadow-2xs">
+              <p className="font-bold text-[#181206] flex items-center gap-1.5">
+                <ShieldCheck className="h-4 w-4 text-[#8C5921]" /> Comprehensive Quality Assurances
               </p>
-              <p className="text-muted-foreground leading-relaxed">
+              <p className="text-[#5A6560] leading-relaxed">
                 All production batches are accompanied by NABL testing reports, microbial purity analyses, and airtight tamper seals.
               </p>
             </div>
@@ -468,7 +468,7 @@ function CustomBrandingPage() {
 
           {/* Right Inquiry Form */}
           <div className="lg:col-span-7">
-            <div className="rounded-3xl border border-border bg-card p-6 sm:p-8 shadow-sm">
+            <div className="rounded-3xl border-2 border-[#FFC700] bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6] p-6 sm:p-8 shadow-md ring-1 ring-[#FFC700]/40">
               {submitted ? (
                 <div className="text-center py-10 space-y-4">
                   <div className="h-12 w-12 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 mx-auto flex items-center justify-center">
@@ -502,9 +502,12 @@ function CustomBrandingPage() {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-                  <div>
-                    <h3 className="text-lg font-bold text-foreground">Request Formulation & Pricing Quote</h3>
-                    <p className="text-xs text-muted-foreground mt-0.5">
+                  <div className="border-b border-[#E8DEC8] pb-3 mb-2">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-[#8C5921] bg-[#FFC700]/20 px-2 py-0.5 rounded border border-[#D8A700]">
+                      Custom Packaging Quote
+                    </span>
+                    <h3 className="text-xl font-bold text-[#181206] mt-1.5">Request Formulation &amp; Pricing Quote</h3>
+                    <p className="text-xs text-[#5A6560] mt-0.5">
                       Tell us about your brand, preferred spice format, and estimated initial quantity.
                     </p>
                   </div>
@@ -651,7 +654,7 @@ function CustomBrandingPage() {
                     />
                   </div>
 
-                  <Button type="submit" className="w-full font-bold h-10 text-xs shadow-sm mt-2" disabled={sending}>
+                  <Button type="submit" className="w-full font-black h-11 text-xs shadow-md mt-2 bg-[#FFC700] hover:bg-[#181206] text-[#181206] hover:text-[#FFC700] border border-[#D8A700] hover:border-[#181206] transition-all cursor-pointer active:scale-95" disabled={sending}>
                     {sending ? "Submitting Inquiry..." : "Submit Private Label Inquiry"}
                   </Button>
 

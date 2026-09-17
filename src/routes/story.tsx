@@ -355,8 +355,8 @@ function StoryPage() {
             <div className="lg:col-span-6 flex justify-center order-2 lg:order-2">
               <div className="w-full max-w-lg lg:max-w-none rounded-2xl overflow-hidden border-2 border-[#E5D7B7] shadow-md bg-[#F2E8CE] transition-transform hover:scale-[1.01] duration-300">
                 <img
-                  src="/products/100g-gold-asafoetida-powder/img-1.jpg"
-                  alt="Chapter 3: Cake to Powder and India's First Sachet"
+                  src="/images/story-chapter-3-sachet.jpg"
+                  alt="Chapter 3: 1980 Cake to Powder and 1982 India's First Sachet"
                   className="w-full h-auto object-cover max-h-[340px] sm:max-h-[380px]"
                   loading="lazy"
                 />
@@ -461,7 +461,7 @@ function StoryPage() {
             <div className="lg:col-span-6 flex justify-center order-2 lg:order-2">
               <div className="w-full max-w-lg lg:max-w-none rounded-2xl overflow-hidden border-2 border-[#E5D7B7] shadow-md bg-[#F2E8CE] transition-transform hover:scale-[1.01] duration-300">
                 <img
-                  src="/products/traditional-health-mix/img-1.jpg"
+                  src="/images/story-chapter-5-health-mix.jpg"
                   alt="Chapter 5: 2019 Health Mix and Millet Based Products"
                   className="w-full h-auto object-cover max-h-[340px] sm:max-h-[380px]"
                   loading="lazy"
@@ -488,7 +488,7 @@ function StoryPage() {
             <div className="lg:col-span-6 flex justify-center order-2 lg:order-1">
               <div className="w-full max-w-lg lg:max-w-none rounded-2xl overflow-hidden border-2 border-[#E5D7B7] shadow-md bg-[#F2E8CE] transition-transform hover:scale-[1.01] duration-300">
                 <img
-                  src="/products/all-product/img-1.jpg"
+                  src="/images/story-chapter-6-vismaya-podis.jpg"
                   alt="Chapter 6: 2025 Vismaya Products and Ready to Cook Research"
                   className="w-full h-auto object-cover max-h-[340px] sm:max-h-[380px]"
                   loading="lazy"
@@ -569,40 +569,13 @@ function StoryPage() {
             </div>
 
             <div className="lg:col-span-6 flex justify-center order-2 lg:order-2">
-              <div className="w-full max-w-lg lg:max-w-none rounded-2xl overflow-hidden border-2 border-[#E5D7B7] shadow-md bg-[#FAF4E5] p-4 sm:p-5 transition-transform hover:scale-[1.01] duration-300">
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="rounded-xl overflow-hidden border border-[#E5D7B7] bg-white p-2.5 flex flex-col items-center">
-                    <img
-                      src="/products/millet-pongal-mix/img-1.jpg"
-                      alt="Vismaya Kodo Millet Pongal Mix"
-                      className="max-h-[160px] sm:max-h-[180px] w-auto object-contain"
-                      loading="lazy"
-                    />
-                    <span className="text-[11px] font-bold text-[#181206] mt-2 text-center line-clamp-1">
-                      Kodo Pongal Mix
-                    </span>
-                    <span className="text-[10px] text-[#8C5921] font-semibold">250g Ready-to-Cook</span>
-                  </div>
-
-                  <div className="rounded-xl overflow-hidden border border-[#E5D7B7] bg-white p-2.5 flex flex-col items-center">
-                    <img
-                      src="/products/millet-sambar-mix/img-1.jpg"
-                      alt="Vismaya Kodo Millet Sambar Mix"
-                      className="max-h-[160px] sm:max-h-[180px] w-auto object-contain"
-                      loading="lazy"
-                    />
-                    <span className="text-[11px] font-bold text-[#181206] mt-2 text-center line-clamp-1">
-                      Kodo Sambar Mix
-                    </span>
-                    <span className="text-[10px] text-[#8C5921] font-semibold">250g Ready-to-Cook</span>
-                  </div>
-                </div>
-
-                <div className="mt-3 text-center bg-[#FAF4E5] pt-2 border-t border-[#E5D7B7]">
-                  <span className="text-[11px] font-bold text-[#8C5921] uppercase tracking-wider">
-                    Vismaya Millet Ready-to-Cook Collection · 2026
-                  </span>
-                </div>
+              <div className="w-full max-w-lg lg:max-w-none rounded-2xl overflow-hidden border-2 border-[#E5D7B7] shadow-md bg-[#F2E8CE] transition-transform hover:scale-[1.01] duration-300">
+                <img
+                  src="/images/story-chapter-7-ready-to-cook.jpg"
+                  alt="Chapter 7: 2026 Launching Brand New Vismaya Ready-to-Cook Products"
+                  className="w-full h-auto object-cover max-h-[340px] sm:max-h-[380px]"
+                  loading="lazy"
+                />
               </div>
             </div>
           </div>
