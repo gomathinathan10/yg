@@ -154,7 +154,7 @@ export const policies: Policy[] = [
       {
         heading: "Contact and jurisdiction",
         body: [
-          "Y.G Asafoetida / Mayil Agro Foods, Tirunelveli, Tamil Nadu. Any dispute is subject to the jurisdiction of the courts of Tirunelveli.",
+          "Y.G Asafoetida, Tirunelveli, Tamil Nadu. Any dispute is subject to the jurisdiction of the courts of Tirunelveli.",
         ],
       },
     ],

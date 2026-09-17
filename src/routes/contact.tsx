@@ -57,7 +57,7 @@ export const Route = createFileRoute("/contact")({
           "description": "Customer support, order resolutions, and wholesale bulk enquiries for Y.G Asafoetida.",
           "mainEntity": {
             "@type": "LocalBusiness",
-            "name": "Mayil Agro Foods (Y.G Asafoetida)",
+            "name": "Y.G Asafoetida",
             "telephone": "0462 - 233 5555",
             "email": "Sales@yghing.com",
             "address": {
@@ -402,11 +402,11 @@ function ContactPage() {
         <section className="mt-12">
           <h2 className="text-xl font-bold text-[#181206]">Find Us in Tirunelveli</h2>
           <p className="mt-1 text-xs text-[#6E777D]">
-            YG Hing · Mayil Agro Foods — our factory works and registered office. Drop in {SUPPORT.hours}.
+            Y.G Asafoetida — our factory works and registered office. Drop in {SUPPORT.hours}.
           </p>
           <div className="mt-4 overflow-hidden rounded-[6px] border border-[#E8DEC8] shadow-xs">
             <iframe
-              title="Map showing Y.G Hing (Mayil Agro Foods), Tirunelveli"
+              title="Map showing Y.G Asafoetida Works, Tirunelveli"
               src="https://www.google.com/maps?q=8.7547861,77.6503488&z=16&hl=en&output=embed"
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"

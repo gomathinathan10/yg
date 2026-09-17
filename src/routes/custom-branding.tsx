@@ -223,7 +223,7 @@ function CustomBrandingPage() {
 
   const openWhatsApp = () => {
     const text = encodeURIComponent(
-      `Hello Mayil Agro Foods / YG Team, I am interested in White Labelling & Custom Branding for ${form.companyName || "my company"}. Please share your B2B wholesale catalog and quotation.`
+      `Hello Y.G Team, I am interested in White Labelling & Custom Branding for ${form.companyName || "my company"}. Please share your B2B wholesale catalog and quotation.`
     );
     window.open(`https://wa.me/917200622221?text=${text}`, "_blank");
   };

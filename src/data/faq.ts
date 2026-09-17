@@ -4,7 +4,7 @@
  */
 
 export const SUPPORT = {
-  company: "Mayil Agro Foods",
+  company: "Y.G Asafoetida",
   phone: "0462 - 233 5555",
   phoneHref: "tel:04622335555",
   mobile: "+91 7200622221",

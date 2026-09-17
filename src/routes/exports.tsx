@@ -34,12 +34,12 @@ export const Route = createFileRoute("/exports")({
   head: () => ({
     meta: [
       {
-        title: "Global Exports — Pure Asafoetida, Spices & Podis Worldwide | Mayil Agro Foods / Y.G",
+        title: "Global Exports — Pure Asafoetida, Spices & Podis Worldwide | Y.G Asafoetida",
       },
       {
         name: "description",
         content:
-          "Official Export Division of Mayil Agro Foods / Y.G Asafoetida. Exporting pure compounded Hing, Vismaya Podis, Gluten-Free Asafoetida & Appalam to Singapore, Malaysia, Sri Lanka, Canada & USA. Certified by FSSAI, MSME, NSIC, US FDA Registered, ZED Bronze & IEC.",
+          "Official Export Division of Y.G Asafoetida. Exporting pure compounded Hing, Vismaya Podis, Gluten-Free Asafoetida & Appalam to Singapore, Malaysia, Sri Lanka, Canada & USA. Certified by FSSAI, MSME, NSIC, US FDA Registered, ZED Bronze & IEC.",
       },
       {
         name: "keywords",
@@ -50,7 +50,7 @@ export const Route = createFileRoute("/exports")({
       { property: "og:url", content: "https://ygasafoetida.in/exports" },
       {
         property: "og:title",
-        content: "Global Exports — Mayil Agro Foods / Y.G Asafoetida",
+        content: "Global Exports — Y.G Asafoetida",
       },
       {
         property: "og:description",
@@ -137,7 +137,7 @@ const QUALITY_CERTIFICATIONS = [
     subtitle: "IMPORT EXPORT CODE",
     authority: "Ministry of Commerce & Industry, India",
     description:
-      "Official statutory authorization granted to Mayil Agro Foods for direct worldwide export of compounded spices, culinary herbs, and processed agro foods.",
+      "Official statutory authorization granted to Y.G Asafoetida for direct worldwide export of compounded spices, culinary herbs, and processed agro foods.",
     tag: "Statutory License",
     code: "IEC Code Validated",
   },
@@ -325,7 +325,7 @@ function ExportsPage() {
 
   const openWhatsApp = () => {
     const text = encodeURIComponent(
-      `Hello Mayil Agro Foods / YG Export Desk, I am interested in importing products to ${form.country || "our country"}. Please share your export catalog and FOB/CIF rates.`
+      `Hello Y.G Export Desk, I am interested in importing products to ${form.country || "our country"}. Please share your export catalog and FOB/CIF rates.`
     );
     window.open(`https://wa.me/917200622221?text=${text}`, "_blank");
   };
@@ -429,7 +429,7 @@ function ExportsPage() {
               Our Certifications &amp; Quality Standards
             </h2>
             <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-              Every batch produced at Mayil Agro Foods adheres to central food statutory codes, international trade standards, and global import requirements.
+              Every batch produced at Y.G Asafoetida adheres to central food statutory codes, international trade standards, and global import requirements.
             </p>
           </div>
 
@@ -547,7 +547,7 @@ function ExportsPage() {
               "Committed to eco-friendly practices and stringent hygiene standards in production"
             </p>
             <p className="text-xs text-muted-foreground mt-1.5 uppercase tracking-widest font-semibold">
-              Mayil Agro Foods / Y.G Asafoetida Quality Pledge
+              Y.G Asafoetida Quality Pledge
             </p>
           </div>
         </div>
@@ -620,7 +620,7 @@ function ExportsPage() {
               Formulated &amp; Packaged for Global Standards
             </h2>
             <p className="text-xs sm:text-sm text-muted-foreground">
-              Available under Y.G / Mayil Agro Foods branding or customized turnkey private labelling with overseas barcode compliance.
+              Available under Y.G Asafoetida branding or customized turnkey private labelling with overseas barcode compliance.
             </p>
           </div>
 
