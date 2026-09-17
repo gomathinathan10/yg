@@ -174,19 +174,35 @@ function ProductPage() {
   const navigate = useNavigate();
   useRecentlyViewed(product.slug);
 
-  const [variantId, setVariantId] = useState(product.variants[0]!.id);
+  const [variantId, setVariantId] = useState(product.variants[0]?.id ?? "");
   const [qty, setQty] = useState(1);
   const [activeImage, setActiveImage] = useState(0);
   const thumbContainerRef = useRef<HTMLDivElement>(null);
 
-  const gallery = product.gallery && product.gallery.length > 0 ? product.gallery : [product.image];
+  const variant = product.variants.find((v) => v.id === variantId) ?? product.variants[0]!;
+
+  // Dynamic gallery based on selected variant (gram-wise images)
+  const gallery =
+    variant.gallery && variant.gallery.length > 0
+      ? variant.gallery
+      : variant.image
+      ? [variant.image, ...(product.gallery?.filter((img) => img !== variant.image) ?? [])]
+      : product.gallery && product.gallery.length > 0
+      ? product.gallery
+      : product.image
+      ? [product.image]
+      : [];
+
+  const handleSelectVariant = (id: string) => {
+    setVariantId(id);
+    setActiveImage(0);
+  };
 
   // Pincode lookup state
   const [pinInput, setPinInput] = useState("");
   const [pinResult, setPinResult] = useState<PincodeLookup | null>(null);
   const [isCheckingPin, startPinTransition] = useTransition();
 
-  const variant = product.variants.find((v) => v.id === variantId) ?? product.variants[0]!;
   const soldOut = product.inStock === false;
   const related = products.filter((p) => p.slug !== product.slug).slice(0, 4);
 
@@ -420,7 +436,7 @@ function ProductPage() {
                   <button
                     key={v.id}
                     type="button"
-                    onClick={() => setVariantId(v.id)}
+                    onClick={() => handleSelectVariant(v.id)}
                     className={`flex items-center gap-1.5 rounded-[6px] border px-3 py-2 text-xs font-semibold transition-all cursor-pointer ${
                       v.id === variantId
                         ? "border-[#FFC700] bg-[#FFC700]/10 text-[#181206] shadow-xs font-bold ring-1 ring-[#FFC700]"

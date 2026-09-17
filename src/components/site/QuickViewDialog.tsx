@@ -59,7 +59,7 @@ export function QuickViewDialog({
 
         <div className="grid gap-5 sm:grid-cols-[minmax(0,180px)_minmax(0,1fr)]">
           <SmartImage
-            src={product.image}
+            src={variant.image || product.image}
             alt={product.name}
             sizes="180px"
             fallbackLabel={product.name}

@@ -156,23 +156,31 @@ export function ProductImageZoom({
         className="surface-card group relative overflow-hidden rounded-[6px] border border-[#E8DEC8] bg-[#FAF3D6] p-4 sm:p-6 flex items-center justify-center touch-pan-y min-h-[340px] sm:min-h-[460px] cursor-crosshair shadow-xs"
       >
         {/* Dynamic Zoom Image Container */}
-        <div
-          onClick={nextImage}
-          className="relative aspect-square sm:aspect-[4/3] max-h-[340px] sm:max-h-[440px] w-full flex items-center justify-center overflow-hidden cursor-pointer"
-          title="Click to view next image, or hover to zoom"
-        >
-          <img
-            ref={imgRef}
-            src={currentImage}
-            alt={`${productName} - View ${activeImage + 1}`}
-            className="h-full w-full max-h-[340px] sm:max-h-[440px] object-contain block transition-transform duration-100 ease-out will-change-transform"
-            style={{
-              transform: isHovering ? "scale(2.2)" : "scale(1)",
-            }}
-            loading="eager"
-            decoding="async"
-          />
-        </div>
+        {currentImage ? (
+          <div
+            onClick={nextImage}
+            className="relative aspect-square sm:aspect-[4/3] max-h-[340px] sm:max-h-[440px] w-full flex items-center justify-center overflow-hidden cursor-pointer"
+            title="Click to view next image, or hover to zoom"
+          >
+            <img
+              ref={imgRef}
+              src={currentImage}
+              alt={`${productName} - View ${activeImage + 1}`}
+              className="h-full w-full max-h-[340px] sm:max-h-[440px] object-contain block transition-transform duration-100 ease-out will-change-transform"
+              style={{
+                transform: isHovering ? "scale(2.2)" : "scale(1)",
+              }}
+              loading="eager"
+              decoding="async"
+            />
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center gap-2 p-8 text-center my-auto">
+            <span className="text-4xl">📦</span>
+            <p className="text-sm font-bold text-[#181206]">{productName}</p>
+            <p className="text-xs text-[#78716C]">Official Pack Photography Coming Soon</p>
+          </div>
+        )}
 
         {/* Hover Lens Box Indicator (Desktop only when hovering) */}
         {isHovering && (

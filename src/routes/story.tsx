@@ -228,13 +228,32 @@ function StoryPage() {
             </div>
 
             <div className="lg:col-span-6 flex justify-center order-2 lg:order-2">
-              <div className="w-full max-w-lg lg:max-w-none rounded-2xl overflow-hidden border-2 border-[#E5D7B7] shadow-md bg-[#F2E8CE] transition-transform hover:scale-[1.01] duration-300">
-                <img
-                  src={storyShopImage}
-                  alt="Chapter 1: 1931 Starts in South Car Street Tirunelveli"
-                  className="w-full h-auto object-cover max-h-[340px] sm:max-h-[380px]"
-                  loading="lazy"
-                />
+              <div className="w-full max-w-lg lg:max-w-none rounded-2xl overflow-hidden border-2 border-[#E5D7B7] shadow-md bg-[#FAF4E5] p-5 sm:p-6 flex flex-col items-center justify-center transition-transform hover:scale-[1.01] duration-300">
+                {/* Tamil Header Branding */}
+                <div className="text-center mb-4 pb-3 border-b border-[#E5D7B7] w-full">
+                  <span className="text-[11px] font-bold text-[#8C5921] uppercase tracking-widest block mb-1">
+                    திருநெல்வேலி பாரம்பரியம் · 1931 முதல்
+                  </span>
+                  <p className="font-serif text-xl sm:text-2xl font-black text-[#8C5921] tracking-wide">
+                    YG பெருங்காயம்
+                  </p>
+                  <p className="text-[11px] sm:text-xs text-[#6B5338] mt-0.5">
+                    94 வருடங்களாக மாறாத பாரம்பரிய தூய்மை
+                  </p>
+                </div>
+
+                {/* Compact YG Product Image */}
+                <div className="relative rounded-xl border border-[#E5D7B7] bg-white p-3 shadow-xs max-w-[220px] flex items-center justify-center">
+                  <img
+                    src="/products/100g-gold-asafoetida-powder/img-1.jpg"
+                    alt="YG பெருங்காயம் - 1931 Tirunelveli South Car Street"
+                    className="max-h-[170px] w-auto object-contain drop-shadow-sm"
+                    loading="lazy"
+                  />
+                </div>
+                <p className="text-[11px] font-semibold text-[#8C5921] mt-3 tracking-wide text-center">
+                  திருநெல்வேலி ஆலை · தூய கைவினை பெருங்காயம்
+                </p>
               </div>
             </div>
           </div>
@@ -258,7 +277,7 @@ function StoryPage() {
               <div className="w-full max-w-lg lg:max-w-none rounded-2xl overflow-hidden border-2 border-[#E5D7B7] shadow-md bg-[#F2E8CE] transition-transform hover:scale-[1.01] duration-300">
                 <img
                   src={storyCookingImage}
-                  alt="Chapter 2: Named as YG"
+                  alt="Chapter 2: 1931 Named as YG"
                   className="w-full h-auto object-cover max-h-[340px] sm:max-h-[380px]"
                   loading="lazy"
                 />
@@ -271,22 +290,22 @@ function StoryPage() {
                   2
                 </div>
                 <span className="px-3 py-1 rounded-full border border-[#C59B27]/60 bg-[#FAF4E5] text-[10px] sm:text-xs font-bold text-[#8C5921] uppercase tracking-wider shadow-xs">
-                  Chapter 2 · The Name
+                  Chapter 2 · Estd. 1931
                 </span>
               </div>
 
               <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#2A1806] leading-snug">
-                Named as YG
+                1931: Named as YG
               </h2>
 
               <p className="text-xs sm:text-sm text-[#5D4730] leading-relaxed">
-                As demand and culinary acclaim spread across towns and villages, the brand was officially christened as YG. A household name symbolizing authentic aroma, sacred temple cooking, and unbending purity.
+                As demand and culinary acclaim spread across towns and villages from our 1931 founding, the brand was officially christened as YG. A household name symbolizing authentic aroma, sacred temple cooking, and unbending purity.
               </p>
 
               <div className="rounded-xl border border-[#C59B27]/60 bg-[#FAF4E5] p-3.5 sm:p-4 flex items-start gap-3 shadow-xs">
                 <Wheat className="h-4 w-4 text-[#8C5921] shrink-0 mt-0.5" />
                 <p className="font-serif italic text-xs sm:text-[13px] text-[#4A3724] leading-relaxed">
-                  &ldquo;YG became the trusted signature of authentic aroma across South Indian homes.&rdquo;
+                  &ldquo;YG became the trusted signature of authentic aroma across South Indian homes since 1931.&rdquo;
                 </p>
               </div>
             </div>
@@ -550,13 +569,40 @@ function StoryPage() {
             </div>
 
             <div className="lg:col-span-6 flex justify-center order-2 lg:order-2">
-              <div className="w-full max-w-lg lg:max-w-none rounded-2xl overflow-hidden border-2 border-[#E5D7B7] shadow-md bg-[#F2E8CE] transition-transform hover:scale-[1.01] duration-300">
-                <img
-                  src="/images/story-chapter4-global.jpg"
-                  alt="Chapter 7: 2026 Brand New Vismaya Ready-to-Cook Products"
-                  className="w-full h-auto object-cover max-h-[340px] sm:max-h-[380px]"
-                  loading="lazy"
-                />
+              <div className="w-full max-w-lg lg:max-w-none rounded-2xl overflow-hidden border-2 border-[#E5D7B7] shadow-md bg-[#FAF4E5] p-4 sm:p-5 transition-transform hover:scale-[1.01] duration-300">
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="rounded-xl overflow-hidden border border-[#E5D7B7] bg-white p-2.5 flex flex-col items-center">
+                    <img
+                      src="/products/millet-pongal-mix/img-1.jpg"
+                      alt="Vismaya Kodo Millet Pongal Mix"
+                      className="max-h-[160px] sm:max-h-[180px] w-auto object-contain"
+                      loading="lazy"
+                    />
+                    <span className="text-[11px] font-bold text-[#181206] mt-2 text-center line-clamp-1">
+                      Kodo Pongal Mix
+                    </span>
+                    <span className="text-[10px] text-[#8C5921] font-semibold">250g Ready-to-Cook</span>
+                  </div>
+
+                  <div className="rounded-xl overflow-hidden border border-[#E5D7B7] bg-white p-2.5 flex flex-col items-center">
+                    <img
+                      src="/products/millet-sambar-mix/img-1.jpg"
+                      alt="Vismaya Kodo Millet Sambar Mix"
+                      className="max-h-[160px] sm:max-h-[180px] w-auto object-contain"
+                      loading="lazy"
+                    />
+                    <span className="text-[11px] font-bold text-[#181206] mt-2 text-center line-clamp-1">
+                      Kodo Sambar Mix
+                    </span>
+                    <span className="text-[10px] text-[#8C5921] font-semibold">250g Ready-to-Cook</span>
+                  </div>
+                </div>
+
+                <div className="mt-3 text-center bg-[#FAF4E5] pt-2 border-t border-[#E5D7B7]">
+                  <span className="text-[11px] font-bold text-[#8C5921] uppercase tracking-wider">
+                    Vismaya Millet Ready-to-Cook Collection · 2026
+                  </span>
+                </div>
               </div>
             </div>
           </div>

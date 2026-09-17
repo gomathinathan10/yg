@@ -45,12 +45,12 @@ export const Route = createFileRoute("/shop")({
       {
         name: "description",
         content:
-          "Explore 15 authentic heritage products: Gold & Premium Hing Powder, Gluten-Free Hing, Solid Cakes, Granules, Traditional Sathu Maavu, and Pure Benzoin Pooja Sambrani. Fast shipping across India.",
+          "Explore our authentic heritage catalog: Gold & Premium Hing Powder, Gluten-Free Hing, Solid Cakes, Granules, Traditional Sathu Maavu, Pure Benzoin Pooja Sambrani, and Vismaya traditional podis & mixes. Fast shipping across India.",
       },
       {
         name: "keywords",
         content:
-          "buy hing online, asafoetida powder price, pure gold hing cake, gluten free hing powder, traditional health mix, sathu maavu online, pure benzoin pooja sambrani, buy hing in India",
+          "buy hing online, asafoetida powder price, pure gold hing cake, gluten free hing powder, traditional health mix, sathu maavu online, pure benzoin pooja sambrani, vismaya podi, buy hing in India",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://ygasafoetida.in/shop" },
@@ -58,7 +58,7 @@ export const Route = createFileRoute("/shop")({
       {
         property: "og:description",
         content:
-          "Explore 15 authentic heritage products: Gold & Premium Hing Powder, Gluten-Free Hing, Solid Cakes, Granules, Traditional Sathu Maavu, and Pure Benzoin Pooja Sambrani.",
+          "Explore authentic heritage preparations: Gold & Premium Hing Powder, Gluten-Free Hing, Solid Cakes, Granules, Traditional Sathu Maavu, Pure Benzoin Pooja Sambrani, and Vismaya podis.",
       },
       { property: "og:image", content: "https://ygasafoetida.in/products/all-product/img-1.jpg" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -66,7 +66,7 @@ export const Route = createFileRoute("/shop")({
       {
         name: "twitter:description",
         content:
-          "Explore 15 authentic heritage preparations: Hing powders, solid cakes, gluten-free, health mix, and sambrani.",
+          "Explore authentic heritage preparations: Hing powders, solid cakes, gluten-free, health mix, pooja sambrani, and Vismaya traditional podis.",
       },
       { name: "twitter:image", content: "https://ygasafoetida.in/products/all-product/img-1.jpg" },
     ],
