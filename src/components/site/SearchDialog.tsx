@@ -22,6 +22,8 @@ const QUICK_SUGGESTIONS = [
   "Solid Cake",
   "Gluten-Free",
   "Granules",
+  "Appalam",
+  "Vismaya",
   "Health Mix",
   "Sambrani",
   "Sambar",

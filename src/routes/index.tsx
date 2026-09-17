@@ -94,10 +94,10 @@ const featuredCategories = [
     itemCount: products.filter((p) => p.format === "cake").length,
   },
   {
-    id: "combo" as const,
-    title: formatLabels.combo, // "Gift & combo"
-    image: "/products/all-product/img-1.jpg",
-    itemCount: products.filter((p) => p.format === "combo").length,
+    id: "gf" as const,
+    title: "Gluten-Free Pure",
+    image: "/products/50g-gluten-free-asafoetida-powder/img-1.jpg",
+    itemCount: products.filter((p) => p.glutenFree).length,
   },
   {
     id: "wellness" as const,
@@ -106,22 +106,22 @@ const featuredCategories = [
     itemCount: products.filter((p) => p.format === "wellness").length,
   },
   {
-    id: "pooja" as const,
-    title: formatLabels.pooja, // "Pooja Sambrani"
-    image: "/products/pure-benzoin-sambrani/img-1.png",
-    itemCount: products.filter((p) => p.format === "pooja").length,
-  },
-  {
     id: "appalam" as const,
-    title: formatLabels.appalam,
+    title: formatLabels.appalam, // "Crispy Appalam"
     image: "/products/crispy-appalam/img-1.jpg",
     itemCount: products.filter((p) => p.format === "appalam").length,
   },
   {
     id: "vismaya" as const,
-    title: formatLabels.vismaya,
+    title: formatLabels.vismaya, // "Vismaya Ready to Cook"
     image: "/products/millet-pongal-mix/img-1.jpg",
     itemCount: products.filter((p) => p.format === "vismaya").length,
+  },
+  {
+    id: "pooja" as const,
+    title: formatLabels.pooja, // "Pooja Sambrani"
+    image: "/products/pure-benzoin-sambrani/img-1.png",
+    itemCount: products.filter((p) => p.format === "pooja").length,
   },
 ];
 
@@ -627,6 +627,8 @@ function HomePage() {
                 { id: "powder", label: formatLabels.powder },
                 { id: "cake", label: formatLabels.cake },
                 { id: "granules", label: formatLabels.granules },
+                { id: "appalam", label: formatLabels.appalam },
+                { id: "vismaya", label: formatLabels.vismaya },
               ].map((tab) => (
                 <button
                   key={tab.id}

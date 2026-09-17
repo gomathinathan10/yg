@@ -204,7 +204,7 @@ export function Header() {
                   <ChevronDown className="h-3 w-3 text-[#5A6560]" />
                 </button>
                 {categoryDropdownOpen && (
-                  <div className="absolute top-full left-0 mt-1.5 w-48 bg-white border border-[#E8DEC8] rounded-[6px] shadow-lg py-1.5 z-50 text-[#181206]">
+                  <div className="absolute top-full left-0 mt-1.5 w-52 bg-white border border-[#E8DEC8] rounded-[6px] shadow-lg py-1.5 z-50 text-[#181206]">
                     <Link
                       to="/shop"
                       onClick={() => setCategoryDropdownOpen(false)}
@@ -214,6 +214,7 @@ export function Header() {
                     </Link>
                     <Link
                       to="/shop"
+                      search={{ category: "powder" }}
                       onClick={() => setCategoryDropdownOpen(false)}
                       className="block px-3.5 py-1.5 text-xs hover:bg-[#FAF3D6] hover:text-black font-semibold"
                     >
@@ -221,6 +222,7 @@ export function Header() {
                     </Link>
                     <Link
                       to="/shop"
+                      search={{ category: "cake" }}
                       onClick={() => setCategoryDropdownOpen(false)}
                       className="block px-3.5 py-1.5 text-xs hover:bg-[#FAF3D6] hover:text-black font-semibold"
                     >
@@ -228,6 +230,7 @@ export function Header() {
                     </Link>
                     <Link
                       to="/shop"
+                      search={{ category: "gf" }}
                       onClick={() => setCategoryDropdownOpen(false)}
                       className="block px-3.5 py-1.5 text-xs hover:bg-[#FAF3D6] hover:text-black font-semibold"
                     >
@@ -235,6 +238,7 @@ export function Header() {
                     </Link>
                     <Link
                       to="/shop"
+                      search={{ category: "granules" }}
                       onClick={() => setCategoryDropdownOpen(false)}
                       className="block px-3.5 py-1.5 text-xs hover:bg-[#FAF3D6] hover:text-black font-semibold"
                     >
@@ -242,10 +246,35 @@ export function Header() {
                     </Link>
                     <Link
                       to="/shop"
+                      search={{ category: "wellness" }}
                       onClick={() => setCategoryDropdownOpen(false)}
                       className="block px-3.5 py-1.5 text-xs hover:bg-[#FAF3D6] hover:text-black font-semibold"
                     >
                       Health Mix (Sathu Maavu)
+                    </Link>
+                    <Link
+                      to="/shop"
+                      search={{ category: "appalam" }}
+                      onClick={() => setCategoryDropdownOpen(false)}
+                      className="block px-3.5 py-1.5 text-xs hover:bg-[#FAF3D6] hover:text-black font-semibold"
+                    >
+                      Crispy Appalam
+                    </Link>
+                    <Link
+                      to="/shop"
+                      search={{ category: "vismaya" }}
+                      onClick={() => setCategoryDropdownOpen(false)}
+                      className="block px-3.5 py-1.5 text-xs hover:bg-[#FAF3D6] hover:text-black font-semibold"
+                    >
+                      Vismaya Ready to Cook
+                    </Link>
+                    <Link
+                      to="/shop"
+                      search={{ category: "pooja" }}
+                      onClick={() => setCategoryDropdownOpen(false)}
+                      className="block px-3.5 py-1.5 text-xs hover:bg-[#FAF3D6] hover:text-black font-semibold"
+                    >
+                      Pooja Sambrani
                     </Link>
                   </div>
                 )}
