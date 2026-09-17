@@ -1488,7 +1488,6 @@ html[data-theme="copper"],
               border-color 0.3s ease;
   will-change: transform, box-shadow;
 }
-
 .product-card-interactive:hover {
   transform: translateY(-6px);
   box-shadow: 0 16px 32px -4px rgba(255, 199, 0, 0.32),
@@ -1498,4 +1497,34 @@ html[data-theme="copper"],
 
 .product-card-interactive:hover img {
   transform: scale(1.08) rotate(0.5deg);
+}
+
+/* Guaranteed Right-Anchored Floating Controls */
+.floating-faq-btn {
+  position: fixed !important;
+  right: 1.5rem !important;
+  left: auto !important;
+  bottom: calc(1.25rem + var(--fab-offset, 0px)) !important;
+  z-index: 50 !important;
+}
+
+.floating-back-to-top-btn {
+  position: fixed !important;
+  right: 1.5rem !important;
+  left: auto !important;
+  bottom: calc(4.75rem + var(--fab-offset, 0px)) !important;
+  z-index: 50 !important;
+}
+
+@media (max-width: 640px) {
+  .floating-faq-btn {
+    right: 0.875rem !important;
+    left: auto !important;
+    bottom: calc(1rem + var(--fab-offset, 0px)) !important;
+  }
+  .floating-back-to-top-btn {
+    right: 0.875rem !important;
+    left: auto !important;
+    bottom: calc(4.25rem + var(--fab-offset, 0px)) !important;
+  }
 }

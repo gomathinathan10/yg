@@ -59,19 +59,20 @@ export function FaqBot() {
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         aria-label={open ? "Close the FAQ helper" : "Open the FAQ helper"}
-        style={{ bottom: "calc(1.25rem + var(--fab-offset, 0px))" }}
-        className="fixed right-4 sm:right-6 z-40 flex h-11 sm:h-12 items-center justify-center gap-2 rounded-full bg-[#FFC700] hover:bg-[#F0B800] px-4 text-xs sm:text-sm font-bold text-[#181206] border border-[#D8A700] shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95 cursor-pointer"
+        className="floating-faq-btn fixed z-50 flex h-11 w-11 sm:h-12 sm:w-auto items-center justify-center sm:gap-2 rounded-full bg-[#FFC700] hover:bg-[#F0B800] p-0 sm:px-4 text-xs sm:text-sm font-bold text-[#181206] border border-[#D8A700] shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95 cursor-pointer"
       >
-        {open ? <X className="h-4 w-4 sm:h-5 sm:w-5 text-[#181206]" /> : <MessageSquare className="h-4 w-4 sm:h-5 sm:w-5 text-[#181206]" />}
-        <span>{open ? "Close" : "FAQ Helper"}</span>
+        {open ? <X className="h-5 w-5 text-[#181206]" /> : <MessageSquare className="h-5 w-5 text-[#181206]" />}
+        <span className="hidden sm:inline">{open ? "Close" : "FAQ Helper"}</span>
       </button>
 
       {open && (
         <div
           role="dialog"
           aria-label="Y.G FAQ helper"
-          style={{ bottom: "calc(4.75rem + var(--fab-offset, 0px))" }}
-          className="fixed inset-x-3 z-40 flex max-h-[70vh] flex-col overflow-hidden rounded-[8px] border border-[#E8DEC8] bg-white shadow-2xl sm:inset-x-auto sm:right-6 sm:w-96"
+          style={{
+            bottom: "calc(4.75rem + var(--fab-offset, 0px))",
+          }}
+          className="fixed inset-x-3 sm:inset-x-auto sm:right-6 sm:w-96 z-50 flex max-h-[72vh] sm:max-h-[70vh] flex-col overflow-hidden rounded-2xl sm:rounded-[8px] border-2 border-[#FFC700] sm:border-[#E8DEC8] bg-white shadow-2xl"
         >
           <header className="bg-[#FFC700] text-[#181206] font-black px-4 py-3 flex items-center justify-between border-b border-[#D8A700]">
             <div>
