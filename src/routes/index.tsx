@@ -235,7 +235,6 @@ const HERO_VIDEOS = [
 
 function HomePage() {
   const [activeCatalogTab, setActiveCatalogTab] = useState<Format | "all">("all");
-  const [activeCategoryIdx, setActiveCategoryIdx] = useState(2);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const soundPlayCountRef = useRef(0);
@@ -535,24 +534,13 @@ function HomePage() {
                 Featured Categories
               </h2>
             </div>
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => setActiveCategoryIdx((i) => (i - 1 + featuredCategories.length) % featuredCategories.length)}
-                className="h-8 w-8 sm:h-9 sm:w-9 rounded-[6px] border border-[#E8DEC8] flex items-center justify-center text-[#181206] hover:border-[#FFC700] hover:bg-[#FFC700] transition-all cursor-pointer bg-white active:scale-95 shadow-xs"
-                aria-label="Previous category"
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveCategoryIdx((i) => (i + 1) % featuredCategories.length)}
-                className="h-8 w-8 sm:h-9 sm:w-9 rounded-[6px] border border-[#E8DEC8] flex items-center justify-center text-[#181206] hover:border-[#FFC700] hover:bg-[#FFC700] transition-all cursor-pointer bg-white active:scale-95 shadow-xs"
-                aria-label="Next category"
-              >
-                <ChevronRight className="h-4 w-4" />
-              </button>
-            </div>
+            <Link
+              to="/shop"
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#181206] bg-[#FFC700] hover:bg-[#181206] hover:text-[#FFC700] hover:border-[#181206] border border-[#D8A700] px-3.5 py-1.5 rounded-[6px] shadow-xs transition-all active:scale-95 cursor-pointer"
+            >
+              <span>Explore All Categories</span>
+              <ChevronRight className="h-3.5 w-3.5" />
+            </Link>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-3.5 sm:gap-5">
@@ -561,37 +549,26 @@ function HomePage() {
                 key={`${cat.id}-${idx}`}
                 to="/shop"
                 search={{ category: cat.id }}
-                className={cn(
-                  "bg-white rounded-[12px] p-3.5 sm:p-5 text-center transition-all duration-300 ease-out flex flex-col items-center justify-between min-h-[175px] sm:min-h-[205px] hover:-translate-y-1.5 hover:scale-[1.02] hover:shadow-[0_12px_28px_rgba(255,199,0,0.22)] cursor-pointer group relative overflow-hidden border",
-                  idx === activeCategoryIdx
-                    ? "border-2 border-[#FFC700] bg-[#FFFBEA] shadow-md ring-2 ring-[#FFC700]/25"
-                    : "border-[#E8DEC8] hover:border-[#FFC700] hover:ring-2 hover:ring-[#FFC700]/30"
-                )}
+                className="bg-gradient-to-b from-[#FFFDF2] to-[#FFFBEA] rounded-2xl p-3.5 sm:p-5 text-center transition-all duration-300 ease-out flex flex-col items-center justify-between min-h-[190px] sm:min-h-[220px] border-2 border-[#FFC700] shadow-[0_4px_16px_rgba(255,199,0,0.18)] ring-1 ring-[#FFC700]/30 hover:shadow-[0_12px_28px_rgba(255,199,0,0.35)] hover:-translate-y-1.5 hover:ring-2 hover:ring-[#FFC700] cursor-pointer group relative overflow-hidden active:scale-98"
                 style={{
                   transitionDelay: `${idx * 40}ms`,
                 }}
-                onClick={() => setActiveCategoryIdx(idx)}
               >
-                {/* Ambient glow on hover */}
-                <div className="absolute inset-0 bg-radial from-[#FFC700]/15 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                {/* Ambient gold glow on hover */}
+                <div className="absolute inset-0 bg-radial from-[#FFC700]/25 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
-                {/* Subtle top active indicator badge */}
-                {idx === activeCategoryIdx && (
-                  <span className="absolute top-2 right-2 h-2.5 w-2.5 rounded-full bg-[#FFC700] animate-ping" />
-                )}
-
-                <div className="h-20 w-20 sm:h-24 sm:w-24 flex items-center justify-center p-1.5 my-auto relative transition-transform duration-300 ease-out group-hover:scale-110">
+                <div className="h-20 w-20 sm:h-24 sm:w-24 rounded-xl bg-white/95 border border-[#E8DEC8] flex items-center justify-center p-2 my-auto shadow-2xs transition-all duration-300 ease-out group-hover:scale-105 group-hover:border-[#FFC700] group-hover:shadow-xs">
                   <img
                     src={cat.image}
                     alt={cat.title}
-                    className="max-h-full max-w-full object-contain drop-shadow-sm transition-all duration-300 ease-out group-hover:drop-shadow-md"
+                    className="max-h-full max-w-full object-contain drop-shadow-xs transition-all duration-300 group-hover:drop-shadow-sm"
                   />
                 </div>
                 <div className="mt-2.5 sm:mt-3 text-center w-full relative z-10">
-                  <p className="text-xs sm:text-sm font-bold text-[#181206] group-hover:text-[#8C5921] transition-colors leading-tight truncate">
+                  <p className="text-xs sm:text-sm font-extrabold text-[#181206] group-hover:text-[#8C5921] transition-colors leading-tight truncate">
                     {cat.title}
                   </p>
-                  <span className="text-[10px] sm:text-[11px] text-[#5A6560] font-bold inline-block mt-1 px-2.5 py-0.5 rounded-full bg-[#FAF3D6] border border-[#E8DEC8] group-hover:bg-[#FFC700] group-hover:border-[#D8A700] group-hover:text-[#181206] transition-all">
+                  <span className="text-[10px] sm:text-[11px] font-black inline-block mt-1 px-2.5 py-0.5 rounded-full bg-[#FFC700] text-[#181206] border border-[#D8A700] shadow-2xs group-hover:bg-[#181206] group-hover:text-[#FFC700] group-hover:border-[#181206] transition-all">
                     {cat.itemCount} items
                   </span>
                 </div>
