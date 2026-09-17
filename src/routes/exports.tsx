@@ -394,22 +394,22 @@ function ExportsPage() {
           </div>
 
           {/* Key Metrics Strip */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-8 border-t border-border">
-            <div className="rounded-xl border border-border/80 bg-card p-4 text-center shadow-xs">
-              <p className="text-2xl sm:text-3xl font-extrabold text-foreground">5+ Nations</p>
-              <p className="text-xs text-muted-foreground font-medium mt-0.5">Singapore, Malaysia, Sri Lanka, Canada &amp; USA</p>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-8 border-t border-[#E8DEC8]">
+            <div className="rounded-xl border-2 border-[#E8DEC8] bg-[#FAF3D6] p-4 text-center shadow-xs hover:border-[#FFC700] hover:shadow-sm transition-all group">
+              <p className="text-2xl sm:text-3xl font-black text-[#181206]">5+ Nations</p>
+              <p className="text-xs text-[#5D4730] font-semibold mt-1">Singapore, Malaysia, Sri Lanka, Canada &amp; USA</p>
             </div>
-            <div className="rounded-xl border border-border/80 bg-card p-4 text-center shadow-xs">
-              <p className="text-2xl sm:text-3xl font-extrabold text-foreground">25 kg</p>
-              <p className="text-xs text-muted-foreground font-medium mt-0.5">Flexible Low Starting MOQ</p>
+            <div className="rounded-xl border-2 border-[#E8DEC8] bg-[#FAF3D6] p-4 text-center shadow-xs hover:border-[#FFC700] hover:shadow-sm transition-all group">
+              <p className="text-2xl sm:text-3xl font-black text-[#181206]">25 kg</p>
+              <p className="text-xs text-[#5D4730] font-semibold mt-1">Flexible Low Starting MOQ</p>
             </div>
-            <div className="rounded-xl border border-border/80 bg-card p-4 text-center shadow-xs">
-              <p className="text-2xl sm:text-3xl font-extrabold text-foreground">50 km</p>
-              <p className="text-xs text-muted-foreground font-medium mt-0.5">Tuticorin VOC Sea Port Proximity</p>
+            <div className="rounded-xl border-2 border-[#E8DEC8] bg-[#FAF3D6] p-4 text-center shadow-xs hover:border-[#FFC700] hover:shadow-sm transition-all group">
+              <p className="text-2xl sm:text-3xl font-black text-[#181206]">50 km</p>
+              <p className="text-xs text-[#5D4730] font-semibold mt-1">Tuticorin VOC Sea Port Proximity</p>
             </div>
-            <div className="rounded-xl border border-border/80 bg-card p-4 text-center shadow-xs">
-              <p className="text-2xl sm:text-3xl font-extrabold text-foreground">100%</p>
-              <p className="text-xs text-muted-foreground font-medium mt-0.5">Tested Purity &amp; Traceability</p>
+            <div className="rounded-xl border-2 border-[#E8DEC8] bg-[#FAF3D6] p-4 text-center shadow-xs hover:border-[#FFC700] hover:shadow-sm transition-all group">
+              <p className="text-2xl sm:text-3xl font-black text-[#181206]">100%</p>
+              <p className="text-xs text-[#5D4730] font-semibold mt-1">Tested Purity &amp; Traceability</p>
             </div>
           </div>
         </div>
@@ -418,14 +418,14 @@ function ExportsPage() {
       {/* ======================================================== */}
       {/* 2. OUR CERTIFICATIONS & QUALITY STANDARDS (PDF PAGE 10)  */}
       {/* ======================================================== */}
-      <section className="py-14 sm:py-20 bg-card border-b border-border">
+      <section className="py-14 sm:py-20 bg-white border-b border-[#E8DEC8]">
         <div className="container-page space-y-10">
           <div className="text-center max-w-3xl mx-auto space-y-3">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFC700]/20 border border-[#FFC700]/40 text-[#181206] text-xs font-bold uppercase tracking-wider">
               <Award className="h-3.5 w-3.5 text-[#8C5921]" />
               <span>YG Trusted Since 1931 · Quality Benchmarks</span>
             </div>
-            <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-foreground uppercase">
+            <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-[#181206] uppercase">
               Our Certifications &amp; Quality Standards
             </h2>
             <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
@@ -437,11 +437,11 @@ function ExportsPage() {
             {QUALITY_CERTIFICATIONS.map((cert) => (
               <div
                 key={cert.id}
-                className="rounded-2xl border border-border/80 bg-background p-6 space-y-4 shadow-xs hover:border-[#FFC700] hover:shadow-md transition-all flex flex-col justify-between group"
+                className="rounded-2xl border-2 border-[#E8DEC8] bg-[#FAF3D6] p-6 space-y-4 shadow-sm hover:border-[#FFC700] hover:shadow-md transition-all flex flex-col justify-between group"
               >
                 <div className="space-y-3">
-                  {/* Certificate Logo Graphic */}
-                  <div className="h-24 w-full rounded-xl bg-white border border-border/80 p-3 flex items-center justify-center shadow-2xs group-hover:border-[#FFC700]/70 group-hover:shadow-xs transition-all duration-300">
+                  {/* Certificate Logo Graphic inside elevated white plaque */}
+                  <div className="h-24 w-full rounded-xl bg-white border border-[#E8DEC8] p-3 flex items-center justify-center shadow-xs group-hover:border-[#FFC700] transition-all duration-300">
                     <img
                       src={cert.image}
                       alt={`${cert.fullName} Certificate Logo`}
@@ -450,30 +450,30 @@ function ExportsPage() {
                     />
                   </div>
 
-                  <div className="flex items-center justify-between gap-2 pt-1 border-b border-border/60 pb-2">
+                  <div className="flex items-center justify-between gap-2 pt-1 border-b border-[#E8DEC8] pb-2">
                     <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#8C5921]">
                       {cert.authority}
                     </span>
-                    <span className="text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full shrink-0">
+                    <span className="text-[10px] font-bold text-[#181206] bg-[#FFC700] border border-[#D8A700] px-2.5 py-0.5 rounded-full shrink-0 shadow-2xs">
                       {cert.tag}
                     </span>
                   </div>
 
                   <div>
-                    <h3 className="text-sm sm:text-base font-bold text-foreground leading-snug">{cert.fullName}</h3>
+                    <h3 className="text-sm sm:text-base font-bold text-[#181206] leading-snug">{cert.fullName}</h3>
                     <p className="text-xs font-semibold text-[#8C5921] mt-0.5">
                       {cert.subtitle}
                     </p>
                   </div>
 
-                  <p className="text-xs text-muted-foreground leading-relaxed">
+                  <p className="text-xs text-[#5D4730] leading-relaxed">
                     {cert.description}
                   </p>
                 </div>
 
-                <div className="border-t border-border/60 pt-3 flex items-center justify-between text-[11px]">
-                  <span className="font-mono text-muted-foreground">{cert.code}</span>
-                  <span className="inline-flex items-center gap-1 font-bold text-emerald-600 dark:text-emerald-400 text-[10px]">
+                <div className="border-t border-[#E8DEC8] pt-3 flex items-center justify-between text-[11px]">
+                  <span className="font-mono text-[#5A6560] font-semibold">{cert.code}</span>
+                  <span className="inline-flex items-center gap-1 font-bold text-emerald-700 dark:text-emerald-400 text-[10px]">
                     <ShieldCheck className="h-3.5 w-3.5" /> Verified Standard
                   </span>
                 </div>
