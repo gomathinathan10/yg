@@ -122,6 +122,7 @@ const filterCategories: Array<{ id: Format | "all" | "gf"; label: string }> = [
   { id: "granules", label: formatLabels.granules },
   { id: "cake", label: formatLabels.cake },
   { id: "combo", label: formatLabels.combo },
+  { id: "wellness", label: formatLabels.wellness },
   { id: "pooja", label: formatLabels.pooja },
 ];
 
@@ -475,9 +476,51 @@ function ShopPage() {
           <main className="lg:col-span-3">
             {/* Top Toolbar (Ekomart Shop Top Filter) */}
             <div className="rounded-[6px] border border-[#E8DEC8] bg-white p-3.5 sm:p-4 mb-6 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="text-xs text-[#6E777D]">
-                Showing <span className="font-bold text-[#181206]">{visible.length}</span> of{" "}
-                <span className="font-bold text-[#181206]">{products.length}</span> authentic products
+              <div className="text-xs text-[#6E777D] flex flex-wrap items-center gap-2.5">
+                <span>
+                  Showing{" "}
+                  <span className="font-bold text-[#181206]">
+                    {visible.length === 0
+                      ? 0
+                      : `${(currentPage - 1) * itemsPerPage + 1} - ${Math.min(currentPage * itemsPerPage, visible.length)}`}
+                  </span>{" "}
+                  of <span className="font-bold text-[#181206]">{visible.length}</span> products
+                </span>
+
+                {/* Top Pagination Navigation Controls */}
+                {totalPages > 1 && (
+                  <div className="inline-flex items-center gap-1 bg-[#FAF3D6] p-0.5 rounded-[6px] border border-[#E8DEC8]">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setCurrentPage((p) => Math.max(1, p - 1));
+                        window.scrollTo({ top: 200, behavior: "smooth" });
+                      }}
+                      disabled={currentPage === 1}
+                      title="Previous Page"
+                      aria-label="Previous Page"
+                      className="h-6 w-6 rounded-[4px] bg-white border border-[#E8DEC8] flex items-center justify-center disabled:opacity-30 hover:bg-[#FFC700] transition-colors cursor-pointer disabled:cursor-not-allowed active:scale-95"
+                    >
+                      <ChevronLeft className="h-3 w-3 text-[#181206]" />
+                    </button>
+                    <span className="text-[11px] font-bold text-[#181206] px-1 font-mono">
+                      {currentPage} / {totalPages}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setCurrentPage((p) => Math.min(totalPages, p + 1));
+                        window.scrollTo({ top: 200, behavior: "smooth" });
+                      }}
+                      disabled={currentPage === totalPages}
+                      title="Next Page"
+                      aria-label="Next Page"
+                      className="h-6 w-6 rounded-[4px] bg-white border border-[#E8DEC8] flex items-center justify-center disabled:opacity-30 hover:bg-[#FFC700] transition-colors cursor-pointer disabled:cursor-not-allowed active:scale-95"
+                    >
+                      <ChevronRight className="h-3 w-3 text-[#181206]" />
+                    </button>
+                  </div>
+                )}
               </div>
 
               <div className="flex items-center justify-between w-full sm:w-auto gap-3">

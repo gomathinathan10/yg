@@ -209,8 +209,10 @@ function ProductPage() {
 
   const currentIndex = products.findIndex((p) => p.slug === product.slug);
   const safeIndex = currentIndex === -1 ? 0 : currentIndex;
-  const prevProduct = safeIndex > 0 ? products[safeIndex - 1]! : products[products.length - 1]!;
-  const nextProduct = safeIndex < products.length - 1 ? products[safeIndex + 1]! : products[0]!;
+  const hasPrev = safeIndex > 0;
+  const hasNext = safeIndex < products.length - 1;
+  const prevProduct = hasPrev ? products[safeIndex - 1]! : null;
+  const nextProduct = hasNext ? products[safeIndex + 1]! : null;
 
   // Floating button offset for mobile
   useEffect(() => {
@@ -287,54 +289,88 @@ function ProductPage() {
     <div className="pb-32 lg:pb-12 space-y-0">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      {/* Breadcrumb Navigation & Next/Back Product Switcher */}
+      {/* Top Breadcrumb & Page Navigation Bar */}
       <div className="border-b border-[#E8DEC8] bg-[#F5EAC4] py-2.5 sm:py-3">
-        <div className="container-page flex items-center justify-between gap-3">
-          <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-[#6E777D] overflow-x-auto whitespace-nowrap scrollbar-none min-w-0">
-            <Link to="/" className="hover:text-[#181206] transition-colors font-medium shrink-0">
-              Home
-            </Link>
-            <ChevronRight className="h-3 w-3 text-[#A0A8B0] shrink-0" aria-hidden />
-            <Link to="/shop" className="hover:text-[#181206] transition-colors font-medium shrink-0">
-              Shop
-            </Link>
-            <ChevronRight className="h-3 w-3 text-[#A0A8B0] shrink-0" aria-hidden />
+        <div className="container-page flex flex-wrap sm:flex-nowrap items-center justify-between gap-2.5">
+          {/* Breadcrumb path with Back to Shop */}
+          <div className="flex items-center gap-2 text-xs min-w-0">
             <Link
               to="/shop"
-              search={{ category: product.format }}
-              className="capitalize text-[#6E777D] hover:text-[#181206] hover:underline transition-colors font-medium shrink-0"
-            >
-              {formatLabels[product.format] || product.format}
-            </Link>
-            <ChevronRight className="h-3 w-3 text-[#A0A8B0] shrink-0" aria-hidden />
-            <span aria-current="page" className="truncate font-semibold text-[#181206] min-w-0">
-              {product.name}
-            </span>
-          </nav>
-
-          {/* Correctly placed Next and Back buttons */}
-          <div className="flex items-center gap-1.5 shrink-0">
-            <Link
-              to="/product/$slug"
-              params={{ slug: prevProduct.slug }}
-              className="inline-flex items-center gap-1 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-[6px] border border-[#E8DEC8] bg-white text-xs font-bold text-[#181206] hover:bg-[#FFC700] hover:border-[#FFC700] transition-all shadow-xs cursor-pointer active:scale-95"
-              title={`Back to ${prevProduct.name}`}
+              className="inline-flex items-center gap-1 font-bold text-[#181206] hover:text-[#B45309] transition-colors py-1 px-2.5 rounded-[6px] bg-white border border-[#E8DEC8] hover:bg-[#FAF3D6] shadow-xs shrink-0 cursor-pointer active:scale-95"
+              title="Return to Shop catalog"
             >
               <ChevronLeft className="h-3.5 w-3.5" />
-              <span>Back</span>
+              <span>Back to Shop</span>
             </Link>
-            <span className="text-[11px] font-mono text-[#6E777D] hidden md:inline px-1">
+
+            <span className="text-[#A0A8B0] shrink-0 hidden sm:inline" aria-hidden>·</span>
+
+            <nav aria-label="Breadcrumb" className="hidden sm:flex items-center gap-1.5 text-xs text-[#6E777D] overflow-x-auto whitespace-nowrap scrollbar-none min-w-0">
+              <Link to="/" className="hover:text-[#181206] transition-colors font-medium shrink-0">
+                Home
+              </Link>
+              <ChevronRight className="h-3 w-3 text-[#A0A8B0] shrink-0" aria-hidden />
+              <Link to="/shop" className="hover:text-[#181206] transition-colors font-medium shrink-0">
+                Shop
+              </Link>
+              <ChevronRight className="h-3 w-3 text-[#A0A8B0] shrink-0" aria-hidden />
+              <Link
+                to="/shop"
+                search={{ category: product.format }}
+                className="capitalize text-[#6E777D] hover:text-[#181206] hover:underline transition-colors font-medium shrink-0"
+              >
+                {formatLabels[product.format] || product.format}
+              </Link>
+              <ChevronRight className="h-3 w-3 text-[#A0A8B0] shrink-0" aria-hidden />
+              <span aria-current="page" className="truncate font-semibold text-[#181206] min-w-0 max-w-[140px] md:max-w-[220px]">
+                {product.name}
+              </span>
+            </nav>
+          </div>
+
+          {/* Product-to-Product Navigation Controls */}
+          <div className="flex items-center gap-1.5 shrink-0 ml-auto">
+            {hasPrev && prevProduct ? (
+              <Link
+                to="/product/$slug"
+                params={{ slug: prevProduct.slug }}
+                className="inline-flex items-center gap-1 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-[6px] border border-[#E8DEC8] bg-white text-xs font-bold text-[#181206] hover:bg-[#FFC700] hover:border-[#FFC700] transition-all shadow-xs cursor-pointer active:scale-95"
+                title={`Previous: ${prevProduct.name}`}
+              >
+                <ChevronLeft className="h-3.5 w-3.5" />
+                <span className="hidden sm:inline">Prev Product</span>
+                <span className="sm:hidden">Prev</span>
+              </Link>
+            ) : (
+              <span className="inline-flex items-center gap-1 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-[6px] border border-[#E8DEC8] bg-white/50 text-xs font-medium text-[#A0A8B0] cursor-not-allowed opacity-50">
+                <ChevronLeft className="h-3.5 w-3.5" />
+                <span className="hidden sm:inline">Prev Product</span>
+                <span className="sm:hidden">Prev</span>
+              </span>
+            )}
+
+            <span className="text-[11px] font-mono text-[#6E777D] px-1 font-bold">
               {safeIndex + 1} / {products.length}
             </span>
-            <Link
-              to="/product/$slug"
-              params={{ slug: nextProduct.slug }}
-              className="inline-flex items-center gap-1 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-[6px] border border-[#E8DEC8] bg-white text-xs font-bold text-[#181206] hover:bg-[#FFC700] hover:border-[#FFC700] transition-all shadow-xs cursor-pointer active:scale-95"
-              title={`Next to ${nextProduct.name}`}
-            >
-              <span>Next</span>
-              <ChevronRight className="h-3.5 w-3.5" />
-            </Link>
+
+            {hasNext && nextProduct ? (
+              <Link
+                to="/product/$slug"
+                params={{ slug: nextProduct.slug }}
+                className="inline-flex items-center gap-1 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-[6px] border border-[#E8DEC8] bg-white text-xs font-bold text-[#181206] hover:bg-[#FFC700] hover:border-[#FFC700] transition-all shadow-xs cursor-pointer active:scale-95"
+                title={`Next: ${nextProduct.name}`}
+              >
+                <span className="hidden sm:inline">Next Product</span>
+                <span className="sm:hidden">Next</span>
+                <ChevronRight className="h-3.5 w-3.5" />
+              </Link>
+            ) : (
+              <span className="inline-flex items-center gap-1 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-[6px] border border-[#E8DEC8] bg-white/50 text-xs font-medium text-[#A0A8B0] cursor-not-allowed opacity-50">
+                <span className="hidden sm:inline">Next Product</span>
+                <span className="sm:hidden">Next</span>
+                <ChevronRight className="h-3.5 w-3.5" />
+              </span>
+            )}
           </div>
         </div>
       </div>
@@ -657,6 +693,78 @@ function ProductPage() {
         </div>
       </section>
 
+      {/* Product Showcase Navigation Bar: Back to Shop, Previous Product, Next Product */}
+      <div className="border-y border-[#E8DEC8] bg-[#FAF3D6]/80 py-3.5">
+        <div className="container-page flex items-center justify-between gap-3">
+          {hasPrev && prevProduct ? (
+            <Link
+              to="/product/$slug"
+              params={{ slug: prevProduct.slug }}
+              className="flex items-center gap-2.5 text-xs font-bold text-[#181206] hover:text-[#B45309] transition-colors group min-w-0"
+              title={`Previous: ${prevProduct.name}`}
+            >
+              <div className="h-8 w-8 rounded-full border border-[#E8DEC8] bg-white flex items-center justify-center shrink-0 group-hover:bg-[#FFC700] transition-colors shadow-xs">
+                <ChevronLeft className="h-4 w-4 text-[#181206]" />
+              </div>
+              <div className="truncate text-left">
+                <div className="text-[10px] text-[#6E777D] uppercase font-semibold">Previous Product</div>
+                <div className="truncate font-bold text-xs max-w-[120px] sm:max-w-[200px]">{prevProduct.name}</div>
+              </div>
+            </Link>
+          ) : (
+            <Link
+              to="/shop"
+              className="flex items-center gap-2 text-xs font-bold text-[#181206] hover:text-[#B45309] transition-colors group"
+            >
+              <div className="h-8 w-8 rounded-full border border-[#E8DEC8] bg-white flex items-center justify-center shrink-0 group-hover:bg-[#FFC700] transition-colors shadow-xs">
+                <ChevronLeft className="h-4 w-4 text-[#181206]" />
+              </div>
+              <div className="text-left">
+                <div className="text-[10px] text-[#6E777D] uppercase font-semibold">First Item</div>
+                <div className="font-bold text-xs">Back to All Products</div>
+              </div>
+            </Link>
+          )}
+
+          <Link
+            to="/shop"
+            className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] border border-[#E8DEC8] bg-white text-xs font-bold text-[#181206] hover:bg-[#FFC700] hover:border-[#FFC700] transition-colors shadow-xs cursor-pointer"
+          >
+            <span>All Products ({products.length})</span>
+          </Link>
+
+          {hasNext && nextProduct ? (
+            <Link
+              to="/product/$slug"
+              params={{ slug: nextProduct.slug }}
+              className="flex items-center gap-2.5 text-xs font-bold text-[#181206] hover:text-[#B45309] transition-colors group min-w-0 text-right justify-end ml-auto"
+              title={`Next: ${nextProduct.name}`}
+            >
+              <div className="truncate text-right">
+                <div className="text-[10px] text-[#6E777D] uppercase font-semibold">Next Product</div>
+                <div className="truncate font-bold text-xs max-w-[120px] sm:max-w-[200px]">{nextProduct.name}</div>
+              </div>
+              <div className="h-8 w-8 rounded-full border border-[#E8DEC8] bg-white flex items-center justify-center shrink-0 group-hover:bg-[#FFC700] transition-colors shadow-xs">
+                <ChevronRight className="h-4 w-4 text-[#181206]" />
+              </div>
+            </Link>
+          ) : (
+            <Link
+              to="/shop"
+              className="flex items-center gap-2 text-xs font-bold text-[#181206] hover:text-[#B45309] transition-colors group text-right justify-end ml-auto"
+            >
+              <div className="text-right">
+                <div className="text-[10px] text-[#6E777D] uppercase font-semibold">Last Item</div>
+                <div className="font-bold text-xs">Back to Shop</div>
+              </div>
+              <div className="h-8 w-8 rounded-full border border-[#E8DEC8] bg-white flex items-center justify-center shrink-0 group-hover:bg-[#FFC700] transition-colors shadow-xs">
+                <ChevronRight className="h-4 w-4 text-[#181206]" />
+              </div>
+            </Link>
+          )}
+        </div>
+      </div>
+
       {/* Community Q&A Section */}
       <section className="border-t border-[#E8DEC8] bg-[#F5EAC4] py-8 sm:py-12">
         <div className="container-page">
@@ -689,41 +797,6 @@ function ProductPage() {
           <ProductReviews product={product} />
         </Suspense>
       </section>
-
-      {/* Bottom Product Navigation Bar: Previous & Next Product */}
-      <div className="border-t border-[#E8DEC8] bg-[#FAF3D6]/70 py-4">
-        <div className="container-page flex items-center justify-between gap-4">
-          <Link
-            to="/product/$slug"
-            params={{ slug: prevProduct.slug }}
-            className="flex items-center gap-2.5 text-xs font-bold text-[#181206] hover:text-[#B45309] transition-colors group min-w-0"
-            title={`Back to ${prevProduct.name}`}
-          >
-            <div className="h-8 w-8 rounded-full border border-[#E8DEC8] bg-white flex items-center justify-center shrink-0 group-hover:bg-[#FFC700] transition-colors shadow-xs">
-              <ChevronLeft className="h-4 w-4 text-[#181206]" />
-            </div>
-            <div className="truncate text-left">
-              <div className="text-[10px] text-[#6E777D] uppercase font-semibold">Previous Product</div>
-              <div className="truncate font-bold text-xs">{prevProduct.name}</div>
-            </div>
-          </Link>
-
-          <Link
-            to="/product/$slug"
-            params={{ slug: nextProduct.slug }}
-            className="flex items-center gap-2.5 text-xs font-bold text-[#181206] hover:text-[#B45309] transition-colors group min-w-0 text-right justify-end"
-            title={`Next to ${nextProduct.name}`}
-          >
-            <div className="truncate text-right">
-              <div className="text-[10px] text-[#6E777D] uppercase font-semibold">Next Product</div>
-              <div className="truncate font-bold text-xs">{nextProduct.name}</div>
-            </div>
-            <div className="h-8 w-8 rounded-full border border-[#E8DEC8] bg-white flex items-center justify-center shrink-0 group-hover:bg-[#FFC700] transition-colors shadow-xs">
-              <ChevronRight className="h-4 w-4 text-[#181206]" />
-            </div>
-          </Link>
-        </div>
-      </div>
 
       {/* Related Formulations Grid */}
       <section className="border-t border-[#E8DEC8] bg-[#F5EAC4] py-10 sm:py-14">
