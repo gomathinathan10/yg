@@ -293,7 +293,13 @@ function ProductPage() {
               Shop
             </Link>
             <ChevronRight className="h-3 w-3 text-[#A0A8B0] shrink-0" aria-hidden />
-            <span className="capitalize text-[#6E777D] shrink-0">{formatLabels[product.format] || product.format}</span>
+            <Link
+              to="/shop"
+              search={{ category: product.format }}
+              className="capitalize text-[#6E777D] hover:text-[#181206] hover:underline transition-colors font-medium shrink-0"
+            >
+              {formatLabels[product.format] || product.format}
+            </Link>
             <ChevronRight className="h-3 w-3 text-[#A0A8B0] shrink-0" aria-hidden />
             <span aria-current="page" className="truncate font-semibold text-[#181206] min-w-0">
               {product.name}

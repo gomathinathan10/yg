@@ -100,7 +100,7 @@ export function Footer() {
           <ul className="space-y-2.5 text-xs sm:text-sm text-white/80">
             <li>
               <Link to="/shop" className="hover:text-[#FFC700] transition-colors">
-                All Products (15 Items)
+                All Products Collection
               </Link>
             </li>
             <li>

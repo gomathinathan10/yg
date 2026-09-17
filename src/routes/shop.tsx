@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
+  ChevronLeft,
   ChevronRight,
   Filter,
   Grid2X2,
@@ -20,6 +21,7 @@ import {
 } from "@/components/ui/select";
 import { ProductCard, type ProductCardMode } from "@/components/site/ProductCard";
 import { formatLabels, products, type Format } from "@/data/products";
+import { cn } from "@/lib/utils";
 
 type ShopSearch = {
   category?: string | undefined;
@@ -220,6 +222,20 @@ function ShopPage() {
     return list;
   }, [filter, sort, minPrice, maxPrice]);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 12;
+
+  // Reset to page 1 whenever filters or search criteria change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filter, sort, minPrice, maxPrice]);
+
+  const totalPages = Math.ceil(visible.length / itemsPerPage);
+  const paginated = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return visible.slice(start, start + itemsPerPage);
+  }, [visible, currentPage, itemsPerPage]);
+
   return (
     <div className="min-h-screen bg-white font-sans pb-16">
       {/* Ekomart Breadcrumb Bar */}
@@ -230,7 +246,32 @@ function ShopPage() {
               Home
             </Link>
             <ChevronRight className="h-3 w-3 text-[#A0A8B0]" />
-            <span className="font-semibold text-[#181206]">Shop</span>
+            <Link
+              to="/shop"
+              onClick={() => {
+                setFilter("all");
+                setMinPrice(18);
+                setMaxPrice(2000);
+                setSelectedPreset("all");
+                setCurrentPage(1);
+              }}
+              className={cn(
+                "transition-colors font-semibold cursor-pointer",
+                filter === "all"
+                  ? "text-[#181206]"
+                  : "text-[#6E777D] hover:text-[#181206] hover:underline"
+              )}
+            >
+              Shop
+            </Link>
+            {filter !== "all" && (
+              <>
+                <ChevronRight className="h-3 w-3 text-[#A0A8B0]" />
+                <span className="font-bold text-[#181206] capitalize">
+                  {filterCategories.find((c) => c.id === filter)?.label || filter}
+                </span>
+              </>
+            )}
           </div>
           <span className="hidden sm:inline-block text-xs font-semibold text-[#181206] bg-[#FFC700]/10 px-2.5 py-0.5 rounded-[4px]">
             100% Authentic Heritage
@@ -554,7 +595,7 @@ function ShopPage() {
             {/* Product Display Area */}
             {viewMode === "compact" && (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 xl:grid-cols-3 gap-3 sm:gap-4">
-                {visible.map((p, i) => (
+                {paginated.map((p, i) => (
                   <ProductCard key={p.slug} product={p} priority={i < 6} mode="compact" />
                 ))}
               </div>
@@ -562,7 +603,7 @@ function ShopPage() {
 
             {viewMode === "default" && (
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
-                {visible.map((p, i) => (
+                {paginated.map((p, i) => (
                   <ProductCard key={p.slug} product={p} priority={i < 4} mode="default" />
                 ))}
               </div>
@@ -570,9 +611,69 @@ function ShopPage() {
 
             {viewMode === "list" && (
               <div className="flex flex-col gap-3 sm:gap-4">
-                {visible.map((p, i) => (
+                {paginated.map((p, i) => (
                   <ProductCard key={p.slug} product={p} priority={i < 4} mode="list" />
                 ))}
+              </div>
+            )}
+
+            {/* Working Pagination Bar with Next and Previous Buttons */}
+            {totalPages > 1 && (
+              <div className="mt-8 pt-6 border-t border-[#E8DEC8] flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="text-xs text-[#6E777D]">
+                  Showing <span className="font-bold text-[#181206]">{(currentPage - 1) * itemsPerPage + 1}</span> -{" "}
+                  <span className="font-bold text-[#181206]">{Math.min(currentPage * itemsPerPage, visible.length)}</span> of{" "}
+                  <span className="font-bold text-[#181206]">{visible.length}</span> products
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCurrentPage((p) => Math.max(1, p - 1));
+                      window.scrollTo({ top: 200, behavior: "smooth" });
+                    }}
+                    disabled={currentPage === 1}
+                    className="h-9 px-3.5 rounded-[6px] border border-[#E8DEC8] bg-white text-xs font-semibold text-[#181206] hover:bg-[#FAF3D6] disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer shadow-xs flex items-center gap-1 active:scale-95"
+                  >
+                    <ChevronLeft className="h-3.5 w-3.5" />
+                    <span>Previous</span>
+                  </button>
+
+                  <div className="flex items-center gap-1">
+                    {Array.from({ length: totalPages }, (_, idx) => idx + 1).map((pageNum) => (
+                      <button
+                        key={pageNum}
+                        type="button"
+                        onClick={() => {
+                          setCurrentPage(pageNum);
+                          window.scrollTo({ top: 200, behavior: "smooth" });
+                        }}
+                        className={cn(
+                          "h-9 w-9 rounded-[6px] text-xs font-bold transition-all cursor-pointer shadow-xs",
+                          currentPage === pageNum
+                            ? "bg-[#FFC700] text-[#181206] border border-[#FFC700] font-black"
+                            : "bg-white text-[#181206] border border-[#E8DEC8] hover:bg-[#FAF3D6]"
+                        )}
+                      >
+                        {pageNum}
+                      </button>
+                    ))}
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCurrentPage((p) => Math.min(totalPages, p + 1));
+                      window.scrollTo({ top: 200, behavior: "smooth" });
+                    }}
+                    disabled={currentPage === totalPages}
+                    className="h-9 px-3.5 rounded-[6px] border border-[#FFC700] bg-[#FFC700] text-xs font-bold text-[#181206] hover:bg-[#E6B000] disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer shadow-xs flex items-center gap-1 active:scale-95"
+                  >
+                    <span>Next</span>
+                    <ChevronRight className="h-3.5 w-3.5" />
+                  </button>
+                </div>
               </div>
             )}
 
