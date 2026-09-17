@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
-  ChevronLeft,
   ChevronRight,
   ChevronUp,
   CreditCard,
@@ -308,19 +307,6 @@ function HomePage() {
     setCurrentVideoIndex((prev) => (prev + 1) % HERO_VIDEOS.length);
   };
 
-  const nextVideo = () => {
-    if (soundPlayCountRef.current < 2) {
-      setIsMuted(false);
-    }
-    setCurrentVideoIndex((prev) => (prev + 1) % HERO_VIDEOS.length);
-  };
-
-  const prevVideo = () => {
-    if (soundPlayCountRef.current < 2) {
-      setIsMuted(false);
-    }
-    setCurrentVideoIndex((prev) => (prev - 1 + HERO_VIDEOS.length) % HERO_VIDEOS.length);
-  };
 
   const selectVideo = (index: number) => {
     if (soundPlayCountRef.current < 2) {
@@ -412,26 +398,6 @@ function HomePage() {
             )}
           </button>
         </div>
-
-        {/* Navigation Arrow Left */}
-        <button
-          type="button"
-          onClick={prevVideo}
-          aria-label="Previous video"
-          className="absolute left-2.5 sm:left-5 top-1/2 -translate-y-1/2 h-8 w-8 sm:h-11 sm:w-11 rounded-full bg-black/50 backdrop-blur-md border border-white/20 text-white flex items-center justify-center shadow-lg transition-all hover:bg-black/80 hover:scale-110 active:scale-95 z-20 opacity-80 sm:opacity-0 group-hover:opacity-100 cursor-pointer"
-        >
-          <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
-        </button>
-
-        {/* Navigation Arrow Right */}
-        <button
-          type="button"
-          onClick={nextVideo}
-          aria-label="Next video"
-          className="absolute right-2.5 sm:right-5 top-1/2 -translate-y-1/2 h-8 w-8 sm:h-11 sm:w-11 rounded-full bg-black/50 backdrop-blur-md border border-white/20 text-white flex items-center justify-center shadow-lg transition-all hover:bg-black/80 hover:scale-110 active:scale-95 z-20 opacity-80 sm:opacity-0 group-hover:opacity-100 cursor-pointer"
-        >
-          <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
-        </button>
 
         {/* Bottom Interactive Video Selector Dock */}
         <div className="absolute bottom-2.5 sm:bottom-4 inset-x-0 flex flex-col items-center gap-2 z-20 pointer-events-auto px-3 sm:px-4">
