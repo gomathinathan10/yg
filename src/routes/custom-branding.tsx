@@ -152,9 +152,9 @@ const WORKFLOW_STEPS = [
   },
   {
     step: "03",
-    title: "Batch Production & Induction Sealing",
+    title: "Batch Production & Sterile Packaging",
     description:
-      "Fresh batches are compounded on our specialized stone mills, induction sealed for 100% moisture barrier protection, and packed under sterile conditions.",
+      "Fresh batches are compounded on our specialized stone mills, hermetically sealed for 100% moisture barrier protection, and packed under sterile conditions.",
   },
   {
     step: "04",
@@ -168,7 +168,7 @@ const PACKAGING_FORMATS = [
   {
     name: "Classic Food-Grade HDPE Jar",
     sizes: "20g · 50g · 100g · 200g",
-    features: "Induction sealed, snap-tight cap, moisture barrier, lightweight for retail shipping.",
+    features: "Airtight snap-tight cap, high moisture barrier, lightweight for retail shipping.",
     idealFor: "Supermarket retail brands & general trade distribution.",
   },
   {

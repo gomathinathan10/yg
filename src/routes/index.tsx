@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
+  ChevronLeft,
   ChevronRight,
   CreditCard,
   MapPin,
@@ -255,6 +256,20 @@ function HomePage() {
   };
 
 
+  const handlePrevVideo = () => {
+    if (soundPlayCountRef.current < 2) {
+      setIsMuted(false);
+    }
+    setCurrentVideoIndex((prev) => (prev - 1 + HERO_VIDEOS.length) % HERO_VIDEOS.length);
+  };
+
+  const handleNextVideo = () => {
+    if (soundPlayCountRef.current < 2) {
+      setIsMuted(false);
+    }
+    setCurrentVideoIndex((prev) => (prev + 1) % HERO_VIDEOS.length);
+  };
+
   const selectVideo = (index: number) => {
     if (soundPlayCountRef.current < 2) {
       setIsMuted(false);
@@ -342,38 +357,30 @@ function HomePage() {
           </button>
         </div>
 
-        {/* Bottom Overlay: Page Navigation Buttons & Slide Switcher */}
-        <div className="absolute bottom-2.5 sm:bottom-4 inset-x-0 flex flex-col items-center gap-2 z-20 pointer-events-auto px-3 sm:px-4">
-          {/* Quick Page Navigation Buttons */}
-          <nav aria-label="Hero page navigation" className="flex items-center gap-1.5 sm:gap-2 flex-wrap justify-center p-1 rounded-full bg-black/65 backdrop-blur-md border border-white/20 shadow-2xl max-w-full">
-            <Link
-              to="/shop"
-              className="inline-flex items-center gap-1 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-[#FFC700] hover:bg-[#F0B800] text-[#181206] text-xs font-black shadow-md hover:scale-105 active:scale-95 transition-all border border-[#D8A700]"
-            >
-              <span>Shop Now</span>
-              <ArrowRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
-            </Link>
-            <Link
-              to="/story"
-              className="inline-flex items-center gap-1 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold hover:text-[#FFC700] transition-all"
-            >
-              <span>Our Story</span>
-            </Link>
-            <Link
-              to="/exports"
-              className="inline-flex items-center gap-1 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold hover:text-[#FFC700] transition-all"
-            >
-              <span>Exports</span>
-            </Link>
-            <Link
-              to="/custom-branding"
-              className="hidden sm:inline-flex items-center gap-1 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold hover:text-[#FFC700] transition-all"
-            >
-              <span>White Labelling</span>
-            </Link>
-          </nav>
+        {/* Left Arrow: Backward Video Navigation (Visibly Styled on Mobile & Desktop) */}
+        <button
+          type="button"
+          onClick={handlePrevVideo}
+          className="absolute left-2 sm:left-5 top-1/2 -translate-y-1/2 z-30 h-9 w-9 sm:h-12 sm:w-12 rounded-full bg-black/60 hover:bg-[#FFC700] hover:text-[#181206] text-white border-2 border-white/40 hover:border-[#D8A700] flex items-center justify-center shadow-2xl backdrop-blur-md transition-all active:scale-90 cursor-pointer"
+          aria-label="Previous video"
+          title="Previous video"
+        >
+          <ChevronLeft className="h-4 w-4 sm:h-6 sm:w-6 transition-transform" />
+        </button>
 
-          {/* Clean Slide Dots Switcher without text names */}
+        {/* Right Arrow: Forward Video Navigation (Visibly Styled on Mobile & Desktop) */}
+        <button
+          type="button"
+          onClick={handleNextVideo}
+          className="absolute right-2 sm:right-5 top-1/2 -translate-y-1/2 z-30 h-9 w-9 sm:h-12 sm:w-12 rounded-full bg-black/60 hover:bg-[#FFC700] hover:text-[#181206] text-white border-2 border-white/40 hover:border-[#D8A700] flex items-center justify-center shadow-2xl backdrop-blur-md transition-all active:scale-90 cursor-pointer"
+          aria-label="Next video"
+          title="Next video"
+        >
+          <ChevronRight className="h-4 w-4 sm:h-6 sm:w-6 transition-transform" />
+        </button>
+
+        {/* Bottom Slide Switcher (Dots hidden on mobile per user request: "remove three dot option for mobile") */}
+        <div className="absolute bottom-2.5 sm:bottom-4 inset-x-0 hidden sm:flex justify-center items-center z-20 pointer-events-auto px-4">
           <div className="flex items-center gap-1.5 p-1 rounded-full bg-black/50 backdrop-blur-xs border border-white/10">
             {HERO_VIDEOS.map((v, i) => (
               <button

@@ -69,32 +69,33 @@ export function Header() {
       {/* ======================================================== */}
       {/* 1. TOP ANNOUNCEMENT STRIP (Neon Gold)                    */}
       {/* ======================================================== */}
-      <div className="bg-[#FFC700] text-[#181206] py-1.5 sm:py-2 text-[11px] sm:text-xs border-b border-[#D8A700] font-medium">
-        <div className="container-page flex flex-col sm:flex-row items-center justify-between gap-1.5 sm:gap-2 px-3 sm:px-6">
-          <div className="flex items-center gap-2 text-center sm:text-left">
-            <span className="inline-flex items-center gap-1 bg-[#181206] text-[#FFC700] font-black text-[9px] sm:text-[10px] px-2 py-0.5 rounded uppercase tracking-wider">
-              <Sparkles className="h-3 w-3" /> Special
+      <div className="bg-[#FFC700] text-[#181206] py-1 sm:py-1.5 text-[10px] sm:text-xs border-b border-[#D8A700] font-medium overflow-hidden">
+        <div className="container-page flex flex-row items-center justify-between gap-2 px-2.5 sm:px-6 whitespace-nowrap">
+          <div className="flex items-center gap-1.5 min-w-0 truncate">
+            <span className="inline-flex items-center gap-0.5 bg-[#181206] text-[#FFC700] font-black text-[8px] sm:text-[10px] px-1.5 py-0.5 rounded uppercase tracking-wider shrink-0">
+              <Sparkles className="h-2.5 w-2.5 sm:h-3 sm:w-3" /> Special
             </span>
-            <p className="text-[#181206] text-[11px] sm:text-xs font-semibold">
-              FREE delivery &amp; 40% Discount for next 3 orders! Place your 1st order in.
+            <p className="text-[#181206] text-[10px] sm:text-xs font-semibold truncate">
+              FREE delivery &amp; 40% OFF next 3 orders!
             </p>
             <span className="hidden md:inline text-[#181206]/75 font-normal">
               · Limited time festive offer
             </span>
           </div>
-          <div className="flex items-center gap-4 text-[#181206] text-xs font-semibold">
+          <div className="flex items-center gap-3 sm:gap-4 text-[#181206] text-[10px] sm:text-xs font-semibold shrink-0">
             <Link
               to="/custom-branding"
-              className="hidden md:inline-flex items-center gap-1 bg-[#181206]/10 hover:bg-[#181206]/20 text-[#181206] border border-[#181206]/20 px-2.5 py-0.5 rounded text-[11px] font-bold transition-colors"
+              className="hidden lg:inline-flex items-center gap-1 bg-[#181206]/10 hover:bg-[#181206]/20 text-[#181206] border border-[#181206]/20 px-2.5 py-0.5 rounded text-[11px] font-bold transition-colors"
             >
               Enquire for Bulk Order
             </Link>
             <a
               href="tel:04622335555"
-              className="flex items-center gap-1.5 hover:text-black transition-colors"
+              className="flex items-center gap-1 hover:text-black transition-colors"
+              title="Direct Factory Hotline"
             >
               <Phone className="h-3 w-3 text-[#181206]" />
-              <span>Call: <strong className="text-[#181206]">0462 - 233 5555</strong></span>
+              <span><span className="hidden xs:inline sm:inline">Call: </span><strong className="text-[#181206]">0462 - 233 5555</strong></span>
             </a>
           </div>
         </div>
