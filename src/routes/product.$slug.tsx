@@ -336,7 +336,7 @@ function ProductPage() {
         <div className="lg:hidden space-y-2 pb-4 border-b border-[#E8DEC8] mb-4">
           <div className="flex items-center justify-between gap-2">
             <span className="text-xs font-semibold text-[#181206] bg-[#FFC700]/10 px-2.5 py-1 rounded-[4px]">
-              {formatLabels[product.format]} · Estd. 1931
+              {product.format === "vismaya" ? "Vismaya · Ready to Cook" : `${formatLabels[product.format]} · Estd. 1931`}
             </span>
 
             {/* Mobile Product Next/Back Navigation */}
@@ -434,7 +434,7 @@ function ProductPage() {
             <div className="hidden lg:block">
               <div className="flex items-center justify-between gap-2">
                 <span className="text-xs font-semibold text-[#181206] bg-[#FFC700]/10 px-2.5 py-1 rounded-[4px]">
-                  {formatLabels[product.format]} · Estd. 1931
+                  {product.format === "vismaya" ? "Vismaya · Ready to Cook" : `${formatLabels[product.format]} · Estd. 1931`}
                 </span>
 
                 {/* Desktop Product Navigation: Back, 1/23, Next */}

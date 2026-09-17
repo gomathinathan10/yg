@@ -1,4 +1,4 @@
-export type Format = "powder" | "granules" | "cake" | "combo" | "wellness" | "pooja";
+export type Format = "powder" | "granules" | "cake" | "combo" | "wellness" | "pooja" | "vismaya";
 
 export type Variant = {
   id: string;
@@ -496,7 +496,7 @@ export const products: Product[] = [
     slug: "traditional-idli-podi",
     name: "Vismaya Traditional Idli Chutney Podi",
     tagline: "Artisanal Wood-Roasted Gunpowder with Pure Hing & Lentils",
-    format: "powder",
+    format: "vismaya",
     glutenFree: false,
     bestseller: true,
     image: "/products/traditional-idli-podi/img-1.jpg",
@@ -537,7 +537,7 @@ export const products: Product[] = [
     slug: "traditional-ellu-podi",
     name: "Vismaya Traditional Ellu Podi (Black Sesame)",
     tagline: "Sun-Dried High-Calcium Black Sesame Chutney Podi",
-    format: "powder",
+    format: "vismaya",
     glutenFree: true,
     bestseller: true,
     image: "/products/black-sesame-seeds/img-1.jpg",
@@ -577,7 +577,7 @@ export const products: Product[] = [
     slug: "vismaya-kodo-millet-pongal-mix",
     name: "Vismaya Kodo Millet Pongal Mix",
     tagline: "Nutrient-Dense Wholesome Kodo Millet & Moong Dal Breakfast Blend",
-    format: "wellness",
+    format: "vismaya",
     glutenFree: true,
     bestseller: true,
     image: "/products/millet-pongal-mix/img-1.jpg",
@@ -614,7 +614,7 @@ export const products: Product[] = [
     slug: "vismaya-kodo-millet-sambar-mix",
     name: "Vismaya Kodo Millet Sambar Mix",
     tagline: "Authentic Tirunelveli Sambar Rice with Ancient Kodo Millet & Spices",
-    format: "wellness",
+    format: "vismaya",
     glutenFree: false,
     bestseller: true,
     image: "/products/millet-sambar-mix/img-1.jpg",
@@ -676,7 +676,7 @@ export const products: Product[] = [
     slug: "vismaya-andhra-spl-paruppu-podi",
     name: "Vismaya Andhra Spl Paruppu Podi",
     tagline: "Fiery Guntur-Style Roasted Dal & Spices Podi for Rice & Ghee",
-    format: "powder",
+    format: "vismaya",
     glutenFree: false,
     bestseller: false,
     image: "",
@@ -699,7 +699,7 @@ export const products: Product[] = [
     slug: "vismaya-tirunelveli-spl-paruppu-podi",
     name: "Vismaya Tirunelveli Spl Paruppu Podi",
     tagline: "Heritage Thamirabarani Roasted Lentil & Cumin Podi",
-    format: "powder",
+    format: "vismaya",
     glutenFree: false,
     bestseller: false,
     image: "",
@@ -722,7 +722,7 @@ export const products: Product[] = [
     slug: "vismaya-multi-millet-adai-dosa-mix",
     name: "Vismaya Multi Millet Adai Dosa Mix",
     tagline: "High-Protein Native Millets & Multigrain Crispy Pancake Blend",
-    format: "wellness",
+    format: "vismaya",
     glutenFree: false,
     bestseller: false,
     image: "",
@@ -745,7 +745,7 @@ export const products: Product[] = [
     slug: "vismaya-moringa-paruppu-podi",
     name: "Vismaya Moringa Paruppu Podi (Murungai Keerai)",
     tagline: "Iron-Rich Sun-Dried Drumstick Leaves & Roasted Lentils",
-    format: "powder",
+    format: "vismaya",
     glutenFree: false,
     bestseller: false,
     image: "",
@@ -768,7 +768,7 @@ export const products: Product[] = [
     slug: "vismaya-curry-leaves-paruppu-podi",
     name: "Vismaya Curry Leaves Paruppu Podi (Karuveppilai)",
     tagline: "Fragrant Roasted Karuveppilai & Spiced Lentil Rice Mix",
-    format: "powder",
+    format: "vismaya",
     glutenFree: false,
     bestseller: false,
     image: "",
@@ -791,7 +791,7 @@ export const products: Product[] = [
     slug: "vismaya-pirandai-paruppu-podi",
     name: "Vismaya Pirandai Paruppu Podi (Adamant Creeper)",
     tagline: "Ancient Bone-Health & Digestive Tonic Herbal Podi",
-    format: "powder",
+    format: "vismaya",
     glutenFree: false,
     bestseller: false,
     image: "",
@@ -936,6 +936,7 @@ export const formatLabels: Record<Format, string> = {
   combo: "Gift & combo",
   wellness: "Health Mix",
   pooja: "Pooja Sambrani",
+  vismaya: "Vismaya Ready to Cook",
 };
 
 /** Simple relevance search over name, tagline, format and description. */

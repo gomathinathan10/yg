@@ -119,9 +119,9 @@ const featuredCategories = [
   },
   {
     id: "vismaya" as const,
-    title: "Vismaya Ready to Cook",
+    title: formatLabels.vismaya,
     image: "/products/millet-pongal-mix/img-1.jpg",
-    itemCount: products.filter((p) => p.name.toLowerCase().includes("vismaya") || p.slug.includes("vismaya") || p.slug.includes("podi") || p.slug.includes("mix")).length,
+    itemCount: products.filter((p) => p.format === "vismaya").length,
   },
 ];
 
