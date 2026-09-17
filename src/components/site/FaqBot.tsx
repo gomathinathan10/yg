@@ -60,31 +60,30 @@ export function FaqBot() {
         aria-expanded={open}
         aria-label={open ? "Close the FAQ helper" : "Open the FAQ helper"}
         style={{ bottom: "calc(1.25rem + var(--fab-offset, 0px))" }}
-        className="fixed right-4 sm:right-6 z-40 flex h-11 w-11 sm:h-12 sm:w-auto items-center justify-center sm:justify-start gap-2 rounded-full bg-[#FFC700] hover:bg-[#181206] hover:text-[#FFC700] hover:border-[#181206] border border-[#D8A700] p-0 sm:px-4 text-sm font-bold text-[#181206] shadow-lg transition-all hover:scale-105 cursor-pointer active:scale-95"
+        className="fixed right-4 sm:right-6 z-40 flex h-11 sm:h-12 items-center justify-center gap-2 rounded-full bg-[#FFC700] hover:bg-[#F0B800] px-4 text-xs sm:text-sm font-bold text-[#181206] border border-[#D8A700] shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95 cursor-pointer"
       >
-        {open ? <X className="h-5 w-5" /> : <MessageSquare className="h-5 w-5" />}
-        <span className="hidden sm:inline">{open ? "Close" : "FAQ Helper"}</span>
+        {open ? <X className="h-4 w-4 sm:h-5 sm:w-5 text-[#181206]" /> : <MessageSquare className="h-4 w-4 sm:h-5 sm:w-5 text-[#181206]" />}
+        <span>{open ? "Close" : "FAQ Helper"}</span>
       </button>
 
       {open && (
         <div
           role="dialog"
           aria-label="Y.G FAQ helper"
-          style={{ bottom: "calc(5rem + var(--fab-offset, 0px))" }}
-          className="fixed inset-x-3 z-50 flex max-h-[70vh] flex-col overflow-hidden rounded-[10px] border border-[#E8DEC8] bg-white shadow-2xl sm:inset-x-auto sm:right-6 sm:w-96"
+          style={{ bottom: "calc(4.75rem + var(--fab-offset, 0px))" }}
+          className="fixed inset-x-3 z-40 flex max-h-[70vh] flex-col overflow-hidden rounded-[8px] border border-[#E8DEC8] bg-white shadow-2xl sm:inset-x-auto sm:right-6 sm:w-96"
         >
-          <header className="bg-[#FFC700] text-[#181206] px-4 py-3 flex items-center justify-between border-b border-[#D8A700]">
+          <header className="bg-[#FFC700] text-[#181206] font-black px-4 py-3 flex items-center justify-between border-b border-[#D8A700]">
             <div>
-              <p className="font-extrabold text-sm tracking-wide text-[#181206]">Y.G FAQ Helper</p>
-              <p className="text-[11px] text-[#181206]/80 font-medium">
+              <p className="font-bold text-sm tracking-wide">Y.G FAQ Helper</p>
+              <p className="text-[11px] text-[#181206]/80">
                 Rule-based answers for instant clarity
               </p>
             </div>
             <button
               type="button"
               onClick={() => setOpen(false)}
-              className="p-1.5 text-[#181206] hover:bg-black/10 rounded-[4px] transition-colors cursor-pointer"
-              aria-label="Close FAQ dialog"
+              className="p-1 text-[#181206]/80 hover:text-[#181206] cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>

@@ -826,15 +826,15 @@ function HomePage() {
         </div>
       </section>
 
-      {/* Floating Back to Top Button (Stacked cleanly above FAQ Helper) */}
+      {/* Floating Back to Top Button */}
       {showBackToTop && (
         <button
           type="button"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           style={{ bottom: "calc(4.75rem + var(--fab-offset, 0px))" }}
-          className="fixed right-4 sm:right-6 z-40 h-10 w-10 sm:h-11 sm:w-11 rounded-full bg-white border border-[#E8DEC8] text-[#181206] hover:bg-[#FFC700] hover:border-[#D8A700] flex items-center justify-center shadow-md transition-all active:scale-95 cursor-pointer"
+          className="fixed right-4 sm:right-6 z-30 h-10 w-10 sm:h-11 sm:w-11 rounded-full bg-white border border-[#E8DEC8] text-[#181206] hover:bg-[#FFC700] hover:border-[#D8A700] flex items-center justify-center shadow-md transition-all active:scale-95 cursor-pointer"
           aria-label="Scroll to top"
-          title="Scroll to top"
+          title="Back to top"
         >
           <ChevronUp className="h-5 w-5" />
         </button>
