@@ -180,7 +180,6 @@ const verifiedReviews = [
 ];
 
 const HERO_VIDEOS = [
-  { src: "/hero-video-slide2.mp4" },
   { src: "/hero-video-heritage.mp4" },
   { src: "/hero-video-factory.mp4" },
   { src: "/hero-video-craft.mp4" },
@@ -357,26 +356,26 @@ function HomePage() {
           </button>
         </div>
 
-        {/* Left Arrow: Backward Video Navigation (Visibly Styled on Mobile & Desktop) */}
+        {/* Left Arrow: Backward Video Navigation */}
         <button
           type="button"
           onClick={handlePrevVideo}
-          className="absolute left-2 sm:left-5 top-1/2 -translate-y-1/2 z-30 h-9 w-9 sm:h-12 sm:w-12 rounded-full bg-black/60 hover:bg-[#FFC700] hover:text-[#181206] text-white border-2 border-white/40 hover:border-[#D8A700] flex items-center justify-center shadow-2xl backdrop-blur-md transition-all active:scale-90 cursor-pointer"
+          className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-30 h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-black/60 hover:bg-[#FFC700] text-white hover:text-[#181206] border border-white/25 hover:border-[#FFC700] flex items-center justify-center shadow-2xl backdrop-blur-md transition-all duration-200 active:scale-90 hover:scale-105 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFC700]"
           aria-label="Previous video"
           title="Previous video"
         >
-          <ChevronLeft className="h-4 w-4 sm:h-6 sm:w-6 transition-transform" />
+          <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6 transition-transform" strokeWidth={2.5} />
         </button>
 
-        {/* Right Arrow: Forward Video Navigation (Visibly Styled on Mobile & Desktop) */}
+        {/* Right Arrow: Forward Video Navigation */}
         <button
           type="button"
           onClick={handleNextVideo}
-          className="absolute right-2 sm:right-5 top-1/2 -translate-y-1/2 z-30 h-9 w-9 sm:h-12 sm:w-12 rounded-full bg-black/60 hover:bg-[#FFC700] hover:text-[#181206] text-white border-2 border-white/40 hover:border-[#D8A700] flex items-center justify-center shadow-2xl backdrop-blur-md transition-all active:scale-90 cursor-pointer"
+          className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-30 h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-black/60 hover:bg-[#FFC700] text-white hover:text-[#181206] border border-white/25 hover:border-[#FFC700] flex items-center justify-center shadow-2xl backdrop-blur-md transition-all duration-200 active:scale-90 hover:scale-105 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFC700]"
           aria-label="Next video"
           title="Next video"
         >
-          <ChevronRight className="h-4 w-4 sm:h-6 sm:w-6 transition-transform" />
+          <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6 transition-transform" strokeWidth={2.5} />
         </button>
 
         {/* Bottom Slide Switcher (Dots hidden on mobile per user request: "remove three dot option for mobile") */}
