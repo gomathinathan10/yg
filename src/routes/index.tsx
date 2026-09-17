@@ -349,9 +349,9 @@ function HomePage() {
       {/* ======================================================== */}
       {/* 1. CINEMATIC HERO BANNER (Screenshot 3 background)       */}
       {/* ======================================================== */}
-      <section className="group relative overflow-hidden border-b border-border min-h-[380px] sm:min-h-[460px] max-h-[75vh] w-full bg-neutral-950 flex items-center justify-center select-none">
-        {/* Cinematic Backdrop Glow */}
-        <div className="absolute inset-0 bg-radial from-neutral-900 to-black opacity-80" />
+      <section className="group relative overflow-hidden border-b border-border w-full bg-neutral-950 flex items-center justify-center select-none min-h-[260px] sm:min-h-[380px] md:min-h-[480px]">
+        {/* Subtle Ambient Backdrop Glow */}
+        <div className="absolute inset-0 bg-radial from-neutral-900 to-black opacity-80 pointer-events-none" />
 
         <video
           ref={videoRef}
@@ -365,14 +365,14 @@ function HomePage() {
             setIsFading(false);
             videoRef.current?.play().catch(() => {});
           }}
-          className={`h-full w-full max-h-[75vh] object-cover object-center relative z-10 transition-all duration-500 ${
+          className={`w-full max-h-[85vh] sm:max-h-[88vh] object-contain object-center relative z-10 transition-all duration-500 mx-auto ${
             isFading ? "opacity-75 scale-98" : "opacity-100 scale-100"
           }`}
           style={{ willChange: "transform, opacity" }}
         />
 
-        {/* Subtle Vignette Gradient */}
-        <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/60 via-transparent to-black/30" />
+        {/* Gentle bottom scrim only behind controls so video visuals remain fully visible */}
+        <div className="absolute inset-x-0 bottom-0 h-20 pointer-events-none bg-gradient-to-t from-black/50 via-black/10 to-transparent z-10" />
 
         {/* Top-Left: Active Reel Badge */}
         <div className="absolute top-2.5 sm:top-5 left-2.5 sm:left-5 z-20 pointer-events-none flex items-center gap-2">

@@ -4,6 +4,7 @@ import {
   ArrowRight,
   Check,
   CheckCircle2,
+  ChevronLeft,
   ChevronRight,
   Clock,
   Flame,
@@ -206,6 +207,11 @@ function ProductPage() {
   const soldOut = product.inStock === false;
   const related = products.filter((p) => p.slug !== product.slug).slice(0, 4);
 
+  const currentIndex = products.findIndex((p) => p.slug === product.slug);
+  const safeIndex = currentIndex === -1 ? 0 : currentIndex;
+  const prevProduct = safeIndex > 0 ? products[safeIndex - 1]! : products[products.length - 1]!;
+  const nextProduct = safeIndex < products.length - 1 ? products[safeIndex + 1]! : products[0]!;
+
   // Floating button offset for mobile
   useEffect(() => {
     const root = document.documentElement;
@@ -281,10 +287,10 @@ function ProductPage() {
     <div className="pb-32 lg:pb-12 space-y-0">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      {/* Breadcrumb Navigation */}
-      <div className="border-b border-[#E8DEC8] bg-[#F5EAC4] py-3.5">
-        <div className="container-page flex items-center justify-between">
-          <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-[#6E777D] overflow-x-auto whitespace-nowrap scrollbar-none">
+      {/* Breadcrumb Navigation & Next/Back Product Switcher */}
+      <div className="border-b border-[#E8DEC8] bg-[#F5EAC4] py-2.5 sm:py-3">
+        <div className="container-page flex items-center justify-between gap-3">
+          <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-[#6E777D] overflow-x-auto whitespace-nowrap scrollbar-none min-w-0">
             <Link to="/" className="hover:text-[#181206] transition-colors font-medium shrink-0">
               Home
             </Link>
@@ -305,9 +311,31 @@ function ProductPage() {
               {product.name}
             </span>
           </nav>
-          <span className="hidden sm:inline-block text-xs font-semibold text-[#181206] bg-[#FFC700]/10 px-2.5 py-0.5 rounded-[4px]">
-            In Stock · Authentic
-          </span>
+
+          {/* Correctly placed Next and Back buttons */}
+          <div className="flex items-center gap-1.5 shrink-0">
+            <Link
+              to="/product/$slug"
+              params={{ slug: prevProduct.slug }}
+              className="inline-flex items-center gap-1 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-[6px] border border-[#E8DEC8] bg-white text-xs font-bold text-[#181206] hover:bg-[#FFC700] hover:border-[#FFC700] transition-all shadow-xs cursor-pointer active:scale-95"
+              title={`Back to ${prevProduct.name}`}
+            >
+              <ChevronLeft className="h-3.5 w-3.5" />
+              <span>Back</span>
+            </Link>
+            <span className="text-[11px] font-mono text-[#6E777D] hidden md:inline px-1">
+              {safeIndex + 1} / {products.length}
+            </span>
+            <Link
+              to="/product/$slug"
+              params={{ slug: nextProduct.slug }}
+              className="inline-flex items-center gap-1 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-[6px] border border-[#E8DEC8] bg-white text-xs font-bold text-[#181206] hover:bg-[#FFC700] hover:border-[#FFC700] transition-all shadow-xs cursor-pointer active:scale-95"
+              title={`Next to ${nextProduct.name}`}
+            >
+              <span>Next</span>
+              <ChevronRight className="h-3.5 w-3.5" />
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -661,6 +689,41 @@ function ProductPage() {
           <ProductReviews product={product} />
         </Suspense>
       </section>
+
+      {/* Bottom Product Navigation Bar: Previous & Next Product */}
+      <div className="border-t border-[#E8DEC8] bg-[#FAF3D6]/70 py-4">
+        <div className="container-page flex items-center justify-between gap-4">
+          <Link
+            to="/product/$slug"
+            params={{ slug: prevProduct.slug }}
+            className="flex items-center gap-2.5 text-xs font-bold text-[#181206] hover:text-[#B45309] transition-colors group min-w-0"
+            title={`Back to ${prevProduct.name}`}
+          >
+            <div className="h-8 w-8 rounded-full border border-[#E8DEC8] bg-white flex items-center justify-center shrink-0 group-hover:bg-[#FFC700] transition-colors shadow-xs">
+              <ChevronLeft className="h-4 w-4 text-[#181206]" />
+            </div>
+            <div className="truncate text-left">
+              <div className="text-[10px] text-[#6E777D] uppercase font-semibold">Previous Product</div>
+              <div className="truncate font-bold text-xs">{prevProduct.name}</div>
+            </div>
+          </Link>
+
+          <Link
+            to="/product/$slug"
+            params={{ slug: nextProduct.slug }}
+            className="flex items-center gap-2.5 text-xs font-bold text-[#181206] hover:text-[#B45309] transition-colors group min-w-0 text-right justify-end"
+            title={`Next to ${nextProduct.name}`}
+          >
+            <div className="truncate text-right">
+              <div className="text-[10px] text-[#6E777D] uppercase font-semibold">Next Product</div>
+              <div className="truncate font-bold text-xs">{nextProduct.name}</div>
+            </div>
+            <div className="h-8 w-8 rounded-full border border-[#E8DEC8] bg-white flex items-center justify-center shrink-0 group-hover:bg-[#FFC700] transition-colors shadow-xs">
+              <ChevronRight className="h-4 w-4 text-[#181206]" />
+            </div>
+          </Link>
+        </div>
+      </div>
 
       {/* Related Formulations Grid */}
       <section className="border-t border-[#E8DEC8] bg-[#F5EAC4] py-10 sm:py-14">

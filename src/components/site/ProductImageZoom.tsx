@@ -243,10 +243,11 @@ export function ProductImageZoom({
                 e.stopPropagation();
                 prevImage();
               }}
-              aria-label="Previous product image"
-              className="absolute left-2.5 top-1/2 -translate-y-1/2 grid h-8 w-8 sm:h-9 sm:w-9 place-items-center rounded-[6px] bg-white/95 text-[#181206] border border-[#E8DEC8] shadow-xs hover:bg-[#FFC700] hover:text-white transition-all cursor-pointer opacity-90 hover:opacity-100"
+              aria-label="Back to previous photo"
+              title="Back to previous photo"
+              className="absolute left-3 top-1/2 -translate-y-1/2 z-30 grid h-9 w-9 sm:h-10 sm:w-10 place-items-center rounded-full bg-white/95 text-[#181206] border border-[#E8DEC8] shadow-md hover:bg-[#FFC700] hover:scale-105 active:scale-95 transition-all cursor-pointer"
             >
-              <ChevronLeft className="h-4 w-4" />
+              <ChevronLeft className="h-5 w-5" />
             </button>
             <button
               type="button"
@@ -254,10 +255,11 @@ export function ProductImageZoom({
                 e.stopPropagation();
                 nextImage();
               }}
-              aria-label="Next product image"
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 grid h-8 w-8 sm:h-9 sm:w-9 place-items-center rounded-[6px] bg-white/95 text-[#181206] border border-[#E8DEC8] shadow-xs hover:bg-[#FFC700] hover:text-white transition-all cursor-pointer opacity-90 hover:opacity-100"
+              aria-label="Next photo"
+              title="Next photo"
+              className="absolute right-3 top-1/2 -translate-y-1/2 z-30 grid h-9 w-9 sm:h-10 sm:w-10 place-items-center rounded-full bg-white/95 text-[#181206] border border-[#E8DEC8] shadow-md hover:bg-[#FFC700] hover:scale-105 active:scale-95 transition-all cursor-pointer"
             >
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="h-5 w-5" />
             </button>
           </>
         )}
@@ -292,14 +294,35 @@ export function ProductImageZoom({
         </div>
       </div>
 
-      {/* Interactive Helper Hint */}
-      <div className="flex items-center justify-between px-1 text-xs text-[#6E777D] font-medium">
+      {/* Interactive Helper Hint & Dedicated Back / Next Photo Buttons */}
+      <div className="flex items-center justify-between px-1 text-xs text-[#6E777D] font-medium gap-2">
         <div className="flex items-center gap-1.5">
           <ZoomIn className="h-3.5 w-3.5 text-[#181206]" />
-          <span>Hover to magnify · Click arrows to view next photo</span>
+          <span className="hidden sm:inline">Hover image to zoom</span>
+          <span className="sm:hidden text-[11px]">Pinch / Tap to zoom</span>
         </div>
         {images.length > 1 ? (
-          <span className="text-[11px] text-[#6E777D]">{images.length} views available</span>
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={prevImage}
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-[6px] border border-[#E8DEC8] bg-[#FAF3D6] text-xs font-bold text-[#181206] hover:bg-[#FFC700] hover:border-[#FFC700] transition-colors shadow-xs cursor-pointer active:scale-95"
+            >
+              <ChevronLeft className="h-3.5 w-3.5" />
+              <span>Back</span>
+            </button>
+            <span className="text-[11px] font-mono font-bold text-[#181206] px-1">
+              {activeImage + 1} / {images.length}
+            </span>
+            <button
+              type="button"
+              onClick={nextImage}
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-[6px] border border-[#E8DEC8] bg-[#FAF3D6] text-xs font-bold text-[#181206] hover:bg-[#FFC700] hover:border-[#FFC700] transition-colors shadow-xs cursor-pointer active:scale-95"
+            >
+              <span>Next</span>
+              <ChevronRight className="h-3.5 w-3.5" />
+            </button>
+          </div>
         ) : null}
       </div>
 
