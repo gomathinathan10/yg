@@ -14,9 +14,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/site/ProductCard";
-import { SmartImage } from "@/components/site/SmartImage";
 import { formatLabels, products, type Format } from "@/data/products";
-import { storyShopImage } from "@/assets/images";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({
@@ -181,54 +179,13 @@ const verifiedReviews = [
 ];
 
 const HERO_VIDEOS = [
-  {
-    src: "/hero-video-slide2.mp4",
-    title: "Heritage Tradition",
-    subtitle: "Purity Since 1931",
-    tag: "Tradition",
-  },
-  {
-    src: "/hero-video-heritage.mp4",
-    title: "Generational Legacy",
-    subtitle: "Artisans of Tirunelveli",
-    tag: "Legacy",
-  },
-  {
-    src: "/hero-video-tradition.mp4",
-    title: "Pure Temple Aroma",
-    subtitle: "Sacred Ferula Resin",
-    tag: "Temple Aroma",
-  },
-  {
-    src: "/hero-video-factory.mp4",
-    title: "Generational Works",
-    subtitle: "Authentic Stone-Milling",
-    tag: "Factory Works",
-  },
-  {
-    src: "/hero-video-craft.mp4",
-    title: "Artisanal Handcrafting",
-    subtitle: "Zero Additives, 100% Purity",
-    tag: "Handcrafted",
-  },
-  {
-    src: "/hero-video-gold.mp4",
-    title: "Gold Hing Collection",
-    subtitle: "Signature Royal Grade",
-    tag: "Gold Collection",
-  },
-  {
-    src: "/hero-video-purity.mp4",
-    title: "Culinary Essence",
-    subtitle: "Daily Kitchen Vitality",
-    tag: "Kitchen Essential",
-  },
-  {
-    src: "/hero-video-master.mp4?v=20260827",
-    title: "Culinary Alchemy",
-    subtitle: "Instant Bloom in Hot Ghee",
-    tag: "Tadka Bloom",
-  },
+  { src: "/hero-video-slide2.mp4" },
+  { src: "/hero-video-heritage.mp4" },
+  { src: "/hero-video-factory.mp4" },
+  { src: "/hero-video-craft.mp4" },
+  { src: "/hero-video-gold.mp4" },
+  { src: "/hero-video-purity.mp4" },
+  { src: "/hero-video-master.mp4?v=20260827" },
 ];
 
 function HomePage() {
@@ -355,15 +312,11 @@ function HomePage() {
         {/* Gentle bottom scrim only behind controls so video visuals remain fully visible */}
         <div className="absolute inset-x-0 bottom-0 h-20 pointer-events-none bg-gradient-to-t from-black/50 via-black/10 to-transparent z-10" />
 
-        {/* Top-Left: Active Reel Badge */}
+        {/* Top-Left: Video Reel Count (No text video names) */}
         <div className="absolute top-2.5 sm:top-5 left-2.5 sm:left-5 z-20 pointer-events-none flex items-center gap-2">
-          <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white shadow-xl">
-            <span className="h-2 w-2 rounded-full bg-[#FFC700] animate-pulse" />
-            <span className="text-[10px] sm:text-xs font-black tracking-wider uppercase">{currentVideo.title}</span>
-            <span className="text-[10px] text-white/70 hidden md:inline">· {currentVideo.subtitle}</span>
-          </div>
-          <span className="text-[9px] sm:text-[10px] font-mono font-bold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-black/50 backdrop-blur-md text-[#FFC700] border border-white/20">
-            {currentVideoIndex + 1} / {HERO_VIDEOS.length}
+          <span className="text-[10px] sm:text-xs font-mono font-bold px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-black/60 backdrop-blur-md text-[#FFC700] border border-white/20 shadow-xl flex items-center gap-1.5">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#FFC700] animate-pulse" />
+            Video {currentVideoIndex + 1} / {HERO_VIDEOS.length}
           </span>
         </div>
 
@@ -389,37 +342,49 @@ function HomePage() {
           </button>
         </div>
 
-        {/* Bottom Interactive Video Selector Dock */}
+        {/* Bottom Overlay: Page Navigation Buttons & Slide Switcher */}
         <div className="absolute bottom-2.5 sm:bottom-4 inset-x-0 flex flex-col items-center gap-2 z-20 pointer-events-auto px-3 sm:px-4">
-          <div className="hidden sm:flex items-center gap-1.5 p-1 rounded-full bg-black/65 backdrop-blur-md border border-white/20 shadow-2xl max-w-full overflow-x-auto scrollbar-none">
-            {HERO_VIDEOS.map((v, i) => (
-              <button
-                key={v.src}
-                type="button"
-                onClick={() => selectVideo(i)}
-                className={`px-3 py-1 rounded-full text-[11px] font-medium transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
-                  currentVideoIndex === i
-                    ? "bg-[#FFC700] text-[#181206] font-black shadow-md scale-105"
-                    : "text-white/80 hover:text-white hover:bg-white/10"
-                }`}
-              >
-                <span className={`h-1.5 w-1.5 rounded-full ${currentVideoIndex === i ? "bg-[#181206]" : "bg-white/50"}`} />
-                {v.tag || v.title}
-              </button>
-            ))}
-          </div>
+          {/* Quick Page Navigation Buttons */}
+          <nav aria-label="Hero page navigation" className="flex items-center gap-1.5 sm:gap-2 flex-wrap justify-center p-1 rounded-full bg-black/65 backdrop-blur-md border border-white/20 shadow-2xl max-w-full">
+            <Link
+              to="/shop"
+              className="inline-flex items-center gap-1 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-[#FFC700] hover:bg-[#F0B800] text-[#181206] text-xs font-black shadow-md hover:scale-105 active:scale-95 transition-all border border-[#D8A700]"
+            >
+              <span>Shop Now</span>
+              <ArrowRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+            </Link>
+            <Link
+              to="/story"
+              className="inline-flex items-center gap-1 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold hover:text-[#FFC700] transition-all"
+            >
+              <span>Our Story</span>
+            </Link>
+            <Link
+              to="/exports"
+              className="inline-flex items-center gap-1 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold hover:text-[#FFC700] transition-all"
+            >
+              <span>Exports</span>
+            </Link>
+            <Link
+              to="/custom-branding"
+              className="hidden sm:inline-flex items-center gap-1 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold hover:text-[#FFC700] transition-all"
+            >
+              <span>White Labelling</span>
+            </Link>
+          </nav>
 
-          <div className="flex sm:hidden justify-center items-center gap-1.5">
+          {/* Clean Slide Dots Switcher without text names */}
+          <div className="flex items-center gap-1.5 p-1 rounded-full bg-black/50 backdrop-blur-xs border border-white/10">
             {HERO_VIDEOS.map((v, i) => (
               <button
                 key={v.src}
                 type="button"
                 onClick={() => selectVideo(i)}
                 aria-label={`Switch to video ${i + 1}`}
-                className={`h-1.5 rounded-full transition-all duration-300 ${
+                className={`transition-all duration-300 rounded-full cursor-pointer ${
                   currentVideoIndex === i
-                    ? "w-7 bg-[#FFC700] shadow-md"
-                    : "w-1.5 bg-white/40 hover:bg-white/70"
+                    ? "w-6 sm:w-8 h-1.5 sm:h-2 bg-[#FFC700] shadow-md"
+                    : "w-2 sm:w-2.5 h-1.5 sm:h-2 bg-white/40 hover:bg-white/70"
                 }`}
               />
             ))}
@@ -640,15 +605,11 @@ function HomePage() {
         <div className="container-page grid items-center gap-6 sm:gap-8 lg:grid-cols-12 px-3 sm:px-6">
           <div className="lg:col-span-5 relative max-w-sm mx-auto lg:max-w-none w-full">
             <div className="aspect-4/3 rounded-xl sm:rounded-2xl overflow-hidden border border-white/10 shadow-lg bg-black/20">
-              <SmartImage
-                src={storyShopImage}
-                alt="Shri P. Subramanian compounding artisanal hing in 1931 Tirunelveli"
-                width={1200}
-                height={900}
-                sizes="(min-width: 1024px) 40vw, 95vw"
-                fallbackLabel="Estd. 1931"
-                wrapperClassName="h-full w-full"
-                className="h-full w-full object-cover"
+              <img
+                src="/images/heritage-compounding-1931.jpg"
+                alt="Shri P. Subramanian stone compounding pure Ferula asafoetida gum resin in 1931 Tirunelveli"
+                className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
+                loading="lazy"
               />
             </div>
             <div className="absolute -bottom-2 -left-2 bg-[#FFC700] text-[#181206] font-black px-3 py-1 rounded-lg text-[10px] shadow-md border border-black/20">

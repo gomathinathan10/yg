@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
-  Anchor,
   ArrowRight,
   Award,
   Box,
@@ -17,9 +16,7 @@ import {
   MessageSquare,
   Package,
   Phone,
-  Plane,
   ShieldCheck,
-  Ship,
   Sparkles,
   Truck,
   WheatOff,
@@ -265,30 +262,6 @@ const EXPORT_PRODUCTS = [
     spec: "Multi-millet nutrient blends and health mixes",
     description: "Wholesome native grain formulations tailored for modern health & organic supermarket chains.",
     formats: "250g, 500g, 1kg airtight pouches · 25kg drums.",
-  },
-];
-
-const LOGISTICS_HUBS = [
-  {
-    icon: Ship,
-    title: "Tuticorin Sea Port (VOC Port)",
-    distance: "50 km from Factory",
-    description: "Primary direct international container terminal offering direct sea freight connectivity to Southeast Asia, Middle East, Europe & Americas.",
-    tag: "Primary Sea Hub",
-  },
-  {
-    icon: Anchor,
-    title: "Chennai Sea Port",
-    distance: "Overnight Road Transit",
-    description: "Secondary major container gateway for deep-sea routes and large volume consolidation shipments.",
-    tag: "Secondary Sea Hub",
-  },
-  {
-    icon: Plane,
-    title: "Madurai & Trivandrum Air Cargo",
-    distance: "100 km / 140 km from Works",
-    description: "High-priority air cargo terminals for expedited commercial sampling, urgent LCL parcels, and gourmet retail dispatches.",
-    tag: "Air Freight Hub",
   },
 ];
 
@@ -648,42 +621,7 @@ function ExportsPage() {
       </section>
 
       {/* ======================================================== */}
-      {/* 6. LOGISTICS HUBS & PORTS                                */}
-      {/* ======================================================== */}
-      <section className="py-12 sm:py-16 bg-card border-b border-border">
-        <div className="container-page space-y-10">
-          <div className="text-center max-w-2xl mx-auto space-y-2">
-            <p className="eyebrow">Oceanic &amp; Air Gateways</p>
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
-              Rapid Worldwide Logistics From Southern Hubs
-            </h2>
-            <p className="text-xs sm:text-sm text-muted-foreground">
-              Our factory in Tirunelveli sits within immediate proximity to Tamil Nadu's deep-water international sea gateways.
-            </p>
-          </div>
-
-          <div className="grid gap-6 sm:grid-cols-3">
-            {LOGISTICS_HUBS.map((hub) => (
-              <div key={hub.title} className="rounded-2xl border border-border bg-background p-6 space-y-3 shadow-xs">
-                <div className="flex items-center justify-between">
-                  <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-                    <hub.icon className="h-5 w-5" />
-                  </div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-2.5 py-0.5 rounded-full">
-                    {hub.tag}
-                  </span>
-                </div>
-                <h3 className="text-base font-bold text-foreground">{hub.title}</h3>
-                <p className="text-xs font-semibold text-primary">{hub.distance}</p>
-                <p className="text-xs text-muted-foreground leading-relaxed">{hub.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ======================================================== */}
-      {/* 7. DEDICATED EXPORT CONTACT DESK & INQUIRY FORM          */}
+      {/* 6. DEDICATED EXPORT CONTACT DESK & INQUIRY FORM          */}
       {/* ======================================================== */}
       <section id="export-inquiry" className="py-12 sm:py-20 bg-white">
         <div className="container-page grid gap-10 lg:grid-cols-12 items-start">
