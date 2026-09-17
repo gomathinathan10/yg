@@ -277,7 +277,7 @@ function StoryPage() {
               <div className="w-full max-w-lg lg:max-w-none rounded-2xl overflow-hidden border-2 border-[#E5D7B7] shadow-md bg-[#F2E8CE] transition-transform hover:scale-[1.01] duration-300">
                 <img
                   src={storyCookingImage}
-                  alt="Chapter 2: 1931 Named as YG"
+                  alt="Chapter 2: 1932 Named as YG"
                   className="w-full h-auto object-cover max-h-[340px] sm:max-h-[380px]"
                   loading="lazy"
                 />
@@ -290,22 +290,22 @@ function StoryPage() {
                   2
                 </div>
                 <span className="px-3 py-1 rounded-full border border-[#C59B27]/60 bg-[#FAF4E5] text-[10px] sm:text-xs font-bold text-[#8C5921] uppercase tracking-wider shadow-xs">
-                  Chapter 2 · Estd. 1931
+                  Chapter 2 · 1932
                 </span>
               </div>
 
               <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#2A1806] leading-snug">
-                1931: Named as YG
+                1932: Named as YG
               </h2>
 
               <p className="text-xs sm:text-sm text-[#5D4730] leading-relaxed">
-                As demand and culinary acclaim spread across towns and villages from our 1931 founding, the brand was officially christened as YG. A household name symbolizing authentic aroma, sacred temple cooking, and unbending purity.
+                In 1932, as demand and culinary acclaim spread across towns and villages following the 1931 founding, the brand was officially named as YG. A household name symbolizing authentic aroma, sacred temple cooking, and unbending purity.
               </p>
 
               <div className="rounded-xl border border-[#C59B27]/60 bg-[#FAF4E5] p-3.5 sm:p-4 flex items-start gap-3 shadow-xs">
                 <Wheat className="h-4 w-4 text-[#8C5921] shrink-0 mt-0.5" />
                 <p className="font-serif italic text-xs sm:text-[13px] text-[#4A3724] leading-relaxed">
-                  &ldquo;YG became the trusted signature of authentic aroma across South Indian homes since 1931.&rdquo;
+                  &ldquo;In 1932, the brand was officially named as YG, becoming the trusted signature of authentic aroma across South Indian homes.&rdquo;
                 </p>
               </div>
             </div>
