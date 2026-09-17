@@ -78,11 +78,11 @@ export function ProductCard({
   const isFavorite = wishlist.has(product.slug);
 
   return (
-    <article className="single-shopping-card-one group bg-[#FAF3D6] border border-[#E8DEC8] rounded-[8px] sm:rounded-[10px] p-2.5 sm:p-4 transition-all duration-300 hover:border-[#FFC700] hover:shadow-[0_8px_25px_rgba(255,199,0,0.25)] flex flex-col justify-between relative h-full">
+    <article className="single-shopping-card-one product-card-interactive group bg-[#FAF3D6] border border-[#E8DEC8] rounded-[10px] sm:rounded-[12px] p-2.5 sm:p-4 transition-all duration-300 hover:border-[#FFC700] hover:shadow-[0_14px_32px_rgba(255,199,0,0.32)] flex flex-col justify-between relative h-full">
       {/* 1. Image and Action Area Wrapper */}
-      <div className="relative w-full overflow-hidden rounded-[6px] bg-white aspect-square flex items-center justify-center p-1.5 sm:p-2 border border-[#E8DEC8]/60">
+      <div className="relative w-full overflow-hidden rounded-[8px] bg-white aspect-square flex items-center justify-center p-1.5 sm:p-2 border border-[#E8DEC8]/60 transition-all duration-300 group-hover:border-[#FFC700]/70 group-hover:shadow-xs">
         {/* Top-Left Bookmark Ribbon Tag */}
-        <div className="ekomart-ribbon-badge pointer-events-none">
+        <div className="ekomart-ribbon-badge pointer-events-none transition-transform duration-300 group-hover:scale-105 group-hover:-rotate-2">
           <span>
             {discountPercent}%<br />
             Off

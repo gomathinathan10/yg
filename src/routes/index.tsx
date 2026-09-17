@@ -549,26 +549,29 @@ function HomePage() {
                 key={`${cat.id}-${idx}`}
                 to="/shop"
                 search={{ category: cat.id }}
-                className="bg-gradient-to-b from-[#FFFDF2] to-[#FFFBEA] rounded-2xl p-3.5 sm:p-5 text-center transition-all duration-300 ease-out flex flex-col items-center justify-between min-h-[190px] sm:min-h-[220px] border-2 border-[#FFC700] shadow-[0_4px_16px_rgba(255,199,0,0.18)] ring-1 ring-[#FFC700]/30 hover:shadow-[0_12px_28px_rgba(255,199,0,0.35)] hover:-translate-y-1.5 hover:ring-2 hover:ring-[#FFC700] cursor-pointer group relative overflow-hidden active:scale-98"
+                className="category-card-interactive bg-gradient-to-b from-[#FFFDF2] to-[#FFFBEA] rounded-2xl p-3.5 sm:p-5 text-center flex flex-col items-center justify-between min-h-[190px] sm:min-h-[220px] border-2 border-[#FFC700] shadow-[0_4px_16px_rgba(255,199,0,0.18)] ring-1 ring-[#FFC700]/30 cursor-pointer group relative overflow-hidden active:scale-95 animate-fade-in-up"
                 style={{
-                  transitionDelay: `${idx * 40}ms`,
+                  animationDelay: `${idx * 60}ms`,
                 }}
               >
                 {/* Ambient gold glow on hover */}
                 <div className="absolute inset-0 bg-radial from-[#FFC700]/25 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
-                <div className="h-20 w-20 sm:h-24 sm:w-24 rounded-xl bg-white/95 border border-[#E8DEC8] flex items-center justify-center p-2 my-auto shadow-2xs transition-all duration-300 ease-out group-hover:scale-105 group-hover:border-[#FFC700] group-hover:shadow-xs">
+                {/* Shimmer sweep on hover */}
+                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out bg-gradient-to-r from-transparent via-white/40 to-transparent pointer-events-none" />
+
+                <div className="category-image-wrap h-20 w-20 sm:h-24 sm:w-24 rounded-xl bg-white/95 border border-[#E8DEC8] flex items-center justify-center p-2 my-auto shadow-2xs group-hover:border-[#FFC700] group-hover:shadow-md">
                   <img
                     src={cat.image}
                     alt={cat.title}
-                    className="max-h-full max-w-full object-contain drop-shadow-xs transition-all duration-300 group-hover:drop-shadow-sm"
+                    className="max-h-full max-w-full object-contain drop-shadow-xs transition-all duration-300"
                   />
                 </div>
                 <div className="mt-2.5 sm:mt-3 text-center w-full relative z-10">
                   <p className="text-xs sm:text-sm font-extrabold text-[#181206] group-hover:text-[#8C5921] transition-colors leading-tight truncate">
                     {cat.title}
                   </p>
-                  <span className="text-[10px] sm:text-[11px] font-black inline-block mt-1 px-2.5 py-0.5 rounded-full bg-[#FFC700] text-[#181206] border border-[#D8A700] shadow-2xs group-hover:bg-[#181206] group-hover:text-[#FFC700] group-hover:border-[#181206] transition-all">
+                  <span className="text-[10px] sm:text-[11px] font-black inline-block mt-1 px-2.5 py-0.5 rounded-full bg-[#FFC700] text-[#181206] border border-[#D8A700] shadow-2xs group-hover:bg-[#181206] group-hover:text-[#FFC700] group-hover:border-[#181206] transition-all duration-300 group-hover:scale-105">
                     {cat.itemCount} items
                   </span>
                 </div>
@@ -577,27 +580,27 @@ function HomePage() {
           </div>
 
           {/* Enquire for Bulk Order Action Banner */}
-          <div className="mt-6 sm:mt-8 rounded-xl border border-[#FFC700]/40 bg-gradient-to-r from-[#FFFBEA] via-white to-[#FAF3D6] p-3.5 sm:p-4.5 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xs">
+          <div className="mt-6 sm:mt-8 rounded-xl border border-[#FFC700]/40 bg-gradient-to-r from-[#FFFBEA] via-white to-[#FAF3D6] p-3.5 sm:p-4.5 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xs hover:border-[#FFC700] transition-colors">
             <div className="flex items-center gap-3 text-center sm:text-left">
-              <div className="h-10 w-10 rounded-full bg-[#FFC700] text-[#181206] flex items-center justify-center shrink-0 font-black shadow-xs">
+              <div className="h-10 w-10 rounded-full bg-[#FFC700] text-[#181206] flex items-center justify-center shrink-0 font-black shadow-xs animate-bounce">
                 <Sparkles className="h-5 w-5" />
               </div>
               <div>
                 <p className="text-xs sm:text-sm font-black text-[#181206] uppercase tracking-wide">
                   Looking for Bulk Supply or Private Label Compounding?
                 </p>
-                <p className="text-[11px] sm:text-xs text-[#6E777D] mt-0.5">
-                  Flexible low starting MOQ from 25 kg · Exported to 6+ countries · Direct factory works dispatch
+                <p className="text-xs text-[#5A6560] mt-0.5">
+                  Custom export mesh grades, institutional bulk barrels &amp; client-branded formulation packaging.
                 </p>
               </div>
             </div>
-            <Link
-              to="/custom-branding"
-              className="bg-[#181206] hover:bg-black text-[#FFC700] font-bold text-xs px-5 py-2.5 rounded-[6px] transition-all shrink-0 shadow-xs hover:scale-105 active:scale-95 flex items-center gap-1.5"
+            <Button
+              size="sm"
+              className="bg-[#181206] text-[#FFC700] hover:bg-black hover:text-[#FFD333] border border-[#FFC700]/40 font-black text-xs px-4 py-2 shrink-0 rounded-[6px] shadow-xs active:scale-95 transition-all"
+              asChild
             >
-              <span>Enquire for Bulk Order</span>
-              <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
+              <Link to="/custom-branding">Request White Label Quote</Link>
+            </Button>
           </div>
         </div>
       </section>
@@ -608,14 +611,19 @@ function HomePage() {
       <section className="border-t border-[#E8DEC8] bg-[#FAF3D6]/50 py-10 sm:py-14">
         <div className="container-page space-y-5 sm:space-y-6 px-3 sm:px-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 border-b border-[#E8DEC8] pb-3 sm:pb-4">
-            <h2 className="text-xl sm:text-3xl font-extrabold text-[#181206] tracking-tight">
-              Popular Products
-            </h2>
+            <div>
+              <span className="text-[11px] font-black uppercase tracking-wider text-[#8C5921] bg-[#FAF3D6] px-2.5 py-0.5 rounded border border-[#E8DEC8]">
+                Bestselling Heritage
+              </span>
+              <h2 className="text-xl sm:text-3xl font-extrabold text-[#181206] tracking-tight mt-1">
+                Popular Products
+              </h2>
+            </div>
 
-            {/* Category Filter Tabs */}
-            <div className="flex flex-wrap items-center gap-3 sm:gap-6 text-xs sm:text-sm font-semibold">
+            {/* Category Filter Tabs with Smooth Pill Transitions */}
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2.5 text-xs sm:text-sm font-semibold">
               {[
-                { id: "all", label: "All" },
+                { id: "all", label: "All Formulations" },
                 { id: "powder", label: formatLabels.powder },
                 { id: "cake", label: formatLabels.cake },
                 { id: "granules", label: formatLabels.granules },
@@ -625,10 +633,10 @@ function HomePage() {
                   type="button"
                   onClick={() => setActiveCatalogTab(tab.id as any)}
                   className={cn(
-                    "cursor-pointer transition-colors pb-1 relative text-xs sm:text-sm",
+                    "cursor-pointer transition-all duration-300 px-3.5 py-1.5 rounded-full text-xs font-bold border active:scale-95 shadow-2xs",
                     activeCatalogTab === tab.id
-                      ? "text-[#181206] font-black after:content-[''] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#FFC700]"
-                      : "text-[#5A6560] hover:text-[#181206]"
+                      ? "bg-[#181206] text-[#FFC700] border-[#181206] shadow-sm ring-2 ring-[#FFC700]/50 scale-105"
+                      : "bg-white text-[#181206] border-[#E8DEC8] hover:bg-[#FAF3D6] hover:border-[#FFC700]"
                   )}
                 >
                   {tab.label}
@@ -637,10 +645,19 @@ function HomePage() {
             </div>
           </div>
 
-          {/* 2-column mobile / 4-column desktop Product Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-6">
+          {/* 2-column mobile / 4-column desktop Product Grid with Staggered Entrance Animations */}
+          <div
+            key={activeCatalogTab}
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-6 animate-in fade-in-50 duration-300"
+          >
             {displayedProducts.map((p, i) => (
-              <ProductCard key={p.slug} product={p} priority={i < 4} />
+              <div
+                key={p.slug}
+                className="animate-fade-in-up h-full"
+                style={{ animationDelay: `${i * 55}ms` }}
+              >
+                <ProductCard product={p} priority={i < 4} />
+              </div>
             ))}
           </div>
 

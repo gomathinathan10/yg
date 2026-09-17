@@ -345,17 +345,17 @@ function ShopPage() {
                           setFilter(c.id);
                           if (mobileFilterOpen) setMobileFilterOpen(false);
                         }}
-                        className={`w-full flex items-center justify-between px-3 py-2 rounded-[6px] text-xs font-medium transition-all text-left cursor-pointer ${
+                        className={`w-full flex items-center justify-between px-3 py-2 rounded-[6px] text-xs font-semibold transition-all duration-200 text-left cursor-pointer active:scale-98 ${
                           active
-                            ? "bg-[#FFC700] text-[#181206] font-black font-semibold shadow-xs"
-                            : "text-[#181206] hover:bg-[#FAF3D6] hover:text-[#181206]"
+                            ? "bg-[#FFC700] text-[#181206] font-black shadow-xs border border-[#D8A700] translate-x-1"
+                            : "text-[#181206] hover:bg-[#FAF3D6] hover:text-[#181206] hover:translate-x-1"
                         }`}
                       >
                         <span className="truncate">{c.label}</span>
                         <span
-                          className={`text-[11px] px-2 py-0.5 rounded-full font-mono font-semibold ${
+                          className={`text-[11px] px-2 py-0.5 rounded-full font-mono font-bold transition-all ${
                             active
-                              ? "bg-white/20 text-white"
+                              ? "bg-[#181206] text-[#FFC700] shadow-2xs"
                               : "bg-[#FAF3D6] text-[#6E777D]"
                           }`}
                         >
@@ -373,90 +373,40 @@ function ShopPage() {
                   <h3 className="text-sm font-bold text-[#181206] uppercase tracking-wider">
                     Price Filter
                   </h3>
-                  {(minPrice > 18 || maxPrice < 2000 || selectedPreset !== "all") && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setMinPrice(18);
-                        setMaxPrice(2000);
-                        setSelectedPreset("all");
-                      }}
-                      className="text-[11px] font-semibold text-[#181206] hover:underline flex items-center gap-1 cursor-pointer"
-                    >
-                      <RotateCcw className="w-3 h-3" />
-                      Reset
-                    </button>
-                  )}
                 </div>
-
-                {/* Price Brackets Aligned to Price List */}
-                <div className="mt-3.5 space-y-1.5">
-                  <p className="text-[11px] font-bold text-[#6E777D] uppercase tracking-wider">
-                    Price Brackets
-                  </p>
-                  <div className="grid grid-cols-1 gap-1.5">
-                    {PRICE_PRESETS.map((preset) => {
-                      const isActive = selectedPreset === preset.id;
-                      const count = pricePresetCounts[preset.id] ?? 0;
-                      return (
-                        <button
-                          key={preset.id}
-                          type="button"
-                          onClick={() => {
-                            setSelectedPreset(preset.id);
-                            setMinPrice(preset.min);
-                            setMaxPrice(preset.max);
-                          }}
-                          className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-[4px] text-xs transition-all cursor-pointer text-left ${
-                            isActive
-                              ? "bg-[#FFC700] text-[#181206] font-bold shadow-xs"
-                              : "text-[#181206] hover:bg-[#FAF3D6]"
+                <div className="mt-4 space-y-2">
+                  {PRICE_PRESETS.map((preset) => {
+                    const active = selectedPreset === preset.id;
+                    const count = pricePresetCounts[preset.id] ?? 0;
+                    return (
+                      <button
+                        key={preset.id}
+                        type="button"
+                        onClick={() => {
+                          setSelectedPreset(preset.id);
+                          setMinPrice(preset.min);
+                          setMaxPrice(preset.max);
+                          if (mobileFilterOpen) setMobileFilterOpen(false);
+                        }}
+                        className={`w-full flex items-center justify-between px-3 py-2 rounded-[6px] text-xs font-semibold transition-all duration-200 text-left cursor-pointer active:scale-98 ${
+                          active
+                            ? "bg-[#FFC700] text-[#181206] font-black shadow-xs border border-[#D8A700] translate-x-1"
+                            : "text-[#181206] hover:bg-[#FAF3D6] hover:text-[#181206] hover:translate-x-1"
+                        }`}
+                      >
+                        <span className="truncate">{preset.label}</span>
+                        <span
+                          className={`text-[11px] px-2 py-0.5 rounded-full font-mono font-bold transition-all ${
+                            active
+                              ? "bg-[#181206] text-[#FFC700] shadow-2xs"
+                              : "bg-[#FAF3D6] text-[#6E777D]"
                           }`}
                         >
-                          <span className="truncate">{preset.label}</span>
-                          <span
-                            className={`text-[10px] px-1.5 py-0.5 rounded font-mono ${
-                              isActive
-                                ? "bg-black/10 text-[#181206] font-bold"
-                                : "bg-[#FAF3D6] text-[#6E777D]"
-                            }`}
-                          >
-                            {count}
-                          </span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* Range Slider */}
-                <div className="mt-4 pt-3 border-t border-[#E8DEC8] space-y-2.5">
-                  <div className="flex items-center justify-between text-xs text-[#6E777D]">
-                    <span>Current Range:</span>
-                    <span className="font-bold text-[#181206] font-mono">
-                      ₹{minPrice} — ₹{maxPrice}
-                    </span>
-                  </div>
-                  <input
-                    type="range"
-                    min={18}
-                    max={2000}
-                    step={10}
-                    value={maxPrice}
-                    onChange={(e) => {
-                      const val = Number(e.target.value);
-                      setMaxPrice(val);
-                      setSelectedPreset("custom");
-                    }}
-                    className="w-full accent-[#FFC700] h-1.5 bg-[#E2E2E2] rounded-lg cursor-pointer"
-                  />
-                  <div className="flex items-center justify-between text-[10px] text-[#A0A8B0] font-mono">
-                    <span>₹18 (10g)</span>
-                    <span>₹100</span>
-                    <span>₹500</span>
-                    <span>₹1,600 (1kg)</span>
-                    <span>₹2,000</span>
-                  </div>
+                          {count}
+                        </span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -601,22 +551,22 @@ function ShopPage() {
 
             {/* Active Filter Pill Tags */}
             {(filter !== "all" || minPrice > 18 || maxPrice < 2000 || selectedPreset !== "all") && (
-              <div className="flex flex-wrap items-center gap-2 mb-4">
+              <div className="flex flex-wrap items-center gap-2 mb-4 animate-in fade-in-50 duration-200">
                 <span className="text-xs text-[#6E777D]">Active Filters:</span>
                 {filter !== "all" && (
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-[#FFC700]/10 text-[#181206] border border-[#FFC700]/20">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-[#FFC700] text-[#181206] border border-[#D8A700] shadow-2xs">
                     Category: {filterCategories.find((c) => c.id === filter)?.label}
                     <button
                       type="button"
                       onClick={() => setFilter("all")}
-                      className="hover:text-red-500 ml-1 cursor-pointer"
+                      className="hover:text-red-700 ml-1 cursor-pointer"
                     >
                       <X className="w-3 h-3" />
                     </button>
                   </span>
                 )}
                 {(minPrice > 18 || maxPrice < 2000 || selectedPreset !== "all") && (
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-[#FFC700]/10 text-[#181206] border border-[#FFC700]/20">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-[#FFC700] text-[#181206] border border-[#D8A700] shadow-2xs">
                     {selectedPreset !== "all" && selectedPreset !== "custom"
                       ? `Price: ${PRICE_PRESETS.find((p) => p.id === selectedPreset)?.label}`
                       : `Price: ₹${minPrice} — ₹${maxPrice}`}
@@ -627,7 +577,7 @@ function ShopPage() {
                         setMaxPrice(2000);
                         setSelectedPreset("all");
                       }}
-                      className="hover:text-red-500 ml-1 cursor-pointer"
+                      className="hover:text-red-700 ml-1 cursor-pointer"
                     >
                       <X className="w-3 h-3" />
                     </button>
@@ -636,27 +586,54 @@ function ShopPage() {
               </div>
             )}
 
-            {/* Product Display Area */}
+            {/* Product Display Area with Staggered Entrance Animations */}
             {viewMode === "compact" && (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 xl:grid-cols-3 gap-3 sm:gap-4">
+              <div
+                key={`compact-${currentPage}-${filter}-${sort}`}
+                className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 xl:grid-cols-3 gap-3 sm:gap-4 animate-in fade-in-50 duration-300"
+              >
                 {paginated.map((p, i) => (
-                  <ProductCard key={p.slug} product={p} priority={i < 6} mode="compact" />
+                  <div
+                    key={p.slug}
+                    className="animate-fade-in-up h-full"
+                    style={{ animationDelay: `${(i % 9) * 45}ms` }}
+                  >
+                    <ProductCard product={p} priority={i < 6} mode="compact" />
+                  </div>
                 ))}
               </div>
             )}
 
             {viewMode === "default" && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+              <div
+                key={`default-${currentPage}-${filter}-${sort}`}
+                className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 animate-in fade-in-50 duration-300"
+              >
                 {paginated.map((p, i) => (
-                  <ProductCard key={p.slug} product={p} priority={i < 4} mode="default" />
+                  <div
+                    key={p.slug}
+                    className="animate-fade-in-up h-full"
+                    style={{ animationDelay: `${(i % 6) * 55}ms` }}
+                  >
+                    <ProductCard product={p} priority={i < 4} mode="default" />
+                  </div>
                 ))}
               </div>
             )}
 
             {viewMode === "list" && (
-              <div className="flex flex-col gap-3 sm:gap-4">
+              <div
+                key={`list-${currentPage}-${filter}-${sort}`}
+                className="flex flex-col gap-3 sm:gap-4 animate-in fade-in-50 duration-300"
+              >
                 {paginated.map((p, i) => (
-                  <ProductCard key={p.slug} product={p} priority={i < 4} mode="list" />
+                  <div
+                    key={p.slug}
+                    className="animate-fade-in-up"
+                    style={{ animationDelay: `${(i % 6) * 50}ms` }}
+                  >
+                    <ProductCard product={p} priority={i < 4} mode="list" />
+                  </div>
                 ))}
               </div>
             )}
