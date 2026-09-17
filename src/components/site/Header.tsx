@@ -128,30 +128,30 @@ export function Header() {
                     />
                   </div>
 
-                  <nav className="mt-5 flex flex-col gap-1 font-semibold">
+                  <nav className="mt-5 flex flex-col gap-2 font-semibold">
                     {nav.map((item) => (
                       <Link
                         key={item.to}
                         to={item.to}
                         onClick={() => setMenuOpen(false)}
-                        className="rounded-[6px] px-3 py-2.5 text-sm transition-colors hover:bg-[#FAF3D6] text-[#181206]"
-                        activeProps={{ className: "bg-[#FFC700]/30 text-[#181206] font-black border-l-3 border-[#FFC700]" }}
+                        className="bg-[#FFC700] text-[#181206] hover:bg-[#181206] hover:text-[#FFC700] hover:border-[#181206] rounded-[6px] px-3.5 py-2.5 text-sm font-bold border border-[#D8A700] shadow-xs transition-all flex items-center justify-between"
+                        activeProps={{ className: "!bg-[#181206] !text-[#FFC700] !border-[#181206] font-black ring-2 ring-[#FFC700]/70" }}
                       >
-                        {item.label}
+                        <span>{item.label}</span>
                       </Link>
                     ))}
                     <Link
                       to="/custom-branding"
                       onClick={() => setMenuOpen(false)}
-                      className="rounded-[6px] px-3 py-2.5 text-sm font-bold text-[#8C5921] bg-[#FAF3D6] border border-[#E8DEC8] mt-2 flex items-center justify-between"
+                      className="bg-[#FFC700] text-[#181206] hover:bg-[#181206] hover:text-[#FFC700] hover:border-[#181206] rounded-[6px] px-3.5 py-2.5 text-sm font-bold border border-[#D8A700] shadow-xs transition-all mt-1 flex items-center justify-between"
                     >
                       <span>Enquire for Bulk Order</span>
                     </Link>
                     <Link
                       to="/wishlist"
                       onClick={() => setMenuOpen(false)}
-                      className="rounded-[6px] px-3 py-2.5 text-sm transition-colors hover:bg-[#FAF3D6] flex items-center justify-between text-[#181206]"
-                      activeProps={{ className: "bg-[#FFC700]/30 text-[#181206] font-black border-l-3 border-[#FFC700]" }}
+                      className="bg-[#FFC700] text-[#181206] hover:bg-[#181206] hover:text-[#FFC700] hover:border-[#181206] rounded-[6px] px-3.5 py-2.5 text-sm font-bold border border-[#D8A700] shadow-xs transition-all flex items-center justify-between"
+                      activeProps={{ className: "!bg-[#181206] !text-[#FFC700] !border-[#181206] font-black ring-2 ring-[#FFC700]/70" }}
                     >
                       <span>Wishlist</span>
                       {wishlist.slugs.length ? (
@@ -163,8 +163,8 @@ export function Header() {
                     <Link
                       to="/track"
                       onClick={() => setMenuOpen(false)}
-                      className="rounded-[6px] px-3 py-2.5 text-sm transition-colors hover:bg-[#FAF3D6] text-[#181206]"
-                      activeProps={{ className: "bg-[#FFC700]/30 text-[#181206] font-black border-l-3 border-[#FFC700]" }}
+                      className="bg-[#FFC700] text-[#181206] hover:bg-[#181206] hover:text-[#FFC700] hover:border-[#181206] rounded-[6px] px-3.5 py-2.5 text-sm font-bold border border-[#D8A700] shadow-xs transition-all"
+                      activeProps={{ className: "!bg-[#181206] !text-[#FFC700] !border-[#181206] font-black ring-2 ring-[#FFC700]/70" }}
                     >
                       Track Order
                     </Link>
@@ -334,17 +334,17 @@ export function Header() {
       </div>
 
       {/* ======================================================== */}
-      {/* 3. LOWER NAVIGATION BAR (Mild Yellow with Crisp Links)   */}
+      {/* 3. LOWER NAVIGATION BAR (Neon Gold Button Boxes)         */}
       {/* ======================================================== */}
-      <div className="sticky top-0 bg-[#FAF3D6]/95 backdrop-blur-xs border-t border-b border-[#E8DEC8] shadow-xs z-30">
-        <div className="container-page flex items-center justify-between h-10 sm:h-11 px-3 sm:px-6">
-          <nav className="flex items-center gap-4 sm:gap-7 overflow-x-auto scrollbar-none py-1">
+      <div className="sticky top-0 bg-[#FAF3D6]/95 backdrop-blur-xs border-t border-b border-[#E8DEC8] shadow-xs z-30 py-1 sm:py-1.5">
+        <div className="container-page flex items-center justify-between min-h-11 sm:min-h-12 px-3 sm:px-6">
+          <nav className="flex items-center gap-2 sm:gap-2.5 overflow-x-auto scrollbar-none py-1">
             {nav.map((item) => (
               <Link
                 key={item.to}
                 to={item.to}
-                className="text-[#181206] hover:text-[#8C5921] font-bold text-xs sm:text-sm tracking-wide whitespace-nowrap transition-colors"
-                activeProps={{ className: "text-[#8C5921] underline underline-offset-4 decoration-[#FFC700] decoration-2 font-black" }}
+                className="bg-[#FFC700] text-[#181206] hover:bg-[#181206] hover:text-[#FFC700] hover:border-[#181206] font-bold text-xs sm:text-sm tracking-wide whitespace-nowrap px-3 sm:px-3.5 py-1.5 rounded-[6px] border border-[#D8A700] shadow-2xs hover:shadow-xs transition-all cursor-pointer active:scale-95"
+                activeProps={{ className: "!bg-[#181206] !text-[#FFC700] !border-[#181206] font-black shadow-sm ring-2 ring-[#FFC700]/70" }}
               >
                 {item.label}
               </Link>
@@ -352,7 +352,7 @@ export function Header() {
           </nav>
 
           {/* Right Delivery Location */}
-          <div className="hidden md:flex items-center gap-1.5 text-xs text-[#181206] shrink-0 font-bold">
+          <div className="hidden md:flex items-center gap-1.5 text-xs text-[#181206] shrink-0 font-bold bg-[#FFC700]/25 border border-[#D8A700]/60 px-3 py-1.5 rounded-[6px]">
             <MapPin className="h-3.5 w-3.5 text-[#8C5921]" />
             <span>Delivery: <strong>Tamil Nadu &amp; All India Direct Dispatch</strong></span>
           </div>
