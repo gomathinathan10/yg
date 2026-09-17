@@ -1,4 +1,4 @@
-export type Format = "powder" | "granules" | "cake" | "combo" | "wellness" | "pooja" | "vismaya";
+export type Format = "powder" | "granules" | "cake" | "combo" | "wellness" | "pooja" | "vismaya" | "appalam";
 
 export type Variant = {
   id: string;
@@ -651,20 +651,22 @@ export const products: Product[] = [
     slug: "crispy-appalam",
     name: "Y.G Crispy Appalam",
     tagline: "Traditional Hand-Rolled Sun-Dried Papadum",
-    format: "wellness",
+    format: "appalam",
     glutenFree: false,
-    bestseller: false,
-    image: "",
-    gallery: [],
+    bestseller: true,
+    image: "/products/crispy-appalam/img-1.jpg",
+    gallery: [
+      "/products/crispy-appalam/img-1.jpg",
+    ],
     description:
       "Traditional handcrafted sun-dried appalam rolled thin with premium urad dal and seasoned with a touch of pure asafoetida. Deep fries into an irresistibly crisp, golden accompaniment for sambar and rasam rice.",
     ingredients: "Urad Dal Flour, Edible Vegetable Oil, Sodium Bicarbonate, Asafoetida, Salt.",
     usage: "Deep fry in hot oil for 3-5 seconds until golden and crisp, or roast over direct flame.",
     shelfLife: "9 months from packing. Keep sealed in a moisture-free pouch.",
     variants: [
-      { id: "100g", label: "100 g", price: 45, mrp: 55, stock: 150 },
-      { id: "200g", label: "200 g", price: 85, mrp: 100, stock: 120 },
-      { id: "300g", label: "300 g", price: 120, mrp: 145, stock: 100 },
+      { id: "100g", label: "100 g", price: 45, mrp: 55, stock: 150, image: "/products/crispy-appalam/img-1.jpg" },
+      { id: "200g", label: "200 g", price: 85, mrp: 100, stock: 120, image: "/products/crispy-appalam/img-1.jpg" },
+      { id: "300g", label: "300 g", price: 120, mrp: 145, stock: 100, image: "/products/crispy-appalam/img-1.jpg" },
     ],
     inStock: true,
     rating: 4.8,
@@ -937,6 +939,7 @@ export const formatLabels: Record<Format, string> = {
   wellness: "Health Mix",
   pooja: "Pooja Sambrani",
   vismaya: "Vismaya Ready to Cook",
+  appalam: "Crispy Appalam",
 };
 
 /** Simple relevance search over name, tagline, format and description. */

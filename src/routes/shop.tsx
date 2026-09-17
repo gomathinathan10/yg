@@ -124,6 +124,7 @@ const filterCategories: Array<{ id: Format | "all" | "gf"; label: string }> = [
   { id: "combo", label: formatLabels.combo },
   { id: "wellness", label: formatLabels.wellness },
   { id: "pooja", label: formatLabels.pooja },
+  { id: "appalam", label: formatLabels.appalam },
   { id: "vismaya", label: formatLabels.vismaya },
 ];
 

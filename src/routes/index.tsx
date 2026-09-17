@@ -112,10 +112,10 @@ const featuredCategories = [
     itemCount: products.filter((p) => p.format === "pooja").length,
   },
   {
-    id: "gf" as const,
-    title: "Gluten-Free Pure",
-    image: "/products/50g-gluten-free-asafoetida-powder/img-1.jpg",
-    itemCount: products.filter((p) => p.glutenFree).length,
+    id: "appalam" as const,
+    title: formatLabels.appalam,
+    image: "/products/crispy-appalam/img-1.jpg",
+    itemCount: products.filter((p) => p.format === "appalam").length,
   },
   {
     id: "vismaya" as const,
