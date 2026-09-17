@@ -234,36 +234,6 @@ export function ProductImageZoom({
           </button>
         </div>
 
-        {/* Slider Navigation Arrows (shown if multiple images) */}
-        {images.length > 1 && (
-          <>
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                prevImage();
-              }}
-              aria-label="Back to previous photo"
-              title="Back to previous photo"
-              className="absolute left-3 top-1/2 -translate-y-1/2 z-30 grid h-9 w-9 sm:h-10 sm:w-10 place-items-center rounded-full bg-white/95 text-[#181206] border border-[#E8DEC8] shadow-md hover:bg-[#FFC700] hover:scale-105 active:scale-95 transition-all cursor-pointer"
-            >
-              <ChevronLeft className="h-5 w-5" />
-            </button>
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                nextImage();
-              }}
-              aria-label="Next photo"
-              title="Next photo"
-              className="absolute right-3 top-1/2 -translate-y-1/2 z-30 grid h-9 w-9 sm:h-10 sm:w-10 place-items-center rounded-full bg-white/95 text-[#181206] border border-[#E8DEC8] shadow-md hover:bg-[#FFC700] hover:scale-105 active:scale-95 transition-all cursor-pointer"
-            >
-              <ChevronRight className="h-5 w-5" />
-            </button>
-          </>
-        )}
-
         {/* Bottom indicator bar */}
         <div className="absolute bottom-3 inset-x-3 flex items-center justify-between pointer-events-none z-10">
           {images.length > 1 ? (
