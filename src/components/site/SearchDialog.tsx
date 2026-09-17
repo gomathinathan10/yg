@@ -344,7 +344,7 @@ export function SearchDialog({
                 className="p-2 rounded-[6px] border border-[#E8DEC8] bg-[#FAF3D6] hover:bg-[#FFC700]/10 hover:border-[#FFC700]/40 text-center transition-all group cursor-pointer"
               >
                 <History className="h-4 w-4 mx-auto mb-1 text-[#181206] group-hover:scale-110 transition-transform" />
-                <span className="text-[11px] font-bold text-[#181206] block">Since 1932</span>
+                <span className="text-[11px] font-bold text-[#181206] block">Since 1931</span>
               </button>
             </div>
           </div>

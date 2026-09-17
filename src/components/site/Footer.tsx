@@ -75,12 +75,12 @@ export function Footer() {
                 Y.G Asafoetida
               </p>
               <p className="text-[10px] font-semibold text-white/70 tracking-wider uppercase mt-1">
-                Tirunelveli · Since 1932
+                Tirunelveli · Since 1931
               </p>
             </div>
           </div>
           <p className="mt-4 text-xs sm:text-sm text-white/70 leading-relaxed">
-            Crafting pure compounded asafoetida, solid gold cakes, and wood-roasted traditional mixes in Tirunelveli for over 92 years across three generations.
+            Crafting pure compounded asafoetida, solid gold cakes, and wood-roasted traditional mixes in Tirunelveli with 94 years of heritage across three generations.
           </p>
           <div className="mt-4 flex items-center gap-3 text-xs text-[#FFC700] font-semibold">
             <span className="flex items-center gap-1">

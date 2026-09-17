@@ -68,7 +68,7 @@ export const Route = createFileRoute("/product/$slug")({
     const minPrice = Math.min(...product.variants.map((v) => v.price));
     const maxPrice = Math.max(...product.variants.map((v) => v.price));
     const priceText = minPrice === maxPrice ? `₹${minPrice}` : `₹${minPrice} - ₹${maxPrice}`;
-    const description = `${product.name} (${priceText}) — ${product.tagline}. ${product.description.slice(0, 140)}... Compounded in Tirunelveli since 1932.`;
+    const description = `${product.name} (${priceText}) — ${product.tagline}. ${product.description.slice(0, 140)}... Compounded in Tirunelveli since 1931.`;
     const canonicalUrl = `https://ygasafoetida.in/product/${product.slug}`;
     const imageUrl = `https://ygasafoetida.in/products/${product.slug}/img-1.jpg`;
 
@@ -295,7 +295,7 @@ function ProductPage() {
         <div className="lg:hidden space-y-2 pb-4 border-b border-[#E8DEC8] mb-4">
           <div className="flex items-center justify-between gap-2">
             <span className="text-xs font-semibold text-[#181206] bg-[#FFC700]/10 px-2.5 py-1 rounded-[4px]">
-              {formatLabels[product.format]} · Estd. 1932
+              {formatLabels[product.format]} · Estd. 1931
             </span>
             <WishlistButton slug={product.slug} name={product.name} />
           </div>
@@ -349,7 +349,7 @@ function ProductPage() {
             <div className="hidden lg:block">
               <div className="flex items-center justify-between gap-2">
                 <span className="text-xs font-semibold text-[#181206] bg-[#FFC700]/10 px-2.5 py-1 rounded-[4px]">
-                  {formatLabels[product.format]} · Estd. 1932
+                  {formatLabels[product.format]} · Estd. 1931
                 </span>
                 <WishlistButton slug={product.slug} name={product.name} />
               </div>

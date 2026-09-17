@@ -45,14 +45,14 @@ function DeferUntilIdle({ children }: { children: ReactNode }) {
 function NotFoundComponent() {
   const links = [
     { to: "/shop", label: "Shop all products" },
-    { to: "/story", label: "Our story since 1932" },
+    { to: "/story", label: "Our story since 1931" },
     { to: "/contact", label: "Contact support" },
     { to: "/account", label: "Your orders" },
   ] as const;
 
   return (
     <div className="container-page flex min-h-[60vh] flex-col items-center justify-center py-16 text-center">
-      <p className="eyebrow">Est. 1932 · Tirunelveli</p>
+      <p className="eyebrow">Est. 1931 · Tirunelveli</p>
       <h1 className="font-display mt-3 text-7xl leading-none font-bold text-primary">404</h1>
       <h2 className="mt-4 text-2xl font-semibold">This shelf is empty</h2>
       <p className="mt-2 max-w-md text-sm text-muted-foreground">
@@ -122,11 +122,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { name: "google-site-verification", content: "JCXySiTdM9cLVtF34BfI08thOQrkAoFOo5HOBWHlnR4" },
-      { title: "Y.G Asafoetida — Authentic Heritage Hing & Traditional Products Since 1932" },
+      { title: "Y.G Asafoetida — Authentic Heritage Hing & Traditional Products Since 1931" },
       {
         name: "description",
         content:
-          "Compounded artisanal asafoetida powder, pure gold hing cake, gluten-free hing, wood-roasted traditional health mix (sathu maavu), and pure temple benzoin sambrani from Tirunelveli since 1932.",
+          "Compounded artisanal asafoetida powder, pure gold hing cake, gluten-free hing, wood-roasted traditional health mix (sathu maavu), and pure temple benzoin sambrani from Tirunelveli since 1931.",
       },
       {
         name: "keywords",
@@ -140,21 +140,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:site_name", content: "Y.G Asafoetida" },
       { property: "og:type", content: "website" },
       { property: "og:locale", content: "en_IN" },
-      { property: "og:title", content: "Y.G Asafoetida — Authentic Heritage Hing & Traditional Products Since 1932" },
+      { property: "og:title", content: "Y.G Asafoetida — Authentic Heritage Hing & Traditional Products Since 1931" },
       {
         property: "og:description",
         content:
-          "Compounded artisanal asafoetida powder, pure gold hing cake, gluten-free hing, traditional health mix (sathu maavu), and pure temple benzoin sambrani from Tirunelveli since 1932.",
+          "Compounded artisanal asafoetida powder, pure gold hing cake, gluten-free hing, traditional health mix (sathu maavu), and pure temple benzoin sambrani from Tirunelveli since 1931.",
       },
       { property: "og:image", content: "https://ygasafoetida.in/logo.png" },
       { property: "og:image:alt", content: "Y.G Asafoetida Logo" },
       // Twitter Card
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Y.G Asafoetida — Authentic Heritage Hing & Traditional Products Since 1932" },
+      { name: "twitter:title", content: "Y.G Asafoetida — Authentic Heritage Hing & Traditional Products Since 1931" },
       {
         name: "twitter:description",
         content:
-          "Compounded artisanal asafoetida powder, pure gold hing cake, gluten-free hing, traditional health mix, and sambrani from Tirunelveli since 1932.",
+          "Compounded artisanal asafoetida powder, pure gold hing cake, gluten-free hing, traditional health mix, and sambrani from Tirunelveli since 1931.",
       },
       { name: "twitter:image", content: "https://ygasafoetida.in/logo.png" },
       // Regional & Local SEO
@@ -183,10 +183,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "@context": "https://schema.org",
           "@type": "GroceryStore",
           "name": "Y.G Asafoetida",
-          "description": "Authentic Heritage Asafoetida, Traditional Health Mix & Pure Sambrani handcrafted in Tirunelveli since 1932.",
+          "description": "Authentic Heritage Asafoetida, Traditional Health Mix & Pure Sambrani handcrafted in Tirunelveli since 1931.",
           "url": "https://ygasafoetida.in",
           "logo": "https://ygasafoetida.in/logo.png",
-          "foundingDate": "1932",
+          "foundingDate": "1931",
           "address": {
             "@type": "PostalAddress",
             "addressLocality": "Tirunelveli",

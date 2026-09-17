@@ -423,7 +423,7 @@ function ExportsPage() {
           <div className="text-center max-w-3xl mx-auto space-y-3">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFC700]/20 border border-[#FFC700]/40 text-[#181206] text-xs font-bold uppercase tracking-wider">
               <Award className="h-3.5 w-3.5 text-[#8C5921]" />
-              <span>YG Trusted Since 1902 · Quality Benchmarks</span>
+              <span>YG Trusted Since 1931 · Quality Benchmarks</span>
             </div>
             <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-foreground uppercase">
               Our Certifications &amp; Quality Standards

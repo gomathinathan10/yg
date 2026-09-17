@@ -15,32 +15,32 @@ import {
 export const Route = createFileRoute("/story")({
   head: () => ({
     meta: [
-      { title: "Our Heritage Since 1932 — Three Generations of Tirunelveli Hing | Y.G Asafoetida" },
+      { title: "Our Heritage Since 1931 — Three Generations of Tirunelveli Hing | Y.G Asafoetida" },
       {
         name: "description",
         content:
-          "The 92-year journey of Y.G Asafoetida from a small shop on South Car Street in Tirunelveli to India's most trusted heritage hing house. Learn our artisanal stone-milling compounding craft.",
+          "The 94-year journey of Y.G Asafoetida from a small shop on South Car Street in Tirunelveli to India's most trusted heritage hing house. Learn our artisanal stone-milling compounding craft.",
       },
       {
         name: "keywords",
         content:
-          "Y.G Asafoetida history, Tirunelveli hing history, heritage asafoetida, traditional hing compounding, South Indian spices history, 1932 spices brand",
+          "Y.G Asafoetida history, Tirunelveli hing history, heritage asafoetida, traditional hing compounding, South Indian spices history, 1931 spices brand",
       },
       { property: "og:type", content: "article" },
       { property: "og:url", content: "https://ygasafoetida.in/story" },
-      { property: "og:title", content: "Our Heritage Since 1932 — Y.G Asafoetida" },
+      { property: "og:title", content: "Our Heritage Since 1931 — Y.G Asafoetida" },
       {
         property: "og:description",
         content:
-          "Ninety-two years of stone-compounding pure hing in Tirunelveli, preserved across three generations.",
+          "Ninety-four years of stone-compounding pure hing in Tirunelveli, preserved across three generations.",
       },
       { property: "og:image", content: "https://ygasafoetida.in/logo.png" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Our 1932 Heritage — Y.G Asafoetida" },
+      { name: "twitter:title", content: "Our 1931 Heritage — Y.G Asafoetida" },
       {
         name: "twitter:description",
         content:
-          "The 92-year journey of Y.G Asafoetida compounding in Tirunelveli, Tamil Nadu.",
+          "The 94-year journey of Y.G Asafoetida compounding in Tirunelveli, Tamil Nadu.",
       },
       { name: "twitter:image", content: "https://ygasafoetida.in/logo.png" },
     ],
@@ -52,7 +52,7 @@ export const Route = createFileRoute("/story")({
           "@context": "https://schema.org",
           "@type": "AboutPage",
           "name": "The Y.G Asafoetida Heritage Story",
-          "description": "The 92-year history and artisanal compounding craft of Y.G Asafoetida in Tirunelveli since 1932.",
+          "description": "The 94-year history and artisanal compounding craft of Y.G Asafoetida in Tirunelveli since 1931.",
           "url": "https://ygasafoetida.in/story",
           "publisher": {
             "@type": "Organization",
@@ -136,7 +136,7 @@ function StoryPage() {
             </div>
 
             <h1 className="font-serif text-3xl sm:text-4xl lg:text-[46px] font-bold text-[#2A1806] leading-[1.18] tracking-tight">
-              Ninety-Two Years of Aroma, One Family Legacy
+              Ninety-Four Years of Aroma, One Family Legacy
             </h1>
 
             <p className="text-sm sm:text-base text-[#68523A] max-w-xl leading-relaxed mx-auto lg:mx-0">
@@ -162,7 +162,7 @@ function StoryPage() {
                   YG பெருங்காயம்
                 </p>
                 <p className="text-white/85 text-xs sm:text-sm mt-1 leading-relaxed">
-                  90+ வருடங்களாக மாறாத பாரம்பரிய தூய்மை மற்றும் நறுமணத்தின் அடையாளம்
+                  94 வருடங்களாக மாறாத பாரம்பரிய தூய்மை மற்றும் நறுமணத்தின் அடையாளம்
                 </p>
               </div>
             </div>
@@ -222,7 +222,7 @@ function StoryPage() {
               <div className="rounded-xl border border-[#C59B27]/60 bg-[#FAF4E5] p-3.5 sm:p-4 flex items-start gap-3 shadow-xs">
                 <Wheat className="h-4 w-4 text-[#8C5921] shrink-0 mt-0.5" />
                 <p className="font-serif italic text-xs sm:text-[13px] text-[#4A3724] leading-relaxed">
-                  &ldquo;A small artisanal shop on Tirunelveli South Car Street that laid the foundation for 90+ years of unadulterated aroma.&rdquo;
+                  &ldquo;A small artisanal shop on Tirunelveli South Car Street that laid the foundation for 94 years of unadulterated aroma.&rdquo;
                 </p>
               </div>
             </div>

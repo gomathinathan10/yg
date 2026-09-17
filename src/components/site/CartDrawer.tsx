@@ -30,7 +30,7 @@ export function CartDrawer() {
             <div>
               <h3 className="font-bold text-[#181206] text-base">Your basket is empty</h3>
               <p className="mt-1 text-sm text-muted-foreground">
-                Start with our 1932 classic hing powder and authentic South Indian spices.
+                Start with our 1931 classic hing powder and authentic South Indian spices.
               </p>
             </div>
             <Button asChild className="bg-[#FFC700] hover:bg-[#E6B000] text-[#181206] border border-black/15 rounded-[6px] font-bold shadow-xs" onClick={() => cart.setOpen(false)}>

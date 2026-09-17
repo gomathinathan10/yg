@@ -24,11 +24,11 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Y.G Asafoetida — Artisanal Hing, Sathu Maavu & Sambrani Since 1932" },
+      { title: "Y.G Asafoetida — Artisanal Hing, Sathu Maavu & Sambrani Since 1931" },
       {
         name: "description",
         content:
-          "Buy authentic compounded asafoetida powder, pure gold hing cake, gluten-free hing, wood-roasted traditional health mix (sathu maavu), and pure temple benzoin sambrani online from Tirunelveli since 1932.",
+          "Buy authentic compounded asafoetida powder, pure gold hing cake, gluten-free hing, wood-roasted traditional health mix (sathu maavu), and pure temple benzoin sambrani online from Tirunelveli since 1931.",
       },
       {
         name: "keywords",
@@ -37,7 +37,7 @@ export const Route = createFileRoute("/")({
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://ygasafoetida.in/" },
-      { property: "og:title", content: "Y.G Asafoetida — Authentic Heritage Hing & Traditional Store Since 1932" },
+      { property: "og:title", content: "Y.G Asafoetida — Authentic Heritage Hing & Traditional Store Since 1931" },
       {
         property: "og:description",
         content:
@@ -45,7 +45,7 @@ export const Route = createFileRoute("/")({
       },
       { property: "og:image", content: "https://ygasafoetida.in/logo.png" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Y.G Asafoetida — Authentic Heritage Hing Since 1932" },
+      { name: "twitter:title", content: "Y.G Asafoetida — Authentic Heritage Hing Since 1931" },
       {
         name: "twitter:description",
         content:
@@ -180,7 +180,7 @@ const HERO_VIDEOS = [
   {
     src: "/hero-video-slide2.mp4",
     title: "Heritage Tradition",
-    subtitle: "Purity Since 1932",
+    subtitle: "Purity Since 1931",
     tag: "Tradition",
   },
   {
@@ -498,7 +498,7 @@ function HomePage() {
               </div>
               <div className="min-w-0">
                 <h4 className="font-bold text-xs sm:text-sm text-[#181206] leading-tight truncate">100% Happy</h4>
-                <p className="text-[10px] sm:text-xs text-[#5A6560] mt-0.5 truncate">90+ Yrs Heritage</p>
+                <p className="text-[10px] sm:text-xs text-[#5A6560] mt-0.5 truncate">94 Yrs Heritage</p>
               </div>
             </div>
 
@@ -681,36 +681,36 @@ function HomePage() {
             <div className="aspect-4/3 rounded-xl sm:rounded-2xl overflow-hidden border border-white/10 shadow-lg bg-black/20">
               <SmartImage
                 src={storyShopImage}
-                alt="Shri P. Subramanian compounding artisanal hing in 1932 Tirunelveli"
+                alt="Shri P. Subramanian compounding artisanal hing in 1931 Tirunelveli"
                 width={1200}
                 height={900}
                 sizes="(min-width: 1024px) 40vw, 95vw"
-                fallbackLabel="Estd. 1932"
+                fallbackLabel="Estd. 1931"
                 wrapperClassName="h-full w-full"
                 className="h-full w-full object-cover"
               />
             </div>
             <div className="absolute -bottom-2 -left-2 bg-[#FFC700] text-[#181206] font-black px-3 py-1 rounded-lg text-[10px] shadow-md border border-black/20">
-              Estd. 1932 · Tirunelveli
+              Estd. 1931 · Tirunelveli
             </div>
           </div>
 
           <div className="lg:col-span-7 space-y-3.5">
             <p className="text-[11px] font-extrabold tracking-widest uppercase text-[#FFC700]">
-              Preserving A 90-Year Craft
+              Preserving A 94-Year Craft
             </p>
             <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold leading-tight">
               Started by Shri P. Subramanian. Mastered across three generations.
             </h2>
             <p className="text-xs sm:text-sm opacity-85 leading-relaxed">
-              In 1932, near the banks of the Thamirabarani river, Shri P. Subramanian perfected the art of
+              In 1931, near the banks of the Thamirabarani river, Shri P. Subramanian perfected the art of
               stone-compounding imported mountain ferula resin with pure starches. Today, his grandchildren
               continue the same strict formula without shortcuts.
             </p>
 
             <div className="grid grid-cols-3 gap-3 pt-2 border-t border-white/10 text-center">
               <div>
-                <p className="text-lg sm:text-xl font-extrabold text-[#FFC700]">1932</p>
+                <p className="text-lg sm:text-xl font-extrabold text-[#FFC700]">1931</p>
                 <p className="opacity-75 text-[10px]">Founding Year</p>
               </div>
               <div>
@@ -725,7 +725,7 @@ function HomePage() {
 
             <div className="pt-1">
               <Button size="sm" className="font-bold bg-[#FFC700] text-[#181206] hover:bg-[#E6B000] text-xs border border-black/15 shadow-xs" asChild>
-                <Link to="/story">Read Our Full 1932 Story</Link>
+                <Link to="/story">Read Our Full 1931 Story</Link>
               </Button>
             </div>
           </div>
@@ -797,7 +797,7 @@ function HomePage() {
               Special Coupon: BULK15
             </span>
             <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-[#181206]">
-              Ninety Years of Culinary Purity, One Pinch at a Time
+              Ninety-Four Years of Culinary Purity, One Pinch at a Time
             </h2>
             <p className="text-xs sm:text-sm text-[#181206]/85 font-medium leading-relaxed">
               Free delivery on orders above ₹499 with same-day dispatch directly from our works in Tirunelveli.

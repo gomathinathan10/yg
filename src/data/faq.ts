@@ -137,10 +137,10 @@ export const faqs: FaqEntry[] = [
   },
   {
     id: "history",
-    keywords: ["1932", "history", "story", "founder", "family", "heritage", "who are you", "about"],
+    keywords: ["1931", "history", "story", "founder", "family", "heritage", "who are you", "about"],
     question: "Who makes Y.G Asafoetida?",
     answer:
-      "Shri P. Subramanian Chettiar started the works near Tirunelveli in 1932. Ninety-plus years later the founder's grandchildren still run it from the same town, using the same house formula. Read the full story on our Story page.",
+      "Shri P. Subramanian Chettiar started the works near Tirunelveli in 1931. 94 years of heritage later, the founder's grandchildren still run it from the same town, using the same house formula. Read the full story on our Story page.",
   },
   {
     id: "gift",

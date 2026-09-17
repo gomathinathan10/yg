@@ -47,7 +47,7 @@ export const products: Product[] = [
       "/products/50g-gold-asafoetida-powder/img-2.jpg",
     ],
     description:
-      "Our signature Gold grade compounded hing powder crafted to age-old Tirunelveli traditions since 1932. Rich, intense aromatic profile that elevates every sambar, rasam, kootu, and tadka with wholesome flavor.",
+      "Our signature Gold grade compounded hing powder crafted to age-old Tirunelveli traditions since 1931. Rich, intense aromatic profile that elevates every sambar, rasam, kootu, and tadka with wholesome flavor.",
     ingredients: "Asafoetida (Ferula asafoetida), edible starch, edible gum.",
     usage: "Add 1/4 teaspoon to hot ghee during tempering.",
     shelfLife: "12 months from packing. Store in an airtight container.",

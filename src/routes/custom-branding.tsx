@@ -245,7 +245,7 @@ function CustomBrandingPage() {
               White Labelling &amp; Custom Branding 
             </h1>
             <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-              Harness over 90 years of generational stone-milling heritage. We formulate, lab-certify, package,
+              Harness 94 years of generational stone-milling heritage. We formulate, lab-certify, package,
               and brand authentic Asafoetida (Hing), Vismaya Idli Chutney Podis, Rice Mixes, and Heritage Millet Blends under your own brand identity.
             </p>
           </div>
@@ -270,7 +270,7 @@ function CustomBrandingPage() {
           {/* Quick Metrics */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-8 border-t border-border/80">
             <div className="rounded-xl border border-border/80 bg-card p-4 text-center">
-              <p className="text-2xl sm:text-3xl font-extrabold text-foreground">90+</p>
+              <p className="text-2xl sm:text-3xl font-extrabold text-foreground">94</p>
               <p className="text-xs text-muted-foreground font-medium mt-0.5">Years Compounding Mastery</p>
             </div>
             <div className="rounded-xl border border-border/80 bg-card p-4 text-center">

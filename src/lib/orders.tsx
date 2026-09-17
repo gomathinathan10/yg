@@ -114,7 +114,7 @@ export function trackingSteps(order: Order, now = Date.now()): TrackingStep[] {
   const fast = order.delivery === "express";
   const offsets: Array<[string, string, string, number]> = [
     ["placed", "Order placed", "We received your order and payment details.", 0],
-    ["packed", "Packed in Tirunelveli", "Sealed fresh from our 1932 works.", fast ? 3 : 8],
+    ["packed", "Packed in Tirunelveli", "Sealed fresh from our 1931 works.", fast ? 3 : 8],
     ["shipped", "Shipped", "Handed to our courier partner.", fast ? 8 : 24],
     ["out", "Out for delivery", "Arriving with you today.", fast ? 30 : 84],
     ["delivered", "Delivered", "Enjoy your hing.", fast ? 40 : 110],
