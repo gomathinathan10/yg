@@ -59,8 +59,8 @@ export function FaqBot() {
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         aria-label={open ? "Close the FAQ helper" : "Open the FAQ helper"}
-        style={{ bottom: "calc(1rem + var(--fab-offset, 0px))" }}
-        className="fixed right-3 z-40 flex h-11 w-11 sm:h-12 sm:w-auto items-center justify-center sm:justify-start gap-2 rounded-full bg-[#FFC700] hover:bg-[#E6B000] p-0 sm:px-4 text-sm font-semibold text-white shadow-lift transition-transform hover:scale-105 sm:right-6 cursor-pointer"
+        style={{ bottom: "calc(1.25rem + var(--fab-offset, 0px))" }}
+        className="fixed right-4 sm:right-6 z-40 flex h-11 w-11 sm:h-12 sm:w-auto items-center justify-center sm:justify-start gap-2 rounded-full bg-[#FFC700] hover:bg-[#181206] hover:text-[#FFC700] hover:border-[#181206] border border-[#D8A700] p-0 sm:px-4 text-sm font-bold text-[#181206] shadow-lg transition-all hover:scale-105 cursor-pointer active:scale-95"
       >
         {open ? <X className="h-5 w-5" /> : <MessageSquare className="h-5 w-5" />}
         <span className="hidden sm:inline">{open ? "Close" : "FAQ Helper"}</span>
@@ -71,19 +71,20 @@ export function FaqBot() {
           role="dialog"
           aria-label="Y.G FAQ helper"
           style={{ bottom: "calc(5rem + var(--fab-offset, 0px))" }}
-          className="fixed inset-x-3 z-40 flex max-h-[70vh] flex-col overflow-hidden rounded-[8px] border border-[#E8DEC8] bg-white shadow-2xl sm:inset-x-auto sm:right-6 sm:w-96"
+          className="fixed inset-x-3 z-50 flex max-h-[70vh] flex-col overflow-hidden rounded-[10px] border border-[#E8DEC8] bg-white shadow-2xl sm:inset-x-auto sm:right-6 sm:w-96"
         >
-          <header className="bg-[#FFC700] text-[#181206] font-black px-4 py-3 flex items-center justify-between">
+          <header className="bg-[#FFC700] text-[#181206] px-4 py-3 flex items-center justify-between border-b border-[#D8A700]">
             <div>
-              <p className="font-bold text-sm tracking-wide">Y.G FAQ Helper</p>
-              <p className="text-[11px] text-white/80">
+              <p className="font-extrabold text-sm tracking-wide text-[#181206]">Y.G FAQ Helper</p>
+              <p className="text-[11px] text-[#181206]/80 font-medium">
                 Rule-based answers for instant clarity
               </p>
             </div>
             <button
               type="button"
               onClick={() => setOpen(false)}
-              className="p-1 text-white/80 hover:text-white"
+              className="p-1.5 text-[#181206] hover:bg-black/10 rounded-[4px] transition-colors cursor-pointer"
+              aria-label="Close FAQ dialog"
             >
               <X className="w-4 h-4" />
             </button>
@@ -93,7 +94,7 @@ export function FaqBot() {
             {messages.map((m) => (
               <div key={m.id}>
                 {m.from === "user" ? (
-                  <p className="ml-auto w-fit max-w-[85%] rounded-[6px] bg-[#FFC700] px-3.5 py-2 text-xs text-white font-medium shadow-xs">
+                  <p className="ml-auto w-fit max-w-[85%] rounded-[6px] bg-[#FFC700] px-3.5 py-2 text-xs text-[#181206] font-bold shadow-xs border border-[#D8A700]">
                     {m.text}
                   </p>
                 ) : (
