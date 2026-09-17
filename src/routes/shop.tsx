@@ -116,7 +116,7 @@ export const Route = createFileRoute("/shop")({
   component: ShopPage,
 });
 
-const filterCategories: Array<{ id: Format | "all" | "gf"; label: string }> = [
+const filterCategories: Array<{ id: Format | "all" | "gf" | "vismaya"; label: string }> = [
   { id: "all", label: "All Categories" },
   { id: "powder", label: formatLabels.powder },
   { id: "granules", label: formatLabels.granules },
@@ -124,6 +124,7 @@ const filterCategories: Array<{ id: Format | "all" | "gf"; label: string }> = [
   { id: "combo", label: formatLabels.combo },
   { id: "wellness", label: formatLabels.wellness },
   { id: "pooja", label: formatLabels.pooja },
+  { id: "vismaya", label: "Vismaya Ready to Cook" },
 ];
 
 export const PRICE_PRESETS = [
@@ -139,8 +140,8 @@ export type PricePresetId = (typeof PRICE_PRESETS)[number]["id"];
 
 function ShopPage() {
   const search = Route.useSearch();
-  const initialCat = (search.category || search.format || "all") as Format | "all" | "gf";
-  const [filter, setFilter] = useState<Format | "all" | "gf">(() => {
+  const initialCat = (search.category || search.format || "all") as Format | "all" | "gf" | "vismaya";
+  const [filter, setFilter] = useState<Format | "all" | "gf" | "vismaya">(() => {
     if (filterCategories.some((c) => c.id === initialCat)) {
       return initialCat;
     }
@@ -148,7 +149,7 @@ function ShopPage() {
   });
 
   useEffect(() => {
-    const target = (search.category || search.format) as Format | "all" | "gf" | undefined;
+    const target = (search.category || search.format) as Format | "all" | "gf" | "vismaya" | undefined;
     if (target && filterCategories.some((c) => c.id === target)) {
       setFilter(target);
     }
@@ -179,9 +180,10 @@ function ShopPage() {
     const counts: Record<string, number> = {
       all: products.length,
       gf: products.filter((p) => p.glutenFree).length,
+      vismaya: products.filter((p) => p.name.toLowerCase().includes("vismaya") || p.slug.includes("vismaya") || p.slug.includes("podi") || p.slug.includes("mix")).length,
     };
     filterCategories.forEach((fc) => {
-      if (fc.id !== "all" && fc.id !== "gf") {
+      if (fc.id !== "all" && fc.id !== "gf" && fc.id !== "vismaya") {
         counts[fc.id] = products.filter((p) => p.format === fc.id).length;
       }
     });
@@ -203,6 +205,8 @@ function ShopPage() {
     let list = products.filter((p) => {
       if (filter === "gf") {
         if (!p.glutenFree) return false;
+      } else if (filter === "vismaya") {
+        if (!p.name.toLowerCase().includes("vismaya") && !p.slug.includes("vismaya") && !p.slug.includes("podi") && !p.slug.includes("mix")) return false;
       } else if (filter !== "all") {
         if (p.format !== filter) return false;
       }

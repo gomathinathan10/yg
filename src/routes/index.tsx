@@ -117,6 +117,12 @@ const featuredCategories = [
     image: "/products/50g-gluten-free-asafoetida-powder/img-1.jpg",
     itemCount: products.filter((p) => p.glutenFree).length,
   },
+  {
+    id: "vismaya" as const,
+    title: "Vismaya Ready to Cook",
+    image: "/products/millet-pongal-mix/img-1.jpg",
+    itemCount: products.filter((p) => p.name.toLowerCase().includes("vismaya") || p.slug.includes("vismaya") || p.slug.includes("podi") || p.slug.includes("mix")).length,
+  },
 ];
 
 const verifiedReviews = [
@@ -549,14 +555,14 @@ function HomePage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-2.5 sm:gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-3.5 sm:gap-5">
             {featuredCategories.map((cat, idx) => (
               <Link
                 key={`${cat.id}-${idx}`}
                 to="/shop"
                 search={{ category: cat.id }}
                 className={cn(
-                  "bg-white rounded-[12px] p-3 sm:p-4 text-center transition-all duration-500 ease-out flex flex-col items-center justify-between min-h-[155px] sm:min-h-[185px] hover:-translate-y-2 hover:scale-[1.03] hover:shadow-[0_12px_28px_rgba(255,199,0,0.22)] cursor-pointer group relative overflow-hidden border",
+                  "bg-white rounded-[12px] p-3.5 sm:p-5 text-center transition-all duration-300 ease-out flex flex-col items-center justify-between min-h-[175px] sm:min-h-[205px] hover:-translate-y-1.5 hover:scale-[1.02] hover:shadow-[0_12px_28px_rgba(255,199,0,0.22)] cursor-pointer group relative overflow-hidden border",
                   idx === activeCategoryIdx
                     ? "border-2 border-[#FFC700] bg-[#FFFBEA] shadow-md ring-2 ring-[#FFC700]/25"
                     : "border-[#E8DEC8] hover:border-[#FFC700] hover:ring-2 hover:ring-[#FFC700]/30"
@@ -567,25 +573,25 @@ function HomePage() {
                 onClick={() => setActiveCategoryIdx(idx)}
               >
                 {/* Ambient glow on hover */}
-                <div className="absolute inset-0 bg-radial from-[#FFC700]/15 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                <div className="absolute inset-0 bg-radial from-[#FFC700]/15 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
                 {/* Subtle top active indicator badge */}
                 {idx === activeCategoryIdx && (
-                  <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-[#FFC700] animate-ping" />
+                  <span className="absolute top-2 right-2 h-2.5 w-2.5 rounded-full bg-[#FFC700] animate-ping" />
                 )}
 
-                <div className="h-16 w-16 sm:h-20 sm:w-20 flex items-center justify-center p-1 my-auto relative transition-transform duration-500 ease-out group-hover:scale-125 group-hover:-rotate-3">
+                <div className="h-20 w-20 sm:h-24 sm:w-24 flex items-center justify-center p-1.5 my-auto relative transition-transform duration-300 ease-out group-hover:scale-110">
                   <img
                     src={cat.image}
                     alt={cat.title}
-                    className="max-h-full max-w-full object-contain drop-shadow-md transition-all duration-500 ease-out group-hover:scale-110 group-hover:drop-shadow-[0_8px_16px_rgba(0,0,0,0.15)]"
+                    className="max-h-full max-w-full object-contain drop-shadow-sm transition-all duration-300 ease-out group-hover:drop-shadow-md"
                   />
                 </div>
-                <div className="mt-2 sm:mt-3 text-center w-full relative z-10">
-                  <p className="text-xs sm:text-sm font-bold text-[#181206] group-hover:text-[#8C5921] transition-colors leading-tight group-hover:translate-y-[-1px]">
+                <div className="mt-2.5 sm:mt-3 text-center w-full relative z-10">
+                  <p className="text-xs sm:text-sm font-bold text-[#181206] group-hover:text-[#8C5921] transition-colors leading-tight truncate">
                     {cat.title}
                   </p>
-                  <span className="text-[10px] sm:text-[11px] text-[#5A6560] font-medium inline-block mt-1 px-2 py-0.5 rounded-full group-hover:bg-[#FFC700]/20 group-hover:text-[#181206] transition-all">
+                  <span className="text-[10px] sm:text-[11px] text-[#5A6560] font-bold inline-block mt-1 px-2.5 py-0.5 rounded-full bg-[#FAF3D6] border border-[#E8DEC8] group-hover:bg-[#FFC700] group-hover:border-[#D8A700] group-hover:text-[#181206] transition-all">
                     {cat.itemCount} items
                   </span>
                 </div>
