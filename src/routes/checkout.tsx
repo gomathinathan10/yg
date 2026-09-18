@@ -22,6 +22,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { formatPrice } from "@/data/products";
+import { useLiveMetrics } from "@/data/metrics";
 import { useCart } from "@/lib/cart";
 import { useOrders, type Address } from "@/lib/orders";
 import { lookupPincode, type PincodeLookup } from "@/lib/pincode.functions";
@@ -43,19 +44,9 @@ export const Route = createFileRoute("/checkout")({
   component: CheckoutPage,
 });
 
-const EXPRESS_FEE = 99;
 const GIFT_FEE = 49;
-const COD_FEE = 20;
 
 const steps = ["Details", "Delivery", "Payment"] as const;
-
-const payments = [
-  { id: "paytm", label: "Paytm", hint: "UPI, wallet & cards via Paytm gateway" },
-  { id: "upi", label: "UPI", hint: "GPay, PhonePe, BHIM" },
-  { id: "card", label: "Card", hint: "Credit or debit card" },
-  { id: "netbanking", label: "Net banking", hint: "All major Indian banks" },
-  { id: "cod", label: "Cash on delivery", hint: `₹${COD_FEE} handling fee` },
-];
 
 type Form = {
   email: string;
@@ -81,6 +72,7 @@ const emptyForm: Form = {
 
 function CheckoutPage() {
   const cart = useCart();
+  const metrics = useLiveMetrics();
   const navigate = useNavigate();
   const { profile, addresses, orders, saveAddress, placeOrder, signIn } = useOrders();
 
@@ -213,9 +205,20 @@ function CheckoutPage() {
     });
   };
 
-  const expressFee = delivery === "express" ? EXPRESS_FEE : 0;
+  const expressFeeAmount = metrics.expressDeliveryFee || 120;
+  const codFeeAmount = metrics.codHandlingFee || 40;
+
+  const payments = [
+    { id: "paytm", label: "Paytm", hint: "UPI, wallet & cards via Paytm gateway" },
+    { id: "upi", label: "UPI", hint: "GPay, PhonePe, BHIM" },
+    { id: "card", label: "Card", hint: "Credit or debit card" },
+    { id: "netbanking", label: "Net banking", hint: "All major Indian banks" },
+    { id: "cod", label: "Cash on delivery", hint: `₹${codFeeAmount} handling fee` },
+  ];
+
+  const expressFee = delivery === "express" ? expressFeeAmount : 0;
   const giftFee = gift ? GIFT_FEE : 0;
-  const codFee = payment === "cod" ? COD_FEE : 0;
+  const codFee = payment === "cod" ? codFeeAmount : 0;
   const grandTotal = cart.total + expressFee + giftFee + codFee;
 
   const fieldErrors = useMemo(() => {
@@ -607,7 +610,7 @@ function CheckoutPage() {
               <RadioGroup aria-label="Delivery speed" value={delivery} onValueChange={(v) => setDelivery(v as "standard" | "express")} className="mt-4 space-y-3">
                 {[
                   { id: "standard", icon: Truck, label: "Standard Delivery", hint: "2–6 working days (Direct from Tirunelveli)", fee: cart.shipping },
-                  { id: "express", icon: Zap, label: "Express Air Dispatch", hint: "1–2 working days (Priority couriered)", fee: EXPRESS_FEE },
+                  { id: "express", icon: Zap, label: "Express Air Dispatch", hint: "1–2 working days (Priority couriered)", fee: expressFeeAmount },
                 ].map((opt) => (
                   <label
                     key={opt.id}

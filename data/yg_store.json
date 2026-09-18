@@ -8,17 +8,17 @@
       "gluten_free": 0,
       "bestseller": 1,
       "image": "/products/100g-gold-asafoetida-powder/img-1.jpg",
-      "gallery": "[\"/products/100g-gold-asafoetida-powder/img-1.jpg\",\"/products/50g-gold-asafoetida-powder/img-1.jpg\",\"/products/500g-gold-asafoetida-powder/img-1.jpg\"]",
-      "description": "Our signature Gold grade compounded hing powder crafted to age-old Tirunelveli traditions since 1931.",
-      "ingredients": "Asafoetida (Ferula asafoetida), edible starch, edible gum.",
-      "usage": "Add 1/4 teaspoon to hot ghee during tempering.",
-      "shelf_life": "12 months from packing. Store in an airtight container.",
+      "gallery": "[\"/products/100g-gold-asafoetida-powder/img-1.jpg\"]",
+      "description": "Test desc",
+      "ingredients": "Ferula",
+      "usage": "Pinch",
+      "shelf_life": "12 months",
       "in_stock": 1,
-      "stock_left": null,
+      "stock_left": 100,
       "rating": 5,
       "reviews": 4,
       "created_at": 1788497335967,
-      "updated_at": 1788497335967
+      "updated_at": 1789715480980
     },
     {
       "slug": "premium-asafoetida-powder",
@@ -299,72 +299,29 @@
       "reviews": 49,
       "created_at": 1788497335967,
       "updated_at": 1788497335967
+    },
+    {
+      "slug": "vismaya-multi-millet-adai-dosa-mix",
+      "name": "Vismaya Multigrain Adai Dosa Mix",
+      "tagline": "Wholesome Millet Meal with Traditional Adai Dosa Flavours",
+      "format": "vismaya",
+      "gluten_free": 0,
+      "bestseller": 0,
+      "image": "/products/vismaya-multi-millet-adai-dosa-mix/img-1.jpg",
+      "gallery": "[\"/products/vismaya-multi-millet-adai-dosa-mix/img-1.jpg\",\"/products/vismaya-multi-millet-adai-dosa-mix/img-2.jpg\"]",
+      "description": "Authentic Tirunelveli taste crafted with nutrient-rich millets (Barnyard & Kodo Millet) and wholesome traditional pulses. Made with no maida and no refined rice. Rich in fiber, source of plant protein, with no artificial colours or flavours. Ready to cook in just 2 minutes.",
+      "ingredients": "Multigrain (Barnyard Millet, Kodo Millet), Toor Dhal, Bengal Gram Dhal, Moong Dhal, Urad Dhal, Olive seeds, Salt.",
+      "usage": "Mix the required quantity of Vismaya Multigrain Adai Dosa Mix with water to obtain a smooth batter. Rest the batter for 5 minutes. Heat a Dosa pan/tawa and spread the batter evenly. Cook on both sides until golden brown. No additional salt is required.",
+      "shelf_life": "12 months from packing. Store in a cool, dry and hygienic place.",
+      "in_stock": 1,
+      "stock_left": 70,
+      "rating": 4.8,
+      "reviews": 52,
+      "created_at": 1789716486782,
+      "updated_at": 1789716486782
     }
   ],
   "product_variants": [
-    {
-      "id": "10g",
-      "product_slug": "gold-asafoetida-powder",
-      "label": "10 g Cover (Pack of 10)",
-      "price": 18,
-      "mrp": 20,
-      "stock": 150,
-      "sort_order": 0
-    },
-    {
-      "id": "20g",
-      "product_slug": "gold-asafoetida-powder",
-      "label": "20 g Cover (Pack of 10)",
-      "price": 36,
-      "mrp": 40,
-      "stock": 150,
-      "sort_order": 1
-    },
-    {
-      "id": "50g",
-      "product_slug": "gold-asafoetida-powder",
-      "label": "50 g Tray",
-      "price": 85,
-      "mrp": 96,
-      "stock": 120,
-      "sort_order": 2
-    },
-    {
-      "id": "100g",
-      "product_slug": "gold-asafoetida-powder",
-      "label": "100 g Tray",
-      "price": 165,
-      "mrp": 186,
-      "stock": 140,
-      "sort_order": 3
-    },
-    {
-      "id": "200g",
-      "product_slug": "gold-asafoetida-powder",
-      "label": "200 g Container",
-      "price": 315,
-      "mrp": 350,
-      "stock": 80,
-      "sort_order": 4
-    },
-    {
-      "id": "500g",
-      "product_slug": "gold-asafoetida-powder",
-      "label": "500 g Pouch",
-      "price": 765,
-      "mrp": 850,
-      "stock": 60,
-      "sort_order": 5
-    },
-    {
-      "id": "1kg",
-      "product_slug": "gold-asafoetida-powder",
-      "label": "1 kg Pouch",
-      "price": 1440,
-      "mrp": 1600,
-      "stock": 45,
-      "sort_order": 6
-    },
     {
       "id": "50g",
       "product_slug": "premium-asafoetida-powder",
@@ -643,6 +600,78 @@
       "mrp": 290,
       "stock": 60,
       "sort_order": 1
+    },
+    {
+      "id": "10g",
+      "product_slug": "gold-asafoetida-powder",
+      "label": "10 g Cover (Pack of 10)",
+      "price": 18,
+      "mrp": 20,
+      "stock": 150,
+      "sort_order": 0
+    },
+    {
+      "id": "20g",
+      "product_slug": "gold-asafoetida-powder",
+      "label": "20 g Cover (Pack of 10)",
+      "price": 36,
+      "mrp": 40,
+      "stock": 150,
+      "sort_order": 1
+    },
+    {
+      "id": "50g",
+      "product_slug": "gold-asafoetida-powder",
+      "label": "50 g Tray",
+      "price": 85,
+      "mrp": 96,
+      "stock": 120,
+      "sort_order": 2
+    },
+    {
+      "id": "100g",
+      "product_slug": "gold-asafoetida-powder",
+      "label": "100 g Tray",
+      "price": 165,
+      "mrp": 186,
+      "stock": 140,
+      "sort_order": 3
+    },
+    {
+      "id": "200g",
+      "product_slug": "gold-asafoetida-powder",
+      "label": "200 g Container",
+      "price": 315,
+      "mrp": 350,
+      "stock": 80,
+      "sort_order": 4
+    },
+    {
+      "id": "500g",
+      "product_slug": "gold-asafoetida-powder",
+      "label": "500 g Pouch",
+      "price": 765,
+      "mrp": 850,
+      "stock": 60,
+      "sort_order": 5
+    },
+    {
+      "id": "1kg",
+      "product_slug": "gold-asafoetida-powder",
+      "label": "1 kg Pouch",
+      "price": 1440,
+      "mrp": 1600,
+      "stock": 45,
+      "sort_order": 6
+    },
+    {
+      "id": "500g",
+      "product_slug": "vismaya-multi-millet-adai-dosa-mix",
+      "label": "500 g Pouch",
+      "price": 175,
+      "mrp": 210,
+      "stock": 70,
+      "sort_order": 0
     }
   ],
   "orders": [],

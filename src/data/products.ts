@@ -1,13 +1,15 @@
+import { useEffect, useState } from "react";
+
 export type Format = "powder" | "granules" | "cake" | "combo" | "wellness" | "pooja" | "vismaya" | "appalam";
 
 export type Variant = {
   id: string;
   label: string;
   price: number;
-  mrp?: number;
-  stock?: number;
-  image?: string;
-  gallery?: string[];
+  mrp?: number | undefined;
+  stock?: number | undefined;
+  image?: string | undefined;
+  gallery?: string[] | undefined;
 };
 
 export type Product = {
@@ -16,7 +18,7 @@ export type Product = {
   tagline: string;
   format: Format;
   glutenFree: boolean;
-  bestseller?: boolean;
+  bestseller?: boolean | undefined;
   image: string;
   gallery: string[];
   description: string;
@@ -25,9 +27,9 @@ export type Product = {
   shelfLife: string;
   variants: Variant[];
   /** false = sold out; visitors can then ask for a back-in-stock alert. */
-  inStock?: boolean;
+  inStock?: boolean | undefined;
   /** Units left, when low enough to be worth showing. */
-  stockLeft?: number;
+  stockLeft?: number | undefined;
   rating: number;
   reviews: number;
 };
@@ -678,7 +680,7 @@ export const products: Product[] = [
   // 14. VISMAYA ANDHRA SPL PARUPPU PODI
   {
     slug: "vismaya-andhra-spl-paruppu-podi",
-    name: "Vismaya Andhra Spl Paruppu PodI",
+    name: "Vismaya Andhra Spl Paruppu Podi",
     tagline: "Fiery Guntur-Style Roasted Dal & Spices Podi for Rice & Ghee",
     format: "vismaya",
     glutenFree: false,
@@ -721,27 +723,41 @@ export const products: Product[] = [
     reviews: 58,
   },
 
-  // 16. VISMAYA MULTI MILLET ADAI DOSA MIX
+  // 16. VISMAYA MULTIGRAIN ADAI DOSA MIX
   {
     slug: "vismaya-multi-millet-adai-dosa-mix",
-    name: "Vismaya Multi Millet Adai Dosa Mix",
-    tagline: "High-Protein Native Millets & Multigrain Crispy Pancake Blend",
+    name: "Vismaya Multigrain Adai Dosa Mix",
+    tagline: "Wholesome Millet Meal with Traditional Adai Dosa Flavours",
     format: "vismaya",
     glutenFree: false,
     bestseller: false,
     image: "/products/vismaya-multi-millet-adai-dosa-mix/img-1.jpg",
-    gallery: ["/products/vismaya-multi-millet-adai-dosa-mix/img-1.jpg"],
+    gallery: [
+      "/products/vismaya-multi-millet-adai-dosa-mix/img-1.jpg",
+      "/products/vismaya-multi-millet-adai-dosa-mix/img-2.jpg",
+    ],
     description:
-      "Nutrient-dense traditional South Indian Adai mix combining unpolished Foxtail, Kodo, and Little millets with four hearty pulses (chana, toor, urad, moong), red chillies, and ginger. Makes crispy, golden, protein-packed adai dosas without long soaking.",
-    ingredients: "Kodo Millet, Foxtail Millet, Little Millet, Chana Dal, Toor Dal, Urad Dal, Red Chillies, Hing, Ginger, Rock Salt.",
-    usage: "Mix 1 cup with 1 cup water, rest for 15 mins, and pour thick dosas on hot tawa with oil or butter.",
-    shelfLife: "12 months from packing. Store in an airtight container.",
+      "Authentic Tirunelveli taste crafted with nutrient-rich millets (Barnyard & Kodo Millet) and wholesome traditional pulses. Made with no maida and no refined rice. Rich in fiber, source of plant protein, with no artificial colours or flavours. Ready to cook in just 2 minutes.",
+    ingredients: "Multigrain (Barnyard Millet, Kodo Millet), Toor Dhal, Bengal Gram Dhal, Moong Dhal, Urad Dhal, Olive seeds, Salt.",
+    usage: "Mix the required quantity of Vismaya Multigrain Adai Dosa Mix with water to obtain a smooth batter. Rest the batter for 5 minutes. Heat a Dosa pan/tawa and spread the batter evenly. Cook on both sides until golden brown. No additional salt is required.",
+    shelfLife: "12 months from packing. Store in a cool, dry and hygienic place. Keep pouch tightly closed after opening.",
     variants: [
-      { id: "500g", label: "500 g", price: 175, mrp: 210, stock: 70, image: "/products/vismaya-multi-millet-adai-dosa-mix/img-1.jpg" },
+      {
+        id: "500g",
+        label: "500 g Pouch",
+        price: 175,
+        mrp: 210,
+        stock: 70,
+        image: "/products/vismaya-multi-millet-adai-dosa-mix/img-1.jpg",
+        gallery: [
+          "/products/vismaya-multi-millet-adai-dosa-mix/img-1.jpg",
+          "/products/vismaya-multi-millet-adai-dosa-mix/img-2.jpg",
+        ],
+      },
     ],
     inStock: true,
-    rating: 4.6,
-    reviews: 38,
+    rating: 4.8,
+    reviews: 52,
   },
 
   // 17. VISMAYA MORINGA PARUPPU PODI
@@ -832,8 +848,30 @@ export const products: Product[] = [
     usage: "Drop 2-3 flakes into warm ghee before adding spices.",
     shelfLife: "12 months from packing. Store in an airtight container.",
     variants: [
-      { id: "50g", label: "50 g", price: 260, mrp: 300, stock: 45 },
-      { id: "100g", label: "100 g", price: 490, mrp: 560, stock: 50 },
+      {
+        id: "50g",
+        label: "50 g",
+        price: 260,
+        mrp: 300,
+        stock: 45,
+        image: "/products/hing-chips/img-1.jpg",
+        gallery: [
+          "/products/hing-chips/img-1.jpg",
+          "/products/hing-chips/img-2.jpg",
+        ],
+      },
+      {
+        id: "100g",
+        label: "100 g",
+        price: 490,
+        mrp: 560,
+        stock: 50,
+        image: "/products/hing-chips/img-2.jpg",
+        gallery: [
+          "/products/hing-chips/img-2.jpg",
+          "/products/hing-chips/img-1.jpg",
+        ],
+      },
     ],
     inStock: true,
     rating: 4.6,
@@ -862,8 +900,32 @@ export const products: Product[] = [
     usage: "Keep on kitchen counter for easy daily spooning.",
     shelfLife: "12 months from packing. Store in an airtight container.",
     variants: [
-      { id: "100g", label: "100 g Glass Jar", price: 380, mrp: 440, stock: 40 },
-      { id: "250g", label: "250 g Glass Jar", price: 850, mrp: 990, stock: 30 },
+      {
+        id: "100g",
+        label: "100 g Glass Jar",
+        price: 380,
+        mrp: 440,
+        stock: 40,
+        image: "/products/bottle-jar/img-1.jpg",
+        gallery: [
+          "/products/bottle-jar/img-1.jpg",
+          "/products/bottle-jar/img-2.jpg",
+          "/products/bottle-jar/img-3.jpg",
+        ],
+      },
+      {
+        id: "250g",
+        label: "250 g Glass Jar",
+        price: 850,
+        mrp: 990,
+        stock: 30,
+        image: "/products/bottle-jar/img-4.jpg",
+        gallery: [
+          "/products/bottle-jar/img-4.jpg",
+          "/products/bottle-jar/img-5.jpg",
+          "/products/bottle-jar/img-1.jpg",
+        ],
+      },
     ],
     inStock: true,
     rating: 4.9,
@@ -892,9 +954,43 @@ export const products: Product[] = [
     usage: "Scrape a tiny pinhead amount and dissolve in warm liquid.",
     shelfLife: "12 months from packing. Store in an airtight container.",
     variants: [
-      { id: "25g", label: "25 g Raw Lump", price: 390, mrp: 450, stock: 35 },
-      { id: "50g", label: "50 g Raw Lump", price: 720, mrp: 820, stock: 40 },
-      { id: "100g", label: "100 g Raw Lump", price: 1350, mrp: 1550, stock: 25 },
+      {
+        id: "25g",
+        label: "25 g Raw Lump",
+        price: 390,
+        mrp: 450,
+        stock: 35,
+        image: "/products/hing/img-1.jpg",
+        gallery: [
+          "/products/hing/img-1.jpg",
+          "/products/hing/img-2.jpg",
+        ],
+      },
+      {
+        id: "50g",
+        label: "50 g Raw Lump",
+        price: 720,
+        mrp: 820,
+        stock: 40,
+        image: "/products/hing/img-2.jpg",
+        gallery: [
+          "/products/hing/img-2.jpg",
+          "/products/hing/img-3.jpg",
+        ],
+      },
+      {
+        id: "100g",
+        label: "100 g Raw Lump",
+        price: 1350,
+        mrp: 1550,
+        stock: 25,
+        image: "/products/hing/img-3.jpg",
+        gallery: [
+          "/products/hing/img-3.jpg",
+          "/products/hing/img-4.jpg",
+          "/products/hing/img-5.jpg",
+        ],
+      },
     ],
     inStock: true,
     rating: 4.7,
@@ -924,8 +1020,32 @@ export const products: Product[] = [
     usage: "The ultimate culinary gift for gourmet cooks and heritage lovers.",
     shelfLife: "12 months from packing. Store in an airtight container.",
     variants: [
-      { id: "4in1", label: "4-in-1 Heritage Box", price: 999, mrp: 1299, stock: 50 },
-      { id: "deluxe", label: "Deluxe Hamper Box", price: 1799, mrp: 2299, stock: 30 },
+      {
+        id: "4in1",
+        label: "4-in-1 Heritage Box",
+        price: 999,
+        mrp: 1299,
+        stock: 50,
+        image: "/products/all-product/img-1.jpg",
+        gallery: [
+          "/products/all-product/img-1.jpg",
+          "/products/all-product/img-2.jpg",
+          "/products/all-product/img-3.jpg",
+        ],
+      },
+      {
+        id: "deluxe",
+        label: "Deluxe Hamper Box",
+        price: 1799,
+        mrp: 2299,
+        stock: 30,
+        image: "/products/all-product/img-4.jpg",
+        gallery: [
+          "/products/all-product/img-4.jpg",
+          "/products/all-product/img-5.jpg",
+          "/products/all-product/img-6.jpg",
+        ],
+      },
     ],
     inStock: true,
     rating: 4.8,
@@ -944,14 +1064,211 @@ export const formatLabels: Record<Format, string> = {
   appalam: "Crispy Appalam",
 };
 
+function normalizeLiveProduct(raw: any, base?: Product): Product {
+  const slug = raw.slug || base?.slug || "";
+  const name = raw.name || base?.name || "";
+  const tagline = raw.tagline || base?.tagline || "";
+  const format: Format = (raw.format || base?.format || "powder") as Format;
+
+  const glutenFree =
+    raw.glutenFree !== undefined
+      ? Boolean(raw.glutenFree)
+      : raw.gluten_free !== undefined
+      ? Boolean(raw.gluten_free)
+      : base?.glutenFree ?? false;
+
+  const bestseller =
+    raw.bestseller !== undefined
+      ? Boolean(raw.bestseller)
+      : base?.bestseller ?? false;
+
+  const image = raw.image || base?.image || "/products/100g-gold-asafoetida-powder/img-1.jpg";
+
+  let gallery: string[] = base?.gallery || [image];
+  if (Array.isArray(raw.gallery) && raw.gallery.length > 0) {
+    gallery = raw.gallery;
+  } else if (typeof raw.gallery === "string") {
+    try {
+      const parsed = JSON.parse(raw.gallery);
+      if (Array.isArray(parsed) && parsed.length > 0) gallery = parsed;
+    } catch {
+      gallery = [image];
+    }
+  }
+
+  const inStock =
+    raw.inStock !== undefined
+      ? Boolean(raw.inStock)
+      : raw.in_stock !== undefined
+      ? Boolean(raw.in_stock)
+      : base?.inStock ?? true;
+
+  const stockLeft =
+    raw.stockLeft !== undefined
+      ? (raw.stockLeft === null ? undefined : Number(raw.stockLeft))
+      : raw.stock_left !== undefined
+      ? (raw.stock_left === null ? undefined : Number(raw.stock_left))
+      : base?.stockLeft;
+
+  const description = raw.description || base?.description || "";
+  const ingredients = raw.ingredients || base?.ingredients || "";
+  const usage = raw.usage || base?.usage || "";
+  const shelfLife =
+    raw.shelfLife ||
+    raw.shelf_life ||
+    base?.shelfLife ||
+    "12 months from packing. Store in an airtight container.";
+  const rating = Number(raw.rating !== undefined ? raw.rating : (base?.rating ?? 4.8));
+  const reviews = Number(raw.reviews !== undefined ? raw.reviews : (base?.reviews ?? 100));
+
+  let variants: Variant[] = base?.variants || [];
+  if (Array.isArray(raw.variants) && raw.variants.length > 0) {
+    variants = raw.variants.map((mv: any) => {
+      const baseV = base?.variants?.find((bv) => bv.id === mv.id);
+      return {
+        id: String(mv.id),
+        label: mv.label || baseV?.label || String(mv.id),
+        price: Number(mv.price ?? baseV?.price ?? 100),
+        mrp: mv.mrp !== undefined && mv.mrp !== null ? Number(mv.mrp) : baseV?.mrp,
+        stock: mv.stock !== undefined ? Number(mv.stock) : baseV?.stock,
+        image: mv.image || baseV?.image,
+        gallery: mv.gallery || baseV?.gallery,
+      };
+    });
+  }
+
+  return {
+    slug,
+    name,
+    tagline,
+    format,
+    glutenFree,
+    bestseller,
+    image,
+    gallery,
+    description,
+    ingredients,
+    usage,
+    shelfLife,
+    variants,
+    inStock,
+    stockLeft,
+    rating,
+    reviews,
+  };
+}
+
+/**
+ * Live product catalog synchronization:
+ * When an administrator updates prices, stock, names, or descriptions in the Admin Portal,
+ * this function automatically retrieves the updated data from storage / database so the
+ * entire website (Shop page, Product details, Cart, and Checkout) updates dynamically.
+ */
+export function getLiveProducts(): Product[] {
+  if (typeof window === "undefined") return products;
+  try {
+    let deletedSlugs: string[] = [];
+    try {
+      const delRaw = localStorage.getItem("yg_deleted_products");
+      if (delRaw) deletedSlugs = JSON.parse(delRaw);
+    } catch {}
+
+    const baseList = products.filter((p) => !deletedSlugs.includes(p.slug));
+    const raw = localStorage.getItem("yg_live_products");
+    if (raw) {
+      const liveList = JSON.parse(raw) as any[];
+      if (Array.isArray(liveList) && liveList.length > 0) {
+        const merged = baseList.map((base) => {
+          const match = liveList.find((p) => p.slug === base.slug);
+          if (!match) return base;
+          return normalizeLiveProduct(match, base);
+        });
+
+        for (const item of liveList) {
+          if (item?.slug && !deletedSlugs.includes(item.slug) && !merged.some((p) => p.slug === item.slug)) {
+            merged.push(normalizeLiveProduct(item));
+          }
+        }
+        return merged;
+      }
+    }
+    return baseList;
+  } catch (e) {
+    console.error("Failed to load live product overrides:", e);
+    return products;
+  }
+}
+
+export function saveLiveProducts(items: any[]): void {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem("yg_live_products", JSON.stringify(items));
+    window.dispatchEvent(new CustomEvent("yg_products_updated"));
+    window.dispatchEvent(new Event("storage"));
+  } catch (e) {
+    console.error("Failed to save live products:", e);
+  }
+}
+
+/**
+ * Reactive React hook for live products catalog.
+ * Any admin change (price, stock, title, category) causes all subscribing components to immediately re-render.
+ */
+export function useLiveProducts(): Product[] {
+  const [list, setList] = useState<Product[]>(() => getLiveProducts());
+
+  useEffect(() => {
+    setList(getLiveProducts());
+
+    const handleUpdate = () => {
+      setList(getLiveProducts());
+    };
+
+    window.addEventListener("yg_products_updated", handleUpdate);
+    window.addEventListener("storage", handleUpdate);
+
+    return () => {
+      window.removeEventListener("yg_products_updated", handleUpdate);
+      window.removeEventListener("storage", handleUpdate);
+    };
+  }, []);
+
+  return list;
+}
+
+/**
+ * Reactive React hook for a single product by slug.
+ */
+export function useLiveProduct(slug: string): Product | undefined {
+  const [product, setProduct] = useState<Product | undefined>(() => getProduct(slug));
+
+  useEffect(() => {
+    setProduct(getProduct(slug));
+
+    const handleUpdate = () => {
+      setProduct(getProduct(slug));
+    };
+
+    window.addEventListener("yg_products_updated", handleUpdate);
+    window.addEventListener("storage", handleUpdate);
+
+    return () => {
+      window.removeEventListener("yg_products_updated", handleUpdate);
+      window.removeEventListener("storage", handleUpdate);
+    };
+  }, [slug]);
+
+  return product;
+}
+
 /** Simple relevance search over name, tagline, format and description. */
 export function searchProducts(query: string): Product[] {
   const q = query.trim().toLowerCase();
   if (!q) return [];
   const terms = q.split(/\s+/);
-  return products
+  return getLiveProducts()
     .map((p) => {
-      const haystack = [p.name, p.tagline, formatLabels[p.format], p.description]
+      const haystack = [p.name, p.tagline, formatLabels[p.format] || "", p.description]
         .join(" ")
         .toLowerCase();
       let score = 0;
@@ -967,17 +1284,21 @@ export function searchProducts(query: string): Product[] {
 }
 
 export function getProduct(slug: string) {
+  const all = getLiveProducts();
   // Support slug aliases
   if (slug === "millet-pongal-mix") {
-    return products.find((p) => p.slug === "vismaya-kodo-millet-pongal-mix") || products.find((p) => p.slug === slug);
+    return all.find((p) => p.slug === "vismaya-kodo-millet-pongal-mix") || all.find((p) => p.slug === slug);
   }
   if (slug === "millet-sambar-mix") {
-    return products.find((p) => p.slug === "vismaya-kodo-millet-sambar-mix") || products.find((p) => p.slug === slug);
+    return all.find((p) => p.slug === "vismaya-kodo-millet-sambar-mix") || all.find((p) => p.slug === slug);
   }
   if (slug === "black-sesame-seeds") {
-    return products.find((p) => p.slug === "traditional-ellu-podi") || products.find((p) => p.slug === slug);
+    return all.find((p) => p.slug === "traditional-ellu-podi") || all.find((p) => p.slug === slug);
   }
-  return products.find((p) => p.slug === slug);
+  if (slug === "vismaya-multigrain-adai-dosa-mix" || slug === "adai-dosa-mix" || slug === "multigrain-adai-dosa-mix") {
+    return all.find((p) => p.slug === "vismaya-multi-millet-adai-dosa-mix") || all.find((p) => p.slug === slug);
+  }
+  return all.find((p) => p.slug === slug);
 }
 
 export function formatPrice(paise?: number | string | null) {
@@ -987,3 +1308,4 @@ export function formatPrice(paise?: number | string | null) {
   const num = Number(paise);
   return `₹${num.toLocaleString("en-IN")}`;
 }
+

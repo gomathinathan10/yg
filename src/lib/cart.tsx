@@ -7,7 +7,8 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { products, type Product, type Variant } from "@/data/products";
+import { useLiveProducts, type Product, type Variant } from "@/data/products";
+import { useLiveMetrics } from "@/data/metrics";
 import {
   bestAutomaticPromo,
   discountBreakdown,
@@ -66,6 +67,8 @@ const CartContext = createContext<CartContextValue | null>(null);
 
 
 export function CartProvider({ children }: { children: ReactNode }) {
+  const products = useLiveProducts();
+  const metrics = useLiveMetrics();
   const [lines, setLines] = useState<CartLine[]>([]);
   const [isOpen, setOpen] = useState(false);
   const [promoCode, setPromoCode] = useState<string | null>(null);
@@ -131,7 +134,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         const variant = product?.variants.find((v) => v.id === line.variantId);
         return variant ? sum + variant.price * line.qty : sum;
       }, 0),
-    [lines],
+    [lines, products],
   );
 
   const applyPromo = useCallback(
@@ -174,11 +177,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const discount = appliedPromo ? discountFor(appliedPromo, subtotal) : 0;
     const discountedSubtotal = Math.max(0, subtotal - discount);
 
-    const baseShipping = subtotal === 0 || subtotal >= FREE_SHIPPING ? 0 : 49;
+    const freeThreshold = metrics.freeShippingThreshold || 499;
+    const stdFee = metrics.standardDeliveryFee || 50;
+    const baseShipping = subtotal === 0 || subtotal >= freeThreshold ? 0 : stdFee;
     const shipping =
-      subtotal === 0 || appliedPromo?.freeShipping || discountedSubtotal >= FREE_SHIPPING
+      subtotal === 0 || appliedPromo?.freeShipping || discountedSubtotal >= freeThreshold
         ? 0
-        : 49;
+        : stdFee;
     const shippingSaved = Math.max(0, baseShipping - shipping);
     const discountLines = appliedPromo
       ? discountBreakdown(appliedPromo, subtotal, shippingSaved)
@@ -198,7 +203,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       promoIsAutomatic: Boolean(appliedPromo?.automatic),
       shipping,
       total: discountedSubtotal + shipping,
-      freeShippingThreshold: FREE_SHIPPING,
+      freeShippingThreshold: metrics.freeShippingThreshold || 499,
       isOpen,
       setOpen,
       add,
@@ -208,7 +213,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       applyPromo,
       removePromo,
     };
-  }, [lines, isOpen, add, setQty, remove, clear, promoCode, applyPromo, removePromo]);
+  }, [lines, isOpen, add, setQty, remove, clear, promoCode, applyPromo, removePromo, products, metrics]);
 
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

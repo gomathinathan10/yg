@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
-  ChevronLeft,
   ChevronRight,
   CreditCard,
   MapPin,
@@ -15,7 +14,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/site/ProductCard";
-import { formatLabels, products, type Format } from "@/data/products";
+import { formatLabels, products, useLiveProducts, type Format } from "@/data/products";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({
@@ -185,6 +184,7 @@ const HERO_VIDEOS = [
   { src: "/hero-video-craft.mp4" },
   { src: "/hero-video-gold.mp4" },
   { src: "/hero-video-purity.mp4" },
+  { src: "/hero-video-tradition.mp4" },
   { src: "/hero-video-master.mp4?v=20260827" },
 ];
 
@@ -255,19 +255,7 @@ function HomePage() {
   };
 
 
-  const handlePrevVideo = () => {
-    if (soundPlayCountRef.current < 2) {
-      setIsMuted(false);
-    }
-    setCurrentVideoIndex((prev) => (prev - 1 + HERO_VIDEOS.length) % HERO_VIDEOS.length);
-  };
 
-  const handleNextVideo = () => {
-    if (soundPlayCountRef.current < 2) {
-      setIsMuted(false);
-    }
-    setCurrentVideoIndex((prev) => (prev + 1) % HERO_VIDEOS.length);
-  };
 
   const selectVideo = (index: number) => {
     if (soundPlayCountRef.current < 2) {
@@ -276,6 +264,7 @@ function HomePage() {
     setCurrentVideoIndex(index);
   };
 
+  const products = useLiveProducts();
   const displayedProducts = products.filter((p) => {
     if (activeCatalogTab === "all") return true;
     return p.format === activeCatalogTab;
@@ -301,7 +290,7 @@ function HomePage() {
       {/* ======================================================== */}
       {/* 1. CINEMATIC HERO BANNER (Screenshot 3 background)       */}
       {/* ======================================================== */}
-      <section className="group relative overflow-hidden border-b border-border w-full bg-neutral-950 flex items-center justify-center select-none min-h-[260px] sm:min-h-[380px] md:min-h-[480px]">
+      <section className="group relative overflow-hidden border-b border-border w-full bg-neutral-950 flex items-center justify-center select-none min-h-[280px] sm:min-h-[400px] md:min-h-[500px]">
         {/* Subtle Ambient Backdrop Glow */}
         <div className="absolute inset-0 bg-radial from-neutral-900 to-black opacity-80 pointer-events-none" />
 
@@ -326,16 +315,8 @@ function HomePage() {
         {/* Gentle bottom scrim only behind controls so video visuals remain fully visible */}
         <div className="absolute inset-x-0 bottom-0 h-20 pointer-events-none bg-gradient-to-t from-black/50 via-black/10 to-transparent z-10" />
 
-        {/* Top-Left: Video Reel Count (No text video names) */}
-        <div className="absolute top-2.5 sm:top-5 left-2.5 sm:left-5 z-20 pointer-events-none flex items-center gap-2">
-          <span className="text-[10px] sm:text-xs font-mono font-bold px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-black/60 backdrop-blur-md text-[#FFC700] border border-white/20 shadow-xl flex items-center gap-1.5">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#FFC700] animate-pulse" />
-            Video {currentVideoIndex + 1} / {HERO_VIDEOS.length}
-          </span>
-        </div>
-
         {/* Top-Right: Sound Toggle Button */}
-        <div className="absolute top-2.5 sm:top-5 right-2.5 sm:right-5 z-20 flex items-center gap-2">
+        <div className="absolute top-3 sm:top-5 right-3 sm:right-6 z-20 flex items-center gap-2">
           <button
             type="button"
             onClick={() => setIsMuted((m) => !m)}
@@ -356,27 +337,7 @@ function HomePage() {
           </button>
         </div>
 
-        {/* Left Arrow: Backward Video Navigation */}
-        <button
-          type="button"
-          onClick={handlePrevVideo}
-          className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-30 h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-black/60 hover:bg-[#FFC700] text-white hover:text-[#181206] border border-white/25 hover:border-[#FFC700] flex items-center justify-center shadow-2xl backdrop-blur-md transition-all duration-200 active:scale-90 hover:scale-105 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFC700]"
-          aria-label="Previous video"
-          title="Previous video"
-        >
-          <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6 transition-transform" strokeWidth={2.5} />
-        </button>
 
-        {/* Right Arrow: Forward Video Navigation */}
-        <button
-          type="button"
-          onClick={handleNextVideo}
-          className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-30 h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-black/60 hover:bg-[#FFC700] text-white hover:text-[#181206] border border-white/25 hover:border-[#FFC700] flex items-center justify-center shadow-2xl backdrop-blur-md transition-all duration-200 active:scale-90 hover:scale-105 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFC700]"
-          aria-label="Next video"
-          title="Next video"
-        >
-          <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6 transition-transform" strokeWidth={2.5} />
-        </button>
 
         {/* Bottom Slide Switcher (Dots hidden on mobile per user request: "remove three dot option for mobile") */}
         <div className="absolute bottom-2.5 sm:bottom-4 inset-x-0 hidden sm:flex justify-center items-center z-20 pointer-events-auto px-4">
@@ -498,7 +459,7 @@ function HomePage() {
                   <p className="text-xs sm:text-sm font-extrabold text-[#181206] group-hover:text-[#8C5921] transition-colors leading-tight truncate">
                     {cat.title}
                   </p>
-                  <span className="text-[10px] sm:text-[11px] font-black inline-block mt-1 px-2.5 py-0.5 rounded-full bg-[#FFC700] text-[#181206] border border-[#D8A700] shadow-2xs group-hover:bg-[#181206] group-hover:text-[#FFC700] group-hover:border-[#181206] transition-all duration-300 group-hover:scale-105">
+                  <span className="text-[10px] sm:text-[11px] font-black inline-block mt-1 px-2.5 py-0.5 rounded-full bg-[#FFC700] text-[#181206] border border-[#D8A700] shadow-2xs group-hover:bg-[#8C5921] group-hover:text-white group-hover:border-[#8C5921] transition-all duration-300 group-hover:scale-105">
                     {cat.itemCount} items
                   </span>
                 </div>
@@ -564,7 +525,7 @@ function HomePage() {
                   className={cn(
                     "cursor-pointer transition-all duration-300 px-3.5 py-1.5 rounded-full text-xs font-bold border active:scale-95 shadow-2xs",
                     activeCatalogTab === tab.id
-                      ? "bg-[#181206] text-[#FFC700] border-[#181206] shadow-sm ring-2 ring-[#FFC700]/50 scale-105"
+                      ? "bg-[#FFC700] text-[#181206] border-[#D8A700] shadow-sm ring-2 ring-[#8C5921]/30 font-black scale-105"
                       : "bg-white text-[#181206] border-[#E8DEC8] hover:bg-[#FAF3D6] hover:border-[#FFC700]"
                   )}
                 >

@@ -1,17 +1,21 @@
+import { useEffect, useState } from "react";
+
 export type Promo = {
   code: string;
   label: string;
   description: string;
   /** Percentage off the subtotal (0-100). */
-  percentOff?: number;
+  percentOff?: number | undefined;
   /** Flat amount off the subtotal in ₹. */
-  amountOff?: number;
+  amountOff?: number | undefined;
   /** Minimum subtotal (₹) required for the promo to apply. */
-  minSubtotal?: number;
+  minSubtotal?: number | undefined;
   /** Makes shipping free regardless of the usual threshold. */
-  freeShipping?: boolean;
+  freeShipping?: boolean | undefined;
   /** Applied automatically once its conditions are met — no code needed. */
-  automatic?: boolean;
+  automatic?: boolean | undefined;
+  /** Whether the promo is currently enabled. */
+  isActive?: boolean | undefined;
 };
 
 export const promos: Promo[] = [
@@ -20,6 +24,7 @@ export const promos: Promo[] = [
     label: "10% off",
     description: "10% off your order — our 1931 heritage welcome offer.",
     percentOff: 10,
+    isActive: true,
   },
   {
     code: "HING50",
@@ -27,12 +32,14 @@ export const promos: Promo[] = [
     description: "₹50 off orders above ₹399.",
     amountOff: 50,
     minSubtotal: 399,
+    isActive: true,
   },
   {
     code: "FREESHIP",
     label: "Free shipping",
     description: "Free delivery on any order.",
     freeShipping: true,
+    isActive: true,
   },
   {
     code: "BULK15",
@@ -41,15 +48,80 @@ export const promos: Promo[] = [
     percentOff: 15,
     minSubtotal: 999,
     automatic: true,
+    isActive: true,
   },
 ];
 
+const PROMOS_STORAGE_KEY = "yg_live_promos";
+
+export function getLivePromos(): Promo[] {
+  if (typeof window === "undefined") return promos;
+  try {
+    const raw = localStorage.getItem(PROMOS_STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw) as any[];
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        // Map backend or admin input format into clean Promo objects
+        return parsed.map((p) => ({
+          code: String(p.code || "").toUpperCase(),
+          label: p.label || p.code,
+          description: p.description || "",
+          percentOff: p.percentOff !== undefined ? Number(p.percentOff) : p.percent_off !== undefined && p.percent_off !== null ? Number(p.percent_off) : undefined,
+          amountOff: p.amountOff !== undefined ? Number(p.amountOff) : p.amount_off !== undefined && p.amount_off !== null ? Number(p.amount_off) : undefined,
+          minSubtotal: p.minSubtotal !== undefined ? Number(p.minSubtotal) : p.min_subtotal !== undefined && p.min_subtotal !== null ? Number(p.min_subtotal) : undefined,
+          freeShipping: Boolean(p.freeShipping || p.free_shipping),
+          automatic: Boolean(p.automatic),
+          isActive: p.isActive !== undefined ? Boolean(p.isActive) : p.is_active !== undefined ? Boolean(p.is_active) : true,
+        }));
+      }
+    }
+  } catch (e) {
+    console.error("Failed to load live promos:", e);
+  }
+  return promos;
+}
+
+export function saveLivePromos(items: any[]): void {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(PROMOS_STORAGE_KEY, JSON.stringify(items));
+    window.dispatchEvent(new CustomEvent("yg_promos_updated"));
+    window.dispatchEvent(new Event("storage"));
+  } catch (e) {
+    console.error("Failed to save live promos:", e);
+  }
+}
+
+export function useLivePromos(): Promo[] {
+  const [list, setList] = useState<Promo[]>(() => getLivePromos());
+
+  useEffect(() => {
+    setList(getLivePromos());
+
+    const handleUpdate = () => {
+      setList(getLivePromos());
+    };
+
+    window.addEventListener("yg_promos_updated", handleUpdate);
+    window.addEventListener("storage", handleUpdate);
+
+    return () => {
+      window.removeEventListener("yg_promos_updated", handleUpdate);
+      window.removeEventListener("storage", handleUpdate);
+    };
+  }, []);
+
+  return list;
+}
+
 export function findPromo(code: string): Promo | undefined {
   const normalized = code.trim().toUpperCase();
-  return promos.find((p) => p.code === normalized);
+  const all = getLivePromos();
+  return all.find((p) => p.code === normalized && p.isActive !== false);
 }
 
 export function isPromoEligible(promo: Promo, subtotal: number): boolean {
+  if (promo.isActive === false) return false;
   return subtotal >= (promo.minSubtotal ?? 0);
 }
 
@@ -62,8 +134,9 @@ export function discountFor(promo: Promo, subtotal: number): number {
 
 /** Best automatic promo for a given subtotal, if any. */
 export function bestAutomaticPromo(subtotal: number): Promo | undefined {
-  return promos
-    .filter((p) => p.automatic && isPromoEligible(p, subtotal))
+  const all = getLivePromos();
+  return all
+    .filter((p) => p.automatic && p.isActive !== false && isPromoEligible(p, subtotal))
     .sort((a, b) => discountFor(b, subtotal) - discountFor(a, subtotal))[0];
 }
 

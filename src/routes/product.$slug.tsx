@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/accordion";
 import { QuantityStepper } from "@/components/site/QuantityStepper";
 import { ProductCard } from "@/components/site/ProductCard";
-import { formatLabels, formatPrice, getProduct, products } from "@/data/products";
+import { formatLabels, formatPrice, getProduct, products, useLiveProduct, useLiveProducts } from "@/data/products";
 import { useCart } from "@/lib/cart";
 import { SmartImage } from "@/components/site/SmartImage";
 import { ProductImageZoom } from "@/components/site/ProductImageZoom";
@@ -170,7 +170,10 @@ export const Route = createFileRoute("/product/$slug")({
 });
 
 function ProductPage() {
-  const { product } = Route.useLoaderData();
+  const { product: initialProduct } = Route.useLoaderData();
+  const liveProduct = useLiveProduct(initialProduct.slug);
+  const product = liveProduct || initialProduct;
+  const allProducts = useLiveProducts();
   const { add, count, setOpen: setCartOpen } = useCart();
   const navigate = useNavigate();
   useRecentlyViewed(product.slug);
@@ -205,14 +208,14 @@ function ProductPage() {
   const [isCheckingPin, startPinTransition] = useTransition();
 
   const soldOut = product.inStock === false;
-  const related = products.filter((p) => p.slug !== product.slug).slice(0, 4);
+  const related = allProducts.filter((p) => p.slug !== product.slug).slice(0, 4);
 
-  const currentIndex = products.findIndex((p) => p.slug === product.slug);
+  const currentIndex = allProducts.findIndex((p) => p.slug === product.slug);
   const safeIndex = currentIndex === -1 ? 0 : currentIndex;
   const hasPrev = safeIndex > 0;
-  const hasNext = safeIndex < products.length - 1;
-  const prevProduct = hasPrev ? products[safeIndex - 1]! : null;
-  const nextProduct = hasNext ? products[safeIndex + 1]! : null;
+  const hasNext = safeIndex < allProducts.length - 1;
+  const prevProduct = hasPrev ? allProducts[safeIndex - 1]! : null;
+  const nextProduct = hasNext ? allProducts[safeIndex + 1]! : null;
 
   // Always scroll to top when product slug changes so navigation is never clipped
   useEffect(() => {

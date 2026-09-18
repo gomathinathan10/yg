@@ -3,18 +3,14 @@ import { useNavigate } from "@tanstack/react-router";
 import {
   Search,
   ArrowRight,
-  Sparkles,
   ShoppingBag,
   Package,
-  CookingPot,
   History,
   X,
-  Tag,
 } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { formatPrice, products, searchProducts, formatLabels } from "@/data/products";
-import { recipes } from "@/data/recipes";
 import { SmartImage } from "@/components/site/SmartImage";
 
 const QUICK_SUGGESTIONS = [
@@ -26,8 +22,8 @@ const QUICK_SUGGESTIONS = [
   "Vismaya",
   "Health Mix",
   "Sambrani",
-  "Sambar",
-  "Rasam",
+  "Combo Box",
+  "100g",
 ];
 
 export function SearchDialog({
@@ -58,22 +54,9 @@ export function SearchDialog({
     const q = query.trim();
     if (!q) {
       // Show bestsellers and signature products by default
-      return products.filter((p) => p.bestseller || p.format === "powder" || p.format === "cake").slice(0, 5);
+      return products.filter((p) => p.bestseller || p.format === "powder" || p.format === "cake").slice(0, 6);
     }
     return searchProducts(q);
-  }, [query]);
-
-  // Recipe & culinary dish hits
-  const recipeHits = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return recipes.slice(0, 2);
-    return recipes.filter(
-      (r) =>
-        r.title.toLowerCase().includes(q) ||
-        r.blurb.toLowerCase().includes(q) ||
-        r.region.toLowerCase().includes(q) ||
-        r.ingredients.some((ing) => ing.toLowerCase().includes(q))
-    );
   }, [query]);
 
   const handleSelectProduct = (slug: string) => {
@@ -84,21 +67,11 @@ export function SearchDialog({
     });
   };
 
-  const handleSelectRecipe = (heroSlug: string) => {
-    onOpenChange(false);
-    void navigate({
-      to: "/product/$slug",
-      params: { slug: heroSlug },
-    });
-  };
-
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
       if (productHits.length > 0) {
         handleSelectProduct(productHits[0]!.slug);
-      } else if (recipeHits.length > 0) {
-        handleSelectRecipe(recipeHits[0]!.heroSlug);
       } else {
         onOpenChange(false);
         void navigate({ to: "/shop" });
@@ -108,14 +81,14 @@ export function SearchDialog({
     }
   };
 
-  const hasResults = productHits.length > 0 || recipeHits.length > 0;
+  const hasResults = productHits.length > 0;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-xl overflow-hidden p-0 gap-0 rounded-[6px] shadow-2xl border border-[#E8DEC8] bg-white">
         <DialogTitle className="sr-only">Search Y.G Asafoetida</DialogTitle>
         <DialogDescription className="sr-only">
-          Search for hing powders, solid cakes, gluten-free formulations, and South Indian culinary recipes
+          Search for artisanal hing powders, solid cakes, gluten-free formulations, appalam, and wellness mixes
         </DialogDescription>
 
         {/* Search Input Bar */}
@@ -124,7 +97,7 @@ export function SearchDialog({
           <input
             ref={inputRef}
             type="text"
-            placeholder="Search hing, powder, cake, recipes (e.g. 'sambar')..."
+            placeholder="Search hing, powder, cake, granules, appalam..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
@@ -268,47 +241,7 @@ export function SearchDialog({
             </div>
           ) : null}
 
-          {/* Culinary recipes and dishes hits */}
-          {recipeHits.length > 0 ? (
-            <div className="space-y-1.5 pt-2">
-              <p className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground px-2">
-                Traditional Dishes & Culinary Uses
-              </p>
 
-              <div className="space-y-1">
-                {recipeHits.map((r) => (
-                  <button
-                    key={r.slug}
-                    type="button"
-                    onClick={() => handleSelectRecipe(r.heroSlug)}
-                    className="w-full flex items-center gap-3 p-2 rounded-[6px] text-left transition-all hover:bg-[#FAF3D6] group cursor-pointer border border-transparent hover:border-[#E8DEC8]"
-                  >
-                    <div className="h-10 w-10 rounded-[6px] bg-[#FFC700]/10 border border-[#FFC700]/20 flex items-center justify-center shrink-0 text-[#181206]">
-                      <CookingPot className="h-5 w-5" />
-                    </div>
-
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="font-bold text-xs sm:text-sm text-[#181206] group-hover:text-[#181206] transition-colors">
-                          {r.title}
-                        </span>
-                        <span className="text-[10px] text-muted-foreground font-mono">
-                          · {r.minutes} mins
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-muted-foreground line-clamp-1 mt-0.5">
-                        {r.tip || r.blurb}
-                      </p>
-                    </div>
-
-                    <span className="text-[10px] font-bold text-[#181206] shrink-0 flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
-                      Order Hing <ArrowRight className="h-3 w-3" />
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          ) : null}
 
           {/* Quick Destination Links */}
           <div className="pt-2">

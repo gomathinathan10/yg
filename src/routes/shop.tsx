@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ProductCard, type ProductCardMode } from "@/components/site/ProductCard";
-import { formatLabels, products, type Format } from "@/data/products";
+import { formatLabels, products, useLiveProducts, type Format } from "@/data/products";
 import { cn } from "@/lib/utils";
 
 type ShopSearch = {
@@ -121,6 +121,7 @@ const filterCategories: Array<{ id: Format | "all" | "gf"; label: string }> = [
   { id: "powder", label: formatLabels.powder },
   { id: "granules", label: formatLabels.granules },
   { id: "cake", label: formatLabels.cake },
+  { id: "gf", label: "Gluten-Free Pure" },
   { id: "combo", label: formatLabels.combo },
   { id: "wellness", label: formatLabels.wellness },
   { id: "pooja", label: formatLabels.pooja },
@@ -140,7 +141,9 @@ export const PRICE_PRESETS = [
 export type PricePresetId = (typeof PRICE_PRESETS)[number]["id"];
 
 function ShopPage() {
+  const products = useLiveProducts();
   const search = Route.useSearch();
+  const navigate = Route.useNavigate();
   const initialCat = (search.category || search.format || "all") as Format | "all" | "gf";
   const [filter, setFilter] = useState<Format | "all" | "gf">(() => {
     if (filterCategories.some((c) => c.id === initialCat)) {
@@ -150,9 +153,12 @@ function ShopPage() {
   });
 
   useEffect(() => {
-    const target = (search.category || search.format) as Format | "all" | "gf" | undefined;
-    if (target && filterCategories.some((c) => c.id === target)) {
+    const rawTarget = search.category || search.format || "all";
+    const target = rawTarget as Format | "all" | "gf";
+    if (filterCategories.some((c) => c.id === target)) {
       setFilter(target);
+    } else {
+      setFilter("all");
     }
   }, [search.category, search.format]);
 
@@ -188,7 +194,7 @@ function ShopPage() {
       }
     });
     return counts;
-  }, []);
+  }, [products]);
 
   // Price preset counts based on actual variant prices
   const pricePresetCounts = useMemo(() => {
@@ -199,7 +205,7 @@ function ShopPage() {
       }).length;
     });
     return counts;
-  }, []);
+  }, [products]);
 
   const visible = useMemo(() => {
     let list = products.filter((p) => {
@@ -223,7 +229,7 @@ function ShopPage() {
       list = [...list].sort((a, b) => b.rating - a.rating);
     }
     return list;
-  }, [filter, sort, minPrice, maxPrice]);
+  }, [products, filter, sort, minPrice, maxPrice]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12;
@@ -344,6 +350,14 @@ function ShopPage() {
                         type="button"
                         onClick={() => {
                           setFilter(c.id);
+                          void navigate({
+                            search: (prev) => ({
+                              ...prev,
+                              category: c.id === "all" ? undefined : c.id,
+                              format: undefined,
+                            }),
+                            replace: true,
+                          });
                           if (mobileFilterOpen) setMobileFilterOpen(false);
                         }}
                         className={`w-full flex items-center justify-between px-3 py-2 rounded-[6px] text-xs font-semibold transition-all duration-200 text-left cursor-pointer active:scale-98 ${
@@ -356,7 +370,7 @@ function ShopPage() {
                         <span
                           className={`text-[11px] px-2 py-0.5 rounded-full font-mono font-bold transition-all ${
                             active
-                              ? "bg-[#181206] text-[#FFC700] shadow-2xs"
+                              ? "bg-white text-[#8C5921] shadow-2xs border border-[#D8A700]"
                               : "bg-[#FAF3D6] text-[#6E777D]"
                           }`}
                         >
@@ -399,7 +413,7 @@ function ShopPage() {
                         <span
                           className={`text-[11px] px-2 py-0.5 rounded-full font-mono font-bold transition-all ${
                             active
-                              ? "bg-[#181206] text-[#FFC700] shadow-2xs"
+                              ? "bg-white text-[#8C5921] shadow-2xs border border-[#D8A700]"
                               : "bg-[#FAF3D6] text-[#6E777D]"
                           }`}
                         >

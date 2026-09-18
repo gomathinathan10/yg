@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useRouter } from "@tanstack/react-router";
 import {
   Heart,
@@ -18,6 +18,25 @@ import { useCart } from "@/lib/cart";
 import { useWishlist } from "@/lib/wishlist";
 import { ThemeSwitcher } from "@/components/site/ThemeSwitcher";
 import { SearchDialog } from "@/components/site/SearchDialog";
+import { cn } from "@/lib/utils";
+
+export type HeaderCategoryItem = {
+  id: string;
+  label: string;
+  badge?: string;
+};
+
+export const headerCategoryItems: HeaderCategoryItem[] = [
+  { id: "all", label: "All Formulations", badge: "All" },
+  { id: "powder", label: "Compounded Powder" },
+  { id: "cake", label: "Solid Cake & Lump" },
+  { id: "gf", label: "Gluten-Free Pure", badge: "Pure" },
+  { id: "granules", label: "Granules & Pellets" },
+  { id: "wellness", label: "Health Mix (Sathu Maavu)" },
+  { id: "appalam", label: "Crispy Appalam" },
+  { id: "vismaya", label: "Vismaya Ready to Cook" },
+  { id: "pooja", label: "Pooja Sambrani" },
+];
 
 const nav = [
   { to: "/", label: "Home" },
@@ -35,6 +54,31 @@ export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
+  const [mobileCategoriesOpen, setMobileCategoriesOpen] = useState(false);
+
+  const categoryDropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close desktop search-bar dropdown on outside click or Escape
+  useEffect(() => {
+    if (!categoryDropdownOpen) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        categoryDropdownRef.current &&
+        !categoryDropdownRef.current.contains(e.target as Node)
+      ) {
+        setCategoryDropdownOpen(false);
+      }
+    };
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setCategoryDropdownOpen(false);
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscape);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [categoryDropdownOpen]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -135,28 +179,71 @@ export function Header() {
                         key={item.to}
                         to={item.to}
                         onClick={() => setMenuOpen(false)}
-                        className="bg-[#FFC700] text-[#181206] hover:bg-[#181206] hover:text-[#FFC700] hover:border-[#181206] rounded-[6px] px-3.5 py-2.5 text-sm font-bold border border-[#D8A700] shadow-xs transition-all flex items-center justify-between"
-                        activeProps={{ className: "!bg-[#181206] !text-[#FFC700] !border-[#181206] font-black ring-2 ring-[#FFC700]/70" }}
+                        className="bg-[#FFC700] text-[#181206] hover:bg-[#FFE57F] hover:border-[#C99600] rounded-[6px] px-3.5 py-2.5 text-sm font-bold border border-[#D8A700] shadow-xs transition-all flex items-center justify-between"
+                        activeProps={{ className: "!bg-white !text-[#8C5921] !border-[#8C5921] font-black ring-2 ring-[#FFC700]/80 shadow-xs" }}
                       >
                         <span>{item.label}</span>
                       </Link>
                     ))}
+
+                    {/* Mobile Categories Accordion Button */}
+                    <div className="pt-0.5">
+                      <button
+                        type="button"
+                        onClick={() => setMobileCategoriesOpen((o) => !o)}
+                        className="w-full bg-[#FFC700] text-[#181206] hover:bg-[#FFE57F] hover:border-[#C99600] rounded-[6px] px-3.5 py-2.5 text-sm font-bold border border-[#D8A700] shadow-xs transition-all flex items-center justify-between cursor-pointer active:scale-98"
+                      >
+                        <span className="flex items-center gap-2">
+                          <Menu className="h-4 w-4 text-[#181206]" />
+                          <span>Shop by Category</span>
+                        </span>
+                        <ChevronDown
+                          className={cn(
+                            "h-4 w-4 text-[#5A6560] transition-transform duration-200",
+                            mobileCategoriesOpen && "rotate-180"
+                          )}
+                        />
+                      </button>
+                      {mobileCategoriesOpen && (
+                        <div className="mt-2 ml-1 pl-3 border-l-2 border-[#FFC700] flex flex-col gap-1.5 py-1 text-xs font-semibold animate-in fade-in-50 duration-200">
+                          {headerCategoryItems.map((cat) => (
+                            <Link
+                              key={cat.id}
+                              to="/shop"
+                              search={{ category: cat.id === "all" ? undefined : cat.id }}
+                              onClick={() => {
+                                setMenuOpen(false);
+                                setMobileCategoriesOpen(false);
+                              }}
+                              className="py-1 px-2 rounded text-[#181206] hover:bg-[#FAF3D6] hover:text-[#8C5921] transition-colors flex items-center justify-between"
+                            >
+                              <span>{cat.label}</span>
+                              {cat.badge && (
+                                <span className="text-[10px] bg-[#FFC700] text-[#181206] px-1.5 py-0.2 rounded font-bold">
+                                  {cat.badge}
+                                </span>
+                              )}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                     <Link
                       to="/custom-branding"
                       onClick={() => setMenuOpen(false)}
-                      className="bg-[#FFC700] text-[#181206] hover:bg-[#181206] hover:text-[#FFC700] hover:border-[#181206] rounded-[6px] px-3.5 py-2.5 text-sm font-bold border border-[#D8A700] shadow-xs transition-all mt-1 flex items-center justify-between"
+                      className="bg-[#FFC700] text-[#181206] hover:bg-[#FFE57F] hover:border-[#C99600] rounded-[6px] px-3.5 py-2.5 text-sm font-bold border border-[#D8A700] shadow-xs transition-all mt-1 flex items-center justify-between"
                     >
                       <span>Enquire for Bulk Order</span>
                     </Link>
                     <Link
                       to="/wishlist"
                       onClick={() => setMenuOpen(false)}
-                      className="bg-[#FFC700] text-[#181206] hover:bg-[#181206] hover:text-[#FFC700] hover:border-[#181206] rounded-[6px] px-3.5 py-2.5 text-sm font-bold border border-[#D8A700] shadow-xs transition-all flex items-center justify-between"
-                      activeProps={{ className: "!bg-[#181206] !text-[#FFC700] !border-[#181206] font-black ring-2 ring-[#FFC700]/70" }}
+                      className="bg-[#FFC700] text-[#181206] hover:bg-[#FFE57F] hover:border-[#C99600] rounded-[6px] px-3.5 py-2.5 text-sm font-bold border border-[#D8A700] shadow-xs transition-all flex items-center justify-between"
+                      activeProps={{ className: "!bg-white !text-[#8C5921] !border-[#8C5921] font-black ring-2 ring-[#FFC700]/80 shadow-xs" }}
                     >
                       <span>Wishlist</span>
                       {wishlist.slugs.length ? (
-                        <span className="rounded-full bg-[#181206] text-[#FFC700] text-xs font-bold px-2 py-0.5">
+                        <span className="rounded-full bg-[#8C5921] text-white text-xs font-bold px-2 py-0.5">
                           {wishlist.slugs.length}
                         </span>
                       ) : null}
@@ -164,8 +251,8 @@ export function Header() {
                     <Link
                       to="/track"
                       onClick={() => setMenuOpen(false)}
-                      className="bg-[#FFC700] text-[#181206] hover:bg-[#181206] hover:text-[#FFC700] hover:border-[#181206] rounded-[6px] px-3.5 py-2.5 text-sm font-bold border border-[#D8A700] shadow-xs transition-all"
-                      activeProps={{ className: "!bg-[#181206] !text-[#FFC700] !border-[#181206] font-black ring-2 ring-[#FFC700]/70" }}
+                      className="bg-[#FFC700] text-[#181206] hover:bg-[#FFE57F] hover:border-[#C99600] rounded-[6px] px-3.5 py-2.5 text-sm font-bold border border-[#D8A700] shadow-xs transition-all"
+                      activeProps={{ className: "!bg-white !text-[#8C5921] !border-[#8C5921] font-black ring-2 ring-[#FFC700]/80 shadow-xs" }}
                     >
                       Track Order
                     </Link>
@@ -193,90 +280,46 @@ export function Header() {
 
           {/* Desktop Search Bar */}
           <div className="hidden lg:flex items-center flex-1 max-w-2xl mx-4">
-            <div className="flex w-full items-center bg-white rounded-[6px] overflow-hidden p-1 shadow-xs border border-black/15 relative">
-              <div className="relative">
+            <div className="flex w-full items-center bg-white rounded-[6px] p-1 shadow-xs border border-black/15 relative">
+              <div className="relative" ref={categoryDropdownRef}>
                 <button
                   type="button"
                   onClick={() => setCategoryDropdownOpen((o) => !o)}
-                  className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-[#181206] hover:text-[#526800] transition-colors shrink-0 cursor-pointer"
+                  aria-expanded={categoryDropdownOpen}
+                  aria-haspopup="true"
+                  className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-[#181206] hover:text-[#8C5921] transition-colors shrink-0 cursor-pointer select-none"
                 >
                   <Menu className="h-4 w-4 text-[#181206]" />
                   <span>Categories</span>
-                  <ChevronDown className="h-3 w-3 text-[#5A6560]" />
+                  <ChevronDown
+                    className={cn(
+                      "h-3 w-3 text-[#5A6560] transition-transform duration-200",
+                      categoryDropdownOpen && "rotate-180 text-[#181206]"
+                    )}
+                  />
                 </button>
                 {categoryDropdownOpen && (
-                  <div className="absolute top-full left-0 mt-1.5 w-52 bg-white border border-[#E8DEC8] rounded-[6px] shadow-lg py-1.5 z-50 text-[#181206]">
-                    <Link
-                      to="/shop"
-                      onClick={() => setCategoryDropdownOpen(false)}
-                      className="block px-3.5 py-1.5 text-xs hover:bg-[#FAF3D6] hover:text-black font-semibold"
-                    >
-                      All Formulations
-                    </Link>
-                    <Link
-                      to="/shop"
-                      search={{ category: "powder" }}
-                      onClick={() => setCategoryDropdownOpen(false)}
-                      className="block px-3.5 py-1.5 text-xs hover:bg-[#FAF3D6] hover:text-black font-semibold"
-                    >
-                      Compounded Powder
-                    </Link>
-                    <Link
-                      to="/shop"
-                      search={{ category: "cake" }}
-                      onClick={() => setCategoryDropdownOpen(false)}
-                      className="block px-3.5 py-1.5 text-xs hover:bg-[#FAF3D6] hover:text-black font-semibold"
-                    >
-                      Solid Cake &amp; Lump
-                    </Link>
-                    <Link
-                      to="/shop"
-                      search={{ category: "gf" }}
-                      onClick={() => setCategoryDropdownOpen(false)}
-                      className="block px-3.5 py-1.5 text-xs hover:bg-[#FAF3D6] hover:text-black font-semibold"
-                    >
-                      Gluten-Free Hing
-                    </Link>
-                    <Link
-                      to="/shop"
-                      search={{ category: "granules" }}
-                      onClick={() => setCategoryDropdownOpen(false)}
-                      className="block px-3.5 py-1.5 text-xs hover:bg-[#FAF3D6] hover:text-black font-semibold"
-                    >
-                      Granules &amp; Pellets
-                    </Link>
-                    <Link
-                      to="/shop"
-                      search={{ category: "wellness" }}
-                      onClick={() => setCategoryDropdownOpen(false)}
-                      className="block px-3.5 py-1.5 text-xs hover:bg-[#FAF3D6] hover:text-black font-semibold"
-                    >
-                      Health Mix (Sathu Maavu)
-                    </Link>
-                    <Link
-                      to="/shop"
-                      search={{ category: "appalam" }}
-                      onClick={() => setCategoryDropdownOpen(false)}
-                      className="block px-3.5 py-1.5 text-xs hover:bg-[#FAF3D6] hover:text-black font-semibold"
-                    >
-                      Crispy Appalam
-                    </Link>
-                    <Link
-                      to="/shop"
-                      search={{ category: "vismaya" }}
-                      onClick={() => setCategoryDropdownOpen(false)}
-                      className="block px-3.5 py-1.5 text-xs hover:bg-[#FAF3D6] hover:text-black font-semibold"
-                    >
-                      Vismaya Ready to Cook
-                    </Link>
-                    <Link
-                      to="/shop"
-                      search={{ category: "pooja" }}
-                      onClick={() => setCategoryDropdownOpen(false)}
-                      className="block px-3.5 py-1.5 text-xs hover:bg-[#FAF3D6] hover:text-black font-semibold"
-                    >
-                      Pooja Sambrani
-                    </Link>
+                  <div className="absolute top-full left-0 mt-2 w-56 bg-white border border-[#E8DEC8] rounded-xl shadow-xl py-1.5 z-50 text-[#181206] animate-in fade-in-50 zoom-in-95 duration-150">
+                    <div className="py-1">
+                      {headerCategoryItems.map((cat) => (
+                        <Link
+                          key={cat.id}
+                          to="/shop"
+                          search={{ category: cat.id === "all" ? undefined : cat.id }}
+                          onClick={() => setCategoryDropdownOpen(false)}
+                          className="flex items-center justify-between px-3.5 py-2 text-xs hover:bg-[#FAF3D6] hover:text-[#8C5921] font-semibold transition-colors border-b border-gray-50 last:border-b-0"
+                        >
+                          <span className={cat.id === "all" ? "font-bold text-[#181206]" : ""}>
+                            {cat.label}
+                          </span>
+                          {cat.badge && (
+                            <span className="text-[10px] bg-[#FFC700] text-[#181206] px-1.5 py-0.5 rounded font-mono font-bold">
+                              {cat.badge}
+                            </span>
+                          )}
+                        </Link>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
@@ -364,17 +407,17 @@ export function Header() {
       </div>
 
       {/* ======================================================== */}
-      {/* 3. LOWER NAVIGATION BAR (Neon Gold Button Boxes)         */}
+      {/* 3. LOWER NAVIGATION BAR (Warm Heritage Navigation Strip) */}
       {/* ======================================================== */}
       <div className="sticky top-0 bg-[#FAF3D6]/95 backdrop-blur-xs border-t border-b border-[#E8DEC8] shadow-xs z-30 py-1 sm:py-1.5">
         <div className="container-page flex items-center justify-between min-h-11 sm:min-h-12 px-3 sm:px-6">
-          <nav className="flex items-center gap-2 sm:gap-2.5 overflow-x-auto scrollbar-none py-1">
+          <nav className="flex items-center gap-2 sm:gap-2.5 lg:gap-3 overflow-x-auto scrollbar-none py-1">
             {nav.map((item) => (
               <Link
                 key={item.to}
                 to={item.to}
-                className="bg-[#FFC700] text-[#181206] hover:bg-[#181206] hover:text-[#FFC700] hover:border-[#181206] font-bold text-xs sm:text-sm tracking-wide whitespace-nowrap px-3 sm:px-3.5 py-1.5 rounded-[6px] border border-[#D8A700] shadow-2xs hover:shadow-xs transition-all cursor-pointer active:scale-95"
-                activeProps={{ className: "!bg-[#181206] !text-[#FFC700] !border-[#181206] font-black shadow-sm ring-2 ring-[#FFC700]/70" }}
+                className="bg-[#FFC700] text-[#181206] hover:bg-[#FFE57F] hover:border-[#C99600] font-bold text-xs sm:text-sm tracking-wide whitespace-nowrap px-3 sm:px-3.5 py-1.5 rounded-[6px] border border-[#D8A700] shadow-2xs hover:shadow-xs transition-all cursor-pointer active:scale-95"
+                activeProps={{ className: "!bg-white !text-[#8C5921] !border-[#8C5921] font-black shadow-xs ring-2 ring-[#FFC700]/80" }}
               >
                 {item.label}
               </Link>

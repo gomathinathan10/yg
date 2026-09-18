@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, CheckCircle2, Mail, MapPin, Phone, ShieldCheck, Sparkles, Truck } from "lucide-react";
+import { ArrowRight, CheckCircle2, Lock, Mail, MapPin, Phone, ShieldCheck, Sparkles, Truck } from "lucide-react";
 import { toast } from "sonner";
 
 export function Footer() {
@@ -192,6 +192,12 @@ export function Footer() {
                 My Account
               </Link>
             </li>
+            <li className="pt-1 border-t border-white/10">
+              <Link to="/admin" className="hover:text-[#FFC700] transition-colors inline-flex items-center gap-1.5 text-[#FFC700]/90 font-medium">
+                <Lock className="h-3 w-3 text-[#FFC700]" />
+                <span>Admin Portal</span>
+              </Link>
+            </li>
           </ul>
         </div>
 
@@ -241,7 +247,7 @@ export function Footer() {
         <div className="container-page flex flex-col sm:flex-row items-center justify-between gap-3 px-4 sm:px-6 text-xs text-white/60">
           <p>© {new Date().getFullYear()} Y.G Asafoetida. All rights reserved.</p>
 
-          <nav aria-label="Policies" className="flex flex-wrap items-center gap-4 text-xs">
+          <nav aria-label="Policies and Administration" className="flex flex-wrap items-center gap-4 text-xs">
             <Link to="/policies/$slug" params={{ slug: "shipping" }} className="hover:text-white transition-colors">
               Shipping Policy
             </Link>
@@ -253,6 +259,13 @@ export function Footer() {
             </Link>
             <Link to="/policies/$slug" params={{ slug: "terms" }} className="hover:text-white transition-colors">
               Terms &amp; Conditions
+            </Link>
+            <Link
+              to="/admin"
+              className="inline-flex items-center gap-1 text-[#FFC700]/80 hover:text-[#FFC700] font-semibold transition-colors pl-2 border-l border-white/15"
+            >
+              <Lock className="h-3 w-3" />
+              <span>Admin Login</span>
             </Link>
           </nav>
 

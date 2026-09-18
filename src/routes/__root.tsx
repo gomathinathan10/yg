@@ -96,6 +96,11 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
           Something went wrong on our end — your basket and orders are safe. Try again, or reach
           us at care@ygasafoetida.in if it keeps happening.
         </p>
+        {error && (
+          <div className="mt-4 p-3 rounded-lg bg-destructive/10 text-destructive text-xs font-mono text-left max-h-48 overflow-auto border border-destructive/20">
+            <strong>Error Details:</strong> {error.message || String(error)}
+          </div>
+        )}
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
             onClick={() => {
