@@ -21,16 +21,23 @@ export const subscribeStockAlertServerFn = async ({
   });
 };
 
-export const adminListStockAlertsServerFn = async (): Promise<DbAlert[]> => {
-  return apiFetch<DbAlert[]>("/api/alerts");
+export const adminListStockAlertsServerFn = async ({
+  data,
+}: {
+  data?: { adminToken?: string };
+} = {}): Promise<DbAlert[]> => {
+  return apiFetch<DbAlert[]>("/api/alerts", {
+    headers: data?.adminToken ? { "x-admin-token": data.adminToken } : {},
+  });
 };
 
 export const adminNotifyStockAlertServerFn = async ({
   data,
 }: {
-  data: { id: string };
+  data: { id: string; adminToken?: string };
 }): Promise<{ ok: boolean }> => {
   return apiFetch<{ ok: boolean }>(`/api/alerts/${data.id}/notify`, {
     method: "POST",
+    headers: data.adminToken ? { "x-admin-token": data.adminToken } : {},
   });
 };

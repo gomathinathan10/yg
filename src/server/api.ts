@@ -62,8 +62,31 @@ export async function handleApiRequest(request: Request): Promise<Response | nul
       return json({ ok: true, token: getAdminToken() });
     }
 
+    // ==================== CALCULATION METRICS ====================
+    // GET /api/metrics
+    if (path === "/api/metrics" && method === "GET") {
+      return json(store.getCalcMetrics());
+    }
+
+    // POST /api/metrics
+    if (path === "/api/metrics" && method === "POST") {
+      if (!requireAdmin(request)) return json({ ok: false, error: "Unauthorized" }, 401);
+      const body = await parseBody<any>(request);
+      if (!body) return json({ ok: false, error: "Metrics payload required" }, 400);
+      const metrics = store.saveCalcMetrics(body);
+      return json({ ok: true, metrics });
+    }
+
+    // DELETE /api/metrics (reset to defaults)
+    if (path === "/api/metrics" && method === "DELETE") {
+      if (!requireAdmin(request)) return json({ ok: false, error: "Unauthorized" }, 401);
+      const ok = store.resetCalcMetrics();
+      return json({ ok });
+    }
+
     // ==================== ANALYTICS ====================
     if (path === "/api/analytics" && method === "GET") {
+      if (!requireAdmin(request)) return json({ ok: false, error: "Unauthorized" }, 401);
       return json(store.getDashboardStats());
     }
 
@@ -87,6 +110,7 @@ export async function handleApiRequest(request: Request): Promise<Response | nul
     // PATCH /api/orders/:id/status
     const orderStatusMatch = path.match(/^\/api\/orders\/([A-Za-z0-9_-]+)\/status$/);
     if (orderStatusMatch && method === "PATCH") {
+      if (!requireAdmin(request)) return json({ ok: false, error: "Unauthorized" }, 401);
       const id = orderStatusMatch[1]!;
       const body = await parseBody<{ status: string }>(request);
       if (!body?.status) return json({ ok: false, error: "Status required" }, 400);
@@ -97,6 +121,7 @@ export async function handleApiRequest(request: Request): Promise<Response | nul
     // POST /api/orders/:id/resolve
     const orderResolveMatch = path.match(/^\/api\/orders\/([A-Za-z0-9_-]+)\/resolve$/);
     if (orderResolveMatch && method === "POST") {
+      if (!requireAdmin(request)) return json({ ok: false, error: "Unauthorized" }, 401);
       const id = orderResolveMatch[1]!;
       const body = await parseBody<{ resolution: any }>(request);
       if (!body?.resolution) return json({ ok: false, error: "Resolution required" }, 400);
@@ -106,6 +131,7 @@ export async function handleApiRequest(request: Request): Promise<Response | nul
 
     // DELETE /api/orders/:id
     if (orderIdMatch && method === "DELETE") {
+      if (!requireAdmin(request)) return json({ ok: false, error: "Unauthorized" }, 401);
       const id = orderIdMatch[1]!;
       const ok = store.deleteOrder(id);
       return json({ ok });
@@ -113,6 +139,7 @@ export async function handleApiRequest(request: Request): Promise<Response | nul
 
     // GET /api/orders
     if (path === "/api/orders" && method === "GET") {
+      if (!requireAdmin(request)) return json({ ok: false, error: "Unauthorized" }, 401);
       return json(store.listOrders());
     }
 
@@ -128,6 +155,7 @@ export async function handleApiRequest(request: Request): Promise<Response | nul
 
     // DELETE /api/orders (clear all)
     if (path === "/api/orders" && method === "DELETE") {
+      if (!requireAdmin(request)) return json({ ok: false, error: "Unauthorized" }, 401);
       const ok = store.clearAllOrders();
       return json({ ok });
     }
@@ -238,6 +266,7 @@ export async function handleApiRequest(request: Request): Promise<Response | nul
     // PATCH /api/reviews/:id
     const revIdMatch = path.match(/^\/api\/reviews\/([A-Za-z0-9_-]+)$/);
     if (revIdMatch && method === "PATCH") {
+      if (!requireAdmin(request)) return json({ ok: false, error: "Unauthorized" }, 401);
       const id = revIdMatch[1]!;
       const body = await parseBody<{ status: "pending" | "published" | "rejected" }>(request);
       if (!body?.status) return json({ ok: false, error: "Status required" }, 400);
@@ -247,6 +276,7 @@ export async function handleApiRequest(request: Request): Promise<Response | nul
 
     // DELETE /api/reviews/:id
     if (revIdMatch && method === "DELETE") {
+      if (!requireAdmin(request)) return json({ ok: false, error: "Unauthorized" }, 401);
       const id = revIdMatch[1]!;
       const ok = store.deleteReview(id);
       return json({ ok });
@@ -273,6 +303,7 @@ export async function handleApiRequest(request: Request): Promise<Response | nul
     // PATCH /api/questions/:id
     const qIdMatch = path.match(/^\/api\/questions\/([A-Za-z0-9_-]+)$/);
     if (qIdMatch && method === "PATCH") {
+      if (!requireAdmin(request)) return json({ ok: false, error: "Unauthorized" }, 401);
       const id = qIdMatch[1]!;
       const body = await parseBody<{ answer: string; answeredBy?: string }>(request);
       if (!body?.answer) return json({ ok: false, error: "Answer required" }, 400);
@@ -282,6 +313,7 @@ export async function handleApiRequest(request: Request): Promise<Response | nul
 
     // DELETE /api/questions/:id
     if (qIdMatch && method === "DELETE") {
+      if (!requireAdmin(request)) return json({ ok: false, error: "Unauthorized" }, 401);
       const id = qIdMatch[1]!;
       const ok = store.deleteQuestion(id);
       return json({ ok });
@@ -308,6 +340,7 @@ export async function handleApiRequest(request: Request): Promise<Response | nul
     // PATCH /api/tickets/:id
     const ticketIdMatch = path.match(/^\/api\/tickets\/([A-Za-z0-9_-]+)$/);
     if (ticketIdMatch && method === "PATCH") {
+      if (!requireAdmin(request)) return json({ ok: false, error: "Unauthorized" }, 401);
       const id = ticketIdMatch[1]!;
       const body = await parseBody<{ status: any; reply?: string | null }>(request);
       if (!body?.status) return json({ ok: false, error: "Status required" }, 400);
@@ -317,6 +350,7 @@ export async function handleApiRequest(request: Request): Promise<Response | nul
 
     // GET /api/tickets
     if (path === "/api/tickets" && method === "GET") {
+      if (!requireAdmin(request)) return json({ ok: false, error: "Unauthorized" }, 401);
       const status = url.searchParams.get("status") || undefined;
       return json(store.listTickets(status));
     }
@@ -335,6 +369,7 @@ export async function handleApiRequest(request: Request): Promise<Response | nul
     // POST /api/alerts/:id/notify
     const alertIdMatch = path.match(/^\/api\/alerts\/([A-Za-z0-9_-]+)\/notify$/);
     if (alertIdMatch && method === "POST") {
+      if (!requireAdmin(request)) return json({ ok: false, error: "Unauthorized" }, 401);
       const id = alertIdMatch[1]!;
       const ok = store.markAlertNotified(id);
       return json({ ok });
@@ -342,6 +377,7 @@ export async function handleApiRequest(request: Request): Promise<Response | nul
 
     // GET /api/alerts
     if (path === "/api/alerts" && method === "GET") {
+      if (!requireAdmin(request)) return json({ ok: false, error: "Unauthorized" }, 401);
       const slug = url.searchParams.get("slug") || undefined;
       return json(store.listStockAlerts(slug));
     }
@@ -400,6 +436,7 @@ export async function handleApiRequest(request: Request): Promise<Response | nul
     // PATCH /api/promos/:code
     const promoCodeMatch = path.match(/^\/api\/promos\/([A-Za-z0-9_-]+)$/);
     if (promoCodeMatch && method === "PATCH") {
+      if (!requireAdmin(request)) return json({ ok: false, error: "Unauthorized" }, 401);
       const code = promoCodeMatch[1]!;
       const body = await parseBody<{ isActive: boolean }>(request);
       const ok = store.togglePromo(code, body?.isActive ?? true);
@@ -408,6 +445,7 @@ export async function handleApiRequest(request: Request): Promise<Response | nul
 
     // DELETE /api/promos/:code
     if (promoCodeMatch && method === "DELETE") {
+      if (!requireAdmin(request)) return json({ ok: false, error: "Unauthorized" }, 401);
       const code = promoCodeMatch[1]!;
       const ok = store.deletePromo(code);
       return json({ ok });
@@ -421,6 +459,7 @@ export async function handleApiRequest(request: Request): Promise<Response | nul
 
     // POST /api/promos
     if (path === "/api/promos" && method === "POST") {
+      if (!requireAdmin(request)) return json({ ok: false, error: "Unauthorized" }, 401);
       const body = await parseBody<any>(request);
       if (!body?.code || !body?.label) {
         return json({ ok: false, error: "Code and label required" }, 400);

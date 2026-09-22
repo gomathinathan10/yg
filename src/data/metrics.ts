@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { getCalcMetricsServerFn, type DbCalcMetrics } from "@/functions/metrics";
 
 export interface CalculationMetrics {
   freeShippingThreshold: number;
@@ -30,75 +31,77 @@ export const DEFAULT_METRICS: CalculationMetrics = {
   wholesaleTier3Discount: 25,
 };
 
-const STORAGE_KEY = "yg_calc_metrics";
-
-export function getLiveMetrics(): CalculationMetrics {
-  if (typeof window === "undefined") return DEFAULT_METRICS;
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      if (parsed && typeof parsed === "object") {
-        return {
-          ...DEFAULT_METRICS,
-          ...parsed,
-          freeShippingThreshold: Number(parsed.freeShippingThreshold ?? DEFAULT_METRICS.freeShippingThreshold),
-          standardDeliveryFee: Number(parsed.standardDeliveryFee ?? DEFAULT_METRICS.standardDeliveryFee),
-          expressDeliveryFee: Number(parsed.expressDeliveryFee ?? DEFAULT_METRICS.expressDeliveryFee),
-          codHandlingFee: Number(parsed.codHandlingFee ?? DEFAULT_METRICS.codHandlingFee),
-          gstPercentage: Number(parsed.gstPercentage ?? DEFAULT_METRICS.gstPercentage),
-        };
-      }
-    }
-  } catch (e) {
-    console.error("Failed to load calculation metrics:", e);
-  }
-  return DEFAULT_METRICS;
+export function dbMetricsToMetrics(m: DbCalcMetrics): CalculationMetrics {
+  return {
+    freeShippingThreshold: Number(m.free_shipping_threshold),
+    standardDeliveryFee: Number(m.standard_delivery_fee),
+    expressDeliveryFee: Number(m.express_delivery_fee),
+    codHandlingFee: Number(m.cod_handling_fee),
+    gstPercentage: Number(m.gst_percentage),
+    hsnCode: m.hsn_code,
+    wholesaleTier1MinKg: Number(m.wholesale_tier1_min_kg),
+    wholesaleTier1Discount: Number(m.wholesale_tier1_discount),
+    wholesaleTier2MinKg: Number(m.wholesale_tier2_min_kg),
+    wholesaleTier2Discount: Number(m.wholesale_tier2_discount),
+    wholesaleTier3MinKg: Number(m.wholesale_tier3_min_kg),
+    wholesaleTier3Discount: Number(m.wholesale_tier3_discount),
+  };
 }
 
-export function saveLiveMetrics(metrics: CalculationMetrics): void {
-  if (typeof window === "undefined") return;
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(metrics));
-    window.dispatchEvent(new CustomEvent("yg_calc_metrics_updated", { detail: metrics }));
-    window.dispatchEvent(new Event("storage"));
-  } catch (e) {
-    console.error("Failed to save calculation metrics:", e);
-  }
+export function metricsToDbMetrics(m: CalculationMetrics): DbCalcMetrics {
+  return {
+    free_shipping_threshold: m.freeShippingThreshold,
+    standard_delivery_fee: m.standardDeliveryFee,
+    express_delivery_fee: m.expressDeliveryFee,
+    cod_handling_fee: m.codHandlingFee,
+    gst_percentage: m.gstPercentage,
+    hsn_code: m.hsnCode,
+    wholesale_tier1_min_kg: m.wholesaleTier1MinKg,
+    wholesale_tier1_discount: m.wholesaleTier1Discount,
+    wholesale_tier2_min_kg: m.wholesaleTier2MinKg,
+    wholesale_tier2_discount: m.wholesaleTier2Discount,
+    wholesale_tier3_min_kg: m.wholesaleTier3MinKg,
+    wholesale_tier3_discount: m.wholesaleTier3Discount,
+  };
 }
 
-export function resetLiveMetrics(): void {
-  if (typeof window === "undefined") return;
+/**
+ * Fetches the real, admin-managed shipping/GST/wholesale metrics from the
+ * server so checkout pricing always reflects whatever an administrator has
+ * saved — for every visitor, not just the browser that made the edit.
+ * Falls back to DEFAULT_METRICS if none are saved yet or the request fails.
+ */
+export async function getLiveMetrics(): Promise<CalculationMetrics> {
   try {
-    localStorage.removeItem(STORAGE_KEY);
-    window.dispatchEvent(new CustomEvent("yg_calc_metrics_updated", { detail: DEFAULT_METRICS }));
-    window.dispatchEvent(new Event("storage"));
+    const db = await getCalcMetricsServerFn();
+    return db ? dbMetricsToMetrics(db) : DEFAULT_METRICS;
   } catch (e) {
-    console.error("Failed to reset calculation metrics:", e);
+    console.error("Failed to load live calculation metrics, using defaults:", e);
+    return DEFAULT_METRICS;
   }
 }
 
 /**
  * Reactive React hook for Calculation Metrics.
- * Automatically re-renders components whenever metrics are modified in the Admin Portal.
+ * Re-fetches on mount and whenever "yg_calc_metrics_updated" fires
+ * (dispatched by the Admin Portal right after a save/reset).
  */
 export function useLiveMetrics(): CalculationMetrics {
-  const [metrics, setMetrics] = useState<CalculationMetrics>(() => getLiveMetrics());
+  const [metrics, setMetrics] = useState<CalculationMetrics>(DEFAULT_METRICS);
 
   useEffect(() => {
-    // Sync on mount
-    setMetrics(getLiveMetrics());
-
-    const handleUpdate = () => {
-      setMetrics(getLiveMetrics());
+    let cancelled = false;
+    const load = () => {
+      getLiveMetrics().then((data) => {
+        if (!cancelled) setMetrics(data);
+      });
     };
+    load();
 
-    window.addEventListener("yg_calc_metrics_updated", handleUpdate);
-    window.addEventListener("storage", handleUpdate);
-
+    window.addEventListener("yg_calc_metrics_updated", load);
     return () => {
-      window.removeEventListener("yg_calc_metrics_updated", handleUpdate);
-      window.removeEventListener("storage", handleUpdate);
+      cancelled = true;
+      window.removeEventListener("yg_calc_metrics_updated", load);
     };
   }, []);
 

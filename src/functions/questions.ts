@@ -1,5 +1,9 @@
 import { apiFetch } from "@/lib/api-client";
 
+function adminHeaders(adminToken?: string): Record<string, string> {
+  return adminToken ? { "x-admin-token": adminToken } : {};
+}
+
 export type DbQuestion = {
   id: string;
   slug: string;
@@ -38,22 +42,23 @@ export const submitQuestionServerFn = async ({
 export const adminListQuestionsServerFn = async ({
   data,
 }: {
-  data?: { slug?: string; status?: "pending" | "published" | "all" };
+  data?: { slug?: string; status?: "pending" | "published" | "all"; adminToken?: string };
 } = {}): Promise<DbQuestion[]> => {
   const params = new URLSearchParams();
   if (data?.slug) params.set("slug", data.slug);
   if (data?.status) params.set("status", data.status);
   const q = params.toString() ? `?${params.toString()}` : "";
-  return apiFetch<DbQuestion[]>(`/api/questions${q}`);
+  return apiFetch<DbQuestion[]>(`/api/questions${q}`, { headers: adminHeaders(data?.adminToken) });
 };
 
 export const adminAnswerQuestionServerFn = async ({
   data,
 }: {
-  data: { id: string; answer: string; answeredBy?: string | undefined };
+  data: { id: string; answer: string; answeredBy?: string | undefined; adminToken?: string };
 }) => {
   await apiFetch(`/api/questions/${data.id}`, {
     method: "PATCH",
+    headers: adminHeaders(data.adminToken),
     body: JSON.stringify({ answer: data.answer, answeredBy: data.answeredBy }),
   });
   return { ok: true, id: data.id };
@@ -62,8 +67,8 @@ export const adminAnswerQuestionServerFn = async ({
 export const adminDeleteQuestionServerFn = async ({
   data,
 }: {
-  data: { id: string };
+  data: { id: string; adminToken?: string };
 }) => {
-  await apiFetch(`/api/questions/${data.id}`, { method: "DELETE" });
+  await apiFetch(`/api/questions/${data.id}`, { method: "DELETE", headers: adminHeaders(data.adminToken) });
   return { ok: true, id: data.id };
 };

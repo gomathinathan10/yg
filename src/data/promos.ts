@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { getPromosServerFn, type DbPromo } from "@/functions/promos";
 
 export type Promo = {
   code: string;
@@ -18,6 +19,7 @@ export type Promo = {
   isActive?: boolean | undefined;
 };
 
+/** Bundled fallback, used only as a seed and if the live fetch fails. */
 export const promos: Promo[] = [
   {
     code: "HERITAGE10",
@@ -52,72 +54,69 @@ export const promos: Promo[] = [
   },
 ];
 
-const PROMOS_STORAGE_KEY = "yg_live_promos";
+function dbPromoToPromo(p: DbPromo): Promo {
+  return {
+    code: p.code,
+    label: p.label,
+    description: p.description,
+    percentOff: p.percent_off ?? undefined,
+    amountOff: p.amount_off ?? undefined,
+    minSubtotal: p.min_subtotal ?? undefined,
+    freeShipping: p.free_shipping === 1,
+    automatic: p.automatic === 1,
+    isActive: p.is_active === 1,
+  };
+}
 
-export function getLivePromos(): Promo[] {
-  if (typeof window === "undefined") return promos;
+/**
+ * Fetches the real, admin-managed active promo codes from the server so
+ * checkout always reflects whatever an administrator has saved — for every
+ * visitor, not just the browser that made the edit. Falls back to the
+ * bundled list if the request fails.
+ */
+export async function getLivePromos(): Promise<Promo[]> {
   try {
-    const raw = localStorage.getItem(PROMOS_STORAGE_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw) as any[];
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        // Map backend or admin input format into clean Promo objects
-        return parsed.map((p) => ({
-          code: String(p.code || "").toUpperCase(),
-          label: p.label || p.code,
-          description: p.description || "",
-          percentOff: p.percentOff !== undefined ? Number(p.percentOff) : p.percent_off !== undefined && p.percent_off !== null ? Number(p.percent_off) : undefined,
-          amountOff: p.amountOff !== undefined ? Number(p.amountOff) : p.amount_off !== undefined && p.amount_off !== null ? Number(p.amount_off) : undefined,
-          minSubtotal: p.minSubtotal !== undefined ? Number(p.minSubtotal) : p.min_subtotal !== undefined && p.min_subtotal !== null ? Number(p.min_subtotal) : undefined,
-          freeShipping: Boolean(p.freeShipping || p.free_shipping),
-          automatic: Boolean(p.automatic),
-          isActive: p.isActive !== undefined ? Boolean(p.isActive) : p.is_active !== undefined ? Boolean(p.is_active) : true,
-        }));
-      }
+    const dbPromos = await getPromosServerFn();
+    if (Array.isArray(dbPromos) && dbPromos.length > 0) {
+      return dbPromos.map(dbPromoToPromo);
     }
+    return promos;
   } catch (e) {
-    console.error("Failed to load live promos:", e);
-  }
-  return promos;
-}
-
-export function saveLivePromos(items: any[]): void {
-  if (typeof window === "undefined") return;
-  try {
-    localStorage.setItem(PROMOS_STORAGE_KEY, JSON.stringify(items));
-    window.dispatchEvent(new CustomEvent("yg_promos_updated"));
-    window.dispatchEvent(new Event("storage"));
-  } catch (e) {
-    console.error("Failed to save live promos:", e);
+    console.error("Failed to load live promos, falling back to bundled list:", e);
+    return promos;
   }
 }
 
+/**
+ * Reactive React hook for the live promo list. Re-fetches on mount and
+ * whenever a "yg_products_updated"-style "yg_promos_updated" event fires
+ * (dispatched by the Admin Portal right after a promo save/toggle/delete).
+ */
 export function useLivePromos(): Promo[] {
-  const [list, setList] = useState<Promo[]>(() => getLivePromos());
+  const [list, setList] = useState<Promo[]>(promos);
 
   useEffect(() => {
-    setList(getLivePromos());
-
-    const handleUpdate = () => {
-      setList(getLivePromos());
+    let cancelled = false;
+    const load = () => {
+      getLivePromos().then((data) => {
+        if (!cancelled) setList(data);
+      });
     };
+    load();
 
-    window.addEventListener("yg_promos_updated", handleUpdate);
-    window.addEventListener("storage", handleUpdate);
-
+    window.addEventListener("yg_promos_updated", load);
     return () => {
-      window.removeEventListener("yg_promos_updated", handleUpdate);
-      window.removeEventListener("storage", handleUpdate);
+      cancelled = true;
+      window.removeEventListener("yg_promos_updated", load);
     };
   }, []);
 
   return list;
 }
 
-export function findPromo(code: string): Promo | undefined {
+export function findPromoIn(list: Promo[], code: string): Promo | undefined {
   const normalized = code.trim().toUpperCase();
-  const all = getLivePromos();
-  return all.find((p) => p.code === normalized && p.isActive !== false);
+  return list.find((p) => p.code === normalized && p.isActive !== false);
 }
 
 export function isPromoEligible(promo: Promo, subtotal: number): boolean {
@@ -133,9 +132,8 @@ export function discountFor(promo: Promo, subtotal: number): number {
 }
 
 /** Best automatic promo for a given subtotal, if any. */
-export function bestAutomaticPromo(subtotal: number): Promo | undefined {
-  const all = getLivePromos();
-  return all
+export function bestAutomaticPromoIn(list: Promo[], subtotal: number): Promo | undefined {
+  return list
     .filter((p) => p.automatic && p.isActive !== false && isPromoEligible(p, subtotal))
     .sort((a, b) => discountFor(b, subtotal) - discountFor(a, subtotal))[0];
 }

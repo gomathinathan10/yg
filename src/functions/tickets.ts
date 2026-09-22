@@ -1,5 +1,9 @@
 import { apiFetch } from "@/lib/api-client";
 
+function adminHeaders(adminToken?: string): Record<string, string> {
+  return adminToken ? { "x-admin-token": adminToken } : {};
+}
+
 export type DbTicket = {
   id: string;
   topic: string;
@@ -33,10 +37,10 @@ export const createTicketServerFn = async ({
 export const adminListTicketsServerFn = async ({
   data,
 }: {
-  data?: { status?: string; search?: string };
+  data?: { status?: string; search?: string; adminToken?: string };
 } = {}): Promise<DbTicket[]> => {
   const query = data?.status && data.status !== "all" ? `?status=${encodeURIComponent(data.status)}` : "";
-  const tickets = await apiFetch<DbTicket[]>(`/api/tickets${query}`);
+  const tickets = await apiFetch<DbTicket[]>(`/api/tickets${query}`, { headers: adminHeaders(data?.adminToken) });
   if (data?.search) {
     const term = data.search.toLowerCase();
     return tickets.filter(
@@ -57,10 +61,12 @@ export const adminUpdateTicketServerFn = async ({
     id: string;
     status: "open" | "in_progress" | "resolved" | "closed";
     reply?: string | undefined;
+    adminToken?: string;
   };
 }) => {
   await apiFetch(`/api/tickets/${data.id}`, {
     method: "PATCH",
+    headers: adminHeaders(data.adminToken),
     body: JSON.stringify({ status: data.status, reply: data.reply }),
   });
   return { ok: true };

@@ -217,7 +217,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" data-theme="saffron">
+    <html lang="en" data-theme="saffron" suppressHydrationWarning>
       <head>
         {/* Google Tag Manager */}
         <script

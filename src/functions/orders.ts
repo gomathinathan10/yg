@@ -1,6 +1,10 @@
 import type { Address, OrderItem, OrderTotals, Resolution } from "@/lib/orders";
 import { apiFetch } from "@/lib/api-client";
 
+function adminHeaders(adminToken?: string): Record<string, string> {
+  return adminToken ? { "x-admin-token": adminToken } : {};
+}
+
 export type DbOrderRow = {
   id: string;
   created_at: number;
@@ -145,9 +149,11 @@ export const resolveOrderServerFn = async ({
 export const adminListOrdersServerFn = async ({
   data,
 }: {
-  data?: { status?: string; search?: string; limit?: number };
+  data?: { status?: string; search?: string; limit?: number; adminToken?: string };
 } = {}): Promise<FullOrder[]> => {
-  const orders = await apiFetch<FullOrder[]>("/api/orders");
+  const orders = await apiFetch<FullOrder[]>("/api/orders", {
+    headers: adminHeaders(data?.adminToken),
+  });
   let filtered = orders;
   if (data?.status && data.status !== "all") {
     filtered = filtered.filter((o) => o.status === data.status);
@@ -167,10 +173,11 @@ export const adminListOrdersServerFn = async ({
 export const adminUpdateOrderStatusServerFn = async ({
   data,
 }: {
-  data: { id: string; status: string };
+  data: { id: string; status: string; adminToken?: string };
 }) => {
   await apiFetch(`/api/orders/${data.id}/status`, {
     method: "PATCH",
+    headers: adminHeaders(data.adminToken),
     body: JSON.stringify({ status: data.status }),
   });
   return { ok: true, id: data.id, status: data.status };
@@ -179,7 +186,7 @@ export const adminUpdateOrderStatusServerFn = async ({
 export const adminProcessResolutionServerFn = async ({
   data,
 }: {
-  data: { id: string; action: "approve" | "reject"; note?: string | undefined };
+  data: { id: string; action: "approve" | "reject"; note?: string | undefined; adminToken?: string };
 }) => {
   const order = await apiFetch<FullOrder>(`/api/orders/${data.id}`);
   if (!order || !order.resolution) return { ok: false, error: "No open resolution found" };
@@ -195,6 +202,7 @@ export const adminProcessResolutionServerFn = async ({
 
   await apiFetch(`/api/orders/${data.id}/resolve`, {
     method: "POST",
+    headers: adminHeaders(data.adminToken),
     body: JSON.stringify({ resolution: order.resolution }),
   });
   return { ok: true, resolution: order.resolution };
@@ -203,13 +211,20 @@ export const adminProcessResolutionServerFn = async ({
 export const adminDeleteOrderServerFn = async ({
   data,
 }: {
-  data: { id: string };
+  data: { id: string; adminToken?: string };
 }) => {
-  await apiFetch(`/api/orders/${data.id}`, { method: "DELETE" });
+  await apiFetch(`/api/orders/${data.id}`, {
+    method: "DELETE",
+    headers: adminHeaders(data.adminToken),
+  });
   return { ok: true, id: data.id };
 };
 
-export const adminClearAllOrdersServerFn = async () => {
-  await apiFetch("/api/orders", { method: "DELETE" });
+export const adminClearAllOrdersServerFn = async ({
+  data,
+}: {
+  data?: { adminToken?: string };
+} = {}) => {
+  await apiFetch("/api/orders", { method: "DELETE", headers: adminHeaders(data?.adminToken) });
   return { ok: true };
 };

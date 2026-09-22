@@ -30,6 +30,12 @@ export type AdminDashboardStats = {
   featuredProducts: number;
 };
 
-export const adminGetDashboardStatsServerFn = async (): Promise<AdminDashboardStats> => {
-  return apiFetch<AdminDashboardStats>("/api/analytics");
+export const adminGetDashboardStatsServerFn = async ({
+  data,
+}: {
+  data?: { adminToken?: string };
+} = {}): Promise<AdminDashboardStats> => {
+  return apiFetch<AdminDashboardStats>("/api/analytics", {
+    headers: data?.adminToken ? { "x-admin-token": data.adminToken } : {},
+  });
 };

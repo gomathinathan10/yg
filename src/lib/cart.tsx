@@ -10,11 +10,12 @@ import {
 import { useLiveProducts, type Product, type Variant } from "@/data/products";
 import { useLiveMetrics } from "@/data/metrics";
 import {
-  bestAutomaticPromo,
+  bestAutomaticPromoIn,
   discountBreakdown,
   discountFor,
-  findPromo,
+  findPromoIn,
   isPromoEligible,
+  useLivePromos,
   type DiscountLine,
   type Promo,
 } from "@/data/promos";
@@ -68,6 +69,7 @@ const CartContext = createContext<CartContextValue | null>(null);
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const products = useLiveProducts();
+  const livePromos = useLivePromos();
   const metrics = useLiveMetrics();
   const [lines, setLines] = useState<CartLine[]>([]);
   const [isOpen, setOpen] = useState(false);
@@ -78,7 +80,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       const raw = window.localStorage.getItem(STORAGE_KEY);
       if (raw) setLines(JSON.parse(raw) as CartLine[]);
       const savedPromo = window.localStorage.getItem(PROMO_KEY);
-      if (savedPromo && findPromo(savedPromo)) setPromoCode(savedPromo.toUpperCase());
+      if (savedPromo) setPromoCode(savedPromo.toUpperCase());
     } catch {
       /* ignore */
     }
@@ -139,7 +141,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const applyPromo = useCallback(
     (code: string): ApplyPromoResult => {
-      const promo = findPromo(code);
+      const promo = findPromoIn(livePromos, code);
       if (!promo) return { ok: false, reason: "That code isn't valid." };
       if (promo.automatic)
         return { ok: false, reason: "This offer applies automatically when eligible." };
@@ -151,7 +153,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       setPromoCode(promo.code);
       return { ok: true, promo };
     },
-    [subtotalNow],
+    [subtotalNow, livePromos],
   );
 
   const removePromo = useCallback(() => setPromoCode(null), []);
@@ -165,9 +167,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
     });
     const subtotal = resolved.reduce((sum, l) => sum + l.lineTotal, 0);
 
-    const manual = promoCode ? findPromo(promoCode) : undefined;
+    const manual = promoCode ? findPromoIn(livePromos, promoCode) : undefined;
     const manualValid = manual && isPromoEligible(manual, subtotal) ? manual : undefined;
-    const auto = bestAutomaticPromo(subtotal);
+    const auto = bestAutomaticPromoIn(livePromos, subtotal);
     const manualDiscount = manualValid ? discountFor(manualValid, subtotal) : 0;
     const autoDiscount = auto ? discountFor(auto, subtotal) : 0;
 
@@ -213,7 +215,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       applyPromo,
       removePromo,
     };
-  }, [lines, isOpen, add, setQty, remove, clear, promoCode, applyPromo, removePromo, products, metrics]);
+  }, [lines, isOpen, add, setQty, remove, clear, promoCode, applyPromo, removePromo, products, metrics, livePromos]);
 
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

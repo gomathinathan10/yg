@@ -38,6 +38,8 @@ data/*.db
 data/*.sqlite
 data/*.db-wal
 data/*.db-shm
+# Live JSON-file backend: contains real customer orders/tickets/PII, must never be committed.
+data/yg_store.json
 *.psd
 *.zip
 *.crdownload

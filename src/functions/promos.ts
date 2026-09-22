@@ -1,5 +1,9 @@
 import { apiFetch } from "@/lib/api-client";
 
+function adminHeaders(adminToken?: string): Record<string, string> {
+  return adminToken ? { "x-admin-token": adminToken } : {};
+}
+
 export type DbPromo = {
   code: string;
   label: string;
@@ -40,8 +44,12 @@ export const validatePromoServerFn = async ({
   }
 };
 
-export const adminListPromosServerFn = async (): Promise<DbPromo[]> => {
-  return apiFetch<DbPromo[]>("/api/promos");
+export const adminListPromosServerFn = async ({
+  data,
+}: {
+  data?: { adminToken?: string };
+} = {}): Promise<DbPromo[]> => {
+  return apiFetch<DbPromo[]>("/api/promos", { headers: adminHeaders(data?.adminToken) });
 };
 
 export const adminSavePromoServerFn = async ({
@@ -57,11 +65,14 @@ export const adminSavePromoServerFn = async ({
     freeShipping?: boolean;
     automatic?: boolean;
     isActive?: boolean;
+    adminToken?: string;
   };
 }) => {
+  const { adminToken, ...body } = data;
   await apiFetch("/api/promos", {
     method: "POST",
-    body: JSON.stringify(data),
+    headers: adminHeaders(adminToken),
+    body: JSON.stringify(body),
   });
   return { ok: true, code: data.code };
 };
@@ -69,10 +80,11 @@ export const adminSavePromoServerFn = async ({
 export const adminTogglePromoServerFn = async ({
   data,
 }: {
-  data: { code: string; isActive: boolean };
+  data: { code: string; isActive: boolean; adminToken?: string };
 }) => {
   await apiFetch(`/api/promos/${data.code}`, {
     method: "PATCH",
+    headers: adminHeaders(data.adminToken),
     body: JSON.stringify({ isActive: data.isActive }),
   });
   return { ok: true };
@@ -81,8 +93,8 @@ export const adminTogglePromoServerFn = async ({
 export const adminDeletePromoServerFn = async ({
   data,
 }: {
-  data: { code: string };
+  data: { code: string; adminToken?: string };
 }) => {
-  await apiFetch(`/api/promos/${data.code}`, { method: "DELETE" });
+  await apiFetch(`/api/promos/${data.code}`, { method: "DELETE", headers: adminHeaders(data.adminToken) });
   return { ok: true };
 };

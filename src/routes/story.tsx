@@ -66,6 +66,39 @@ export const Route = createFileRoute("/story")({
   component: StoryPage,
 });
 
+/**
+ * Mobile/tablet counterpart to the desktop "Ribbon Connector" arrows below
+ * (those are `hidden lg:flex`, so without this, small screens show no
+ * connector at all between chapters). Same heritage brown/gold dashed-arrow
+ * language, just re-oriented vertically for the single-column stack.
+ */
+function ChapterConnectorMobile({ id }: { id: string }) {
+  const markerId = `mobile-arrow-${id}`;
+  return (
+    <div className="flex lg:hidden justify-center py-1" aria-hidden="true">
+      <svg width="28" height="48" viewBox="0 0 28 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id={markerId} markerWidth="12" markerHeight="12" refX="5" refY="5" orient="auto">
+            <path d="M 0 1 L 9 5 L 0 9 L 2.5 5 z" fill="#8C5921" />
+          </marker>
+        </defs>
+        <circle cx="14" cy="3" r="3" fill="#C59B27" />
+        <line
+          x1="14"
+          y1="8"
+          x2="14"
+          y2="38"
+          stroke="#C59B27"
+          strokeWidth="3"
+          strokeDasharray="7 10"
+          strokeLinecap="round"
+          markerEnd={`url(#${markerId})`}
+        />
+      </svg>
+    </div>
+  );
+}
+
 const craftSteps = [
   {
     step: "01",
@@ -258,6 +291,7 @@ function StoryPage() {
             </div>
           </div>
 
+          <ChapterConnectorMobile id="1" />
           {/* Ribbon Connector 1 -> 2 */}
           <div className="relative py-2 sm:py-4 my-2 hidden lg:flex flex-col items-center justify-center">
             <svg className="w-full max-w-4xl h-24 overflow-visible" viewBox="0 0 1000 110" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -311,6 +345,7 @@ function StoryPage() {
             </div>
           </div>
 
+          <ChapterConnectorMobile id="2" />
           {/* Ribbon Connector 2 -> 3 */}
           <div className="relative py-2 sm:py-4 my-2 hidden lg:flex flex-col items-center justify-center">
             <svg className="w-full max-w-4xl h-24 overflow-visible" viewBox="0 0 1000 110" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -364,6 +399,7 @@ function StoryPage() {
             </div>
           </div>
 
+          <ChapterConnectorMobile id="3" />
           {/* Ribbon Connector 3 -> 4 */}
           <div className="relative py-2 sm:py-4 my-2 hidden lg:flex flex-col items-center justify-center">
             <svg className="w-full max-w-4xl h-24 overflow-visible" viewBox="0 0 1000 110" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -417,6 +453,7 @@ function StoryPage() {
             </div>
           </div>
 
+          <ChapterConnectorMobile id="4" />
           {/* Ribbon Connector 4 -> 5 */}
           <div className="relative py-2 sm:py-4 my-2 hidden lg:flex flex-col items-center justify-center">
             <svg className="w-full max-w-4xl h-24 overflow-visible" viewBox="0 0 1000 110" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -470,6 +507,7 @@ function StoryPage() {
             </div>
           </div>
 
+          <ChapterConnectorMobile id="5" />
           {/* Ribbon Connector 5 -> 6 */}
           <div className="relative py-2 sm:py-4 my-2 hidden lg:flex flex-col items-center justify-center">
             <svg className="w-full max-w-4xl h-24 overflow-visible" viewBox="0 0 1000 110" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -523,6 +561,7 @@ function StoryPage() {
             </div>
           </div>
 
+          <ChapterConnectorMobile id="6" />
           {/* Ribbon Connector 6 -> 7 */}
           <div className="relative py-2 sm:py-4 my-2 hidden lg:flex flex-col items-center justify-center">
             <svg className="w-full max-w-4xl h-24 overflow-visible" viewBox="0 0 1000 110" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -84,8 +84,12 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { formatPrice, products as defaultStoreProducts } from "@/data/products";
-import { type CalculationMetrics, DEFAULT_METRICS, saveLiveMetrics, resetLiveMetrics } from "@/data/metrics";
-import { getLivePromos, saveLivePromos } from "@/data/promos";
+import { type CalculationMetrics, DEFAULT_METRICS, dbMetricsToMetrics } from "@/data/metrics";
+import {
+  getCalcMetricsServerFn,
+  adminSaveCalcMetricsServerFn,
+  adminResetCalcMetricsServerFn,
+} from "@/functions/metrics";
 import { compressImage, compressMultipleImages } from "@/lib/image-compressor";
 
 // Server Functions
@@ -562,10 +566,6 @@ function AdminDashboardPage() {
     setMounted(true);
     if (typeof window !== "undefined") {
       try {
-        const savedMetrics = localStorage.getItem("yg_calc_metrics");
-        if (savedMetrics) setMetrics(JSON.parse(savedMetrics));
-      } catch {}
-      try {
         const savedDeals = localStorage.getItem("yg_export_deals");
         if (savedDeals) setExportDeals(JSON.parse(savedDeals));
       } catch {}
@@ -626,16 +626,18 @@ function AdminDashboardPage() {
         ticketListRes,
         promoListRes,
         alertListRes,
+        metricsRes,
       ] = await Promise.allSettled([
-        adminGetDashboardStatsServerFn(),
-        adminListOrdersServerFn({ data: {} }),
+        adminGetDashboardStatsServerFn({ data: { adminToken } }),
+        adminListOrdersServerFn({ data: { adminToken } }),
         getProductsServerFn({ data: { includeArchived: showArchivedProducts } }),
         getCategoriesServerFn(),
-        adminListReviewsServerFn({ data: {} }),
-        adminListQuestionsServerFn({ data: {} }),
-        adminListTicketsServerFn({ data: {} }),
-        adminListPromosServerFn(),
-        adminListStockAlertsServerFn(),
+        adminListReviewsServerFn({ data: { adminToken } }),
+        adminListQuestionsServerFn({ data: { adminToken } }),
+        adminListTicketsServerFn({ data: { adminToken } }),
+        adminListPromosServerFn({ data: { adminToken } }),
+        adminListStockAlertsServerFn({ data: { adminToken } }),
+        getCalcMetricsServerFn(),
       ]);
 
       if (dashStatsRes.status === "fulfilled" && dashStatsRes.value) {
@@ -661,10 +663,12 @@ function AdminDashboardPage() {
       }
       if (promoListRes.status === "fulfilled" && Array.isArray(promoListRes.value)) {
         setPromos(promoListRes.value);
-        saveLivePromos(promoListRes.value);
       }
       if (alertListRes.status === "fulfilled" && Array.isArray(alertListRes.value)) {
         setAlerts(alertListRes.value);
+      }
+      if (metricsRes.status === "fulfilled" && metricsRes.value) {
+        setMetrics(dbMetricsToMetrics(metricsRes.value));
       }
     } catch (err) {
       console.error("Admin data fetch fallback handled:", err);
@@ -686,10 +690,17 @@ function AdminDashboardPage() {
     }
   };
 
+  /** Tells the storefront's useLivePromos() hook (cart/checkout) to refetch. */
+  const notifyStorefrontPromosChanged = () => {
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent("yg_promos_updated"));
+    }
+  };
+
   // --- Order Actions ---
   const handleUpdateOrderStatus = async (id: string, newStatus: string) => {
     try {
-      await adminUpdateOrderStatusServerFn({ data: { id, status: newStatus } });
+      await adminUpdateOrderStatusServerFn({ data: { id, status: newStatus, adminToken } });
       toast.success(`Order ${id} status updated to ${newStatus}`);
       setOrders((prev) =>
         prev.map((o) => (o.id === id ? { ...o, status: newStatus } : o))
@@ -704,7 +715,7 @@ function AdminDashboardPage() {
 
   const handleProcessResolution = async (id: string, action: "approve" | "reject", note?: string) => {
     try {
-      await adminProcessResolutionServerFn({ data: { id, action, note } });
+      await adminProcessResolutionServerFn({ data: { id, action, note, adminToken } });
       toast.success(`Resolution ${action === "approve" ? "approved" : "rejected"}`);
       loadAllData();
       setSelectedOrder(null);
@@ -716,7 +727,7 @@ function AdminDashboardPage() {
   const handleDeleteOrder = async (id: string) => {
     if (!window.confirm(`Delete order ${id}?`)) return;
     try {
-      await adminDeleteOrderServerFn({ data: { id } });
+      await adminDeleteOrderServerFn({ data: { id, adminToken } });
       toast.success(`Order ${id} deleted`);
       setOrders((prev) => prev.filter((o) => o.id !== id));
       if (selectedOrder && selectedOrder.id === id) setSelectedOrder(null);
@@ -729,7 +740,7 @@ function AdminDashboardPage() {
   const handleClearAllOrders = async () => {
     if (!window.confirm("Are you sure you want to clear all orders? This will delete all order history.")) return;
     try {
-      await adminClearAllOrdersServerFn();
+      await adminClearAllOrdersServerFn({ data: { adminToken } });
       toast.success("All test orders cleared");
       setOrders([]);
       setSelectedOrder(null);
@@ -1182,7 +1193,7 @@ function AdminDashboardPage() {
   // --- Review Actions ---
   const handleModerateReview = async (id: string, action: "publish" | "reject" | "delete") => {
     try {
-      await adminModerateReviewServerFn({ data: { id, action } });
+      await adminModerateReviewServerFn({ data: { id, action, adminToken } });
       toast.success(`Review ${action}ed`);
       if (action === "delete") {
         setReviews((prev) => prev.filter((r) => r.id !== id));
@@ -1202,7 +1213,7 @@ function AdminDashboardPage() {
     if (!answeringQuestion || !answerText.trim()) return;
     try {
       await adminAnswerQuestionServerFn({
-        data: { id: answeringQuestion.id, answer: answerText.trim(), answeredBy: "Y.G team" },
+        data: { id: answeringQuestion.id, answer: answerText.trim(), answeredBy: "Y.G team", adminToken },
       });
       toast.success("Answer published to product page!");
       setQuestions((prev) =>
@@ -1222,7 +1233,7 @@ function AdminDashboardPage() {
   const handleDeleteQuestion = async (id: string) => {
     if (!confirm("Delete this question?")) return;
     try {
-      await adminDeleteQuestionServerFn({ data: { id } });
+      await adminDeleteQuestionServerFn({ data: { id, adminToken } });
       toast.success("Question deleted");
       setQuestions((prev) => prev.filter((q) => q.id !== id));
     } catch (err) {
@@ -1239,6 +1250,7 @@ function AdminDashboardPage() {
           id: respondingTicket.id,
           status: ticketStatusVal,
           reply: ticketReplyText.trim() || undefined,
+          adminToken,
         },
       });
       toast.success(`Ticket ${respondingTicket.id} updated`);
@@ -1273,32 +1285,13 @@ function AdminDashboardPage() {
           freeShipping: editingPromo.freeShipping,
           automatic: editingPromo.automatic,
           isActive: editingPromo.isActive,
+          adminToken,
         },
       });
-      const currentLive = getLivePromos();
-      const codeUpper = editingPromo.code.trim().toUpperCase();
-      const existsIdx = currentLive.findIndex((p) => p.code === codeUpper);
-      const newPromoObj = {
-        code: codeUpper,
-        label: editingPromo.label,
-        description: editingPromo.description,
-        percentOff: editingPromo.percentOff ? Number(editingPromo.percentOff) : undefined,
-        amountOff: editingPromo.amountOff ? Number(editingPromo.amountOff) : undefined,
-        minSubtotal: editingPromo.minSubtotal ? Number(editingPromo.minSubtotal) : undefined,
-        freeShipping: editingPromo.freeShipping,
-        automatic: editingPromo.automatic,
-        isActive: editingPromo.isActive,
-      };
-      const updated = [...currentLive];
-      if (existsIdx >= 0) {
-        updated[existsIdx] = newPromoObj;
-      } else {
-        updated.push(newPromoObj);
-      }
-      saveLivePromos(updated);
 
       toast.success(`Promo code ${editingPromo.code} saved`);
       setPromoDialogOpen(false);
+      notifyStorefrontPromosChanged();
       loadAllData();
     } catch (err) {
       toast.error("Failed to save promo");
@@ -1308,17 +1301,12 @@ function AdminDashboardPage() {
   const handleTogglePromo = async (code: string, currentActive: boolean) => {
     try {
       const nextActive = !currentActive;
-      await adminTogglePromoServerFn({ data: { code, isActive: nextActive } });
+      await adminTogglePromoServerFn({ data: { code, isActive: nextActive, adminToken } });
       toast.success(`Promo ${code} ${nextActive ? "activated" : "deactivated"}`);
       setPromos((prev) =>
         prev.map((pr) => (pr.code === code ? { ...pr, is_active: nextActive ? 1 : 0 } : pr))
       );
-      const currentLive = getLivePromos();
-      const codeUpper = code.trim().toUpperCase();
-      const updated = currentLive.map((p) =>
-        p.code === codeUpper ? { ...p, isActive: nextActive } : p
-      );
-      saveLivePromos(updated);
+      notifyStorefrontPromosChanged();
     } catch (err) {
       toast.error("Failed to toggle promo");
     }
@@ -1327,13 +1315,10 @@ function AdminDashboardPage() {
   const handleDeletePromo = async (code: string) => {
     if (!confirm(`Delete promo code ${code}?`)) return;
     try {
-      await adminDeletePromoServerFn({ data: { code } });
+      await adminDeletePromoServerFn({ data: { code, adminToken } });
       toast.success("Promo deleted");
       setPromos((prev) => prev.filter((pr) => pr.code !== code));
-      const currentLive = getLivePromos();
-      const codeUpper = code.trim().toUpperCase();
-      const updated = currentLive.filter((p) => p.code !== codeUpper);
-      saveLivePromos(updated);
+      notifyStorefrontPromosChanged();
     } catch (err) {
       toast.error("Failed to delete promo");
     }
@@ -1342,7 +1327,7 @@ function AdminDashboardPage() {
   // --- Stock Alert Actions ---
   const handleNotifyAlert = async (id: string) => {
     try {
-      await adminNotifyStockAlertServerFn({ data: { id } });
+      await adminNotifyStockAlertServerFn({ data: { id, adminToken } });
       toast.success("Marked as customer notified!");
       setAlerts((prev) =>
         prev.map((a) => (a.id === id ? { ...a, notified: 1, notified_at: Date.now() } : a))
@@ -1428,17 +1413,47 @@ function AdminDashboardPage() {
   };
 
   // --- Calculation Metrics Actions ---
-  const handleSaveMetrics = (newMetrics: CalculationMetrics) => {
-    setMetrics(newMetrics);
-    saveLiveMetrics(newMetrics);
-    toast.success("Calculation metrics saved successfully!");
+  const handleSaveMetrics = async (newMetrics: CalculationMetrics) => {
+    try {
+      await adminSaveCalcMetricsServerFn({
+        data: {
+          free_shipping_threshold: newMetrics.freeShippingThreshold,
+          standard_delivery_fee: newMetrics.standardDeliveryFee,
+          express_delivery_fee: newMetrics.expressDeliveryFee,
+          cod_handling_fee: newMetrics.codHandlingFee,
+          gst_percentage: newMetrics.gstPercentage,
+          hsn_code: newMetrics.hsnCode,
+          wholesale_tier1_min_kg: newMetrics.wholesaleTier1MinKg,
+          wholesale_tier1_discount: newMetrics.wholesaleTier1Discount,
+          wholesale_tier2_min_kg: newMetrics.wholesaleTier2MinKg,
+          wholesale_tier2_discount: newMetrics.wholesaleTier2Discount,
+          wholesale_tier3_min_kg: newMetrics.wholesaleTier3MinKg,
+          wholesale_tier3_discount: newMetrics.wholesaleTier3Discount,
+          adminToken,
+        },
+      });
+      setMetrics(newMetrics);
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent("yg_calc_metrics_updated"));
+      }
+      toast.success("Calculation metrics saved successfully!");
+    } catch {
+      toast.error("Failed to save calculation metrics");
+    }
   };
 
-  const handleResetMetrics = () => {
+  const handleResetMetrics = async () => {
     if (!confirm("Reset all calculation metrics to system defaults?")) return;
-    setMetrics(DEFAULT_METRICS);
-    resetLiveMetrics();
-    toast.info("Calculation metrics reset to factory defaults");
+    try {
+      await adminResetCalcMetricsServerFn({ data: { adminToken } });
+      setMetrics(DEFAULT_METRICS);
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent("yg_calc_metrics_updated"));
+      }
+      toast.info("Calculation metrics reset to factory defaults");
+    } catch {
+      toast.error("Failed to reset calculation metrics");
+    }
   };
 
   // --- Export Deals Actions ---

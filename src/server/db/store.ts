@@ -180,6 +180,22 @@ export type StoreData = {
   stock_alerts: DbStockAlert[];
   promos: DbPromo[];
   recipes: unknown[];
+  calc_metrics: DbCalcMetrics | null;
+};
+
+export type DbCalcMetrics = {
+  free_shipping_threshold: number;
+  standard_delivery_fee: number;
+  express_delivery_fee: number;
+  cod_handling_fee: number;
+  gst_percentage: number;
+  hsn_code: string;
+  wholesale_tier1_min_kg: number;
+  wholesale_tier1_discount: number;
+  wholesale_tier2_min_kg: number;
+  wholesale_tier2_discount: number;
+  wholesale_tier3_min_kg: number;
+  wholesale_tier3_discount: number;
 };
 
 const DEFAULT_SEED_REVIEWS: DbReview[] = [
@@ -369,11 +385,16 @@ class JsonStore {
         stock_alerts: [],
         promos: [],
         recipes: [],
+        calc_metrics: null,
       };
     }
 
     // Seed default reviews & questions if empty
     let dirty = false;
+    if (this.data.calc_metrics === undefined) {
+      this.data.calc_metrics = null;
+      dirty = true;
+    }
     if (!this.data.categories || this.data.categories.length === 0) {
       this.data.categories = DEFAULT_CATEGORIES;
       dirty = true;
@@ -1224,6 +1245,26 @@ class JsonStore {
     const deleted = data.promos.length < initLen;
     if (deleted) this.save();
     return deleted;
+  }
+
+  // ==================== CALCULATION METRICS ====================
+  getCalcMetrics(): DbCalcMetrics | null {
+    const data = this.ensureLoaded();
+    return data.calc_metrics;
+  }
+
+  saveCalcMetrics(metrics: DbCalcMetrics): DbCalcMetrics {
+    const data = this.ensureLoaded();
+    data.calc_metrics = metrics;
+    this.save();
+    return metrics;
+  }
+
+  resetCalcMetrics(): boolean {
+    const data = this.ensureLoaded();
+    data.calc_metrics = null;
+    this.save();
+    return true;
   }
 
   // ==================== ANALYTICS ====================
