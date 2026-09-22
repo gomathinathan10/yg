@@ -49,7 +49,7 @@ function AccountPage() {
             <span className="text-[#A0A8B0]">/</span>
             <span className="font-semibold text-[#181206]">Account</span>
           </div>
-          <span className="hidden sm:inline-block text-xs font-semibold text-[#181206] bg-[#FFC700]/10 px-2.5 py-0.5 rounded-[4px]">
+          <span className="hidden sm:inline-block text-xs font-semibold text-[#181206] bg-[#FF9933]/10 px-2.5 py-0.5 rounded-[4px]">
             Fast Guest Sync
           </span>
         </div>
@@ -71,9 +71,9 @@ function AccountPage() {
         <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_1.6fr]">
           <div className="space-y-6">
             {/* Profile Section */}
-            <section className="rounded-2xl border-2 border-[#FFC700] bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6] p-6 shadow-md ring-1 ring-[#FFC700]/30">
+            <section className="rounded-2xl border-2 border-[#FF9933] bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6] p-6 shadow-md ring-1 ring-[#FF9933]/30">
               <h2 className="flex items-center gap-2 text-base font-bold text-[#181206] pb-3 border-b border-[#E8DEC8]">
-                <span className="p-1 rounded bg-[#FFC700] text-[#181206] border border-[#D8A700]">
+                <span className="p-1 rounded bg-[#FF9933] text-[#181206] border border-[#D8A700]">
                   <UserRound className="h-4 w-4" />
                 </span>
                 <span>Profile Details</span>
@@ -86,7 +86,7 @@ function AccountPage() {
                   <Button
                     variant="outline"
                     size="sm"
-                    className="mt-4 rounded-[6px] border-[#D8A700] bg-white text-[#181206] text-xs hover:bg-[#FFC700] hover:border-[#D8A700] cursor-pointer"
+                    className="mt-4 rounded-[6px] border-[#D8A700] bg-white text-[#181206] text-xs hover:bg-[#FF9933] hover:border-[#D8A700] cursor-pointer"
                     onClick={signOut}
                   >
                     Sign Out
@@ -147,7 +147,7 @@ function AccountPage() {
                   </div>
                   <Button
                     type="submit"
-                    className="w-full h-10 rounded-[6px] bg-[#FFC700] hover:bg-[#181206] text-[#181206] hover:text-[#FFC700] border border-[#D8A700] hover:border-[#181206] font-black text-xs shadow-xs cursor-pointer active:scale-95 transition-all"
+                    className="w-full h-10 rounded-[6px] bg-[#FF9933] hover:bg-[#181206] text-[#181206] hover:text-[#FF9933] border border-[#D8A700] hover:border-[#181206] font-black text-xs shadow-xs cursor-pointer active:scale-95 transition-all"
                   >
                     Save Profile
                   </Button>
@@ -156,9 +156,9 @@ function AccountPage() {
             </section>
 
             {/* Saved Addresses Section */}
-            <section className="rounded-2xl border-2 border-[#E8DEC8] hover:border-[#FFC700] bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6] p-6 shadow-xs transition-all">
+            <section className="rounded-2xl border-2 border-[#E8DEC8] hover:border-[#FF9933] bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6] p-6 shadow-xs transition-all">
               <h2 className="flex items-center gap-2 text-base font-bold text-[#181206] pb-3 border-b border-[#E8DEC8]">
-                <span className="p-1 rounded bg-[#FFC700] text-[#181206] border border-[#D8A700]">
+                <span className="p-1 rounded bg-[#FF9933] text-[#181206] border border-[#D8A700]">
                   <MapPin className="h-4 w-4" />
                 </span>
                 <span>Saved Addresses</span>
@@ -179,7 +179,7 @@ function AccountPage() {
                           <p className="font-bold text-[#181206]">
                             {a.firstName} {a.lastName}
                             {a.isDefault && (
-                              <span className="ml-2 rounded-[4px] bg-[#FFC700]/10 px-2 py-0.5 text-[10px] font-bold text-[#181206] uppercase">
+                              <span className="ml-2 rounded-[4px] bg-[#FF9933]/10 px-2 py-0.5 text-[10px] font-bold text-[#181206] uppercase">
                                 Default
                               </span>
                             )}
@@ -215,9 +215,9 @@ function AccountPage() {
           </div>
 
           {/* Orders Section */}
-          <section className="rounded-2xl border-2 border-[#E8DEC8] hover:border-[#FFC700] bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6] p-6 shadow-xs transition-all">
+          <section className="rounded-2xl border-2 border-[#E8DEC8] hover:border-[#FF9933] bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6] p-6 shadow-xs transition-all">
             <h2 className="flex items-center gap-2 text-base font-bold text-[#181206] pb-3 border-b border-[#E8DEC8]">
-              <span className="p-1 rounded bg-[#FFC700] text-[#181206] border border-[#D8A700]">
+              <span className="p-1 rounded bg-[#FF9933] text-[#181206] border border-[#D8A700]">
                 <Package className="h-4 w-4" />
               </span>
               <span>Order History</span>
@@ -227,7 +227,7 @@ function AccountPage() {
                 <p className="text-xs text-[#6E777D]">No orders placed yet on this device.</p>
                 <Button
                   asChild
-                  className="mt-4 rounded-[6px] bg-[#FFC700] hover:bg-[#E6B000] text-[#181206] font-black font-bold text-xs shadow-xs"
+                  className="mt-4 rounded-[6px] bg-[#FF9933] hover:bg-[#E6B000] text-[#181206] font-black font-bold text-xs shadow-xs"
                 >
                   <Link to="/shop">Explore Heritage Spices</Link>
                 </Button>
@@ -254,7 +254,7 @@ function AccountPage() {
                             · {order.items.reduce((n, i) => n + i.qty, 0)} items
                           </p>
                         </div>
-                        <span className="rounded-[4px] bg-[#FFC700]/10 px-2.5 py-1 text-xs font-bold text-[#181206]">
+                        <span className="rounded-[4px] bg-[#FF9933]/10 px-2.5 py-1 text-xs font-bold text-[#181206]">
                           {status.label}
                         </span>
                       </div>
@@ -280,7 +280,7 @@ function AccountPage() {
                           asChild
                           size="sm"
                           variant="outline"
-                          className="rounded-[6px] border-[#E8DEC8] text-xs hover:border-[#FFC700] hover:text-[#181206]"
+                          className="rounded-[6px] border-[#E8DEC8] text-xs hover:border-[#FF9933] hover:text-[#181206]"
                         >
                           <Link to="/order/$id" params={{ id: order.id }}>
                             Track Order

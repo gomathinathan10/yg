@@ -91,7 +91,7 @@ const craftSteps = [
 
 function StoryPage() {
   return (
-    <div className="space-y-0 font-sans pb-16 bg-[#F8F2E2] text-[#241708] relative overflow-hidden selection:bg-[#FFC700]/40">
+    <div className="space-y-0 font-sans pb-16 bg-[#F8F2E2] text-[#241708] relative overflow-hidden selection:bg-[#FF9933]/40">
       {/* Decorative Botanical Leaf Watermarks in Margins */}
       <div className="absolute top-12 left-0 pointer-events-none opacity-20 hidden lg:block -translate-x-6">
         <svg width="160" height="240" viewBox="0 0 160 240" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -158,7 +158,7 @@ function StoryPage() {
                 <span className="text-amber-400 font-bold text-[11px] sm:text-xs uppercase tracking-widest block mb-1">
                   திருநெல்வேலி பாரம்பரியம் · Est. 1931
                 </span>
-                <p className="font-serif text-2xl sm:text-4xl font-black text-[#FFC700] tracking-wide drop-shadow-md">
+                <p className="font-serif text-2xl sm:text-4xl font-black text-[#FF9933] tracking-wide drop-shadow-md">
                   YG பெருங்காயம்
                 </p>
                 <p className="text-white/85 text-xs sm:text-sm mt-1 leading-relaxed">
@@ -179,13 +179,13 @@ function StoryPage() {
                 target.scrollIntoView({ behavior: "smooth", block: "start" });
               }
             }}
-            className="group inline-flex flex-col items-center justify-center gap-1.5 text-[#8C5921] hover:text-[#181206] transition-all cursor-pointer p-2 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FFC700] active:scale-95"
+            className="group inline-flex flex-col items-center justify-center gap-1.5 text-[#8C5921] hover:text-[#181206] transition-all cursor-pointer p-2 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF9933] active:scale-95"
             aria-label="Scroll down to Chapter 1: 1931 South Car Street"
           >
             <span className="text-[11px] uppercase tracking-widest font-bold group-hover:tracking-wider transition-all">
               Scroll Down
             </span>
-            <div className="h-8 w-5 rounded-full border-2 border-[#C59B27] group-hover:border-[#FFC700] group-hover:bg-[#FFC700]/15 flex items-center justify-center p-0.5 transition-colors shadow-2xs">
+            <div className="h-8 w-5 rounded-full border-2 border-[#C59B27] group-hover:border-[#FF9933] group-hover:bg-[#FF9933]/15 flex items-center justify-center p-0.5 transition-colors shadow-2xs">
               <div className="h-1.5 w-1 bg-[#8C5921] group-hover:bg-[#181206] rounded-full animate-bounce" />
             </div>
             <ChevronDown className="h-4 w-4 text-[#8C5921] group-hover:text-[#181206] -mt-0.5 group-hover:translate-y-1 transition-transform animate-pulse" />
@@ -627,12 +627,12 @@ function StoryPage() {
             {craftSteps.map((s) => (
               <div
                 key={s.step}
-                className="p-5 rounded-xl border-2 border-[#E8DEC8] bg-[#FFFDF9] shadow-xs space-y-3 relative overflow-hidden group hover:border-[#FFC700] transition-all"
+                className="p-5 rounded-xl border-2 border-[#E8DEC8] bg-[#FFFDF9] shadow-xs space-y-3 relative overflow-hidden group hover:border-[#FF9933] transition-all"
               >
-                <span className="text-4xl font-black text-[#181206]/10 font-mono absolute top-2 right-3 group-hover:text-[#FFC700]/30 transition-colors">
+                <span className="text-4xl font-black text-[#181206]/10 font-mono absolute top-2 right-3 group-hover:text-[#FF9933]/30 transition-colors">
                   {s.step}
                 </span>
-                <div className="h-8 w-8 rounded-lg bg-[#FFC700] border border-[#E6B000] flex items-center justify-center text-[#181206] font-extrabold text-xs shadow-xs">
+                <div className="h-8 w-8 rounded-lg bg-[#FF9933] border border-[#E6B000] flex items-center justify-center text-[#181206] font-extrabold text-xs shadow-xs">
                   {s.step}
                 </div>
                 <h3 className="text-sm font-serif font-bold text-[#181206] leading-snug">{s.title}</h3>
@@ -662,7 +662,7 @@ function StoryPage() {
             <div className="pt-3 flex flex-wrap items-center justify-center gap-3">
               <Button
                 size="sm"
-                className="h-10 px-6 font-bold bg-[#FFC700] hover:bg-[#E6B000] text-[#181206] font-black rounded-[6px] shadow-xs cursor-pointer"
+                className="h-10 px-6 font-bold bg-[#FF9933] hover:bg-[#E6B000] text-[#181206] font-black rounded-[6px] shadow-xs cursor-pointer"
                 asChild
               >
                 <Link to="/shop">

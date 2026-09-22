@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { getProductsServerFn, type DbProduct } from "@/functions/products";
 
 export type Format = "powder" | "granules" | "cake" | "combo" | "wellness" | "pooja" | "vismaya" | "appalam";
 
@@ -52,7 +53,7 @@ export const products: Product[] = [
       "/products/100g-premium-asafoetida-powder/img-3.jpg",
     ],
     description:
-      "Superior chef-grade asafoetida with higher natural resin concentration for deep, pungent aroma and unmatched digestive tempering potency. Crafted according to age-old Tirunelveli traditions since 1931.",
+      "Superior chef-grade asafoetida with higher natural resin concentration for deep, pungent aroma and unmatched digestive tempering potency. Crafted according to age-old Tirunelveli traditions since 1932.",
     ingredients: "Selected Asafoetida (Ferula asafoetida), wheat flour, edible gum.",
     usage: "A small pinch in hot ghee is sufficient for a family curry.",
     shelfLife: "12 months from packing. Store in an airtight container.",
@@ -124,7 +125,7 @@ export const products: Product[] = [
       "/products/50g-gold-asafoetida-powder/img-2.jpg",
     ],
     description:
-      "Our signature Gold grade compounded hing powder crafted to age-old Tirunelveli traditions since 1931. Rich, intense aromatic profile that elevates every sambar, rasam, kootu, and tadka with wholesome flavor.",
+      "Our signature Gold grade compounded hing powder crafted to age-old Tirunelveli traditions since 1932. Rich, intense aromatic profile that elevates every sambar, rasam, kootu, and tadka with wholesome flavor.",
     ingredients: "Selected Asafoetida (Ferula asafoetida), wheat flour, edible gum.",
     usage: "Add 1/4 teaspoon to hot ghee during tempering.",
     shelfLife: "12 months from packing. Store in an airtight container.",
@@ -251,6 +252,7 @@ export const products: Product[] = [
       "/products/hing-pellets/img-2.jpg",
       "/products/hing-pellets/img-3.jpg",
       "/products/hing-pellets/img-4.jpg",
+      "/products/hing-pellets/img-5.jpg",
     ],
     description:
       "Free-flowing, crisp hing pellets that dissolve smoothly and puff lightly during tempering. The ideal choice for curd rice, buttermilk, vathal kuzhambu, and potato roasts.",
@@ -280,6 +282,7 @@ export const products: Product[] = [
         gallery: [
           "/products/hing-pellets/img-3.jpg",
           "/products/hing-pellets/img-4.jpg",
+          "/products/hing-pellets/img-5.jpg",
         ],
       },
     ],
@@ -299,9 +302,22 @@ export const products: Product[] = [
     image: "/products/100g-asafoetida-gold-cake/img-1.jpg",
     gallery: [
       "/products/100g-asafoetida-gold-cake/img-1.jpg",
-      "/products/50g-asafoetida-gold-cake/img-1.jpg",
+      "/products/100g-asafoetida-gold-cake/img-2.jpg",
       "/products/100g-asafoetida-gold-cake/img-3.jpg",
+      "/products/100g-asafoetida-gold-cake/img-4.jpg",
+      "/products/100g-asafoetida-gold-cake/img-5.jpg",
+      "/products/100g-asafoetida-gold-cake/img-6.jpg",
+      "/products/100g-asafoetida-gold-cake/img-7.jpg",
+      "/products/100g-asafoetida-gold-cake/img-8.jpg",
+      "/products/50g-asafoetida-gold-cake/img-1.jpg",
+      "/products/50g-asafoetida-gold-cake/img-2.jpg",
       "/products/50g-asafoetida-gold-cake/img-3.jpg",
+      "/products/50g-asafoetida-gold-cake/img-4.jpg",
+      "/products/50g-asafoetida-gold-cake/img-5.jpg",
+      "/products/50g-asafoetida-gold-cake/img-6.jpg",
+      "/products/50g-asafoetida-gold-cake/img-7.jpg",
+      "/products/50g-asafoetida-gold-cake/img-8.jpg",
+      "/products/50g-asafoetida-gold-cake/img-9.jpg",
     ],
     description:
       "High-potency solid block pindi hing. Shave or scrape a small flake into hot ghee to release intense, unbroken culinary fragrance, or soak in warm water for aromatic gravy infusion.",
@@ -318,8 +334,14 @@ export const products: Product[] = [
         image: "/products/50g-asafoetida-gold-cake/img-1.jpg",
         gallery: [
           "/products/50g-asafoetida-gold-cake/img-1.jpg",
+          "/products/50g-asafoetida-gold-cake/img-2.jpg",
           "/products/50g-asafoetida-gold-cake/img-3.jpg",
           "/products/50g-asafoetida-gold-cake/img-4.jpg",
+          "/products/50g-asafoetida-gold-cake/img-5.jpg",
+          "/products/50g-asafoetida-gold-cake/img-6.jpg",
+          "/products/50g-asafoetida-gold-cake/img-7.jpg",
+          "/products/50g-asafoetida-gold-cake/img-8.jpg",
+          "/products/50g-asafoetida-gold-cake/img-9.jpg",
         ],
       },
       {
@@ -331,8 +353,13 @@ export const products: Product[] = [
         image: "/products/100g-asafoetida-gold-cake/img-1.jpg",
         gallery: [
           "/products/100g-asafoetida-gold-cake/img-1.jpg",
+          "/products/100g-asafoetida-gold-cake/img-2.jpg",
           "/products/100g-asafoetida-gold-cake/img-3.jpg",
           "/products/100g-asafoetida-gold-cake/img-4.jpg",
+          "/products/100g-asafoetida-gold-cake/img-5.jpg",
+          "/products/100g-asafoetida-gold-cake/img-6.jpg",
+          "/products/100g-asafoetida-gold-cake/img-7.jpg",
+          "/products/100g-asafoetida-gold-cake/img-8.jpg",
         ],
       },
     ],
@@ -352,9 +379,22 @@ export const products: Product[] = [
     image: "/products/100g-asafoetida-gold-cake/img-2.jpg",
     gallery: [
       "/products/100g-asafoetida-gold-cake/img-2.jpg",
-      "/products/50g-asafoetida-gold-cake/img-2.jpg",
+      "/products/100g-asafoetida-gold-cake/img-1.jpg",
+      "/products/100g-asafoetida-gold-cake/img-3.jpg",
+      "/products/100g-asafoetida-gold-cake/img-4.jpg",
       "/products/100g-asafoetida-gold-cake/img-5.jpg",
+      "/products/100g-asafoetida-gold-cake/img-6.jpg",
+      "/products/100g-asafoetida-gold-cake/img-7.jpg",
+      "/products/100g-asafoetida-gold-cake/img-8.jpg",
+      "/products/50g-asafoetida-gold-cake/img-2.jpg",
+      "/products/50g-asafoetida-gold-cake/img-1.jpg",
+      "/products/50g-asafoetida-gold-cake/img-3.jpg",
+      "/products/50g-asafoetida-gold-cake/img-4.jpg",
       "/products/50g-asafoetida-gold-cake/img-5.jpg",
+      "/products/50g-asafoetida-gold-cake/img-6.jpg",
+      "/products/50g-asafoetida-gold-cake/img-7.jpg",
+      "/products/50g-asafoetida-gold-cake/img-8.jpg",
+      "/products/50g-asafoetida-gold-cake/img-9.jpg",
     ],
     description:
       "Pure concentrated hing cake block. Scrape or shave a small flake into hot ghee or tempering to release intense, unbroken culinary fragrance, or soak in warm water for aromatic gravy infusion.",
@@ -371,8 +411,14 @@ export const products: Product[] = [
         image: "/products/50g-asafoetida-gold-cake/img-2.jpg",
         gallery: [
           "/products/50g-asafoetida-gold-cake/img-2.jpg",
+          "/products/50g-asafoetida-gold-cake/img-1.jpg",
+          "/products/50g-asafoetida-gold-cake/img-3.jpg",
+          "/products/50g-asafoetida-gold-cake/img-4.jpg",
           "/products/50g-asafoetida-gold-cake/img-5.jpg",
           "/products/50g-asafoetida-gold-cake/img-6.jpg",
+          "/products/50g-asafoetida-gold-cake/img-7.jpg",
+          "/products/50g-asafoetida-gold-cake/img-8.jpg",
+          "/products/50g-asafoetida-gold-cake/img-9.jpg",
         ],
       },
       {
@@ -384,8 +430,13 @@ export const products: Product[] = [
         image: "/products/100g-asafoetida-gold-cake/img-2.jpg",
         gallery: [
           "/products/100g-asafoetida-gold-cake/img-2.jpg",
+          "/products/100g-asafoetida-gold-cake/img-1.jpg",
+          "/products/100g-asafoetida-gold-cake/img-3.jpg",
+          "/products/100g-asafoetida-gold-cake/img-4.jpg",
           "/products/100g-asafoetida-gold-cake/img-5.jpg",
           "/products/100g-asafoetida-gold-cake/img-6.jpg",
+          "/products/100g-asafoetida-gold-cake/img-7.jpg",
+          "/products/100g-asafoetida-gold-cake/img-8.jpg",
         ],
       },
     ],
@@ -402,15 +453,14 @@ export const products: Product[] = [
     format: "wellness",
     glutenFree: false,
     bestseller: true,
-    image: "/products/traditional-health-mix/img-1.jpg",
+    image: "/products/health-mix-200g/img-1.jpg",
     gallery: [
-      "/products/traditional-health-mix/img-1.jpg",
-      "/products/traditional-health-mix/img-2.jpg",
-      "/products/traditional-health-mix/img-3.jpg",
-      "/products/traditional-health-mix/img-4.jpg",
-      "/products/traditional-health-mix/img-5.jpg",
-      "/products/traditional-health-mix/img-6.jpg",
-      "/products/traditional-health-mix/img-7.jpg",
+      "/products/health-mix-200g/img-1.jpg",
+      "/products/health-mix-200g/img-2.jpg",
+      "/products/health-mix-200g/img-3.jpg",
+      "/products/health-mix-200g/img-4.jpg",
+      "/products/health-mix-200g/img-5.jpg",
+      "/products/health-mix-200g/img-6.jpg",
     ],
     description:
       "Handcrafted traditional Sathu Maavu multigrain porridge mix slowly dry-roasted on wood-fired irons and stone-ground from 18 traditional grains, pulses, millets, cardamom, and roasted nuts. Ideal daily morning nourishment for all ages.",
@@ -424,11 +474,14 @@ export const products: Product[] = [
         price: 140,
         mrp: 165,
         stock: 90,
-        image: "/products/traditional-health-mix/img-1.jpg",
+        image: "/products/health-mix-200g/img-1.jpg",
         gallery: [
-          "/products/traditional-health-mix/img-1.jpg",
-          "/products/traditional-health-mix/img-3.jpg",
-          "/products/traditional-health-mix/img-4.jpg",
+          "/products/health-mix-200g/img-1.jpg",
+          "/products/health-mix-200g/img-2.jpg",
+          "/products/health-mix-200g/img-3.jpg",
+          "/products/health-mix-200g/img-4.jpg",
+          "/products/health-mix-200g/img-5.jpg",
+          "/products/health-mix-200g/img-6.jpg",
         ],
       },
       {
@@ -437,11 +490,14 @@ export const products: Product[] = [
         price: 320,
         mrp: 380,
         stock: 65,
-        image: "/products/traditional-health-mix/img-2.jpg",
+        image: "/products/health-mix-500g/img-1.jpg",
         gallery: [
-          "/products/traditional-health-mix/img-2.jpg",
-          "/products/traditional-health-mix/img-5.jpg",
-          "/products/traditional-health-mix/img-6.jpg",
+          "/products/health-mix-500g/img-1.jpg",
+          "/products/health-mix-500g/img-2.jpg",
+          "/products/health-mix-500g/img-3.jpg",
+          "/products/health-mix-500g/img-4.jpg",
+          "/products/health-mix-500g/img-5.jpg",
+          "/products/health-mix-500g/img-6.jpg",
         ],
       },
     ],
@@ -480,8 +536,8 @@ export const products: Product[] = [
         image: "/products/pure-benzoin-sambrani/img-1.png",
       },
       {
-        id: "100g",
-        label: "100 g",
+        id: "500g",
+        label: "500 g",
         price: 290,
         mrp: 350,
         stock: 50,
@@ -923,7 +979,6 @@ export const products: Product[] = [
         gallery: [
           "/products/bottle-jar/img-4.jpg",
           "/products/bottle-jar/img-5.jpg",
-          "/products/bottle-jar/img-1.jpg",
         ],
       },
     ],
@@ -947,6 +1002,7 @@ export const products: Product[] = [
       "/products/hing/img-3.jpg",
       "/products/hing/img-4.jpg",
       "/products/hing/img-5.jpg",
+      "/products/hing/img-6.jpg",
     ],
     description:
       "The raw, unadulterated gum oleoresin directly harvested from the mountain roots of Ferula. Extremely potent and medicinal — a microscopic piece will transform an entire banquet.",
@@ -955,25 +1011,14 @@ export const products: Product[] = [
     shelfLife: "12 months from packing. Store in an airtight container.",
     variants: [
       {
-        id: "25g",
-        label: "25 g Raw Lump",
-        price: 390,
-        mrp: 450,
-        stock: 35,
-        image: "/products/hing/img-1.jpg",
-        gallery: [
-          "/products/hing/img-1.jpg",
-          "/products/hing/img-2.jpg",
-        ],
-      },
-      {
         id: "50g",
         label: "50 g Raw Lump",
         price: 720,
         mrp: 820,
         stock: 40,
-        image: "/products/hing/img-2.jpg",
+        image: "/products/hing/img-1.jpg",
         gallery: [
+          "/products/hing/img-1.jpg",
           "/products/hing/img-2.jpg",
           "/products/hing/img-3.jpg",
         ],
@@ -984,11 +1029,11 @@ export const products: Product[] = [
         price: 1350,
         mrp: 1550,
         stock: 25,
-        image: "/products/hing/img-3.jpg",
+        image: "/products/hing/img-4.jpg",
         gallery: [
-          "/products/hing/img-3.jpg",
           "/products/hing/img-4.jpg",
           "/products/hing/img-5.jpg",
+          "/products/hing/img-6.jpg",
         ],
       },
     ],
@@ -1013,6 +1058,9 @@ export const products: Product[] = [
       "/products/all-product/img-4.jpg",
       "/products/all-product/img-5.jpg",
       "/products/all-product/img-6.jpg",
+      "/products/all-product/img-7.jpg",
+      "/products/all-product/img-8.jpg",
+      "/products/all-product/img-9.jpg",
     ],
     description:
       "The definitive Y.G tasting experience containing Gold Powder, Premium Cake, Pellets, Chips, and Bottle Jar alongside an engraved brass spoon and heritage recipe cards.",
@@ -1044,6 +1092,9 @@ export const products: Product[] = [
           "/products/all-product/img-4.jpg",
           "/products/all-product/img-5.jpg",
           "/products/all-product/img-6.jpg",
+          "/products/all-product/img-7.jpg",
+          "/products/all-product/img-8.jpg",
+          "/products/all-product/img-9.jpg",
         ],
       },
     ],
@@ -1064,172 +1115,165 @@ export const formatLabels: Record<Format, string> = {
   appalam: "Crispy Appalam",
 };
 
-function normalizeLiveProduct(raw: any, base?: Product): Product {
-  const slug = raw.slug || base?.slug || "";
-  const name = raw.name || base?.name || "";
-  const tagline = raw.tagline || base?.tagline || "";
-  const format: Format = (raw.format || base?.format || "powder") as Format;
+export type MainCategoryId = "all" | "asafoetida" | "crispi" | "food-products" | "pooja-products";
 
-  const glutenFree =
-    raw.glutenFree !== undefined
-      ? Boolean(raw.glutenFree)
-      : raw.gluten_free !== undefined
-      ? Boolean(raw.gluten_free)
-      : base?.glutenFree ?? false;
+export const MAIN_CATEGORIES: Array<{ id: MainCategoryId; label: string }> = [
+  { id: "all", label: "All Products" },
+  { id: "asafoetida", label: "Asafoetida" },
+  { id: "crispi", label: "Crispi" },
+  { id: "food-products", label: "Food Products" },
+  { id: "pooja-products", label: "Pooja Products" },
+];
 
-  const bestseller =
-    raw.bestseller !== undefined
-      ? Boolean(raw.bestseller)
-      : base?.bestseller ?? false;
-
-  const image = raw.image || base?.image || "/products/100g-gold-asafoetida-powder/img-1.jpg";
-
-  let gallery: string[] = base?.gallery || [image];
-  if (Array.isArray(raw.gallery) && raw.gallery.length > 0) {
-    gallery = raw.gallery;
-  } else if (typeof raw.gallery === "string") {
-    try {
-      const parsed = JSON.parse(raw.gallery);
-      if (Array.isArray(parsed) && parsed.length > 0) gallery = parsed;
-    } catch {
-      gallery = [image];
+export function matchesCategory(p: Product, catId: string | undefined | null): boolean {
+  if (!catId || catId === "all") return true;
+  if (
+    catId === "asafoetida" ||
+    catId === "powder" ||
+    catId === "granules" ||
+    catId === "cake" ||
+    catId === "combo" ||
+    catId === "gf"
+  ) {
+    if (catId === "gf") return p.glutenFree;
+    if (catId === "powder" || catId === "granules" || catId === "cake" || catId === "combo") {
+      return p.format === catId;
     }
+    return p.format === "powder" || p.format === "granules" || p.format === "cake" || p.format === "combo" || p.glutenFree;
+  }
+  if (catId === "crispi" || catId === "appalam") {
+    return p.format === "appalam" || p.slug.includes("appalam") || p.slug.includes("crispi");
+  }
+  if (catId === "food-products" || catId === "food_products" || catId === "wellness" || catId === "vismaya") {
+    if (catId === "wellness" || catId === "vismaya") return p.format === catId;
+    return p.format === "wellness" || p.format === "vismaya";
+  }
+  if (catId === "pooja-products" || catId === "pooja_products" || catId === "pooja") {
+    return p.format === "pooja";
+  }
+  return p.format === catId;
+}
+
+
+function dbProductToProduct(db: DbProduct): Product {
+  let gallery: string[] = [db.image];
+  try {
+    const parsed = JSON.parse(db.gallery);
+    if (Array.isArray(parsed) && parsed.length > 0) gallery = parsed;
+  } catch {
+    /* keep fallback */
   }
 
-  const inStock =
-    raw.inStock !== undefined
-      ? Boolean(raw.inStock)
-      : raw.in_stock !== undefined
-      ? Boolean(raw.in_stock)
-      : base?.inStock ?? true;
-
-  const stockLeft =
-    raw.stockLeft !== undefined
-      ? (raw.stockLeft === null ? undefined : Number(raw.stockLeft))
-      : raw.stock_left !== undefined
-      ? (raw.stock_left === null ? undefined : Number(raw.stock_left))
-      : base?.stockLeft;
-
-  const description = raw.description || base?.description || "";
-  const ingredients = raw.ingredients || base?.ingredients || "";
-  const usage = raw.usage || base?.usage || "";
-  const shelfLife =
-    raw.shelfLife ||
-    raw.shelf_life ||
-    base?.shelfLife ||
-    "12 months from packing. Store in an airtight container.";
-  const rating = Number(raw.rating !== undefined ? raw.rating : (base?.rating ?? 4.8));
-  const reviews = Number(raw.reviews !== undefined ? raw.reviews : (base?.reviews ?? 100));
-
-  let variants: Variant[] = base?.variants || [];
-  if (Array.isArray(raw.variants) && raw.variants.length > 0) {
-    variants = raw.variants.map((mv: any) => {
-      const baseV = base?.variants?.find((bv) => bv.id === mv.id);
-      return {
-        id: String(mv.id),
-        label: mv.label || baseV?.label || String(mv.id),
-        price: Number(mv.price ?? baseV?.price ?? 100),
-        mrp: mv.mrp !== undefined && mv.mrp !== null ? Number(mv.mrp) : baseV?.mrp,
-        stock: mv.stock !== undefined ? Number(mv.stock) : baseV?.stock,
-        image: mv.image || baseV?.image,
-        gallery: mv.gallery || baseV?.gallery,
-      };
-    });
-  }
+  const variants: Variant[] = (db.variants || []).map((v) => {
+    let variantGallery: string[] | undefined;
+    if (v.gallery) {
+      try {
+        const parsed = JSON.parse(v.gallery);
+        if (Array.isArray(parsed) && parsed.length > 0) variantGallery = parsed;
+      } catch {
+        /* ignore malformed variant gallery */
+      }
+    }
+    return {
+      id: v.id,
+      label: v.label,
+      price: v.price,
+      mrp: v.mrp ?? undefined,
+      stock: v.stock,
+      image: v.image ?? undefined,
+      gallery: variantGallery,
+    };
+  });
 
   return {
-    slug,
-    name,
-    tagline,
-    format,
-    glutenFree,
-    bestseller,
-    image,
+    slug: db.slug,
+    name: db.name,
+    tagline: db.tagline,
+    format: db.format as Format,
+    glutenFree: db.gluten_free === 1,
+    bestseller: db.bestseller === 1,
+    image: db.image,
     gallery,
-    description,
-    ingredients,
-    usage,
-    shelfLife,
+    description: db.description,
+    ingredients: db.ingredients,
+    usage: db.usage,
+    shelfLife: db.shelf_life,
     variants,
-    inStock,
-    stockLeft,
-    rating,
-    reviews,
+    inStock: db.status !== "hidden" && db.status !== "draft" && db.in_stock === 1,
+    stockLeft: db.stock_left ?? undefined,
+    rating: db.rating,
+    reviews: db.reviews,
   };
+}
+
+/** Slug aliases kept for old links (e.g. older marketing URLs) that point at a renamed product. */
+const SLUG_ALIASES: Record<string, string> = {
+  "millet-pongal-mix": "vismaya-kodo-millet-pongal-mix",
+  "millet-sambar-mix": "vismaya-kodo-millet-sambar-mix",
+  "black-sesame-seeds": "traditional-ellu-podi",
+  "vismaya-multigrain-adai-dosa-mix": "vismaya-multi-millet-adai-dosa-mix",
+  "adai-dosa-mix": "vismaya-multi-millet-adai-dosa-mix",
+  "multigrain-adai-dosa-mix": "vismaya-multi-millet-adai-dosa-mix",
+};
+
+function findBySlugWithAliases(list: Product[], slug: string): Product | undefined {
+  const aliased = SLUG_ALIASES[slug];
+  if (aliased) {
+    const match = list.find((p) => p.slug === aliased);
+    if (match) return match;
+  }
+  return list.find((p) => p.slug === slug);
 }
 
 /**
  * Live product catalog synchronization:
- * When an administrator updates prices, stock, names, or descriptions in the Admin Portal,
- * this function automatically retrieves the updated data from storage / database so the
- * entire website (Shop page, Product details, Cart, and Checkout) updates dynamically.
+ * Fetches the real, admin-managed catalog from the server database so the
+ * entire storefront (Shop page, Product details, Cart, Checkout, Search)
+ * always reflects whatever an administrator has saved in the Admin Portal —
+ * for every visitor, not just the browser that made the edit.
+ * Only customer-visible statuses ("active"/"out_of_stock") are shown; a
+ * network failure falls back to the bundled static catalog so the site
+ * still renders something rather than an empty page.
  */
-export function getLiveProducts(): Product[] {
-  if (typeof window === "undefined") return products;
+export async function getLiveProducts(): Promise<Product[]> {
   try {
-    let deletedSlugs: string[] = [];
-    try {
-      const delRaw = localStorage.getItem("yg_deleted_products");
-      if (delRaw) deletedSlugs = JSON.parse(delRaw);
-    } catch {}
-
-    const baseList = products.filter((p) => !deletedSlugs.includes(p.slug));
-    const raw = localStorage.getItem("yg_live_products");
-    if (raw) {
-      const liveList = JSON.parse(raw) as any[];
-      if (Array.isArray(liveList) && liveList.length > 0) {
-        const merged = baseList.map((base) => {
-          const match = liveList.find((p) => p.slug === base.slug);
-          if (!match) return base;
-          return normalizeLiveProduct(match, base);
-        });
-
-        for (const item of liveList) {
-          if (item?.slug && !deletedSlugs.includes(item.slug) && !merged.some((p) => p.slug === item.slug)) {
-            merged.push(normalizeLiveProduct(item));
-          }
-        }
-        return merged;
-      }
+    const dbProducts = await getProductsServerFn();
+    if (Array.isArray(dbProducts) && dbProducts.length > 0) {
+      return dbProducts
+        .filter((p) => p.status === "active" || p.status === "out_of_stock")
+        .map(dbProductToProduct);
     }
-    return baseList;
-  } catch (e) {
-    console.error("Failed to load live product overrides:", e);
     return products;
-  }
-}
-
-export function saveLiveProducts(items: any[]): void {
-  if (typeof window === "undefined") return;
-  try {
-    localStorage.setItem("yg_live_products", JSON.stringify(items));
-    window.dispatchEvent(new CustomEvent("yg_products_updated"));
-    window.dispatchEvent(new Event("storage"));
   } catch (e) {
-    console.error("Failed to save live products:", e);
+    console.error("Failed to load live products, falling back to static catalog:", e);
+    return products;
   }
 }
 
 /**
  * Reactive React hook for live products catalog.
- * Any admin change (price, stock, title, category) causes all subscribing components to immediately re-render.
+ * Re-fetches on mount and whenever a "yg_products_updated" event fires
+ * (dispatched by the Admin Portal right after a save/delete/status change).
+ * Pass `initialProducts` (e.g. from a route loader that already awaited
+ * getLiveProducts() server-side) to avoid a stale-then-corrected flash on
+ * first paint.
  */
-export function useLiveProducts(): Product[] {
-  const [list, setList] = useState<Product[]>(() => getLiveProducts());
+export function useLiveProducts(initialProducts?: Product[]): Product[] {
+  const [list, setList] = useState<Product[]>(initialProducts || products);
 
   useEffect(() => {
-    setList(getLiveProducts());
-
-    const handleUpdate = () => {
-      setList(getLiveProducts());
+    let cancelled = false;
+    const load = () => {
+      getLiveProducts().then((data) => {
+        if (!cancelled) setList(data);
+      });
     };
+    load();
 
-    window.addEventListener("yg_products_updated", handleUpdate);
-    window.addEventListener("storage", handleUpdate);
-
+    window.addEventListener("yg_products_updated", load);
     return () => {
-      window.removeEventListener("yg_products_updated", handleUpdate);
-      window.removeEventListener("storage", handleUpdate);
+      cancelled = true;
+      window.removeEventListener("yg_products_updated", load);
     };
   }, []);
 
@@ -1240,33 +1284,34 @@ export function useLiveProducts(): Product[] {
  * Reactive React hook for a single product by slug.
  */
 export function useLiveProduct(slug: string): Product | undefined {
-  const [product, setProduct] = useState<Product | undefined>(() => getProduct(slug));
+  const [product, setProduct] = useState<Product | undefined>(() =>
+    findBySlugWithAliases(products, slug)
+  );
 
   useEffect(() => {
-    setProduct(getProduct(slug));
-
-    const handleUpdate = () => {
-      setProduct(getProduct(slug));
+    let cancelled = false;
+    const load = () => {
+      getLiveProducts().then((all) => {
+        if (!cancelled) setProduct(findBySlugWithAliases(all, slug));
+      });
     };
+    load();
 
-    window.addEventListener("yg_products_updated", handleUpdate);
-    window.addEventListener("storage", handleUpdate);
-
+    window.addEventListener("yg_products_updated", load);
     return () => {
-      window.removeEventListener("yg_products_updated", handleUpdate);
-      window.removeEventListener("storage", handleUpdate);
+      cancelled = true;
+      window.removeEventListener("yg_products_updated", load);
     };
   }, [slug]);
 
   return product;
 }
 
-/** Simple relevance search over name, tagline, format and description. */
-export function searchProducts(query: string): Product[] {
+export function searchProductsIn(list: Product[], query: string): Product[] {
   const q = query.trim().toLowerCase();
   if (!q) return [];
   const terms = q.split(/\s+/);
-  return getLiveProducts()
+  return list
     .map((p) => {
       const haystack = [p.name, p.tagline, formatLabels[p.format] || "", p.description]
         .join(" ")
@@ -1283,22 +1328,15 @@ export function searchProducts(query: string): Product[] {
     .map((r) => r.p);
 }
 
-export function getProduct(slug: string) {
-  const all = getLiveProducts();
-  // Support slug aliases
-  if (slug === "millet-pongal-mix") {
-    return all.find((p) => p.slug === "vismaya-kodo-millet-pongal-mix") || all.find((p) => p.slug === slug);
-  }
-  if (slug === "millet-sambar-mix") {
-    return all.find((p) => p.slug === "vismaya-kodo-millet-sambar-mix") || all.find((p) => p.slug === slug);
-  }
-  if (slug === "black-sesame-seeds") {
-    return all.find((p) => p.slug === "traditional-ellu-podi") || all.find((p) => p.slug === slug);
-  }
-  if (slug === "vismaya-multigrain-adai-dosa-mix" || slug === "adai-dosa-mix" || slug === "multigrain-adai-dosa-mix") {
-    return all.find((p) => p.slug === "vismaya-multi-millet-adai-dosa-mix") || all.find((p) => p.slug === slug);
-  }
-  return all.find((p) => p.slug === slug);
+/** Simple relevance search over name, tagline, format and description. */
+export async function searchProducts(query: string): Promise<Product[]> {
+  const list = await getLiveProducts();
+  return searchProductsIn(list, query);
+}
+
+export async function getProduct(slug: string): Promise<Product | undefined> {
+  const all = await getLiveProducts();
+  return findBySlugWithAliases(all, slug);
 }
 
 export function formatPrice(paise?: number | string | null) {

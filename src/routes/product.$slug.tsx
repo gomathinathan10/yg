@@ -54,8 +54,8 @@ const BackInStockDialog = lazy(() =>
 
 export const Route = createFileRoute("/product/$slug")({
   pendingComponent: () => null,
-  loader: ({ params }) => {
-    const product = getProduct(params.slug);
+  loader: async ({ params }) => {
+    const product = await getProduct(params.slug);
     if (!product) throw notFound();
     return { product };
   },
@@ -69,7 +69,7 @@ export const Route = createFileRoute("/product/$slug")({
     const minPrice = Math.min(...product.variants.map((v) => v.price));
     const maxPrice = Math.max(...product.variants.map((v) => v.price));
     const priceText = minPrice === maxPrice ? `₹${minPrice}` : `₹${minPrice} - ₹${maxPrice}`;
-    const description = `${product.name} (${priceText}) — ${product.tagline}. ${product.description.slice(0, 140)}... Compounded in Tirunelveli since 1931.`;
+    const description = `${product.name} (${priceText}) — ${product.tagline}. ${product.description.slice(0, 140)}... Compounded in Tirunelveli since 1932.`;
     const canonicalUrl = `https://ygasafoetida.in/product/${product.slug}`;
     const imageUrl = `https://ygasafoetida.in/products/${product.slug}/img-1.jpg`;
 
@@ -338,8 +338,8 @@ function ProductPage() {
         {/* Mobile Header Lockup (Title, Rating, Eyebrow & Wishlist on top) */}
         <div className="lg:hidden space-y-2 pb-4 border-b border-[#E8DEC8] mb-4">
           <div className="flex items-center justify-between gap-2">
-            <span className="text-xs font-semibold text-[#181206] bg-[#FFC700]/10 px-2.5 py-1 rounded-[4px]">
-              {product.format === "vismaya" ? "Vismaya · Ready to Cook" : `${formatLabels[product.format]} · Estd. 1931`}
+            <span className="text-xs font-semibold text-[#181206] bg-[#FF9933]/10 px-2.5 py-1 rounded-[4px]">
+              {product.format === "vismaya" ? "Vismaya · Ready to Cook" : `${formatLabels[product.format]} · Estd. 1932`}
             </span>
 
             {/* Mobile Product Next/Back Navigation */}
@@ -349,7 +349,7 @@ function ProductPage() {
                   <Link
                     to="/product/$slug"
                     params={{ slug: prevProduct.slug }}
-                    className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-[4px] bg-white border border-[#E8DEC8] text-[10px] font-bold text-[#181206] hover:bg-[#FFC700] hover:border-[#FFC700] transition-all cursor-pointer shadow-xs active:scale-95"
+                    className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-[4px] bg-white border border-[#E8DEC8] text-[10px] font-bold text-[#181206] hover:bg-[#FF9933] hover:border-[#FF9933] transition-all cursor-pointer shadow-xs active:scale-95"
                     title={`Previous: ${prevProduct.name}`}
                   >
                     <ChevronLeft className="h-3 w-3" />
@@ -370,7 +370,7 @@ function ProductPage() {
                   <Link
                     to="/product/$slug"
                     params={{ slug: nextProduct.slug }}
-                    className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-[4px] bg-white border border-[#E8DEC8] text-[10px] font-bold text-[#181206] hover:bg-[#FFC700] hover:border-[#FFC700] transition-all shadow-xs cursor-pointer active:scale-95"
+                    className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-[4px] bg-white border border-[#E8DEC8] text-[10px] font-bold text-[#181206] hover:bg-[#FF9933] hover:border-[#FF9933] transition-all shadow-xs cursor-pointer active:scale-95"
                     title={`Next: ${nextProduct.name}`}
                   >
                     <span>Next</span>
@@ -436,8 +436,8 @@ function ProductPage() {
             {/* Desktop Header Lockup */}
             <div className="hidden lg:block">
               <div className="flex items-center justify-between gap-2">
-                <span className="text-xs font-semibold text-[#181206] bg-[#FFC700]/10 px-2.5 py-1 rounded-[4px]">
-                  {product.format === "vismaya" ? "Vismaya · Ready to Cook" : `${formatLabels[product.format]} · Estd. 1931`}
+                <span className="text-xs font-semibold text-[#181206] bg-[#FF9933]/10 px-2.5 py-1 rounded-[4px]">
+                  {product.format === "vismaya" ? "Vismaya · Ready to Cook" : `${formatLabels[product.format]} · Estd. 1932`}
                 </span>
 
                 {/* Desktop Product Navigation: Back, 1/23, Next */}
@@ -447,7 +447,7 @@ function ProductPage() {
                       <Link
                         to="/product/$slug"
                         params={{ slug: prevProduct.slug }}
-                        className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-[4px] bg-white border border-[#E8DEC8] text-[11px] font-bold text-[#181206] hover:bg-[#FFC700] hover:border-[#FFC700] transition-all cursor-pointer shadow-xs active:scale-95"
+                        className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-[4px] bg-white border border-[#E8DEC8] text-[11px] font-bold text-[#181206] hover:bg-[#FF9933] hover:border-[#FF9933] transition-all cursor-pointer shadow-xs active:scale-95"
                         title={`Previous: ${prevProduct.name}`}
                       >
                         <ChevronLeft className="h-3 w-3" />
@@ -468,7 +468,7 @@ function ProductPage() {
                       <Link
                         to="/product/$slug"
                         params={{ slug: nextProduct.slug }}
-                        className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-[4px] bg-white border border-[#E8DEC8] text-[11px] font-bold text-[#181206] hover:bg-[#FFC700] hover:border-[#FFC700] transition-all shadow-xs cursor-pointer active:scale-95"
+                        className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-[4px] bg-white border border-[#E8DEC8] text-[11px] font-bold text-[#181206] hover:bg-[#FF9933] hover:border-[#FF9933] transition-all shadow-xs cursor-pointer active:scale-95"
                         title={`Next: ${nextProduct.name}`}
                       >
                         <span>Next</span>
@@ -555,8 +555,8 @@ function ProductPage() {
                     onClick={() => handleSelectVariant(v.id)}
                     className={`flex items-center gap-1.5 rounded-[6px] border px-3 py-2 text-xs font-semibold transition-all cursor-pointer ${
                       v.id === variantId
-                        ? "border-[#FFC700] bg-[#FFC700]/10 text-[#181206] shadow-xs font-bold ring-1 ring-[#FFC700]"
-                        : "border-[#E8DEC8] bg-white text-[#181206] hover:border-[#FFC700]/60 hover:text-[#181206]"
+                        ? "border-[#FF9933] bg-[#FF9933]/10 text-[#181206] shadow-xs font-bold ring-1 ring-[#FF9933]"
+                        : "border-[#E8DEC8] bg-white text-[#181206] hover:border-[#FF9933]/60 hover:text-[#181206]"
                     }`}
                   >
                     {v.id === variantId ? <Check className="h-3 w-3 text-[#181206]" /> : null}
@@ -590,7 +590,7 @@ function ProductPage() {
               <div className="space-y-3">
                 {product.stockLeft ? (
                   <p className="text-[11px] font-semibold text-[#181206] flex items-center gap-1.5">
-                    <span className="h-2 w-2 rounded-full bg-[#FFC700] animate-pulse" />
+                    <span className="h-2 w-2 rounded-full bg-[#FF9933] animate-pulse" />
                     Only {product.stockLeft} packs remaining from this fresh Tirunelveli batch
                   </p>
                 ) : null}
@@ -606,7 +606,7 @@ function ProductPage() {
 
                   <Button
                     size="sm"
-                    className="h-11 flex-1 font-bold gap-2 rounded-[6px] bg-[#FFC700] hover:bg-[#E6B000] text-[#181206] font-black shadow-xs text-xs sm:text-sm cursor-pointer transition-colors"
+                    className="h-11 flex-1 font-bold gap-2 rounded-[6px] bg-[#FF9933] hover:bg-[#E6B000] text-[#181206] font-black shadow-xs text-xs sm:text-sm cursor-pointer transition-colors"
                     onClick={() => {
                       add(product.slug, variant.id, qty);
                       toast.success(`Added ${qty} × ${product.name} to your basket!`);
@@ -621,7 +621,7 @@ function ProductPage() {
                   size="sm"
                   variant="outline"
                   disabled={buyingNow}
-                  className="w-full h-10 font-bold gap-1.5 rounded-[6px] border-[#FFC700] text-[#181206] hover:bg-[#FFC700] hover:text-white transition-all cursor-pointer"
+                  className="w-full h-10 font-bold gap-1.5 rounded-[6px] border-[#FF9933] text-[#181206] hover:bg-[#FF9933] hover:text-white transition-all cursor-pointer"
                   onClick={handleBuyNow}
                 >
                   {buyingNow ? (
@@ -631,7 +631,7 @@ function ProductPage() {
                     </>
                   ) : (
                     <>
-                      <Zap className="h-4 w-4 fill-[#FFC700] group-hover:fill-white" />
+                      <Zap className="h-4 w-4 fill-[#FF9933] group-hover:fill-white" />
                       <span>Instant Checkout · Buy Now</span>
                     </>
                   )}
@@ -682,7 +682,7 @@ function ProductPage() {
                   type="submit"
                   size="sm"
                   variant="outline"
-                  className="h-8 text-xs shrink-0 rounded-[6px] border-[#FFC700] text-[#181206] hover:bg-[#FFC700] hover:text-white"
+                  className="h-8 text-xs shrink-0 rounded-[6px] border-[#FF9933] text-[#181206] hover:bg-[#FF9933] hover:text-white"
                   disabled={isCheckingPin}
                 >
                   {isCheckingPin ? "Checking..." : "Check"}
@@ -749,7 +749,7 @@ function ProductPage() {
               className="flex items-center gap-2.5 text-xs font-bold text-[#181206] hover:text-[#B45309] transition-colors group min-w-0"
               title={`Previous: ${prevProduct.name}`}
             >
-              <div className="h-8 w-8 rounded-full border border-[#E8DEC8] bg-white flex items-center justify-center shrink-0 group-hover:bg-[#FFC700] transition-colors shadow-xs">
+              <div className="h-8 w-8 rounded-full border border-[#E8DEC8] bg-white flex items-center justify-center shrink-0 group-hover:bg-[#FF9933] transition-colors shadow-xs">
                 <ChevronLeft className="h-4 w-4 text-[#181206]" />
               </div>
               <div className="truncate text-left">
@@ -762,7 +762,7 @@ function ProductPage() {
               to="/shop"
               className="flex items-center gap-2 text-xs font-bold text-[#181206] hover:text-[#B45309] transition-colors group"
             >
-              <div className="h-8 w-8 rounded-full border border-[#E8DEC8] bg-white flex items-center justify-center shrink-0 group-hover:bg-[#FFC700] transition-colors shadow-xs">
+              <div className="h-8 w-8 rounded-full border border-[#E8DEC8] bg-white flex items-center justify-center shrink-0 group-hover:bg-[#FF9933] transition-colors shadow-xs">
                 <ChevronLeft className="h-4 w-4 text-[#181206]" />
               </div>
               <div className="text-left">
@@ -774,7 +774,7 @@ function ProductPage() {
 
           <Link
             to="/shop"
-            className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] border border-[#E8DEC8] bg-white text-xs font-bold text-[#181206] hover:bg-[#FFC700] hover:border-[#FFC700] transition-colors shadow-xs cursor-pointer"
+            className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] border border-[#E8DEC8] bg-white text-xs font-bold text-[#181206] hover:bg-[#FF9933] hover:border-[#FF9933] transition-colors shadow-xs cursor-pointer"
           >
             <span>All Products ({products.length})</span>
           </Link>
@@ -790,7 +790,7 @@ function ProductPage() {
                 <div className="text-[10px] text-[#6E777D] uppercase font-semibold">Next Product</div>
                 <div className="truncate font-bold text-xs max-w-[120px] sm:max-w-[200px]">{nextProduct.name}</div>
               </div>
-              <div className="h-8 w-8 rounded-full border border-[#E8DEC8] bg-white flex items-center justify-center shrink-0 group-hover:bg-[#FFC700] transition-colors shadow-xs">
+              <div className="h-8 w-8 rounded-full border border-[#E8DEC8] bg-white flex items-center justify-center shrink-0 group-hover:bg-[#FF9933] transition-colors shadow-xs">
                 <ChevronRight className="h-4 w-4 text-[#181206]" />
               </div>
             </Link>
@@ -803,7 +803,7 @@ function ProductPage() {
                 <div className="text-[10px] text-[#6E777D] uppercase font-semibold">Last Item</div>
                 <div className="font-bold text-xs">Back to Shop</div>
               </div>
-              <div className="h-8 w-8 rounded-full border border-[#E8DEC8] bg-white flex items-center justify-center shrink-0 group-hover:bg-[#FFC700] transition-colors shadow-xs">
+              <div className="h-8 w-8 rounded-full border border-[#E8DEC8] bg-white flex items-center justify-center shrink-0 group-hover:bg-[#FF9933] transition-colors shadow-xs">
                 <ChevronRight className="h-4 w-4 text-[#181206]" />
               </div>
             </Link>
@@ -859,7 +859,7 @@ function ProductPage() {
             <Button
               variant="outline"
               size="sm"
-              className="text-xs rounded-[6px] border-[#FFC700] text-[#181206] hover:bg-[#FFC700] hover:text-white"
+              className="text-xs rounded-[6px] border-[#FF9933] text-[#181206] hover:bg-[#FF9933] hover:text-white"
               asChild
             >
               <Link to="/shop">
@@ -901,7 +901,7 @@ function ProductPage() {
                 className="relative grid h-9 w-9 shrink-0 place-items-center rounded-[6px] border border-[#E8DEC8] bg-[#FAF3D6] text-[#181206] shadow-xs"
               >
                 <ShoppingBag className="h-4 w-4" />
-                <span className="absolute -top-1 -right-1 grid h-4 min-w-4 place-items-center rounded-full bg-[#FFC700] px-1 text-[9px] font-bold text-white">
+                <span className="absolute -top-1 -right-1 grid h-4 min-w-4 place-items-center rounded-full bg-[#FF9933] px-1 text-[9px] font-bold text-white">
                   {count}
                 </span>
               </button>
@@ -909,7 +909,7 @@ function ProductPage() {
 
             <Button
               variant="outline"
-              className="h-9 px-3 text-xs font-bold gap-1 rounded-[6px] border-[#FFC700] text-[#181206] hover:bg-[#FFC700] hover:text-white active:scale-95"
+              className="h-9 px-3 text-xs font-bold gap-1 rounded-[6px] border-[#FF9933] text-[#181206] hover:bg-[#FF9933] hover:text-white active:scale-95"
               disabled={soldOut || buyingNow}
               onClick={handleBuyNow}
             >
@@ -921,7 +921,7 @@ function ProductPage() {
               Buy Now
             </Button>
             <Button
-              className="h-9 px-3.5 text-xs font-bold gap-1 rounded-[6px] bg-[#FFC700] hover:bg-[#E6B000] text-[#181206] font-black active:scale-95"
+              className="h-9 px-3.5 text-xs font-bold gap-1 rounded-[6px] bg-[#FF9933] hover:bg-[#E6B000] text-[#181206] font-black active:scale-95"
               disabled={soldOut}
               onClick={() => {
                 add(product.slug, variant.id, qty);

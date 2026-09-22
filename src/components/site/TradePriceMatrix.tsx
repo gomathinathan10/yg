@@ -267,7 +267,7 @@ export function TradePriceMatrix() {
                   onClick={() => setSelectedPriceBracket(b.id)}
                   className={`px-2.5 py-1 text-[11px] font-semibold rounded-lg transition-colors whitespace-nowrap flex items-center gap-1.5 ${
                     isActive
-                      ? "bg-[#FFC700] text-[#181206] font-bold shadow-xs"
+                      ? "bg-[#FF9933] text-[#181206] font-bold shadow-xs"
                       : "text-muted-foreground hover:text-foreground hover:bg-card/60"
                   }`}
                 >

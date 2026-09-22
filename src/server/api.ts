@@ -1,5 +1,6 @@
 import { store } from "./db/store";
 import { TRADE_PRODUCTS, PRICE_TIERS } from "@/data/trade-pricing";
+import { verifyAdminCredentials, getAdminToken, isValidAdminToken } from "./auth";
 
 function json(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), {
@@ -9,6 +10,10 @@ function json(data: unknown, status = 200): Response {
       "access-control-allow-origin": "*",
     },
   });
+}
+
+function requireAdmin(request: Request): boolean {
+  return isValidAdminToken(request.headers.get("x-admin-token"));
 }
 
 async function parseBody<T>(req: Request): Promise<T | null> {
@@ -35,7 +40,7 @@ export async function handleApiRequest(request: Request): Promise<Response | nul
       headers: {
         "access-control-allow-origin": "*",
         "access-control-allow-methods": "GET, POST, PATCH, DELETE, OPTIONS",
-        "access-control-allow-headers": "content-type",
+        "access-control-allow-headers": "content-type, x-admin-token",
       },
     });
   }
@@ -44,6 +49,17 @@ export async function handleApiRequest(request: Request): Promise<Response | nul
     // GET /api/health
     if (path === "/api/health" && method === "GET") {
       return json({ ok: true, timestamp: Date.now() });
+    }
+
+
+    // ==================== ADMIN AUTH ====================
+    // POST /api/admin/login
+    if (path === "/api/admin/login" && method === "POST") {
+      const body = await parseBody<{ username: string; password: string }>(request);
+      if (!body || !verifyAdminCredentials(body.username || "", body.password || "")) {
+        return json({ ok: false, error: "Invalid username or password" }, 401);
+      }
+      return json({ ok: true, token: getAdminToken() });
     }
 
     // ==================== ANALYTICS ====================
@@ -119,9 +135,38 @@ export async function handleApiRequest(request: Request): Promise<Response | nul
     // ==================== PRODUCTS ====================
     // POST /api/products/stock
     if (path === "/api/products/stock" && method === "POST") {
+      if (!requireAdmin(request)) return json({ ok: false, error: "Unauthorized" }, 401);
       const body = await parseBody<{ slug: string; inStock: boolean; stockLeft?: number | null }>(request);
       if (!body?.slug) return json({ ok: false, error: "Slug required" }, 400);
       const ok = store.toggleProductStock(body.slug, body.inStock, body.stockLeft);
+      return json({ ok });
+    }
+
+    // PATCH /api/products/:slug/status
+    const prodStatusMatch = path.match(/^\/api\/products\/([A-Za-z0-9_-]+)\/status$/);
+    if (prodStatusMatch && method === "PATCH") {
+      if (!requireAdmin(request)) return json({ ok: false, error: "Unauthorized" }, 401);
+      const slug = prodStatusMatch[1]!;
+      const body = await parseBody<{ status: "active" | "draft" | "out_of_stock" | "hidden" }>(request);
+      if (!body?.status) return json({ ok: false, error: "Status required" }, 400);
+      const ok = store.setProductStatus(slug, body.status);
+      return json({ ok });
+    }
+
+    // POST /api/products/:slug/restore
+    const prodRestoreMatch = path.match(/^\/api\/products\/([A-Za-z0-9_-]+)\/restore$/);
+    if (prodRestoreMatch && method === "POST") {
+      if (!requireAdmin(request)) return json({ ok: false, error: "Unauthorized" }, 401);
+      const ok = store.restoreProduct(prodRestoreMatch[1]!);
+      return json({ ok });
+    }
+
+    // POST /api/products/reorder
+    if (path === "/api/products/reorder" && method === "POST") {
+      if (!requireAdmin(request)) return json({ ok: false, error: "Unauthorized" }, 401);
+      const body = await parseBody<{ slugs: string[] }>(request);
+      if (!Array.isArray(body?.slugs)) return json({ ok: false, error: "slugs array required" }, 400);
+      const ok = store.reorderProducts(body.slugs);
       return json({ ok });
     }
 
@@ -134,8 +179,9 @@ export async function handleApiRequest(request: Request): Promise<Response | nul
       return json(product);
     }
 
-    // DELETE /api/products/:slug
+    // DELETE /api/products/:slug (soft delete / archive)
     if (prodSlugMatch && method === "DELETE") {
+      if (!requireAdmin(request)) return json({ ok: false, error: "Unauthorized" }, 401);
       const slug = prodSlugMatch[1]!;
       const ok = store.deleteProduct(slug);
       return json({ ok });
@@ -143,7 +189,8 @@ export async function handleApiRequest(request: Request): Promise<Response | nul
 
     // GET /api/products
     if (path === "/api/products" && method === "GET") {
-      return json(store.listProducts());
+      const includeArchived = url.searchParams.get("includeArchived") === "1";
+      return json(store.listProducts({ includeArchived }));
     }
 
     // GET /api/trade-pricing
@@ -153,12 +200,38 @@ export async function handleApiRequest(request: Request): Promise<Response | nul
 
     // POST /api/products (admin save)
     if (path === "/api/products" && method === "POST") {
+      if (!requireAdmin(request)) return json({ ok: false, error: "Unauthorized" }, 401);
       const body = await parseBody<any>(request);
       if (!body?.slug || !body?.name) {
         return json({ ok: false, error: "Invalid product data" }, 400);
       }
       const product = store.saveProduct(body);
       return json(product);
+    }
+
+    // ==================== CATEGORIES ====================
+    // GET /api/categories
+    if (path === "/api/categories" && method === "GET") {
+      return json(store.listCategories());
+    }
+
+    // POST /api/categories
+    if (path === "/api/categories" && method === "POST") {
+      if (!requireAdmin(request)) return json({ ok: false, error: "Unauthorized" }, 401);
+      const body = await parseBody<{ slug?: string; name: string }>(request);
+      if (!body?.name?.trim()) return json({ ok: false, error: "Category name required" }, 400);
+      const category = store.saveCategory(body);
+      return json({ ok: true, category });
+    }
+
+    // DELETE /api/categories/:slug?replacement=other-slug
+    const categorySlugMatch = path.match(/^\/api\/categories\/([A-Za-z0-9_-]+)$/);
+    if (categorySlugMatch && method === "DELETE") {
+      if (!requireAdmin(request)) return json({ ok: false, error: "Unauthorized" }, 401);
+      const slug = categorySlugMatch[1]!;
+      const replacement = url.searchParams.get("replacement") || undefined;
+      const result = store.deleteCategory(slug, replacement);
+      return json(result, result.ok ? 200 : 409);
     }
 
     // ==================== REVIEWS ====================

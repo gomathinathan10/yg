@@ -1,6 +1,6 @@
 # Y.G Asafoetida — E-Commerce Web Application
 
-A full-stack, responsive e-commerce web platform for **Y.G Asafoetida** (Estd. 1931, Tirunelveli — 94 Years of Heritage), built with TanStack Start, React 19, SQLite, and Tailwind CSS.
+A full-stack, responsive e-commerce web platform for **Y.G Asafoetida** (Estd. 1932, Tirunelveli — 94 Years of Heritage), built with TanStack Start, React 19, SQLite, and Tailwind CSS.
 
 ---
 

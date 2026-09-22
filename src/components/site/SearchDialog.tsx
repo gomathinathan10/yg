@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { formatPrice, products, searchProducts, formatLabels } from "@/data/products";
+import { formatPrice, useLiveProducts, searchProductsIn, formatLabels } from "@/data/products";
 import { SmartImage } from "@/components/site/SmartImage";
 
 const QUICK_SUGGESTIONS = [
@@ -36,6 +36,7 @@ export function SearchDialog({
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+  const allProducts = useLiveProducts();
 
   // Auto focus input whenever dialog opens
   useEffect(() => {
@@ -54,10 +55,10 @@ export function SearchDialog({
     const q = query.trim();
     if (!q) {
       // Show bestsellers and signature products by default
-      return products.filter((p) => p.bestseller || p.format === "powder" || p.format === "cake").slice(0, 6);
+      return allProducts.filter((p) => p.bestseller || p.format === "powder" || p.format === "cake").slice(0, 6);
     }
-    return searchProducts(q);
-  }, [query]);
+    return searchProductsIn(allProducts, q);
+  }, [query, allProducts]);
 
   const handleSelectProduct = (slug: string) => {
     onOpenChange(false);
@@ -134,8 +135,8 @@ export function SearchDialog({
               }}
               className={`px-2.5 py-1 rounded-[4px] text-[11px] font-medium transition-all shrink-0 cursor-pointer ${
                 query.toLowerCase() === tag.toLowerCase()
-                  ? "bg-[#FFC700] text-[#181206] font-black font-bold shadow-xs"
-                  : "bg-[#FAF3D6] border border-[#E8DEC8] text-muted-foreground hover:text-[#181206] hover:border-[#FFC700]"
+                  ? "bg-[#FF9933] text-[#181206] font-black font-bold shadow-xs"
+                  : "bg-[#FAF3D6] border border-[#E8DEC8] text-muted-foreground hover:text-[#181206] hover:border-[#FF9933]"
               }`}
             >
               {tag}
@@ -162,14 +163,14 @@ export function SearchDialog({
               <Button
                 variant="outline"
                 size="sm"
-                className="text-xs gap-1.5 font-bold border-[#FFC700] text-[#181206] hover:bg-[#FFC700] hover:text-white rounded-[6px]"
+                className="text-xs gap-1.5 font-bold border-[#FF9933] text-[#181206] hover:bg-[#FF9933] hover:text-white rounded-[6px]"
                 onClick={() => {
                   onOpenChange(false);
                   void navigate({ to: "/shop" });
                 }}
               >
                 <ShoppingBag className="h-3.5 w-3.5" />
-                Browse All {products.length} Products in Shop
+                Browse All {allProducts.length} Products in Shop
               </Button>
             </div>
           ) : null}
@@ -252,7 +253,7 @@ export function SearchDialog({
                   onOpenChange(false);
                   void navigate({ to: "/shop" });
                 }}
-                className="p-2 rounded-[6px] border border-[#E8DEC8] bg-[#FAF3D6] hover:bg-[#FFC700]/10 hover:border-[#FFC700]/40 text-center transition-all group cursor-pointer"
+                className="p-2 rounded-[6px] border border-[#E8DEC8] bg-[#FAF3D6] hover:bg-[#FF9933]/10 hover:border-[#FF9933]/40 text-center transition-all group cursor-pointer"
               >
                 <ShoppingBag className="h-4 w-4 mx-auto mb-1 text-[#181206] group-hover:scale-110 transition-transform" />
                 <span className="text-[11px] font-bold text-[#181206] block">Shop All</span>
@@ -264,7 +265,7 @@ export function SearchDialog({
                   onOpenChange(false);
                   void navigate({ to: "/track" });
                 }}
-                className="p-2 rounded-[6px] border border-[#E8DEC8] bg-[#FAF3D6] hover:bg-[#FFC700]/10 hover:border-[#FFC700]/40 text-center transition-all group cursor-pointer"
+                className="p-2 rounded-[6px] border border-[#E8DEC8] bg-[#FAF3D6] hover:bg-[#FF9933]/10 hover:border-[#FF9933]/40 text-center transition-all group cursor-pointer"
               >
                 <Package className="h-4 w-4 mx-auto mb-1 text-[#181206] group-hover:scale-110 transition-transform" />
                 <span className="text-[11px] font-bold text-[#181206] block">Track Order</span>
@@ -276,10 +277,10 @@ export function SearchDialog({
                   onOpenChange(false);
                   void navigate({ to: "/story" });
                 }}
-                className="p-2 rounded-[6px] border border-[#E8DEC8] bg-[#FAF3D6] hover:bg-[#FFC700]/10 hover:border-[#FFC700]/40 text-center transition-all group cursor-pointer"
+                className="p-2 rounded-[6px] border border-[#E8DEC8] bg-[#FAF3D6] hover:bg-[#FF9933]/10 hover:border-[#FF9933]/40 text-center transition-all group cursor-pointer"
               >
                 <History className="h-4 w-4 mx-auto mb-1 text-[#181206] group-hover:scale-110 transition-transform" />
-                <span className="text-[11px] font-bold text-[#181206] block">Since 1931</span>
+                <span className="text-[11px] font-bold text-[#181206] block">Since 1932</span>
               </button>
             </div>
           </div>

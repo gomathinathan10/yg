@@ -24,7 +24,7 @@ export function Footer() {
       <div className="border-b border-white/10 py-8 sm:py-10 bg-[#1C2219]">
         <div className="container-page flex flex-col md:flex-row items-center justify-between gap-6 px-3 sm:px-6">
           <div className="max-w-md text-center md:text-left">
-            <span className="text-[#FFC700] font-black text-xs uppercase tracking-wider">
+            <span className="text-[#FF9933] font-black text-xs uppercase tracking-wider">
               Stay Connected
             </span>
             <h3 className="text-xl sm:text-2xl font-bold text-white mt-1">
@@ -49,7 +49,7 @@ export function Footer() {
             />
             <button
               type="submit"
-              className="bg-[#FFC700] hover:bg-[#E6B000] text-[#181206] px-4 py-2.5 rounded-[4px] text-xs sm:text-sm font-black flex items-center gap-1.5 transition-colors shrink-0 shadow-xs active:scale-95"
+              className="bg-[#FF9933] hover:bg-[#E6B000] text-[#181206] px-4 py-2.5 rounded-[4px] text-xs sm:text-sm font-black flex items-center gap-1.5 transition-colors shrink-0 shadow-xs active:scale-95"
             >
               <span>{subscribed ? "Subscribed!" : "Subscribe"}</span>
               <ArrowRight className="h-3.5 w-3.5" />
@@ -75,31 +75,31 @@ export function Footer() {
                 Y.G Asafoetida
               </p>
               <p className="text-[10px] font-semibold text-white/70 tracking-wider uppercase mt-1">
-                Tirunelveli · Since 1931
+                Tirunelveli · Since 1932
               </p>
             </div>
           </div>
           <p className="mt-4 text-xs sm:text-sm text-white/70 leading-relaxed">
             Crafting pure compounded asafoetida, solid gold cakes, and wood-roasted traditional mixes in Tirunelveli with 94 years of heritage across three generations.
           </p>
-          <div className="mt-4 flex items-center gap-3 text-xs text-[#FFC700] font-semibold">
+          <div className="mt-4 flex items-center gap-3 text-xs text-[#FF9933] font-semibold">
             <span className="flex items-center gap-1">
-              <ShieldCheck className="h-4 w-4 text-[#FFC700]" /> FSSAI Certified
+              <ShieldCheck className="h-4 w-4 text-[#FF9933]" /> FSSAI Certified
             </span>
             <span className="flex items-center gap-1">
-              <Truck className="h-4 w-4 text-[#FFC700]" /> India-Wide Delivery
+              <Truck className="h-4 w-4 text-[#FF9933]" /> India-Wide Delivery
             </span>
           </div>
         </div>
 
         {/* Col 2: Shop Categories */}
         <div>
-          <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-4 border-l-2 border-[#FFC700] pl-2.5">
+          <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-4 border-l-2 border-[#FF9933] pl-2.5">
             Our Products
           </h4>
           <ul className="space-y-2.5 text-xs sm:text-sm text-white/80">
             <li>
-              <Link to="/shop" className="hover:text-[#FFC700] transition-colors">
+              <Link to="/shop" className="hover:text-[#FF9933] transition-colors">
                 All Products Collection
               </Link>
             </li>
@@ -107,7 +107,7 @@ export function Footer() {
               <Link
                 to="/product/$slug"
                 params={{ slug: "gold-asafoetida-powder" }}
-                className="hover:text-[#FFC700] transition-colors"
+                className="hover:text-[#FF9933] transition-colors"
               >
                 Gold Compounded Hing
               </Link>
@@ -116,7 +116,7 @@ export function Footer() {
               <Link
                 to="/product/$slug"
                 params={{ slug: "gluten-free-asafoetida-powder" }}
-                className="hover:text-[#FFC700] transition-colors"
+                className="hover:text-[#FF9933] transition-colors"
               >
                 Gluten-Free Asafoetida
               </Link>
@@ -125,7 +125,7 @@ export function Footer() {
               <Link
                 to="/product/$slug"
                 params={{ slug: "asafoetida-gold-cake" }}
-                className="hover:text-[#FFC700] transition-colors"
+                className="hover:text-[#FF9933] transition-colors"
               >
                 Traditional Gold Cake
               </Link>
@@ -134,7 +134,7 @@ export function Footer() {
               <Link
                 to="/product/$slug"
                 params={{ slug: "traditional-health-mix" }}
-                className="hover:text-[#FFC700] transition-colors"
+                className="hover:text-[#FF9933] transition-colors"
               >
                 Sathu Maavu Health Mix
               </Link>
@@ -143,7 +143,7 @@ export function Footer() {
               <Link
                 to="/product/$slug"
                 params={{ slug: "pure-benzoin-sambrani" }}
-                className="hover:text-[#FFC700] transition-colors"
+                className="hover:text-[#FF9933] transition-colors"
               >
                 Pure Benzoin Sambrani
               </Link>
@@ -153,48 +153,48 @@ export function Footer() {
 
         {/* Col 3: Company & Quick Links */}
         <div>
-          <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-4 border-l-2 border-[#FFC700] pl-2.5">
+          <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-4 border-l-2 border-[#FF9933] pl-2.5">
             Quick Links
           </h4>
           <ul className="space-y-2.5 text-xs sm:text-sm text-white/80">
             <li>
-              <Link to="/story" className="hover:text-[#FFC700] transition-colors">
-                Our 1931 Story
+              <Link to="/story" className="hover:text-[#FF9933] transition-colors">
+                Our Heritage Story
               </Link>
             </li>
             <li>
-              <Link to="/custom-branding" className="hover:text-[#FFC700] transition-colors">
+              <Link to="/custom-branding" className="hover:text-[#FF9933] transition-colors">
                 White Labelling &amp; Bulk
               </Link>
             </li>
             <li>
-              <Link to="/exports" className="hover:text-[#FFC700] transition-colors">
+              <Link to="/exports" className="hover:text-[#FF9933] transition-colors">
                 Global Exports
               </Link>
             </li>
             <li>
-              <Link to="/contact" className="hover:text-[#FFC700] transition-colors">
+              <Link to="/contact" className="hover:text-[#FF9933] transition-colors">
                 Customer Support
               </Link>
             </li>
             <li>
-              <Link to="/track" className="hover:text-[#FFC700] transition-colors">
+              <Link to="/track" className="hover:text-[#FF9933] transition-colors">
                 Track Your Order
               </Link>
             </li>
             <li>
-              <Link to="/wishlist" className="hover:text-[#FFC700] transition-colors">
+              <Link to="/wishlist" className="hover:text-[#FF9933] transition-colors">
                 Saved Wishlist
               </Link>
             </li>
             <li>
-              <Link to="/account" className="hover:text-[#FFC700] transition-colors">
+              <Link to="/account" className="hover:text-[#FF9933] transition-colors">
                 My Account
               </Link>
             </li>
             <li className="pt-1 border-t border-white/10">
-              <Link to="/admin" className="hover:text-[#FFC700] transition-colors inline-flex items-center gap-1.5 text-[#FFC700]/90 font-medium">
-                <Lock className="h-3 w-3 text-[#FFC700]" />
+              <Link to="/admin" className="hover:text-[#FF9933] transition-colors inline-flex items-center gap-1.5 text-[#FF9933]/90 font-medium">
+                <Lock className="h-3 w-3 text-[#FF9933]" />
                 <span>Admin Portal</span>
               </Link>
             </li>
@@ -203,36 +203,36 @@ export function Footer() {
 
         {/* Col 4: Reach Us */}
         <div>
-          <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-4 border-l-2 border-[#FFC700] pl-2.5">
+          <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-4 border-l-2 border-[#FF9933] pl-2.5">
             Contact &amp; Works
           </h4>
           <ul className="space-y-3 text-xs sm:text-sm text-white/80">
             <li className="flex items-start gap-2.5">
-              <MapPin className="h-4 w-4 text-[#FFC700] shrink-0 mt-0.5" />
+              <MapPin className="h-4 w-4 text-[#FF9933] shrink-0 mt-0.5" />
               <span className="leading-snug">
                 <strong>Mayil Agro Foods</strong><br />
                 1/303, M.K. Nagar, Near to HP Fuel Station, Abhisekapatti, Tirunelveli - Tenkasi Main Road, Tirunelveli - 627 012
               </span>
             </li>
             <li className="flex items-center gap-2.5">
-              <Phone className="h-4 w-4 text-[#FFC700] shrink-0" />
-              <span>Tel: <a href="tel:04622335555" className="hover:text-[#FFC700]">0462 - 233 5555</a></span>
+              <Phone className="h-4 w-4 text-[#FF9933] shrink-0" />
+              <span>Tel: <a href="tel:04622335555" className="hover:text-[#FF9933]">0462 - 233 5555</a></span>
             </li>
             <li className="flex items-center gap-2.5">
-              <Phone className="h-4 w-4 text-[#FFC700] shrink-0" />
-              <span>Mobile: <a href="tel:+917200622221" className="hover:text-[#FFC700]">+91 7200622221</a></span>
+              <Phone className="h-4 w-4 text-[#FF9933] shrink-0" />
+              <span>Mobile: <a href="tel:+917200622221" className="hover:text-[#FF9933]">+91 7200622221</a></span>
             </li>
             <li className="flex items-center gap-2.5">
-              <Phone className="h-4 w-4 text-[#FFC700] shrink-0" />
-              <span>Sales Desk: <a href="tel:+917904567979" className="hover:text-[#FFC700]">+91 7904567979</a></span>
+              <Phone className="h-4 w-4 text-[#FF9933] shrink-0" />
+              <span>Sales Desk: <a href="tel:+917904567979" className="hover:text-[#FF9933]">+91 7904567979</a></span>
             </li>
             <li className="flex items-center gap-2.5">
-              <Mail className="h-4 w-4 text-[#FFC700] shrink-0" />
-              <span><a href="mailto:Sales@yghing.com" className="hover:text-[#FFC700]">Sales@yghing.com</a></span>
+              <Mail className="h-4 w-4 text-[#FF9933] shrink-0" />
+              <span><a href="mailto:Sales@yghing.com" className="hover:text-[#FF9933]">Sales@yghing.com</a></span>
             </li>
             <li className="flex items-center gap-2.5 text-[11px] text-white/70">
-              <Mail className="h-3.5 w-3.5 text-[#FFC700] shrink-0" />
-              <span>White Labelling: <a href="mailto:b2bsales@yghing.com" className="hover:text-[#FFC700] text-white/90">b2bsales@yghing.com</a></span>
+              <Mail className="h-3.5 w-3.5 text-[#FF9933] shrink-0" />
+              <span>White Labelling: <a href="mailto:b2bsales@yghing.com" className="hover:text-[#FF9933] text-white/90">b2bsales@yghing.com</a></span>
             </li>
           </ul>
           <div className="mt-4 p-3 bg-white/5 rounded-[6px] border border-white/10 text-[11px] text-white/70">
@@ -262,7 +262,7 @@ export function Footer() {
             </Link>
             <Link
               to="/admin"
-              className="inline-flex items-center gap-1 text-[#FFC700]/80 hover:text-[#FFC700] font-semibold transition-colors pl-2 border-l border-white/15"
+              className="inline-flex items-center gap-1 text-[#FF9933]/80 hover:text-[#FF9933] font-semibold transition-colors pl-2 border-l border-white/15"
             >
               <Lock className="h-3 w-3" />
               <span>Admin Login</span>

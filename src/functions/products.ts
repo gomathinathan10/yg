@@ -8,13 +8,31 @@ export type DbVariant = {
   mrp: number | null;
   stock: number;
   sort_order: number;
+  image: string | null;
+  gallery: string | null;
 };
+
+export type DbProductFormat =
+  | "powder"
+  | "granules"
+  | "cake"
+  | "combo"
+  | "wellness"
+  | "pooja"
+  | "vismaya"
+  | "appalam";
+
+export type DbProductStatus = "active" | "draft" | "out_of_stock" | "hidden";
 
 export type DbProduct = {
   slug: string;
   name: string;
   tagline: string;
-  format: "powder" | "granules" | "cake" | "combo" | "wellness" | "pooja";
+  format: DbProductFormat;
+  category: string;
+  sku: string;
+  status: DbProductStatus;
+  archived: number;
   gluten_free: number;
   bestseller: number;
   image: string;
@@ -32,11 +50,21 @@ export type DbProduct = {
   variants?: DbVariant[];
 };
 
+export type DbCategory = {
+  slug: string;
+  name: string;
+  created_at: number;
+  productCount: number;
+};
+
 export type AdminProductInput = {
   slug: string;
   name: string;
   tagline: string;
-  format: "powder" | "granules" | "cake" | "combo" | "wellness" | "pooja";
+  format: DbProductFormat;
+  category: string;
+  sku: string;
+  status: DbProductStatus;
   glutenFree: boolean;
   bestseller: boolean;
   image: string;
@@ -55,11 +83,37 @@ export type AdminProductInput = {
     price: number;
     mrp?: number | null;
     stock?: number;
+    image?: string | null;
+    gallery?: string[] | null;
   }>;
 };
 
-export const getProductsServerFn = async (): Promise<DbProduct[]> => {
-  return apiFetch<DbProduct[]>("/api/products");
+function adminHeaders(adminToken?: string): Record<string, string> {
+  return adminToken ? { "x-admin-token": adminToken } : {};
+}
+
+export const adminLoginServerFn = async ({
+  data,
+}: {
+  data: { username: string; password: string };
+}): Promise<{ ok: boolean; token?: string; error?: string }> => {
+  try {
+    return await apiFetch<{ ok: boolean; token: string }>("/api/admin/login", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  } catch (e: any) {
+    return { ok: false, error: e?.message || "Invalid username or password" };
+  }
+};
+
+export const getProductsServerFn = async ({
+  data,
+}: {
+  data?: { includeArchived?: boolean };
+} = {}): Promise<DbProduct[]> => {
+  const qs = data?.includeArchived ? "?includeArchived=1" : "";
+  return apiFetch<DbProduct[]>(`/api/products${qs}`);
 };
 
 export const getProductBySlugServerFn = async ({
@@ -79,11 +133,13 @@ export const getProductBySlugServerFn = async ({
 export const adminSaveProductServerFn = async ({
   data,
 }: {
-  data: AdminProductInput;
+  data: AdminProductInput & { adminToken?: string };
 }) => {
+  const { adminToken, ...input } = data;
   const product = await apiFetch<DbProduct>("/api/products", {
     method: "POST",
-    body: JSON.stringify(data),
+    headers: adminHeaders(adminToken),
+    body: JSON.stringify(input),
   });
   return { ok: true, slug: product.slug };
 };
@@ -91,11 +147,26 @@ export const adminSaveProductServerFn = async ({
 export const adminToggleProductStockServerFn = async ({
   data,
 }: {
-  data: { slug: string; inStock: boolean; stockLeft?: number | null };
+  data: { slug: string; inStock: boolean; stockLeft?: number | null; adminToken?: string };
 }) => {
+  const { adminToken, ...input } = data;
   await apiFetch("/api/products/stock", {
     method: "POST",
-    body: JSON.stringify(data),
+    headers: adminHeaders(adminToken),
+    body: JSON.stringify(input),
+  });
+  return { ok: true };
+};
+
+export const adminSetProductStatusServerFn = async ({
+  data,
+}: {
+  data: { slug: string; status: DbProductStatus; adminToken?: string };
+}) => {
+  await apiFetch(`/api/products/${data.slug}/status`, {
+    method: "PATCH",
+    headers: adminHeaders(data.adminToken),
+    body: JSON.stringify({ status: data.status }),
   });
   return { ok: true };
 };
@@ -103,8 +174,70 @@ export const adminToggleProductStockServerFn = async ({
 export const adminDeleteProductServerFn = async ({
   data,
 }: {
-  data: { slug: string };
+  data: { slug: string; adminToken?: string };
 }) => {
-  await apiFetch(`/api/products/${data.slug}`, { method: "DELETE" });
+  await apiFetch(`/api/products/${data.slug}`, {
+    method: "DELETE",
+    headers: adminHeaders(data.adminToken),
+  });
   return { ok: true };
+};
+
+export const adminRestoreProductServerFn = async ({
+  data,
+}: {
+  data: { slug: string; adminToken?: string };
+}) => {
+  await apiFetch(`/api/products/${data.slug}/restore`, {
+    method: "POST",
+    headers: adminHeaders(data.adminToken),
+  });
+  return { ok: true };
+};
+
+export const adminReorderProductsServerFn = async ({
+  data,
+}: {
+  data: { slugs: string[]; adminToken?: string };
+}) => {
+  await apiFetch("/api/products/reorder", {
+    method: "POST",
+    headers: adminHeaders(data.adminToken),
+    body: JSON.stringify({ slugs: data.slugs }),
+  });
+  return { ok: true };
+};
+
+export const getCategoriesServerFn = async (): Promise<DbCategory[]> => {
+  return apiFetch<DbCategory[]>("/api/categories");
+};
+
+export const adminSaveCategoryServerFn = async ({
+  data,
+}: {
+  data: { slug?: string; name: string; adminToken?: string };
+}) => {
+  const { adminToken, ...input } = data;
+  const res = await apiFetch<{ ok: boolean; category: DbCategory }>("/api/categories", {
+    method: "POST",
+    headers: adminHeaders(adminToken),
+    body: JSON.stringify(input),
+  });
+  return res;
+};
+
+export const adminDeleteCategoryServerFn = async ({
+  data,
+}: {
+  data: { slug: string; replacementSlug?: string; adminToken?: string };
+}): Promise<{ ok: boolean; error?: string }> => {
+  const qs = data.replacementSlug ? `?replacement=${encodeURIComponent(data.replacementSlug)}` : "";
+  try {
+    return await apiFetch<{ ok: boolean }>(`/api/categories/${data.slug}${qs}`, {
+      method: "DELETE",
+      headers: adminHeaders(data.adminToken),
+    });
+  } catch (e: any) {
+    return { ok: false, error: e?.message || "Failed to delete category" };
+  }
 };

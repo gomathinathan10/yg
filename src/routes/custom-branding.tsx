@@ -308,10 +308,10 @@ function CustomBrandingPage() {
             {CAPABILITIES.map((cap) => (
               <div
                 key={cap.title}
-                className="rounded-2xl border-2 border-[#E8DEC8] p-6 sm:p-7 space-y-4 hover:border-[#FFC700] transition-all duration-300 shadow-xs hover:shadow-md bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6]"
+                className="rounded-2xl border-2 border-[#E8DEC8] p-6 sm:p-7 space-y-4 hover:border-[#FF9933] transition-all duration-300 shadow-xs hover:shadow-md bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6]"
               >
                 <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-xl bg-[#FFC700] flex items-center justify-center text-[#181206] shrink-0 border border-[#D8A700] shadow-2xs">
+                  <div className="h-10 w-10 rounded-xl bg-[#FF9933] flex items-center justify-center text-[#181206] shrink-0 border border-[#D8A700] shadow-2xs">
                     <cap.icon className="h-5 w-5" />
                   </div>
                   <h3 className="text-lg font-bold text-[#181206]">{cap.title}</h3>
@@ -359,10 +359,10 @@ function CustomBrandingPage() {
             {PACKAGING_FORMATS.map((pkg) => (
               <div
                 key={pkg.name}
-                className="rounded-2xl border-2 border-[#E8DEC8] hover:border-[#FFC700] p-5 flex flex-col justify-between space-y-3 bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6] shadow-xs hover:shadow-md transition-all duration-300"
+                className="rounded-2xl border-2 border-[#E8DEC8] hover:border-[#FF9933] p-5 flex flex-col justify-between space-y-3 bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6] shadow-xs hover:shadow-md transition-all duration-300"
               >
                 <div className="space-y-2">
-                  <span className="text-[10px] font-black uppercase tracking-wider text-[#181206] bg-[#FFC700] border border-[#D8A700] px-2.5 py-0.5 rounded-full shadow-2xs">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-[#181206] bg-[#FF9933] border border-[#D8A700] px-2.5 py-0.5 rounded-full shadow-2xs">
                     {pkg.sizes}
                   </span>
                   <h3 className="text-base font-bold text-[#181206] leading-snug">{pkg.name}</h3>
@@ -397,9 +397,9 @@ function CustomBrandingPage() {
             {WORKFLOW_STEPS.map((wf) => (
               <div
                 key={wf.step}
-                className="relative rounded-2xl border-2 border-[#E8DEC8] hover:border-[#FFC700] bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6] p-5 space-y-2.5 shadow-xs hover:shadow-md transition-all duration-300"
+                className="relative rounded-2xl border-2 border-[#E8DEC8] hover:border-[#FF9933] bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6] p-5 space-y-2.5 shadow-xs hover:shadow-md transition-all duration-300"
               >
-                <span className="text-3xl font-black text-[#FFC700] drop-shadow-2xs">{wf.step}</span>
+                <span className="text-3xl font-black text-[#FF9933] drop-shadow-2xs">{wf.step}</span>
                 <h3 className="text-base font-bold text-[#181206] leading-snug">{wf.title}</h3>
                 <p className="text-xs text-[#5A6560] leading-relaxed">{wf.description}</p>
               </div>
@@ -456,7 +456,7 @@ function CustomBrandingPage() {
               </div>
             </div>
 
-            <div className="rounded-2xl border border-[#D8A700] bg-[#FFC700]/15 p-4 text-xs space-y-1.5 shadow-2xs">
+            <div className="rounded-2xl border border-[#D8A700] bg-[#FF9933]/15 p-4 text-xs space-y-1.5 shadow-2xs">
               <p className="font-bold text-[#181206] flex items-center gap-1.5">
                 <ShieldCheck className="h-4 w-4 text-[#8C5921]" /> Comprehensive Quality Assurances
               </p>
@@ -468,7 +468,7 @@ function CustomBrandingPage() {
 
           {/* Right Inquiry Form */}
           <div className="lg:col-span-7">
-            <div className="rounded-3xl border-2 border-[#FFC700] bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6] p-6 sm:p-8 shadow-md ring-1 ring-[#FFC700]/40">
+            <div className="rounded-3xl border-2 border-[#FF9933] bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6] p-6 sm:p-8 shadow-md ring-1 ring-[#FF9933]/40">
               {submitted ? (
                 <div className="text-center py-10 space-y-4">
                   <div className="h-12 w-12 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 mx-auto flex items-center justify-center">
@@ -503,7 +503,7 @@ function CustomBrandingPage() {
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4" noValidate>
                   <div className="border-b border-[#E8DEC8] pb-3 mb-2">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-[#8C5921] bg-[#FFC700]/20 px-2 py-0.5 rounded border border-[#D8A700]">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-[#8C5921] bg-[#FF9933]/20 px-2 py-0.5 rounded border border-[#D8A700]">
                       Custom Packaging Quote
                     </span>
                     <h3 className="text-xl font-bold text-[#181206] mt-1.5">Request Formulation &amp; Pricing Quote</h3>
@@ -654,7 +654,7 @@ function CustomBrandingPage() {
                     />
                   </div>
 
-                  <Button type="submit" className="w-full font-black h-11 text-xs shadow-md mt-2 bg-[#FFC700] hover:bg-[#181206] text-[#181206] hover:text-[#FFC700] border border-[#D8A700] hover:border-[#181206] transition-all cursor-pointer active:scale-95" disabled={sending}>
+                  <Button type="submit" className="w-full font-black h-11 text-xs shadow-md mt-2 bg-[#FF9933] hover:bg-[#181206] text-[#181206] hover:text-[#FF9933] border border-[#D8A700] hover:border-[#181206] transition-all cursor-pointer active:scale-95" disabled={sending}>
                     {sending ? "Submitting Inquiry..." : "Submit Private Label Inquiry"}
                   </Button>
 

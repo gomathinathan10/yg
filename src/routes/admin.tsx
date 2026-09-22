@@ -73,7 +73,17 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
-import { formatPrice, products as defaultStoreProducts, getLiveProducts, saveLiveProducts } from "@/data/products";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { formatPrice, products as defaultStoreProducts } from "@/data/products";
 import { type CalculationMetrics, DEFAULT_METRICS, saveLiveMetrics, resetLiveMetrics } from "@/data/metrics";
 import { getLivePromos, saveLivePromos } from "@/data/promos";
 import { compressImage, compressMultipleImages } from "@/lib/image-compressor";
@@ -95,8 +105,16 @@ import {
   getProductsServerFn,
   adminSaveProductServerFn,
   adminToggleProductStockServerFn,
+  adminSetProductStatusServerFn,
   adminDeleteProductServerFn,
+  adminRestoreProductServerFn,
+  getCategoriesServerFn,
+  adminSaveCategoryServerFn,
+  adminDeleteCategoryServerFn,
+  adminLoginServerFn,
   type DbProduct,
+  type DbProductStatus,
+  type DbCategory,
   type AdminProductInput,
 } from "@/functions/products";
 import {
@@ -345,6 +363,11 @@ export const DEFAULT_DASHBOARD_STATS: AdminDashboardStats = {
     { date: "17 Sept", revenue: 39800, orders: 26 },
     { date: "18 Sept", revenue: 42100, orders: 25 },
   ],
+  totalProducts: 0,
+  activeProducts: 0,
+  outOfStockProducts: 0,
+  draftOrHiddenProducts: 0,
+  featuredProducts: 0,
 };
 
 export const INITIAL_PRODUCTS: DbProduct[] = defaultStoreProducts.map((p, idx) => ({
@@ -352,6 +375,10 @@ export const INITIAL_PRODUCTS: DbProduct[] = defaultStoreProducts.map((p, idx) =
   name: p.name,
   tagline: p.tagline,
   format: p.format as any,
+  category: p.format,
+  sku: p.slug.toUpperCase().replace(/[^A-Z0-9]+/g, "-").slice(0, 24),
+  status: p.inStock !== false ? "active" : "out_of_stock",
+  archived: 0,
   gluten_free: p.glutenFree ? 1 : 0,
   bestseller: p.bestseller ? 1 : 0,
   image: p.image,
@@ -374,6 +401,8 @@ export const INITIAL_PRODUCTS: DbProduct[] = defaultStoreProducts.map((p, idx) =
     mrp: v.mrp ?? Math.round(v.price * 1.15),
     stock: v.stock ?? 100,
     sort_order: vIdx,
+    image: v.image ?? null,
+    gallery: v.gallery ? JSON.stringify(v.gallery) : null,
   })),
 }));
 
@@ -387,7 +416,7 @@ export const Route = createFileRoute("/admin")({
   errorComponent: ({ error, reset }) => (
     <div className="min-h-[75vh] flex flex-col items-center justify-center p-6 text-center bg-[#FAF3D6]/30">
       <div className="max-w-md w-full p-6 rounded-2xl border border-[#E8DEC8] bg-card shadow-lg space-y-4">
-        <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[#FFC700] text-[#181206] font-display font-black text-lg">
+        <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[#FF9933] text-[#181206] font-display font-black text-lg">
           YG
         </div>
         <h2 className="text-xl font-bold text-foreground font-display">Y.G Admin Portal</h2>
@@ -403,7 +432,7 @@ export const Route = createFileRoute("/admin")({
               }
               reset();
             }}
-            className="bg-[#FFC700] text-[#181206] font-bold hover:bg-[#FFC700]/90 text-xs h-10"
+            className="bg-[#FF9933] text-[#181206] font-bold hover:bg-[#FF9933]/90 text-xs h-10"
           >
             Reset Admin Session
           </Button>
@@ -438,9 +467,25 @@ function AdminDashboardPage() {
   // Product Filters & Dialog
   const [productSearch, setProductSearch] = useState("");
   const [productFormatFilter, setProductFormatFilter] = useState("all");
+  const [productStatusFilter, setProductStatusFilter] = useState("all");
+  const [productSort, setProductSort] = useState<"name" | "price" | "date">("date");
+  const [productPage, setProductPage] = useState(1);
+  const [showArchivedProducts, setShowArchivedProducts] = useState(false);
+  const PRODUCTS_PER_PAGE = 9;
   const [productDialogOpen, setProductDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<AdminProductInput | null>(null);
   const [newGalleryUrl, setNewGalleryUrl] = useState("");
+  const [productErrors, setProductErrors] = useState<Record<string, string>>({});
+  const [isDraggingGallery, setIsDraggingGallery] = useState(false);
+  const [deletingProduct, setDeletingProduct] = useState<DbProduct | null>(null);
+  const [categories, setCategories] = useState<DbCategory[]>([]);
+  const [categoryDialogOpen, setCategoryDialogOpen] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState("");
+  const [categoryDeleteTarget, setCategoryDeleteTarget] = useState<DbCategory | null>(null);
+  const [categoryReplacement, setCategoryReplacement] = useState("");
+  const [renamingCategorySlug, setRenamingCategorySlug] = useState<string | null>(null);
+  const [renamingCategoryValue, setRenamingCategoryValue] = useState("");
+  const [adminToken, setAdminToken] = useState<string>("");
 
   // Quick Price Editor Dialog
   const [quickPriceProduct, setQuickPriceProduct] = useState<DbProduct | null>(null);
@@ -508,9 +553,10 @@ function AdminDashboardPage() {
 
   const [mounted, setMounted] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [loginUsername, setLoginUsername] = useState("admin");
-  const [loginPassword, setLoginPassword] = useState("admin123");
+  const [loginUsername, setLoginUsername] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
   const [loginError, setLoginError] = useState("");
+  const [loginBusy, setLoginBusy] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -527,47 +573,42 @@ function AdminDashboardPage() {
         const savedMsgs = localStorage.getItem("yg_admin_messages");
         if (savedMsgs) setAdminMessages(JSON.parse(savedMsgs));
       } catch {}
-      try {
-        const url = new URL(window.location.href);
-        if (url.searchParams.get("auth") === "true" || url.searchParams.get("direct") === "true") {
-          localStorage.setItem("yg_admin_auth", "true");
-          sessionStorage.setItem("yg_admin_auth", "true");
-          setIsAuthenticated(true);
-          return;
-        }
-      } catch {}
-      const isAuth =
-        sessionStorage.getItem("yg_admin_auth") === "true" ||
-        localStorage.getItem("yg_admin_auth") === "true";
-      if (isAuth) {
+      const savedToken = sessionStorage.getItem("yg_admin_token");
+      if (savedToken) {
+        setAdminToken(savedToken);
         setIsAuthenticated(true);
       }
     }
   }, []);
 
-  const handleLogin = (e?: React.FormEvent, force = false) => {
+  const handleLogin = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     setLoginError("");
-    const u = loginUsername.trim().toLowerCase();
-    const p = loginPassword.trim();
-
-    if (force || (u === "admin" && p === "admin123") || (u === "admin" && p === "") || (!u && !p)) {
-      if (typeof window !== "undefined") {
-        sessionStorage.setItem("yg_admin_auth", "true");
-        localStorage.setItem("yg_admin_auth", "true");
+    setLoginBusy(true);
+    try {
+      const res = await adminLoginServerFn({
+        data: { username: loginUsername.trim(), password: loginPassword },
+      });
+      if (res.ok && res.token) {
+        sessionStorage.setItem("yg_admin_token", res.token);
+        setAdminToken(res.token);
+        setIsAuthenticated(true);
+        toast.success("Welcome, Administrator!");
+      } else {
+        setLoginError("Invalid username or password.");
       }
-      setIsAuthenticated(true);
-      toast.success("Welcome, Administrator!");
-    } else {
-      setLoginError("Invalid credentials. Please use Username: admin and Password: admin123");
+    } catch {
+      setLoginError("Invalid username or password.");
+    } finally {
+      setLoginBusy(false);
     }
   };
 
   const handleLogout = () => {
     if (typeof window !== "undefined") {
-      sessionStorage.removeItem("yg_admin_auth");
-      localStorage.removeItem("yg_admin_auth");
+      sessionStorage.removeItem("yg_admin_token");
     }
+    setAdminToken("");
     setIsAuthenticated(false);
     toast.info("Logged out from Admin Panel");
   };
@@ -579,6 +620,7 @@ function AdminDashboardPage() {
         dashStatsRes,
         orderListRes,
         prodListRes,
+        categoryListRes,
         revListRes,
         qListRes,
         ticketListRes,
@@ -587,7 +629,8 @@ function AdminDashboardPage() {
       ] = await Promise.allSettled([
         adminGetDashboardStatsServerFn(),
         adminListOrdersServerFn({ data: {} }),
-        getProductsServerFn(),
+        getProductsServerFn({ data: { includeArchived: showArchivedProducts } }),
+        getCategoriesServerFn(),
         adminListReviewsServerFn({ data: {} }),
         adminListQuestionsServerFn({ data: {} }),
         adminListTicketsServerFn({ data: {} }),
@@ -603,7 +646,9 @@ function AdminDashboardPage() {
       }
       if (prodListRes.status === "fulfilled" && Array.isArray(prodListRes.value) && prodListRes.value.length > 0) {
         setProducts(prodListRes.value);
-        saveLiveProducts(prodListRes.value);
+      }
+      if (categoryListRes.status === "fulfilled" && Array.isArray(categoryListRes.value)) {
+        setCategories(categoryListRes.value);
       }
       if (revListRes.status === "fulfilled" && Array.isArray(revListRes.value)) {
         setReviews(revListRes.value);
@@ -632,7 +677,14 @@ function AdminDashboardPage() {
     if (isAuthenticated) {
       loadAllData();
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, showArchivedProducts]);
+
+  /** Tells the storefront's useLiveProducts()/useLiveProduct() hooks to refetch. */
+  const notifyStorefrontProductsChanged = () => {
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent("yg_products_updated"));
+    }
+  };
 
   // --- Order Actions ---
   const handleUpdateOrderStatus = async (id: string, newStatus: string) => {
@@ -689,15 +741,19 @@ function AdminDashboardPage() {
 
   // --- Product Actions ---
   const handleOpenNewProduct = () => {
+    setProductErrors({});
     setEditingProduct({
       slug: "",
       name: "",
       tagline: "",
-      format: "powder",
+      format: (categories[0]?.slug as any) || "powder",
+      category: categories[0]?.slug || "powder",
+      sku: "",
+      status: "active",
       glutenFree: false,
       bestseller: false,
-      image: "powder",
-      gallery: ["powder"],
+      image: "",
+      gallery: [],
       description: "",
       ingredients: "",
       usage: "",
@@ -714,6 +770,7 @@ function AdminDashboardPage() {
   };
 
   const handleEditProduct = (p: DbProduct) => {
+    setProductErrors({});
     let gallery: string[] = [];
     try {
       gallery = JSON.parse(p.gallery);
@@ -726,6 +783,9 @@ function AdminDashboardPage() {
       name: p.name,
       tagline: p.tagline,
       format: p.format,
+      category: p.category || p.format,
+      sku: p.sku || "",
+      status: p.status || (p.in_stock ? "active" : "out_of_stock"),
       glutenFree: Boolean(p.gluten_free),
       bestseller: Boolean(p.bestseller),
       image: p.image,
@@ -738,30 +798,64 @@ function AdminDashboardPage() {
       stockLeft: p.stock_left,
       rating: Math.min(4.9, Math.max(4.5, Number(p.rating || 4.8))),
       reviews: p.reviews ?? 100,
-      variants: (p.variants || []).map((v) => ({
-        id: v.id,
-        label: v.label,
-        price: v.price,
-        mrp: v.mrp,
-        stock: v.stock,
-      })),
+      variants: (p.variants || []).map((v) => {
+        let variantGallery: string[] | null = null;
+        if (v.gallery) {
+          try {
+            variantGallery = JSON.parse(v.gallery);
+          } catch {
+            variantGallery = null;
+          }
+        }
+        return {
+          id: v.id,
+          label: v.label,
+          price: v.price,
+          mrp: v.mrp,
+          stock: v.stock,
+          image: v.image ?? null,
+          gallery: variantGallery,
+        };
+      }),
     });
     setProductDialogOpen(true);
   };
 
+  const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+  const MAX_IMAGE_SIZE_MB = 10;
+
+  function validateImageFiles(files: FileList | File[]): { valid: File[]; rejected: string[] } {
+    const valid: File[] = [];
+    const rejected: string[] = [];
+    for (const file of Array.from(files)) {
+      if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
+        rejected.push(`${file.name} (unsupported file type — use JPG, PNG, or WEBP)`);
+        continue;
+      }
+      if (file.size > MAX_IMAGE_SIZE_MB * 1024 * 1024) {
+        rejected.push(`${file.name} (larger than ${MAX_IMAGE_SIZE_MB}MB)`);
+        continue;
+      }
+      valid.push(file);
+    }
+    return { valid, rejected };
+  }
+
   const handleImageFileUpload = async (
-    e: React.ChangeEvent<HTMLInputElement>,
+    filesInput: FileList | File[] | null,
     isGallery = false
   ) => {
-    const files = e.target.files;
-    if (!files || files.length === 0) return;
+    if (!filesInput || filesInput.length === 0) return;
+    const { valid, rejected } = validateImageFiles(filesInput);
+    if (rejected.length > 0) {
+      toast.error(`Skipped ${rejected.length} file(s): ${rejected.join("; ")}`);
+    }
+    if (valid.length === 0) return;
 
     const toastId = toast.loading("Compressing and optimizing image(s)...");
     try {
       if (!isGallery) {
-        const file = files[0];
-        if (!file) return;
-        const res = await compressImage(file, {
+        const res = await compressImage(valid[0]!, {
           maxWidth: 1600,
           maxHeight: 1600,
           quality: 0.88,
@@ -773,7 +867,7 @@ function AdminDashboardPage() {
           { id: toastId }
         );
       } else {
-        const results = await compressMultipleImages(files, {
+        const results = await compressMultipleImages(valid, {
           maxWidth: 1600,
           maxHeight: 1600,
           quality: 0.88,
@@ -796,38 +890,113 @@ function AdminDashboardPage() {
     } catch (err) {
       console.error("Image upload compression failed:", err);
       toast.error("Failed to compress image", { id: toastId });
-    } finally {
-      e.target.value = "";
     }
   };
 
-  const handleSaveProduct = async () => {
-    if (!editingProduct || !editingProduct.slug || !editingProduct.name) {
-      toast.error("Slug and Name are required");
+  const handleReplaceGalleryImage = async (index: number, file: File) => {
+    const { valid, rejected } = validateImageFiles([file]);
+    if (rejected.length > 0) {
+      toast.error(rejected[0]!);
       return;
     }
-    const r = Number(editingProduct.rating ?? 4.8);
-    if (isNaN(r) || r < 4.5 || r > 4.9) {
-      toast.error("Rating must be between 4.5 and 4.9");
-      return;
-    }
+    const toastId = toast.loading("Compressing replacement image...");
     try {
-      await adminSaveProductServerFn({ data: editingProduct });
-      const currentLive = getLiveProducts();
-      const existsIndex = currentLive.findIndex((p) => p.slug === editingProduct.slug);
-      const updatedList = [...currentLive];
-      if (existsIndex >= 0) {
-        updatedList[existsIndex] = {
-          ...updatedList[existsIndex]!,
-          ...editingProduct,
-        } as any;
-      } else {
-        updatedList.push(editingProduct as any);
-      }
-      saveLiveProducts(updatedList);
+      const res = await compressImage(valid[0]!, {
+        maxWidth: 1600,
+        maxHeight: 1600,
+        quality: 0.88,
+        mimeType: "image/webp",
+      });
+      setEditingProduct((prev) => {
+        if (!prev) return null;
+        const gallery = [...prev.gallery];
+        const wasPrimary = gallery[index] === prev.image;
+        gallery[index] = res.dataUrl;
+        return { ...prev, gallery, image: wasPrimary ? res.dataUrl : prev.image };
+      });
+      toast.success("Image replaced", { id: toastId });
+    } catch {
+      toast.error("Failed to replace image", { id: toastId });
+    }
+  };
 
-      toast.success(`Product "${editingProduct.name}" saved successfully`);
+  const handleMoveGalleryImage = (index: number, direction: -1 | 1) => {
+    setEditingProduct((prev) => {
+      if (!prev) return null;
+      const gallery = [...prev.gallery];
+      const target = index + direction;
+      if (target < 0 || target >= gallery.length) return prev;
+      [gallery[index], gallery[target]] = [gallery[target]!, gallery[index]!];
+      return { ...prev, gallery };
+    });
+  };
+
+  const handleRemoveGalleryImage = (index: number) => {
+    setEditingProduct((prev) => {
+      if (!prev) return null;
+      const removed = prev.gallery[index];
+      const gallery = prev.gallery.filter((_, i) => i !== index);
+      const image = prev.image === removed ? gallery[0] || "" : prev.image;
+      return { ...prev, gallery, image };
+    });
+  };
+
+  const handleSetPrimaryImage = (url: string) => {
+    setEditingProduct((prev) => (prev ? { ...prev, image: url } : null));
+  };
+
+  function validateProductForm(input: AdminProductInput): Record<string, string> {
+    const errors: Record<string, string> = {};
+    if (!input.name.trim()) errors["name"] = "Product name is required.";
+    if (!input.category?.trim()) errors["category"] = "Category is required.";
+    if (!input.gallery || input.gallery.length === 0) {
+      errors["images"] = "At least one product image is required.";
+    }
+    if (!input.variants || input.variants.length === 0) {
+      errors["variants"] = "Add at least one price/pack size.";
+    } else {
+      for (const v of input.variants) {
+        if (!(Number(v.price) > 0)) {
+          errors["variants"] = "Every variant needs a valid positive price.";
+          break;
+        }
+        if (v.mrp !== undefined && v.mrp !== null && Number(v.mrp) < Number(v.price)) {
+          errors["variants"] = "Offer price cannot be higher than the regular (MRP) price.";
+          break;
+        }
+      }
+    }
+    return errors;
+  }
+
+  const handleSaveProduct = async () => {
+    if (!editingProduct) return;
+    const slug =
+      editingProduct.slug.trim() ||
+      editingProduct.name
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)/g, "");
+    const input: AdminProductInput = { ...editingProduct, slug };
+
+    const errors = validateProductForm(input);
+    if (Object.keys(errors).length > 0) {
+      setProductErrors(errors);
+      toast.error(Object.values(errors)[0]!);
+      return;
+    }
+    setProductErrors({});
+
+    try {
+      await adminSaveProductServerFn({ data: { ...input, adminToken } });
+      toast.success(
+        products.some((p) => p.slug === slug)
+          ? "Product updated successfully."
+          : "Product added successfully."
+      );
       setProductDialogOpen(false);
+      notifyStorefrontProductsChanged();
       loadAllData();
     } catch (err) {
       toast.error("Failed to save product");
@@ -838,43 +1007,177 @@ function AdminDashboardPage() {
     try {
       const newStock = !currentInStock;
       await adminToggleProductStockServerFn({
-        data: { slug, inStock: newStock, stockLeft: newStock ? 50 : 0 },
+        data: { slug, inStock: newStock, stockLeft: newStock ? 50 : 0, adminToken },
       });
       toast.success(`Stock status updated for ${slug}`);
       setProducts((prev) =>
-        prev.map((p) => (p.slug === slug ? { ...p, in_stock: newStock ? 1 : 0 } : p))
+        prev.map((p) =>
+          p.slug === slug
+            ? { ...p, in_stock: newStock ? 1 : 0, status: newStock ? "active" : "out_of_stock" }
+            : p
+        )
       );
-      const currentLive = getLiveProducts();
-      const updatedList = currentLive.map((p) =>
-        p.slug === slug ? { ...p, inStock: newStock, stockLeft: newStock ? 50 : 0 } : p
-      );
-      saveLiveProducts(updatedList);
+      notifyStorefrontProductsChanged();
     } catch (err) {
       toast.error("Failed to toggle stock");
     }
   };
 
-  const handleDeleteProduct = async (slug: string) => {
-    if (!confirm(`Are you sure you want to delete ${slug}?`)) return;
+  const handleSetProductStatus = async (slug: string, status: DbProductStatus) => {
     try {
-      await adminDeleteProductServerFn({ data: { slug } });
-      toast.success("Product deleted");
-      setProducts((prev) => prev.filter((p) => p.slug !== slug));
-      let deletedSlugs: string[] = [];
-      try {
-        const delRaw = localStorage.getItem("yg_deleted_products");
-        if (delRaw) deletedSlugs = JSON.parse(delRaw);
-      } catch {}
-      if (!deletedSlugs.includes(slug)) {
-        deletedSlugs.push(slug);
-        localStorage.setItem("yg_deleted_products", JSON.stringify(deletedSlugs));
-      }
-      const currentLive = getLiveProducts().filter((p) => p.slug !== slug);
-      saveLiveProducts(currentLive);
+      await adminSetProductStatusServerFn({ data: { slug, status, adminToken } });
+      toast.success("Product status updated successfully.");
+      setProducts((prev) =>
+        prev.map((p) =>
+          p.slug === slug
+            ? { ...p, status, in_stock: status === "active" ? 1 : status === "out_of_stock" ? 0 : p.in_stock }
+            : p
+        )
+      );
+      notifyStorefrontProductsChanged();
+    } catch {
+      toast.error("Failed to update product status");
+    }
+  };
+
+  const handleDeleteProduct = async () => {
+    if (!deletingProduct) return;
+    try {
+      await adminDeleteProductServerFn({ data: { slug: deletingProduct.slug, adminToken } });
+      toast.success("Product deleted successfully.");
+      setProducts((prev) => prev.filter((p) => p.slug !== deletingProduct.slug));
+      setDeletingProduct(null);
+      notifyStorefrontProductsChanged();
     } catch (err) {
       toast.error("Failed to delete product");
     }
   };
+
+  const handleRestoreProduct = async (slug: string) => {
+    try {
+      await adminRestoreProductServerFn({ data: { slug, adminToken } });
+      toast.success("Product restored.");
+      notifyStorefrontProductsChanged();
+      loadAllData();
+    } catch {
+      toast.error("Failed to restore product");
+    }
+  };
+
+  // --- Category Actions ---
+  const handleSaveCategory = async () => {
+    if (!newCategoryName.trim()) {
+      toast.error("Category name is required.");
+      return;
+    }
+    try {
+      const res = await adminSaveCategoryServerFn({ data: { name: newCategoryName.trim(), adminToken } });
+      if (res.ok) {
+        toast.success(`Category "${newCategoryName.trim()}" saved.`);
+        setNewCategoryName("");
+        const list = await getCategoriesServerFn();
+        setCategories(list);
+      } else {
+        toast.error("Failed to save category");
+      }
+    } catch {
+      toast.error("Failed to save category");
+    }
+  };
+
+  const handleRenameCategory = async (slug: string) => {
+    if (!renamingCategoryValue.trim()) {
+      toast.error("Category name is required.");
+      return;
+    }
+    try {
+      const res = await adminSaveCategoryServerFn({
+        data: { slug, name: renamingCategoryValue.trim(), adminToken },
+      });
+      if (res.ok) {
+        toast.success("Category renamed.");
+        setRenamingCategorySlug(null);
+        const list = await getCategoriesServerFn();
+        setCategories(list);
+        loadAllData();
+      } else {
+        toast.error("Failed to rename category");
+      }
+    } catch {
+      toast.error("Failed to rename category");
+    }
+  };
+
+  const handleDeleteCategory = async () => {
+    if (!categoryDeleteTarget) return;
+    try {
+      const res = await adminDeleteCategoryServerFn({
+        data: {
+          slug: categoryDeleteTarget.slug,
+          adminToken,
+          ...(categoryReplacement ? { replacementSlug: categoryReplacement } : {}),
+        },
+      });
+      if (res.ok) {
+        toast.success(`Category "${categoryDeleteTarget.name}" deleted.`);
+        setCategoryDeleteTarget(null);
+        setCategoryReplacement("");
+        const list = await getCategoriesServerFn();
+        setCategories(list);
+        loadAllData();
+      } else {
+        toast.error(res.error || "Cannot delete this category");
+      }
+    } catch {
+      toast.error("Failed to delete category");
+    }
+  };
+
+  const categoryProductCounts = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const p of products) {
+      if (p.archived === 1) continue;
+      counts.set(p.category, (counts.get(p.category) || 0) + 1);
+    }
+    return counts;
+  }, [products]);
+
+  const filteredSortedProducts = useMemo(() => {
+    const q = productSearch.trim().toLowerCase();
+    let list = products.filter((p) => {
+      const matchSearch =
+        !q ||
+        p.name.toLowerCase().includes(q) ||
+        p.slug.toLowerCase().includes(q) ||
+        (p.sku || "").toLowerCase().includes(q) ||
+        p.tagline.toLowerCase().includes(q);
+      const matchCategory = productFormatFilter === "all" || p.category === productFormatFilter;
+      const matchStatus = productStatusFilter === "all" || p.status === productStatusFilter;
+      return matchSearch && matchCategory && matchStatus;
+    });
+
+    list = [...list].sort((a, b) => {
+      if (productSort === "name") return a.name.localeCompare(b.name);
+      if (productSort === "price") {
+        const priceA = a.variants?.[0]?.price ?? 0;
+        const priceB = b.variants?.[0]?.price ?? 0;
+        return priceA - priceB;
+      }
+      return b.updated_at - a.updated_at;
+    });
+
+    return list;
+  }, [products, productSearch, productFormatFilter, productStatusFilter, productSort]);
+
+  const productTotalPages = Math.max(1, Math.ceil(filteredSortedProducts.length / PRODUCTS_PER_PAGE));
+  const paginatedProducts = filteredSortedProducts.slice(
+    (productPage - 1) * PRODUCTS_PER_PAGE,
+    productPage * PRODUCTS_PER_PAGE
+  );
+
+  useEffect(() => {
+    setProductPage(1);
+  }, [productSearch, productFormatFilter, productStatusFilter, productSort]);
 
   // --- Review Actions ---
   const handleModerateReview = async (id: string, action: "publish" | "reject" | "delete") => {
@@ -1072,11 +1375,25 @@ function AdminDashboardPage() {
       gallery = [quickPriceProduct.image];
     }
 
+    for (const v of quickVariants) {
+      if (!(Number(v.price) > 0)) {
+        toast.error(`"${v.label}" needs a valid positive price.`);
+        return;
+      }
+      if (v.mrp !== null && v.mrp !== undefined && Number(v.mrp) < Number(v.price)) {
+        toast.error(`"${v.label}": offer price cannot be higher than the regular price.`);
+        return;
+      }
+    }
+
     const input: AdminProductInput = {
       slug: quickPriceProduct.slug,
       name: quickPriceProduct.name,
       tagline: quickPriceProduct.tagline,
       format: quickPriceProduct.format,
+      category: quickPriceProduct.category || quickPriceProduct.format,
+      sku: quickPriceProduct.sku || "",
+      status: quickPriceProduct.status || (quickPriceProduct.in_stock ? "active" : "out_of_stock"),
       glutenFree: Boolean(quickPriceProduct.gluten_free),
       bestseller: Boolean(quickPriceProduct.bestseller),
       image: quickPriceProduct.image,
@@ -1089,30 +1406,21 @@ function AdminDashboardPage() {
       stockLeft: quickPriceProduct.stock_left,
       rating: Math.min(4.9, Math.max(4.5, Number(quickPriceProduct.rating || 4.8))),
       reviews: quickPriceProduct.reviews ?? 100,
-      variants: quickVariants,
+      variants: quickVariants.map((qv) => {
+        const original = quickPriceProduct.variants?.find((v) => v.id === qv.id);
+        return {
+          ...qv,
+          image: original?.image ?? null,
+          gallery: original?.gallery ? JSON.parse(original.gallery) : null,
+        };
+      }),
     };
 
     try {
-      await adminSaveProductServerFn({ data: input });
-      const currentLive = getLiveProducts();
-      const updatedList = currentLive.map((p) => {
-        if (p.slug === input.slug) {
-          return {
-            ...p,
-            variants: quickVariants.map((qv) => ({
-              ...qv,
-              price: Number(qv.price),
-              mrp: qv.mrp ? Number(qv.mrp) : undefined,
-              stock: Number(qv.stock),
-            })),
-          };
-        }
-        return p;
-      });
-      saveLiveProducts(updatedList);
-
-      toast.success(`Prices updated for ${quickPriceProduct.name}!`);
+      await adminSaveProductServerFn({ data: { ...input, adminToken } });
+      toast.success("Product price updated successfully.");
       setQuickPriceProduct(null);
+      notifyStorefrontProductsChanged();
       loadAllData();
     } catch {
       toast.error("Failed to update product prices");
@@ -1306,42 +1614,13 @@ function AdminDashboardPage() {
       <div className="min-h-[85vh] flex items-center justify-center px-4 py-12 bg-[#FAF3D6]/40">
         <div className="w-full max-w-md bg-card border border-[#E8DEC8] rounded-2xl p-6 sm:p-8 shadow-xl space-y-6">
           <div className="text-center space-y-2">
-            <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-[#FFC700] text-[#181206] mb-2 shadow-md font-display font-black text-xl">
+            <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-[#FF9933] text-[#181206] mb-2 shadow-md font-display font-black text-xl">
               YG
             </div>
             <h1 className="text-2xl font-bold tracking-tight text-foreground font-display">Y.G Admin Portal</h1>
             <p className="text-xs sm:text-sm text-muted-foreground">
               Tirunelveli Works & Store Administration Portal. Sign in to manage products, pricing, orders, calculation metrics, export deals, and messages.
             </p>
-          </div>
-
-          {/* 1-Click Instant Direct Access */}
-          <div className="space-y-3">
-            <Button
-              type="button"
-              onClick={() => handleLogin(undefined, true)}
-              className="w-full h-12 text-sm font-bold bg-[#FFC700] hover:bg-[#FFC700]/90 text-[#181206] shadow-md flex items-center justify-center gap-2 cursor-pointer transition-transform active:scale-[0.99]"
-            >
-              <Sparkles className="h-4 w-4 text-[#181206]" />
-              Enter Admin Dashboard (Instant Access)
-            </Button>
-
-            {/* Clear Credentials Reminder */}
-            <div className="rounded-xl border border-primary/20 bg-primary/5 p-3 text-xs text-foreground/80 flex items-center justify-between">
-              <div>
-                <span className="font-semibold text-primary">Login Credentials:</span>
-                <div className="mt-0.5 font-mono text-[11px] text-muted-foreground">
-                  Username: <strong className="text-foreground font-semibold">admin</strong> &nbsp;|&nbsp; Password: <strong className="text-foreground font-semibold">admin123</strong>
-                </div>
-              </div>
-              <Badge variant="outline" className="border-primary/40 text-primary text-[10px]">Active</Badge>
-            </div>
-
-            <div className="relative flex py-1 items-center">
-              <div className="flex-grow border-t border-border"></div>
-              <span className="flex-shrink mx-3 text-[11px] text-muted-foreground uppercase font-medium">or verify credentials</span>
-              <div className="flex-grow border-t border-border"></div>
-            </div>
           </div>
 
           <form onSubmit={(e) => handleLogin(e)} className="space-y-4">
@@ -1376,9 +1655,14 @@ function AdminDashboardPage() {
               />
             </div>
 
-            <Button type="submit" variant="outline" className="w-full font-semibold border-primary/40 hover:bg-primary/10 mt-1">
+            <Button
+              type="submit"
+              variant="outline"
+              disabled={loginBusy}
+              className="w-full font-semibold border-primary/40 hover:bg-primary/10 mt-1"
+            >
               <KeyRound className="h-4 w-4 mr-2 text-primary" />
-              Sign In with Credentials
+              {loginBusy ? "Signing in..." : "Sign In"}
             </Button>
           </form>
 
@@ -1566,6 +1850,55 @@ function AdminDashboardPage() {
                   </div>
                 </div>
 
+                {/* Product Catalog Summary */}
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+                  <div className="surface-card p-5">
+                    <div className="flex items-center justify-between">
+                      <p className="text-xs font-medium uppercase text-muted-foreground tracking-wider">Total Products</p>
+                      <div className="grid h-8 w-8 place-items-center rounded-lg bg-primary/10 text-primary">
+                        <Package className="h-4 w-4" />
+                      </div>
+                    </div>
+                    <p className="mt-3 text-2xl font-bold font-display">{stats.totalProducts ?? products.length}</p>
+                  </div>
+                  <div className="surface-card p-5">
+                    <div className="flex items-center justify-between">
+                      <p className="text-xs font-medium uppercase text-muted-foreground tracking-wider">Active</p>
+                      <div className="grid h-8 w-8 place-items-center rounded-lg bg-emerald-500/10 text-emerald-600">
+                        <CheckCircle2 className="h-4 w-4" />
+                      </div>
+                    </div>
+                    <p className="mt-3 text-2xl font-bold font-display">{stats.activeProducts ?? 0}</p>
+                  </div>
+                  <div className="surface-card p-5">
+                    <div className="flex items-center justify-between">
+                      <p className="text-xs font-medium uppercase text-muted-foreground tracking-wider">Out of Stock</p>
+                      <div className="grid h-8 w-8 place-items-center rounded-lg bg-rose-500/10 text-rose-600">
+                        <XCircle className="h-4 w-4" />
+                      </div>
+                    </div>
+                    <p className="mt-3 text-2xl font-bold font-display">{stats.outOfStockProducts ?? 0}</p>
+                  </div>
+                  <div className="surface-card p-5">
+                    <div className="flex items-center justify-between">
+                      <p className="text-xs font-medium uppercase text-muted-foreground tracking-wider">Draft / Hidden</p>
+                      <div className="grid h-8 w-8 place-items-center rounded-lg bg-muted text-muted-foreground">
+                        <Eye className="h-4 w-4" />
+                      </div>
+                    </div>
+                    <p className="mt-3 text-2xl font-bold font-display">{stats.draftOrHiddenProducts ?? 0}</p>
+                  </div>
+                  <div className="surface-card p-5">
+                    <div className="flex items-center justify-between">
+                      <p className="text-xs font-medium uppercase text-muted-foreground tracking-wider">Featured</p>
+                      <div className="grid h-8 w-8 place-items-center rounded-lg bg-amber-500/10 text-amber-600">
+                        <Star className="h-4 w-4" />
+                      </div>
+                    </div>
+                    <p className="mt-3 text-2xl font-bold font-display">{stats.featuredProducts ?? 0}</p>
+                  </div>
+                </div>
+
                 {/* Sales Chart & Status Breakdown */}
                 <div className="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
                   {/* Sales trend */}
@@ -1611,7 +1944,7 @@ function AdminDashboardPage() {
                         { key: "placed", label: "New / Placed", color: "bg-[#D4AF37]" },
                         { key: "packed", label: "Packed in Works", color: "bg-amber-500" },
                         { key: "shipped", label: "Shipped with Courier", color: "bg-purple-500" },
-                        { key: "out", label: "Out for Delivery", color: "bg-[#FFC700]" },
+                        { key: "out", label: "Out for Delivery", color: "bg-[#FF9933]" },
                         { key: "delivered", label: "Delivered", color: "bg-emerald-500" },
                         { key: "refund_requested", label: "Refund Requested", color: "bg-rose-500" },
                         { key: "cancelled", label: "Cancelled", color: "bg-zinc-500" },
@@ -1949,21 +2282,26 @@ function AdminDashboardPage() {
             <div className="surface-card p-6">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                 <div>
-                  <h2 className="text-lg font-semibold">Catalog & Product Flexibility</h2>
-                  <p className="text-xs text-muted-foreground">Add products, edit details, adjust ratings (4.5–4.9), manage variants and shelf life</p>
+                  <h2 className="text-lg font-semibold">Products Management</h2>
+                  <p className="text-xs text-muted-foreground">Add products, edit details, manage categories, pricing, images, and visibility</p>
                 </div>
-                <Button onClick={handleOpenNewProduct} className="shrink-0">
-                  <Plus className="h-4 w-4 mr-1.5" /> Add New Product
-                </Button>
+                <div className="flex items-center gap-2 shrink-0">
+                  <Button variant="outline" onClick={() => setCategoryDialogOpen(true)}>
+                    <Tag className="h-4 w-4 mr-1.5" /> Manage Categories
+                  </Button>
+                  <Button onClick={handleOpenNewProduct}>
+                    <Plus className="h-4 w-4 mr-1.5" /> Add Product
+                  </Button>
+                </div>
               </div>
 
-              {/* Product Search & Format Filter */}
-              <div className="flex flex-col sm:flex-row gap-3 items-center justify-between mb-6 pb-4 border-b border-border">
-                <div className="flex flex-1 w-full gap-2 items-center">
-                  <div className="relative flex-1 max-w-sm">
+              {/* Search & Filters */}
+              <div className="flex flex-col lg:flex-row gap-3 items-stretch lg:items-center justify-between mb-6 pb-4 border-b border-border">
+                <div className="flex flex-1 w-full flex-wrap gap-2 items-center">
+                  <div className="relative flex-1 min-w-[180px] max-w-sm">
                     <Search className="h-3.5 w-3.5 absolute left-2.5 top-2.5 text-muted-foreground" />
                     <Input
-                      placeholder="Search products by name, slug, tagline..."
+                      placeholder="Search by name, SKU, slug..."
                       value={productSearch}
                       onChange={(e) => setProductSearch(e.target.value)}
                       className="pl-8 h-8 text-xs"
@@ -1971,137 +2309,275 @@ function AdminDashboardPage() {
                   </div>
                   <Select value={productFormatFilter} onValueChange={setProductFormatFilter}>
                     <SelectTrigger className="h-8 text-xs w-[170px]">
-                      <SelectValue placeholder="All Formats" />
+                      <SelectValue placeholder="All Categories" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all">All Formats</SelectItem>
-                      <SelectItem value="powder">Powder</SelectItem>
-                      <SelectItem value="granules">Granules</SelectItem>
-                      <SelectItem value="cake">Solid Cake</SelectItem>
-                      <SelectItem value="combo">Combo & Gift</SelectItem>
-                      <SelectItem value="wellness">Health Mix (Wellness)</SelectItem>
-                      <SelectItem value="pooja">Pooja Sambrani</SelectItem>
+                      <SelectItem value="all">All Categories</SelectItem>
+                      {categories.map((c) => (
+                        <SelectItem key={c.slug} value={c.slug}>
+                          {c.name}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
+                  <Select value={productStatusFilter} onValueChange={setProductStatusFilter}>
+                    <SelectTrigger className="h-8 text-xs w-[140px]">
+                      <SelectValue placeholder="All Status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Status</SelectItem>
+                      <SelectItem value="active">Active</SelectItem>
+                      <SelectItem value="draft">Draft</SelectItem>
+                      <SelectItem value="out_of_stock">Out of Stock</SelectItem>
+                      <SelectItem value="hidden">Hidden</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Select value={productSort} onValueChange={(v: any) => setProductSort(v)}>
+                    <SelectTrigger className="h-8 text-xs w-[150px]">
+                      <SelectValue placeholder="Sort by" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="date">Recently updated</SelectItem>
+                      <SelectItem value="name">Name (A–Z)</SelectItem>
+                      <SelectItem value="price">Price (low–high)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <label className="flex items-center gap-1.5 text-xs text-muted-foreground shrink-0 pl-1">
+                    <Switch checked={showArchivedProducts} onCheckedChange={setShowArchivedProducts} />
+                    Show archived
+                  </label>
                 </div>
                 <div className="text-xs text-muted-foreground shrink-0">
-                  Showing {products.filter((p) => {
-                    const matchSearch =
-                      !productSearch.trim() ||
-                      p.name.toLowerCase().includes(productSearch.toLowerCase()) ||
-                      p.slug.toLowerCase().includes(productSearch.toLowerCase()) ||
-                      p.tagline.toLowerCase().includes(productSearch.toLowerCase());
-                    const matchFormat =
-                      productFormatFilter === "all" || p.format === productFormatFilter;
-                    return matchSearch && matchFormat;
-                  }).length} of {products.length} products
+                  Showing {filteredSortedProducts.length} of {products.length} products
                 </div>
               </div>
 
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {products
-                  .filter((p) => {
-                    const matchSearch =
-                      !productSearch.trim() ||
-                      p.name.toLowerCase().includes(productSearch.toLowerCase()) ||
-                      p.slug.toLowerCase().includes(productSearch.toLowerCase()) ||
-                      p.tagline.toLowerCase().includes(productSearch.toLowerCase());
-                    const matchFormat =
-                      productFormatFilter === "all" || p.format === productFormatFilter;
-                    return matchSearch && matchFormat;
-                  })
-                  .map((p) => (
-                  <div key={p.slug} className="surface-card p-5 flex flex-col justify-between border border-border">
-                    <div>
-                      <div className="flex items-start gap-3">
-                        <div className="h-14 w-14 rounded-md overflow-hidden bg-muted border border-border shrink-0">
-                          <img
-                            src={getDisplayImageUrl(p.image)}
-                            alt={p.name}
-                            className="h-full w-full object-cover"
-                            onError={(e) => {
-                              (e.target as HTMLElement).style.display = "none";
-                            }}
-                          />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-1.5 mb-1">
-                            <Badge variant="secondary" className="capitalize text-[10px]">
-                              {p.format}
-                            </Badge>
-                            {p.bestseller ? (
-                              <Badge variant="default" className="text-[9px] bg-amber-600">
-                                Bestseller
-                              </Badge>
-                            ) : null}
-                          </div>
-                          <h3 className="font-semibold text-base leading-snug truncate">{p.name}</h3>
-                          <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{p.tagline}</p>
-                        </div>
-                        <Badge
-                          variant={p.in_stock ? "default" : "destructive"}
-                          className="text-[10px] shrink-0"
-                        >
-                          {p.in_stock ? "In Stock" : "Sold Out"}
-                        </Badge>
-                      </div>
+              {loading ? (
+                <div className="py-16 text-center text-sm text-muted-foreground">
+                  <Loader2 className="h-5 w-5 mx-auto mb-2 animate-spin" />
+                  Loading products…
+                </div>
+              ) : filteredSortedProducts.length === 0 ? (
+                <div className="py-16 text-center">
+                  <Package className="h-10 w-10 mx-auto mb-3 text-muted-foreground/50" />
+                  <p className="text-sm font-medium text-foreground">No products found</p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {productSearch || productFormatFilter !== "all" || productStatusFilter !== "all"
+                      ? "Try adjusting your search or filters."
+                      : "Get started by adding your first product."}
+                  </p>
+                </div>
+              ) : (
+                <>
+                  {/* Desktop table */}
+                  <div className="hidden lg:block overflow-x-auto rounded-lg border border-border">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="bg-muted/40 text-left text-[11px] uppercase tracking-wider text-muted-foreground">
+                          <th className="px-3 py-2.5 font-medium">Product</th>
+                          <th className="px-3 py-2.5 font-medium">Category</th>
+                          <th className="px-3 py-2.5 font-medium">Price</th>
+                          <th className="px-3 py-2.5 font-medium">Offer Price</th>
+                          <th className="px-3 py-2.5 font-medium">Stock / Status</th>
+                          <th className="px-3 py-2.5 font-medium">Featured</th>
+                          <th className="px-3 py-2.5 font-medium">Updated</th>
+                          <th className="px-3 py-2.5 font-medium text-right">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-border">
+                        {paginatedProducts.map((p) => {
+                          const firstVariant = p.variants?.[0];
+                          const categoryName = categories.find((c) => c.slug === p.category)?.name || p.category;
+                          return (
+                            <tr key={p.slug} className={p.archived === 1 ? "opacity-50" : ""}>
+                              <td className="px-3 py-2.5">
+                                <div className="flex items-center gap-2.5 min-w-0">
+                                  <div className="h-10 w-10 rounded-md overflow-hidden bg-muted border border-border shrink-0">
+                                    <img
+                                      src={getDisplayImageUrl(p.image)}
+                                      alt={p.name}
+                                      className="h-full w-full object-cover"
+                                    />
+                                  </div>
+                                  <div className="min-w-0">
+                                    <p className="font-medium truncate max-w-[220px]">{p.name}</p>
+                                    <p className="text-[11px] text-muted-foreground truncate max-w-[220px]">
+                                      {p.sku || p.slug}
+                                    </p>
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="px-3 py-2.5">
+                                <Badge variant="secondary" className="text-[10px] capitalize">{categoryName}</Badge>
+                              </td>
+                              <td className="px-3 py-2.5 font-mono text-xs">
+                                {firstVariant?.mrp ? formatPrice(firstVariant.mrp) : firstVariant ? formatPrice(firstVariant.price) : "—"}
+                              </td>
+                              <td className="px-3 py-2.5 font-mono text-xs font-semibold">
+                                {firstVariant ? formatPrice(firstVariant.price) : "—"}
+                              </td>
+                              <td className="px-3 py-2.5">
+                                <Select
+                                  value={p.status || "active"}
+                                  onValueChange={(v: DbProductStatus) => handleSetProductStatus(p.slug, v)}
+                                >
+                                  <SelectTrigger className="h-7 text-[11px] w-[125px]">
+                                    <SelectValue />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="active">Active</SelectItem>
+                                    <SelectItem value="draft">Draft</SelectItem>
+                                    <SelectItem value="out_of_stock">Out of Stock</SelectItem>
+                                    <SelectItem value="hidden">Hidden</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </td>
+                              <td className="px-3 py-2.5">
+                                {p.bestseller ? (
+                                  <Badge className="text-[9px] bg-amber-600">Featured</Badge>
+                                ) : (
+                                  <span className="text-xs text-muted-foreground">—</span>
+                                )}
+                              </td>
+                              <td className="px-3 py-2.5 text-xs text-muted-foreground whitespace-nowrap">
+                                {new Date(p.updated_at).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
+                              </td>
+                              <td className="px-3 py-2.5">
+                                <div className="flex items-center justify-end gap-1">
+                                  <Button size="sm" variant="ghost" className="h-7 w-7 p-0" title="View on storefront" asChild>
+                                    <Link to="/product/$slug" params={{ slug: p.slug }} target="_blank">
+                                      <Eye className="h-3.5 w-3.5" />
+                                    </Link>
+                                  </Button>
+                                  <Button size="sm" variant="ghost" className="h-7 w-7 p-0" title="Quick edit prices" onClick={() => handleOpenQuickPrice(p)}>
+                                    <Coins className="h-3.5 w-3.5 text-[#D4AF37]" />
+                                  </Button>
+                                  <Button size="sm" variant="ghost" className="h-7 w-7 p-0" title="Edit product" onClick={() => handleEditProduct(p)}>
+                                    <Edit className="h-3.5 w-3.5" />
+                                  </Button>
+                                  {p.archived === 1 ? (
+                                    <Button size="sm" variant="ghost" className="h-7 w-7 p-0 text-emerald-600" title="Restore product" onClick={() => handleRestoreProduct(p.slug)}>
+                                      <RefreshCw className="h-3.5 w-3.5" />
+                                    </Button>
+                                  ) : (
+                                    <Button size="sm" variant="ghost" className="h-7 w-7 p-0 text-destructive hover:bg-destructive/10" title="Delete product" onClick={() => setDeletingProduct(p)}>
+                                      <Trash2 className="h-3.5 w-3.5" />
+                                    </Button>
+                                  )}
+                                </div>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
 
-                      {/* Rating & Shelf Life badges */}
-                      <div className="flex items-center gap-2 mt-3 pt-2 border-t border-border/40">
-                        <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-amber-700 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
-                          <Star className="h-3 w-3 fill-amber-500 text-amber-500" />
-                          {(p.rating || 4.8).toFixed(1)}
-                        </span>
-                        <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground bg-muted/50 px-2 py-0.5 rounded border border-border">
-                          <Clock className="h-3 w-3 text-muted-foreground" />
-                          {p.shelf_life || "12 months from packing"}
-                        </span>
-                      </div>
+                  {/* Mobile cards */}
+                  <div className="grid gap-4 sm:grid-cols-2 lg:hidden">
+                    {paginatedProducts.map((p) => {
+                      const categoryName = categories.find((c) => c.slug === p.category)?.name || p.category;
+                      return (
+                        <div key={p.slug} className={`surface-card p-4 flex flex-col justify-between border border-border ${p.archived === 1 ? "opacity-60" : ""}`}>
+                          <div>
+                            <div className="flex items-start gap-3">
+                              <div className="h-14 w-14 rounded-md overflow-hidden bg-muted border border-border shrink-0">
+                                <img src={getDisplayImageUrl(p.image)} alt={p.name} className="h-full w-full object-cover" />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-1.5 mb-1 flex-wrap">
+                                  <Badge variant="secondary" className="capitalize text-[10px]">{categoryName}</Badge>
+                                  {p.bestseller ? <Badge className="text-[9px] bg-amber-600">Featured</Badge> : null}
+                                  {p.archived === 1 ? <Badge variant="outline" className="text-[9px]">Archived</Badge> : null}
+                                </div>
+                                <h3 className="font-semibold text-sm leading-snug truncate">{p.name}</h3>
+                                <p className="text-[11px] text-muted-foreground mt-0.5">{p.sku || p.slug}</p>
+                              </div>
+                            </div>
 
-                      <div className="mt-3 space-y-1.5 border-t border-b border-border/60 py-3 text-xs">
-                        <div className="font-medium text-muted-foreground mb-1">Variants & Pricing:</div>
-                        {(p.variants || []).map((v) => (
-                          <div key={v.id} className="flex items-center justify-between text-xs">
-                            <span>{v.label}</span>
-                            <div className="font-mono">
-                              <span className="font-bold">{formatPrice(v.price)}</span>
-                              {v.mrp && <span className="text-muted-foreground line-through ml-1.5">{formatPrice(v.mrp)}</span>}
-                              <span className="text-muted-foreground ml-2">({v.stock} in stock)</span>
+                            <div className="mt-3 space-y-1 border-t border-b border-border/60 py-2.5 text-xs">
+                              {(p.variants || []).slice(0, 3).map((v) => (
+                                <div key={v.id} className="flex items-center justify-between">
+                                  <span>{v.label}</span>
+                                  <span className="font-mono font-semibold">{formatPrice(v.price)}</span>
+                                </div>
+                              ))}
                             </div>
                           </div>
-                        ))}
-                      </div>
-                    </div>
 
-                    <div className="mt-5 pt-3 border-t border-border flex items-center justify-between gap-2">
+                          <div className="mt-3 flex items-center justify-between gap-2">
+                            <Select
+                              value={p.status || "active"}
+                              onValueChange={(v: DbProductStatus) => handleSetProductStatus(p.slug, v)}
+                            >
+                              <SelectTrigger className="h-7 text-[11px] w-[115px]">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="active">Active</SelectItem>
+                                <SelectItem value="draft">Draft</SelectItem>
+                                <SelectItem value="out_of_stock">Out of Stock</SelectItem>
+                                <SelectItem value="hidden">Hidden</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <div className="flex items-center gap-1">
+                              <Button size="sm" variant="ghost" className="h-7 w-7 p-0" title="View on storefront" asChild>
+                                <Link to="/product/$slug" params={{ slug: p.slug }} target="_blank">
+                                  <Eye className="h-3.5 w-3.5" />
+                                </Link>
+                              </Button>
+                              <Button size="sm" variant="ghost" className="h-7 w-7 p-0" onClick={() => handleOpenQuickPrice(p)}>
+                                <Coins className="h-3.5 w-3.5 text-[#D4AF37]" />
+                              </Button>
+                              <Button size="sm" variant="ghost" className="h-7 w-7 p-0" onClick={() => handleEditProduct(p)}>
+                                <Edit className="h-3.5 w-3.5" />
+                              </Button>
+                              {p.archived === 1 ? (
+                                <Button size="sm" variant="ghost" className="h-7 w-7 p-0 text-emerald-600" onClick={() => handleRestoreProduct(p.slug)}>
+                                  <RefreshCw className="h-3.5 w-3.5" />
+                                </Button>
+                              ) : (
+                                <Button size="sm" variant="ghost" className="h-7 w-7 p-0 text-destructive" onClick={() => setDeletingProduct(p)}>
+                                  <Trash2 className="h-3.5 w-3.5" />
+                                </Button>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Pagination */}
+                  {productTotalPages > 1 ? (
+                    <div className="flex items-center justify-between mt-5 pt-4 border-t border-border">
+                      <p className="text-xs text-muted-foreground">
+                        Page {productPage} of {productTotalPages}
+                      </p>
                       <div className="flex items-center gap-2">
-                        <Switch
-                          checked={Boolean(p.in_stock)}
-                          onCheckedChange={() => handleToggleStock(p.slug, Boolean(p.in_stock))}
-                        />
-                        <span className="text-xs text-muted-foreground">In Stock</span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
                         <Button
                           size="sm"
                           variant="outline"
-                          onClick={() => handleOpenQuickPrice(p)}
-                          className="h-8 text-xs border-[#FFC700]/60 hover:bg-[#FFC700]/10 text-foreground"
-                          title="Quickly edit variant prices & MRP"
+                          className="h-8 text-xs"
+                          disabled={productPage <= 1}
+                          onClick={() => setProductPage((p) => Math.max(1, p - 1))}
                         >
-                          <Coins className="h-3.5 w-3.5 mr-1 text-[#D4AF37]" /> Price
+                          Previous
                         </Button>
-                        <Button size="sm" variant="outline" className="h-8 text-xs" onClick={() => handleEditProduct(p)}>
-                          <Edit className="h-3.5 w-3.5 mr-1" /> Edit
-                        </Button>
-                        <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-destructive hover:bg-destructive/10" title="Delete Product" onClick={() => handleDeleteProduct(p.slug)}>
-                          <Trash2 className="h-3.5 w-3.5" />
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-8 text-xs"
+                          disabled={productPage >= productTotalPages}
+                          onClick={() => setProductPage((p) => Math.min(productTotalPages, p + 1))}
+                        >
+                          Next
                         </Button>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ) : null}
+                </>
+              )}
             </div>
           </TabsContent>
 
@@ -2476,7 +2952,7 @@ function AdminDashboardPage() {
                   </Button>
                   <Button
                     size="sm"
-                    className="h-8 text-xs bg-[#FFC700] hover:bg-[#FFC700]/90 text-[#181206] font-semibold"
+                    className="h-8 text-xs bg-[#FF9933] hover:bg-[#FF9933]/90 text-[#181206] font-semibold"
                     onClick={() => handleSaveMetrics(metrics)}
                   >
                     <Save className="h-3.5 w-3.5 mr-1" /> Save Metrics
@@ -2489,7 +2965,7 @@ function AdminDashboardPage() {
                 <div className="p-5 rounded-xl bg-card border border-border space-y-4 shadow-xs">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <div className="p-2 rounded-lg bg-[#FFC700]/15 text-[#181206]">
+                      <div className="p-2 rounded-lg bg-[#FF9933]/15 text-[#181206]">
                         <Truck className="h-4 w-4" />
                       </div>
                       <div>
@@ -2694,7 +3170,7 @@ function AdminDashboardPage() {
                 <div className="p-5 rounded-xl bg-[#FAF3D6]/50 border border-[#E8DEC8] space-y-4 shadow-xs">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <div className="p-2 rounded-lg bg-[#FFC700] text-[#181206]">
+                      <div className="p-2 rounded-lg bg-[#FF9933] text-[#181206]">
                         <Calculator className="h-4 w-4" />
                       </div>
                       <div>
@@ -2802,7 +3278,7 @@ function AdminDashboardPage() {
                   </Button>
                   <Button
                     size="sm"
-                    className="h-8 text-xs bg-[#FFC700] hover:bg-[#FFC700]/90 text-[#181206] font-semibold"
+                    className="h-8 text-xs bg-[#FF9933] hover:bg-[#FF9933]/90 text-[#181206] font-semibold"
                     onClick={() => {
                       setEditingDeal({
                         id: `EXP-2026-${String(exportDeals.length + 1).padStart(3, "0")}`,
@@ -3018,7 +3494,7 @@ function AdminDashboardPage() {
                 <div>
                   <div className="flex items-center gap-2">
                     <h2 className="text-lg font-bold font-display text-foreground">Customer Inquiries, Mails & Trade Messages</h2>
-                    <Badge variant="outline" className="text-[10px] border-[#FFC700] text-[#181206] bg-[#FAF3D6]">
+                    <Badge variant="outline" className="text-[10px] border-[#FF9933] text-[#181206] bg-[#FAF3D6]">
                       Inbox Hub
                     </Badge>
                   </div>
@@ -3096,7 +3572,7 @@ function AdminDashboardPage() {
                       key={msg.id}
                       className={`p-4 rounded-xl border transition-all ${
                         msg.status === "unread"
-                          ? "bg-[#FAF3D6]/40 border-[#FFC700]/70 shadow-xs"
+                          ? "bg-[#FAF3D6]/40 border-[#FF9933]/70 shadow-xs"
                           : "bg-card border-border"
                       }`}
                     >
@@ -3149,7 +3625,7 @@ function AdminDashboardPage() {
                         <div className="flex sm:flex-col items-center sm:items-end gap-1.5 shrink-0 pt-2 sm:pt-0">
                           <Button
                             size="sm"
-                            className="h-7 text-xs bg-[#FFC700] hover:bg-[#FFC700]/90 text-[#181206]"
+                            className="h-7 text-xs bg-[#FF9933] hover:bg-[#FF9933]/90 text-[#181206]"
                             asChild
                           >
                             <a
@@ -3395,7 +3871,11 @@ function AdminDashboardPage() {
                       }
                     }}
                     placeholder="e.g. YG Special Hing"
+                    className={productErrors["name"] ? "border-destructive" : ""}
                   />
+                  {productErrors["name"] ? (
+                    <p className="text-[11px] text-destructive">{productErrors["name"]}</p>
+                  ) : null}
                 </div>
               </div>
 
@@ -3409,21 +3889,70 @@ function AdminDashboardPage() {
                   />
                 </div>
                 <div className="space-y-1">
-                  <Label htmlFor="prod-format">Format</Label>
+                  <Label htmlFor="prod-category">Category</Label>
                   <Select
-                    value={editingProduct.format}
-                    onValueChange={(val: any) => setEditingProduct({ ...editingProduct, format: val })}
+                    value={editingProduct.category}
+                    onValueChange={(val: string) => {
+                      const KNOWN_FORMATS = ["powder", "granules", "cake", "combo", "wellness", "pooja", "vismaya", "appalam"];
+                      setEditingProduct({
+                        ...editingProduct,
+                        category: val,
+                        format: (KNOWN_FORMATS.includes(val) ? val : "combo") as any,
+                      });
+                    }}
                   >
-                    <SelectTrigger id="prod-format">
+                    <SelectTrigger id="prod-category" className={productErrors["category"] ? "border-destructive" : ""}>
+                      <SelectValue placeholder="Select a category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories.map((c) => (
+                        <SelectItem key={c.slug} value={c.slug}>
+                          {c.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {productErrors["category"] ? (
+                    <p className="text-[11px] text-destructive">{productErrors["category"]}</p>
+                  ) : (
+                    <button
+                      type="button"
+                      className="text-[11px] text-primary hover:underline"
+                      onClick={() => setCategoryDialogOpen(true)}
+                    >
+                      + Add a new category
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <Label htmlFor="prod-sku">SKU / Product Code</Label>
+                  <Input
+                    id="prod-sku"
+                    value={editingProduct.sku}
+                    onChange={(e) => setEditingProduct({ ...editingProduct, sku: e.target.value })}
+                    placeholder="e.g. YG-GOLD-100G"
+                    className="font-mono"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor="prod-status">Status</Label>
+                  <Select
+                    value={editingProduct.status}
+                    onValueChange={(val: DbProductStatus) =>
+                      setEditingProduct({ ...editingProduct, status: val, inStock: val === "active" })
+                    }
+                  >
+                    <SelectTrigger id="prod-status">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="powder">Powder</SelectItem>
-                      <SelectItem value="granules">Granules</SelectItem>
-                      <SelectItem value="cake">Solid Cake</SelectItem>
-                      <SelectItem value="combo">Combo & Gift</SelectItem>
-                      <SelectItem value="wellness">Health Mix (Wellness)</SelectItem>
-                      <SelectItem value="pooja">Pooja Sambrani</SelectItem>
+                      <SelectItem value="active">Active — visible & purchasable</SelectItem>
+                      <SelectItem value="out_of_stock">Out of Stock — visible, sold out</SelectItem>
+                      <SelectItem value="draft">Draft — hidden, work in progress</SelectItem>
+                      <SelectItem value="hidden">Hidden — hidden from storefront</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -3535,9 +4064,12 @@ function AdminDashboardPage() {
                         <label className="cursor-pointer">
                           <input
                             type="file"
-                            accept="image/*"
+                            accept="image/jpeg,image/jpg,image/png,image/webp"
                             className="hidden"
-                            onChange={(e) => handleImageFileUpload(e, false)}
+                            onChange={(e) => {
+                              handleImageFileUpload(e.target.files, false);
+                              e.target.value = "";
+                            }}
                           />
                           <Button type="button" size="sm" variant="outline" className="h-8 text-xs shrink-0" asChild>
                             <span>
@@ -3570,7 +4102,21 @@ function AdminDashboardPage() {
                 </div>
 
                 {/* Gallery Images */}
-                <div className="p-3 bg-muted/30 rounded-lg border border-border space-y-3">
+                <div
+                  className={`p-3 bg-muted/30 rounded-lg border space-y-3 transition-colors ${
+                    isDraggingGallery ? "border-primary border-dashed bg-primary/5" : "border-border"
+                  } ${productErrors["images"] ? "border-destructive" : ""}`}
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    setIsDraggingGallery(true);
+                  }}
+                  onDragLeave={() => setIsDraggingGallery(false)}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    setIsDraggingGallery(false);
+                    handleImageFileUpload(e.dataTransfer.files, true);
+                  }}
+                >
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-semibold text-foreground flex items-center gap-1">
                       <Layers className="h-3.5 w-3.5 text-primary" /> Additional Gallery Images ({editingProduct.gallery?.length || 0})
@@ -3578,10 +4124,13 @@ function AdminDashboardPage() {
                     <label className="cursor-pointer">
                       <input
                         type="file"
-                        accept="image/*"
+                        accept="image/jpeg,image/jpg,image/png,image/webp"
                         multiple
                         className="hidden"
-                        onChange={(e) => handleImageFileUpload(e, true)}
+                        onChange={(e) => {
+                          handleImageFileUpload(e.target.files, true);
+                          e.target.value = "";
+                        }}
                       />
                       <Button type="button" size="sm" variant="outline" className="h-7 text-[11px]" asChild>
                         <span>
@@ -3590,6 +4139,12 @@ function AdminDashboardPage() {
                       </Button>
                     </label>
                   </div>
+                  <p className="text-[10px] text-muted-foreground -mt-2">
+                    Drag & drop image files here, or use Upload Multiple. JPG, PNG, WEBP up to {MAX_IMAGE_SIZE_MB}MB each.
+                  </p>
+                  {productErrors["images"] ? (
+                    <p className="text-[11px] text-destructive">{productErrors["images"]}</p>
+                  ) : null}
 
                   {/* Add by URL */}
                   <div className="flex gap-2">
@@ -3659,7 +4214,7 @@ function AdminDashboardPage() {
                             )}
 
                             {/* Hover actions */}
-                            <div className="absolute inset-0 bg-black/65 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-1.5 p-1">
+                            <div className="absolute inset-0 bg-black/65 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-1 p-1">
                               {!isCover && (
                                 <Button
                                   type="button"
@@ -3667,24 +4222,58 @@ function AdminDashboardPage() {
                                   variant="secondary"
                                   className="h-6 text-[10px] px-1 py-0 w-full"
                                   onClick={() => {
-                                    setEditingProduct({ ...editingProduct, image: imgUrl });
-                                    toast.success("Set as main cover");
+                                    handleSetPrimaryImage(imgUrl);
+                                    toast.success("Set as primary image");
                                   }}
                                 >
-                                  Set Cover
+                                  Set Primary
                                 </Button>
                               )}
+                              <div className="flex gap-1 w-full">
+                                <Button
+                                  type="button"
+                                  size="sm"
+                                  variant="secondary"
+                                  className="h-6 text-[10px] px-1 py-0 flex-1"
+                                  disabled={idx === 0}
+                                  onClick={() => handleMoveGalleryImage(idx, -1)}
+                                >
+                                  ↑
+                                </Button>
+                                <Button
+                                  type="button"
+                                  size="sm"
+                                  variant="secondary"
+                                  className="h-6 text-[10px] px-1 py-0 flex-1"
+                                  disabled={idx === editingProduct.gallery.length - 1}
+                                  onClick={() => handleMoveGalleryImage(idx, 1)}
+                                >
+                                  ↓
+                                </Button>
+                              </div>
+                              <label className="w-full cursor-pointer">
+                                <input
+                                  type="file"
+                                  accept="image/jpeg,image/jpg,image/png,image/webp"
+                                  className="hidden"
+                                  onChange={(e) => {
+                                    const file = e.target.files?.[0];
+                                    if (file) handleReplaceGalleryImage(idx, file);
+                                    e.target.value = "";
+                                  }}
+                                />
+                                <Button type="button" size="sm" variant="secondary" className="h-6 text-[10px] px-1 py-0 w-full" asChild>
+                                  <span>Replace</span>
+                                </Button>
+                              </label>
                               <Button
                                 type="button"
                                 size="sm"
                                 variant="destructive"
                                 className="h-6 text-[10px] px-1 py-0 w-full"
                                 onClick={() => {
-                                  setEditingProduct({
-                                    ...editingProduct,
-                                    gallery: editingProduct.gallery.filter((_, i) => i !== idx),
-                                  });
-                                  toast.success("Removed from gallery");
+                                  handleRemoveGalleryImage(idx);
+                                  toast.success("Product image removed successfully.");
                                 }}
                               >
                                 <Trash2 className="h-3 w-3 mr-1" /> Remove
@@ -3759,6 +4348,13 @@ function AdminDashboardPage() {
                         }}
                         className="w-1/4 text-xs"
                       />
+                      {v.mrp && v.mrp > v.price ? (
+                        <span className="text-[10px] font-semibold text-emerald-600 shrink-0 w-10 text-center">
+                          -{Math.round(((v.mrp - v.price) / v.mrp) * 100)}%
+                        </span>
+                      ) : (
+                        <span className="w-10 shrink-0" />
+                      )}
                       <Input
                         placeholder="Stock"
                         type="number"
@@ -3791,6 +4387,10 @@ function AdminDashboardPage() {
                 </div>
               </div>
 
+              {productErrors["variants"] ? (
+                <p className="text-[11px] text-destructive -mt-2">{productErrors["variants"]}</p>
+              ) : null}
+
               <div className="flex items-center justify-between pt-2 border-t border-border">
                 <div className="flex items-center gap-3">
                   <div className="flex items-center gap-2">
@@ -3805,14 +4405,7 @@ function AdminDashboardPage() {
                       checked={editingProduct.bestseller}
                       onCheckedChange={(c: boolean) => setEditingProduct({ ...editingProduct, bestseller: c })}
                     />
-                    <span className="text-xs">Bestseller</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Switch
-                      checked={editingProduct.inStock}
-                      onCheckedChange={(c: boolean) => setEditingProduct({ ...editingProduct, inStock: c })}
-                    />
-                    <span className="text-xs">In Stock</span>
+                    <span className="text-xs">Featured</span>
                   </div>
                 </div>
               </div>
@@ -3827,6 +4420,176 @@ function AdminDashboardPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* DELETE PRODUCT CONFIRMATION */}
+      <AlertDialog open={Boolean(deletingProduct)} onOpenChange={(open) => !open && setDeletingProduct(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete "{deletingProduct?.name}"?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will remove <strong>{deletingProduct?.name}</strong> from the customer-facing website
+              immediately. The product record is archived (not permanently erased) and can be restored
+              later from the "Show archived" filter.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={handleDeleteProduct}
+            >
+              Delete Product
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* MANAGE CATEGORIES */}
+      <Dialog open={categoryDialogOpen} onOpenChange={setCategoryDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Manage Categories</DialogTitle>
+            <DialogDescription>Add, rename, or remove product categories.</DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4">
+            <div className="flex gap-2">
+              <Input
+                placeholder="New category name"
+                value={newCategoryName}
+                onChange={(e) => setNewCategoryName(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleSaveCategory();
+                  }
+                }}
+              />
+              <Button type="button" onClick={handleSaveCategory} className="shrink-0">
+                <Plus className="h-4 w-4 mr-1" /> Add
+              </Button>
+            </div>
+
+            <div className="space-y-1.5 max-h-72 overflow-y-auto">
+              {categories.map((c) =>
+                renamingCategorySlug === c.slug ? (
+                  <div key={c.slug} className="flex items-center gap-2 p-2 rounded-md border border-primary/40 bg-primary/5">
+                    <Input
+                      autoFocus
+                      value={renamingCategoryValue}
+                      onChange={(e) => setRenamingCategoryValue(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          handleRenameCategory(c.slug);
+                        }
+                        if (e.key === "Escape") setRenamingCategorySlug(null);
+                      }}
+                      className="h-8 text-sm"
+                    />
+                    <Button size="sm" className="h-8 shrink-0" onClick={() => handleRenameCategory(c.slug)}>
+                      Save
+                    </Button>
+                    <Button size="sm" variant="ghost" className="h-8 shrink-0" onClick={() => setRenamingCategorySlug(null)}>
+                      <X className="h-3.5 w-3.5" />
+                    </Button>
+                  </div>
+                ) : (
+                  <div key={c.slug} className="flex items-center justify-between gap-2 p-2 rounded-md border border-border text-sm">
+                    <div>
+                      <p className="font-medium">{c.name}</p>
+                      <p className="text-[11px] text-muted-foreground">
+                        {categoryProductCounts.get(c.slug) || 0} product(s)
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="h-7 w-7 p-0"
+                        title="Rename category"
+                        onClick={() => {
+                          setRenamingCategorySlug(c.slug);
+                          setRenamingCategoryValue(c.name);
+                        }}
+                      >
+                        <Edit className="h-3.5 w-3.5" />
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="h-7 w-7 p-0 text-destructive hover:bg-destructive/10"
+                        title="Delete category"
+                        onClick={() => setCategoryDeleteTarget(c)}
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </Button>
+                    </div>
+                  </div>
+                )
+              )}
+              {categories.length === 0 ? (
+                <p className="text-xs text-muted-foreground text-center py-4">No categories yet.</p>
+              ) : null}
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setCategoryDialogOpen(false)}>
+              Close
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* DELETE CATEGORY CONFIRMATION */}
+      <AlertDialog open={Boolean(categoryDeleteTarget)} onOpenChange={(open) => !open && setCategoryDeleteTarget(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete category "{categoryDeleteTarget?.name}"?</AlertDialogTitle>
+            <AlertDialogDescription asChild>
+              <div className="space-y-3">
+                {(categoryProductCounts.get(categoryDeleteTarget?.slug || "") || 0) > 0 ? (
+                  <>
+                    <p>
+                      {categoryProductCounts.get(categoryDeleteTarget?.slug || "")} product(s) still use this
+                      category. Choose a replacement category to move them to before deleting.
+                    </p>
+                    <Select value={categoryReplacement} onValueChange={setCategoryReplacement}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Choose replacement category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {categories
+                          .filter((c) => c.slug !== categoryDeleteTarget?.slug)
+                          .map((c) => (
+                            <SelectItem key={c.slug} value={c.slug}>
+                              {c.name}
+                            </SelectItem>
+                          ))}
+                      </SelectContent>
+                    </Select>
+                  </>
+                ) : (
+                  <p>This category has no products. It can be safely deleted.</p>
+                )}
+              </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setCategoryReplacement("")}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              disabled={
+                (categoryProductCounts.get(categoryDeleteTarget?.slug || "") || 0) > 0 && !categoryReplacement
+              }
+              onClick={handleDeleteCategory}
+            >
+              Delete Category
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       {/* 3. QUESTION ANSWER DIALOG */}
       <Dialog open={Boolean(answeringQuestion)} onOpenChange={(open: boolean) => !open && setAnsweringQuestion(null)}>
@@ -4035,9 +4798,16 @@ function AdminDashboardPage() {
               >
                 <div className="flex items-center justify-between text-xs">
                   <span className="font-semibold text-foreground">{v.label}</span>
-                  <span className="text-muted-foreground font-mono text-[11px]">
-                    ID: {v.id}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    {v.mrp && v.mrp > v.price ? (
+                      <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-500/10 px-1.5 py-0.5 rounded">
+                        {Math.round(((v.mrp - v.price) / v.mrp) * 100)}% off
+                      </span>
+                    ) : null}
+                    <span className="text-muted-foreground font-mono text-[11px]">
+                      ID: {v.id}
+                    </span>
+                  </div>
                 </div>
                 <div className="grid grid-cols-3 gap-2">
                   <div className="space-y-1">
@@ -4091,7 +4861,7 @@ function AdminDashboardPage() {
             </Button>
             <Button
               onClick={handleSaveQuickPrices}
-              className="bg-[#FFC700] hover:bg-[#FFC700]/90 text-[#181206] font-semibold"
+              className="bg-[#FF9933] hover:bg-[#FF9933]/90 text-[#181206] font-semibold"
             >
               <Save className="h-4 w-4 mr-1.5" /> Save Updated Prices
             </Button>
@@ -4386,7 +5156,7 @@ function AdminDashboardPage() {
                   Close
                 </Button>
                 <Button
-                  className="bg-[#FFC700] hover:bg-[#FFC700]/90 text-[#181206]"
+                  className="bg-[#FF9933] hover:bg-[#FF9933]/90 text-[#181206]"
                   asChild
                 >
                   <a

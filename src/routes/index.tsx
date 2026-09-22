@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
-  ChevronRight,
   CreditCard,
   MapPin,
   Smile,
@@ -14,17 +13,24 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/site/ProductCard";
-import { formatLabels, products, useLiveProducts, type Format } from "@/data/products";
+import {
+  MAIN_CATEGORIES,
+  matchesCategory,
+  getLiveProducts,
+  useLiveProducts,
+  type MainCategoryId,
+} from "@/data/products";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({
+  loader: () => getLiveProducts(),
   head: () => ({
     meta: [
-      { title: "Y.G Asafoetida — Artisanal Hing, Sathu Maavu & Sambrani Since 1931" },
+      { title: "Y.G Asafoetida — Artisanal Hing, Sathu Maavu & Sambrani Since 1932" },
       {
         name: "description",
         content:
-          "Buy authentic compounded asafoetida powder, pure gold hing cake, gluten-free hing, wood-roasted traditional health mix (sathu maavu), and pure temple benzoin sambrani online from Tirunelveli since 1931.",
+          "Buy authentic compounded asafoetida powder, pure gold hing cake, gluten-free hing, wood-roasted traditional health mix (sathu maavu), and pure temple benzoin sambrani online from Tirunelveli since 1932.",
       },
       {
         name: "keywords",
@@ -33,7 +39,7 @@ export const Route = createFileRoute("/")({
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://ygasafoetida.in/" },
-      { property: "og:title", content: "Y.G Asafoetida — Authentic Heritage Hing & Traditional Store Since 1931" },
+      { property: "og:title", content: "Y.G Asafoetida — Authentic Heritage Hing & Traditional Store Since 1932" },
       {
         property: "og:description",
         content:
@@ -41,7 +47,7 @@ export const Route = createFileRoute("/")({
       },
       { property: "og:image", content: "https://ygasafoetida.in/logo.png" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Y.G Asafoetida — Authentic Heritage Hing Since 1931" },
+      { name: "twitter:title", content: "Y.G Asafoetida — Authentic Heritage Hing Since 1932" },
       {
         name: "twitter:description",
         content:
@@ -70,56 +76,6 @@ export const Route = createFileRoute("/")({
   component: HomePage,
 });
 
-const featuredCategories = [
-  {
-    id: "powder" as const,
-    title: formatLabels.powder, // "Powder"
-    image: "/products/100g-gold-asafoetida-powder/img-1.jpg",
-    itemCount: products.filter((p) => p.format === "powder").length,
-  },
-  {
-    id: "granules" as const,
-    title: formatLabels.granules, // "Granules"
-    image: "/products/hing-pellets/img-1.jpg",
-    itemCount: products.filter((p) => p.format === "granules").length,
-  },
-  {
-    id: "cake" as const,
-    title: formatLabels.cake, // "Cake"
-    image: "/products/100g-asafoetida-gold-cake/img-1.jpg",
-    itemCount: products.filter((p) => p.format === "cake").length,
-  },
-  {
-    id: "gf" as const,
-    title: "Gluten-Free Pure",
-    image: "/products/50g-gluten-free-asafoetida-powder/img-1.jpg",
-    itemCount: products.filter((p) => p.glutenFree).length,
-  },
-  {
-    id: "wellness" as const,
-    title: formatLabels.wellness, // "Health Mix"
-    image: "/products/traditional-health-mix/img-1.jpg",
-    itemCount: products.filter((p) => p.format === "wellness").length,
-  },
-  {
-    id: "appalam" as const,
-    title: formatLabels.appalam, // "Crispy Appalam"
-    image: "/products/crispy-appalam/img-1.jpg",
-    itemCount: products.filter((p) => p.format === "appalam").length,
-  },
-  {
-    id: "vismaya" as const,
-    title: formatLabels.vismaya, // "Vismaya Ready to Cook"
-    image: "/products/millet-pongal-mix/img-1.jpg",
-    itemCount: products.filter((p) => p.format === "vismaya").length,
-  },
-  {
-    id: "pooja" as const,
-    title: formatLabels.pooja, // "Pooja Sambrani"
-    image: "/products/pure-benzoin-sambrani/img-1.png",
-    itemCount: products.filter((p) => p.format === "pooja").length,
-  },
-];
 
 const verifiedReviews = [
   {
@@ -189,7 +145,7 @@ const HERO_VIDEOS = [
 ];
 
 function HomePage() {
-  const [activeCatalogTab, setActiveCatalogTab] = useState<Format | "all">("all");
+  const [activeCatalogTab, setActiveCatalogTab] = useState<MainCategoryId>("all");
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const soundPlayCountRef = useRef(0);
   const [isMuted, setIsMuted] = useState(true);
@@ -254,9 +210,6 @@ function HomePage() {
     setCurrentVideoIndex((prev) => (prev + 1) % HERO_VIDEOS.length);
   };
 
-
-
-
   const selectVideo = (index: number) => {
     if (soundPlayCountRef.current < 2) {
       setIsMuted(false);
@@ -264,11 +217,9 @@ function HomePage() {
     setCurrentVideoIndex(index);
   };
 
-  const products = useLiveProducts();
-  const displayedProducts = products.filter((p) => {
-    if (activeCatalogTab === "all") return true;
-    return p.format === activeCatalogTab;
-  });
+  const initialProducts = Route.useLoaderData();
+  const products = useLiveProducts(initialProducts);
+  const displayedProducts = products.filter((p) => matchesCategory(p, activeCatalogTab));
 
   const currentVideo = HERO_VIDEOS[currentVideoIndex] ?? HERO_VIDEOS[0]!;
   const nextVideoItem = HERO_VIDEOS[(currentVideoIndex + 1) % HERO_VIDEOS.length];
@@ -330,16 +281,14 @@ function HomePage() {
               </>
             ) : (
               <>
-                <Volume2 className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-[#FFC700] animate-pulse" />
-                <span className="text-[10px] sm:text-xs text-[#FFC700] font-bold">Sound On</span>
+                <Volume2 className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-[#FF9933] animate-pulse" />
+                <span className="text-[10px] sm:text-xs text-[#FF9933] font-bold">Sound On</span>
               </>
             )}
           </button>
         </div>
 
-
-
-        {/* Bottom Slide Switcher (Dots hidden on mobile per user request: "remove three dot option for mobile") */}
+        {/* Bottom Slide Switcher */}
         <div className="absolute bottom-2.5 sm:bottom-4 inset-x-0 hidden sm:flex justify-center items-center z-20 pointer-events-auto px-4">
           <div className="flex items-center gap-1.5 p-1 rounded-full bg-black/50 backdrop-blur-xs border border-white/10">
             {HERO_VIDEOS.map((v, i) => (
@@ -350,7 +299,7 @@ function HomePage() {
                 aria-label={`Switch to video ${i + 1}`}
                 className={`transition-all duration-300 rounded-full cursor-pointer ${
                   currentVideoIndex === i
-                    ? "w-6 sm:w-8 h-1.5 sm:h-2 bg-[#FFC700] shadow-md"
+                    ? "w-6 sm:w-8 h-1.5 sm:h-2 bg-[#FF9933] shadow-md"
                     : "w-2 sm:w-2.5 h-1.5 sm:h-2 bg-white/40 hover:bg-white/70"
                 }`}
               />
@@ -365,8 +314,8 @@ function HomePage() {
       <section className="border-b border-[#E8DEC8] bg-[#FAF3D6]/60 py-5 sm:py-6">
         <div className="container-page px-3 sm:px-6">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
-            <div className="flex items-center gap-2.5 sm:gap-3.5 p-2.5 sm:p-3 rounded-[8px] border border-[#E8DEC8] bg-white hover:border-[#FFC700] hover:shadow-xs transition-all">
-              <div className="h-9 w-9 sm:h-11 sm:w-11 rounded-full border-2 border-[#FFC700] bg-[#FFC700]/20 flex items-center justify-center shrink-0 text-[#181206]">
+            <div className="flex items-center gap-2.5 sm:gap-3.5 p-2.5 sm:p-3 rounded-[8px] border border-[#E8DEC8] bg-white hover:border-[#FF9933] hover:shadow-xs transition-all">
+              <div className="h-9 w-9 sm:h-11 sm:w-11 rounded-full border-2 border-[#FF9933] bg-[#FF9933]/20 flex items-center justify-center shrink-0 text-[#181206]">
                 <CreditCard className="h-4 w-4 sm:h-5 sm:w-5" />
               </div>
               <div className="min-w-0">
@@ -375,8 +324,8 @@ function HomePage() {
               </div>
             </div>
 
-            <div className="flex items-center gap-2.5 sm:gap-3.5 p-2.5 sm:p-3 rounded-[8px] border border-[#E8DEC8] bg-white hover:border-[#FFC700] hover:shadow-xs transition-all">
-              <div className="h-9 w-9 sm:h-11 sm:w-11 rounded-full border-2 border-[#FFC700] bg-[#FFC700]/20 flex items-center justify-center shrink-0 text-[#181206]">
+            <div className="flex items-center gap-2.5 sm:gap-3.5 p-2.5 sm:p-3 rounded-[8px] border border-[#E8DEC8] bg-white hover:border-[#FF9933] hover:shadow-xs transition-all">
+              <div className="h-9 w-9 sm:h-11 sm:w-11 rounded-full border-2 border-[#FF9933] bg-[#FF9933]/20 flex items-center justify-center shrink-0 text-[#181206]">
                 <MapPin className="h-4 w-4 sm:h-5 sm:w-5" />
               </div>
               <div className="min-w-0">
@@ -385,8 +334,8 @@ function HomePage() {
               </div>
             </div>
 
-            <div className="flex items-center gap-2.5 sm:gap-3.5 p-2.5 sm:p-3 rounded-[8px] border border-[#E8DEC8] bg-white hover:border-[#FFC700] hover:shadow-xs transition-all">
-              <div className="h-9 w-9 sm:h-11 sm:w-11 rounded-full border-2 border-[#FFC700] bg-[#FFC700]/20 flex items-center justify-center shrink-0 text-[#181206]">
+            <div className="flex items-center gap-2.5 sm:gap-3.5 p-2.5 sm:p-3 rounded-[8px] border border-[#E8DEC8] bg-white hover:border-[#FF9933] hover:shadow-xs transition-all">
+              <div className="h-9 w-9 sm:h-11 sm:w-11 rounded-full border-2 border-[#FF9933] bg-[#FF9933]/20 flex items-center justify-center shrink-0 text-[#181206]">
                 <Smile className="h-4 w-4 sm:h-5 sm:w-5" />
               </div>
               <div className="min-w-0">
@@ -395,8 +344,8 @@ function HomePage() {
               </div>
             </div>
 
-            <div className="flex items-center gap-2.5 sm:gap-3.5 p-2.5 sm:p-3 rounded-[8px] border border-[#E8DEC8] bg-white hover:border-[#FFC700] hover:shadow-xs transition-all">
-              <div className="h-9 w-9 sm:h-11 sm:w-11 rounded-full border-2 border-[#FFC700] bg-[#FFC700]/20 flex items-center justify-center shrink-0 text-[#181206]">
+            <div className="flex items-center gap-2.5 sm:gap-3.5 p-2.5 sm:p-3 rounded-[8px] border border-[#E8DEC8] bg-white hover:border-[#FF9933] hover:shadow-xs transition-all">
+              <div className="h-9 w-9 sm:h-11 sm:w-11 rounded-full border-2 border-[#FF9933] bg-[#FF9933]/20 flex items-center justify-center shrink-0 text-[#181206]">
                 <Truck className="h-4 w-4 sm:h-5 sm:w-5" />
               </div>
               <div className="min-w-0">
@@ -409,73 +358,18 @@ function HomePage() {
       </section>
 
       {/* ======================================================== */}
-      {/* 3. FEATURED CATEGORIES                                   */}
+      {/* 3. BULK SUPPLY / PRIVATE LABEL BANNER                    */}
       {/* ======================================================== */}
-      <section className="border-b border-[#E8DEC8] bg-white py-8 sm:py-14 overflow-hidden">
+      <section className="bg-white py-6 sm:py-8 border-b border-[#E8DEC8]">
         <div className="container-page px-3 sm:px-6">
-          <div className="flex items-center justify-between mb-5 sm:mb-8">
-            <div>
-              <span className="text-[11px] font-black uppercase tracking-wider text-[#8C5921] bg-[#FAF3D6] px-2.5 py-0.5 rounded border border-[#E8DEC8]">
-                Explore Collections
-              </span>
-              <h2 className="text-xl sm:text-3xl font-extrabold text-[#181206] tracking-tight mt-1">
-                Featured Categories
-              </h2>
-            </div>
-            <Link
-              to="/shop"
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#181206] bg-[#FFC700] hover:bg-[#181206] hover:text-[#FFC700] hover:border-[#181206] border border-[#D8A700] px-3.5 py-1.5 rounded-[6px] shadow-xs transition-all active:scale-95 cursor-pointer"
-            >
-              <span>Explore All Categories</span>
-              <ChevronRight className="h-3.5 w-3.5" />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-3.5 sm:gap-5">
-            {featuredCategories.map((cat, idx) => (
-              <Link
-                key={`${cat.id}-${idx}`}
-                to="/shop"
-                search={{ category: cat.id }}
-                className="category-card-interactive bg-gradient-to-b from-[#FFFDF2] to-[#FFFBEA] rounded-2xl p-3.5 sm:p-5 text-center flex flex-col items-center justify-between min-h-[190px] sm:min-h-[220px] border-2 border-[#FFC700] shadow-[0_4px_16px_rgba(255,199,0,0.18)] ring-1 ring-[#FFC700]/30 cursor-pointer group relative overflow-hidden active:scale-95 animate-fade-in-up"
-                style={{
-                  animationDelay: `${idx * 60}ms`,
-                }}
-              >
-                {/* Ambient gold glow on hover */}
-                <div className="absolute inset-0 bg-radial from-[#FFC700]/25 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-
-                {/* Shimmer sweep on hover */}
-                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out bg-gradient-to-r from-transparent via-white/40 to-transparent pointer-events-none" />
-
-                <div className="category-image-wrap h-20 w-20 sm:h-24 sm:w-24 rounded-xl bg-white/95 border border-[#E8DEC8] flex items-center justify-center p-2 my-auto shadow-2xs group-hover:border-[#FFC700] group-hover:shadow-md">
-                  <img
-                    src={cat.image}
-                    alt={cat.title}
-                    className="max-h-full max-w-full object-contain drop-shadow-xs transition-all duration-300"
-                  />
-                </div>
-                <div className="mt-2.5 sm:mt-3 text-center w-full relative z-10">
-                  <p className="text-xs sm:text-sm font-extrabold text-[#181206] group-hover:text-[#8C5921] transition-colors leading-tight truncate">
-                    {cat.title}
-                  </p>
-                  <span className="text-[10px] sm:text-[11px] font-black inline-block mt-1 px-2.5 py-0.5 rounded-full bg-[#FFC700] text-[#181206] border border-[#D8A700] shadow-2xs group-hover:bg-[#8C5921] group-hover:text-white group-hover:border-[#8C5921] transition-all duration-300 group-hover:scale-105">
-                    {cat.itemCount} items
-                  </span>
-                </div>
-              </Link>
-            ))}
-          </div>
-
-          {/* Enquire for Bulk Order Action Banner */}
-          <div className="mt-6 sm:mt-8 rounded-xl border border-[#FFC700]/40 bg-gradient-to-r from-[#FFFBEA] via-white to-[#FAF3D6] p-3.5 sm:p-4.5 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xs hover:border-[#FFC700] transition-colors">
-            <div className="flex items-center gap-3 text-center sm:text-left">
-              <div className="h-10 w-10 rounded-full bg-[#FFC700] text-[#181206] flex items-center justify-center shrink-0 font-black shadow-xs animate-bounce">
+          <div className="rounded-xl border border-[#FF9933]/40 bg-gradient-to-r from-[#FFFBEA] via-white to-[#FAF3D6] p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xs hover:border-[#FF9933] transition-colors">
+            <div className="flex items-center gap-3.5 text-center sm:text-left">
+              <div className="h-11 w-11 rounded-full bg-[#FF9933] text-[#181206] flex items-center justify-center shrink-0 font-black shadow-xs animate-bounce">
                 <Sparkles className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-xs sm:text-sm font-black text-[#181206] uppercase tracking-wide">
-                  Looking for Bulk Supply or Private Label Compounding?
+                <p className="text-xs sm:text-base font-black text-[#181206] uppercase tracking-wide">
+                  Looking for Bulk Supply or Private Label
                 </p>
                 <p className="text-xs text-[#5A6560] mt-0.5">
                   Custom export mesh grades, institutional bulk barrels &amp; client-branded formulation packaging.
@@ -484,7 +378,7 @@ function HomePage() {
             </div>
             <Button
               size="sm"
-              className="bg-[#181206] text-[#FFC700] hover:bg-black hover:text-[#FFD333] border border-[#FFC700]/40 font-black text-xs px-4 py-2 shrink-0 rounded-[6px] shadow-xs active:scale-95 transition-all"
+              className="bg-[#181206] text-[#FF9933] hover:bg-black hover:text-[#FFD333] border border-[#FF9933]/40 font-black text-xs px-5 py-2.5 shrink-0 rounded-[6px] shadow-xs active:scale-95 transition-all"
               asChild
             >
               <Link to="/custom-branding">Request White Label Quote</Link>
@@ -496,7 +390,7 @@ function HomePage() {
       {/* ======================================================== */}
       {/* 4. POPULAR PRODUCTS (Screenshot 1)                       */}
       {/* ======================================================== */}
-      <section className="border-t border-[#E8DEC8] bg-[#FAF3D6]/50 py-10 sm:py-14">
+      <section className="bg-[#FAF3D6]/50 py-10 sm:py-14">
         <div className="container-page space-y-5 sm:space-y-6 px-3 sm:px-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 border-b border-[#E8DEC8] pb-3 sm:pb-4">
             <div>
@@ -510,23 +404,16 @@ function HomePage() {
 
             {/* Category Filter Tabs with Smooth Pill Transitions */}
             <div className="flex flex-wrap items-center gap-1.5 sm:gap-2.5 text-xs sm:text-sm font-semibold">
-              {[
-                { id: "all", label: "All Formulations" },
-                { id: "powder", label: formatLabels.powder },
-                { id: "cake", label: formatLabels.cake },
-                { id: "granules", label: formatLabels.granules },
-                { id: "appalam", label: formatLabels.appalam },
-                { id: "vismaya", label: formatLabels.vismaya },
-              ].map((tab) => (
+              {MAIN_CATEGORIES.map((tab) => (
                 <button
                   key={tab.id}
                   type="button"
-                  onClick={() => setActiveCatalogTab(tab.id as any)}
+                  onClick={() => setActiveCatalogTab(tab.id)}
                   className={cn(
                     "cursor-pointer transition-all duration-300 px-3.5 py-1.5 rounded-full text-xs font-bold border active:scale-95 shadow-2xs",
                     activeCatalogTab === tab.id
-                      ? "bg-[#FFC700] text-[#181206] border-[#D8A700] shadow-sm ring-2 ring-[#8C5921]/30 font-black scale-105"
-                      : "bg-white text-[#181206] border-[#E8DEC8] hover:bg-[#FAF3D6] hover:border-[#FFC700]"
+                      ? "bg-[#FF9933] text-[#181206] border-[#D8A700] shadow-sm ring-2 ring-[#8C5921]/30 font-black scale-105"
+                      : "bg-white text-[#181206] border-[#E8DEC8] hover:bg-[#FAF3D6] hover:border-[#FF9933]"
                   )}
                 >
                   {tab.label}
@@ -554,7 +441,7 @@ function HomePage() {
           <div className="text-center pt-2 sm:pt-4">
             <Button
               size="sm"
-              className="h-10 px-6 sm:px-8 font-extrabold text-xs sm:text-sm rounded-[6px] border border-[#FFC700] bg-[#FFC700] text-[#181206] hover:bg-[#E6B000] transition-all shadow-xs cursor-pointer active:scale-95"
+              className="h-10 px-6 sm:px-8 font-extrabold text-xs sm:text-sm rounded-[6px] border border-[#FF9933] bg-[#FF9933] text-[#181206] hover:bg-[#E6B000] transition-all shadow-xs cursor-pointer active:scale-95"
               asChild
             >
               <Link to="/shop">
@@ -574,47 +461,47 @@ function HomePage() {
             <div className="aspect-4/3 rounded-xl sm:rounded-2xl overflow-hidden border border-white/10 shadow-lg bg-black/20">
               <img
                 src="/images/heritage-compounding-1931.jpg"
-                alt="Shri P. Subramanian stone compounding pure Ferula asafoetida gum resin in 1931 Tirunelveli"
+                alt="Shri P. Subramanian stone compounding pure Ferula asafoetida gum resin in 1932 Tirunelveli"
                 className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
                 loading="lazy"
               />
             </div>
-            <div className="absolute -bottom-2 -left-2 bg-[#FFC700] text-[#181206] font-black px-3 py-1 rounded-lg text-[10px] shadow-md border border-black/20">
-              Estd. 1931 · Tirunelveli
+            <div className="absolute -bottom-2 -left-2 bg-[#FF9933] text-[#181206] font-black px-3 py-1 rounded-lg text-[10px] shadow-md border border-black/20">
+              Estd. 1932 · Tirunelveli
             </div>
           </div>
 
           <div className="lg:col-span-7 space-y-3.5">
-            <p className="text-[11px] font-extrabold tracking-widest uppercase text-[#FFC700]">
+            <p className="text-[11px] font-extrabold tracking-widest uppercase text-[#FF9933]">
               Preserving A 94-Year Craft
             </p>
             <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold leading-tight">
               Started by Shri P. Subramanian. Mastered across three generations.
             </h2>
             <p className="text-xs sm:text-sm opacity-85 leading-relaxed">
-              In 1931, near the banks of the Thamirabarani river, Shri P. Subramanian perfected the art of
+              In 1932, near the banks of the Thamirabarani river, Shri P. Subramanian perfected the art of
               stone-compounding imported mountain ferula resin with pure starches. Today, his grandchildren
               continue the same strict formula without shortcuts.
             </p>
 
             <div className="grid grid-cols-3 gap-3 pt-2 border-t border-white/10 text-center">
               <div>
-                <p className="text-lg sm:text-xl font-extrabold text-[#FFC700]">1931</p>
+                <p className="text-lg sm:text-xl font-extrabold text-[#FF9933]">1932</p>
                 <p className="opacity-75 text-[10px]">Founding Year</p>
               </div>
               <div>
-                <p className="text-lg sm:text-xl font-extrabold text-[#FFC700]">100%</p>
+                <p className="text-lg sm:text-xl font-extrabold text-[#FF9933]">100%</p>
                 <p className="opacity-75 text-[10px]">Natural Ferula</p>
               </div>
               <div>
-                <p className="text-lg sm:text-xl font-extrabold text-[#FFC700]">0%</p>
+                <p className="text-lg sm:text-xl font-extrabold text-[#FF9933]">0%</p>
                 <p className="opacity-75 text-[10px]">Chemical Additives</p>
               </div>
             </div>
 
             <div className="pt-1">
-              <Button size="sm" className="font-bold bg-[#FFC700] text-[#181206] hover:bg-[#E6B000] text-xs border border-black/15 shadow-xs" asChild>
-                <Link to="/story">Read Our Full 1931 Story</Link>
+              <Button size="sm" className="font-bold bg-[#FF9933] text-[#181206] hover:bg-[#E6B000] text-xs border border-black/15 shadow-xs" asChild>
+                <Link to="/story">Read Our Full Heritage Story</Link>
               </Button>
             </div>
           </div>
@@ -626,7 +513,7 @@ function HomePage() {
       {/* ======================================================== */}
       <section className="container-page py-8 sm:py-14 px-3 sm:px-6">
         <div className="text-center max-w-xl mx-auto mb-6 sm:mb-8">
-          <span className="text-[#181206] font-black text-xs uppercase tracking-wider bg-[#FFC700] px-3 py-1 rounded-[4px] border border-black/10">
+          <span className="text-[#181206] font-black text-xs uppercase tracking-wider bg-[#FF9933] px-3 py-1 rounded-[4px] border border-black/10">
             Customer Testimonials
           </span>
           <h2 className="mt-2 text-xl sm:text-3xl font-extrabold text-[#181206] tracking-tight">
@@ -641,7 +528,7 @@ function HomePage() {
           {verifiedReviews.map((rev) => (
             <figure
               key={rev.name}
-              className="w-[82vw] max-w-[300px] sm:max-w-[320px] shrink-0 snap-center md:w-auto md:max-w-none md:shrink single-shopping-card-one flex flex-col justify-between p-3.5 sm:p-5 rounded-[8px] border border-[#E8DEC8] shadow-xs hover:border-[#FFC700] transition-all bg-white"
+              className="w-[82vw] max-w-[300px] sm:max-w-[320px] shrink-0 snap-center md:w-auto md:max-w-none md:shrink single-shopping-card-one flex flex-col justify-between p-3.5 sm:p-5 rounded-[8px] border border-[#E8DEC8] shadow-xs hover:border-[#FF9933] transition-all bg-white"
             >
               <div>
                 <div className="flex items-center justify-between">
@@ -650,7 +537,7 @@ function HomePage() {
                       <Star key={i} className="h-3.5 w-3.5 fill-[#EABC5E] text-[#EABC5E]" />
                     ))}
                   </div>
-                  <span className="text-[9px] sm:text-[10px] px-2 py-0.5 bg-[#FFC700] text-[#181206] font-black rounded-[4px]">
+                  <span className="text-[9px] sm:text-[10px] px-2 py-0.5 bg-[#FF9933] text-[#181206] font-black rounded-[4px]">
                     Verified Purchase
                   </span>
                 </div>
@@ -667,7 +554,7 @@ function HomePage() {
                   <p className="font-bold text-[#181206] text-xs sm:text-sm">{rev.name}</p>
                   <p className="text-[#5A6560] text-[10px] sm:text-[11px]">{rev.city}</p>
                 </div>
-                <span className="text-[10px] text-[#181206] font-bold bg-[#FFC700]/40 px-2 py-0.5 rounded">
+                <span className="text-[10px] text-[#181206] font-bold bg-[#FF9933]/40 px-2 py-0.5 rounded">
                   {rev.product}
                 </span>
               </div>
@@ -680,9 +567,9 @@ function HomePage() {
       {/* 7. PROMO OFFER & CLOSING CTA                             */}
       {/* ======================================================== */}
       <section className="container-page py-8 sm:py-14 px-3 sm:px-6">
-        <div className="relative overflow-hidden bg-[#FFC700] rounded-[10px] sm:rounded-[12px] p-6 sm:p-12 text-center text-[#181206] shadow-md border border-black/10">
+        <div className="relative overflow-hidden bg-[#FF9933] rounded-[10px] sm:rounded-[12px] p-6 sm:p-12 text-center text-[#181206] shadow-md border border-black/10">
           <div className="max-w-xl mx-auto space-y-3">
-            <span className="inline-block px-3 py-1 bg-[#181206] text-[#FFC700] rounded-[4px] text-[10px] font-black uppercase tracking-wider">
+            <span className="inline-block px-3 py-1 bg-[#181206] text-[#FF9933] rounded-[4px] text-[10px] font-black uppercase tracking-wider">
               Special Coupon: BULK15
             </span>
             <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-[#181206]">
@@ -695,7 +582,7 @@ function HomePage() {
             <div className="pt-3 flex flex-wrap items-center justify-center gap-2.5 sm:gap-3">
               <Button
                 size="sm"
-                className="h-10 px-5 sm:px-6 font-extrabold text-xs sm:text-sm bg-[#181206] text-[#FFC700] hover:bg-black rounded-[6px] shadow-sm transition-all active:scale-95"
+                className="h-10 px-5 sm:px-6 font-extrabold text-xs sm:text-sm bg-[#181206] text-[#FF9933] hover:bg-black rounded-[6px] shadow-sm transition-all active:scale-95"
                 asChild
               >
                 <Link to="/shop">Shop All 15 Products</Link>

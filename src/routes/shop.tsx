@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ProductCard, type ProductCardMode } from "@/components/site/ProductCard";
-import { formatLabels, products, useLiveProducts, type Format } from "@/data/products";
+import { MAIN_CATEGORIES, matchesCategory, products, getLiveProducts, useLiveProducts } from "@/data/products";
 import { cn } from "@/lib/utils";
 
 type ShopSearch = {
@@ -33,6 +33,7 @@ type ShopSearch = {
 };
 
 export const Route = createFileRoute("/shop")({
+  loader: () => getLiveProducts(),
   validateSearch: (search: Record<string, unknown>): ShopSearch => ({
     category: typeof search["category"] === "string" ? search["category"] : undefined,
     format: typeof search["format"] === "string" ? search["format"] : undefined,
@@ -116,18 +117,7 @@ export const Route = createFileRoute("/shop")({
   component: ShopPage,
 });
 
-const filterCategories: Array<{ id: Format | "all" | "gf"; label: string }> = [
-  { id: "all", label: "All Categories" },
-  { id: "powder", label: formatLabels.powder },
-  { id: "granules", label: formatLabels.granules },
-  { id: "cake", label: formatLabels.cake },
-  { id: "gf", label: "Gluten-Free Pure" },
-  { id: "combo", label: formatLabels.combo },
-  { id: "wellness", label: formatLabels.wellness },
-  { id: "pooja", label: formatLabels.pooja },
-  { id: "appalam", label: formatLabels.appalam },
-  { id: "vismaya", label: formatLabels.vismaya },
-];
+const filterCategories = MAIN_CATEGORIES;
 
 export const PRICE_PRESETS = [
   { id: "all", label: "All Prices", min: 18, max: 2000, shortLabel: "All" },
@@ -141,25 +131,18 @@ export const PRICE_PRESETS = [
 export type PricePresetId = (typeof PRICE_PRESETS)[number]["id"];
 
 function ShopPage() {
-  const products = useLiveProducts();
+  const initialProducts = Route.useLoaderData();
+  const products = useLiveProducts(initialProducts);
   const search = Route.useSearch();
   const navigate = Route.useNavigate();
-  const initialCat = (search.category || search.format || "all") as Format | "all" | "gf";
-  const [filter, setFilter] = useState<Format | "all" | "gf">(() => {
-    if (filterCategories.some((c) => c.id === initialCat)) {
-      return initialCat;
-    }
-    return "all";
+  const initialCat = (search.category || search.format || "all") as string;
+  const [filter, setFilter] = useState<string>(() => {
+    return initialCat || "all";
   });
 
   useEffect(() => {
     const rawTarget = search.category || search.format || "all";
-    const target = rawTarget as Format | "all" | "gf";
-    if (filterCategories.some((c) => c.id === target)) {
-      setFilter(target);
-    } else {
-      setFilter("all");
-    }
+    setFilter(rawTarget);
   }, [search.category, search.format]);
 
   const [sort, setSort] = useState("featured");
@@ -184,14 +167,9 @@ function ShopPage() {
 
   // Category product counts
   const categoryCounts = useMemo(() => {
-    const counts: Record<string, number> = {
-      all: products.length,
-      gf: products.filter((p) => p.glutenFree).length,
-    };
+    const counts: Record<string, number> = {};
     filterCategories.forEach((fc) => {
-      if (fc.id !== "all" && fc.id !== "gf") {
-        counts[fc.id] = products.filter((p) => p.format === fc.id).length;
-      }
+      counts[fc.id] = products.filter((p) => matchesCategory(p, fc.id)).length;
     });
     return counts;
   }, [products]);
@@ -209,11 +187,7 @@ function ShopPage() {
 
   const visible = useMemo(() => {
     let list = products.filter((p) => {
-      if (filter === "gf") {
-        if (!p.glutenFree) return false;
-      } else if (filter !== "all") {
-        if (p.format !== filter) return false;
-      }
+      if (!matchesCategory(p, filter)) return false;
       const hasVariantInRange = p.variants.some(
         (v) => v.price >= minPrice && v.price <= maxPrice
       );
@@ -282,7 +256,7 @@ function ShopPage() {
               </>
             )}
           </div>
-          <span className="hidden sm:inline-block text-xs font-semibold text-[#181206] bg-[#FFC700]/10 px-2.5 py-0.5 rounded-[4px]">
+          <span className="hidden sm:inline-block text-xs font-semibold text-[#181206] bg-[#FF9933]/10 px-2.5 py-0.5 rounded-[4px]">
             100% Authentic Heritage
           </span>
         </div>
@@ -298,7 +272,7 @@ function ShopPage() {
           <button
             type="button"
             onClick={() => setMobileFilterOpen(!mobileFilterOpen)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] bg-[#FFC700] text-[#181206] font-black text-xs font-semibold shadow-xs"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] bg-[#FF9933] text-[#181206] font-black text-xs font-semibold shadow-xs"
           >
             <Filter className="w-3.5 h-3.5" />
             <span>Filters</span>
@@ -362,7 +336,7 @@ function ShopPage() {
                         }}
                         className={`w-full flex items-center justify-between px-3 py-2 rounded-[6px] text-xs font-semibold transition-all duration-200 text-left cursor-pointer active:scale-98 ${
                           active
-                            ? "bg-[#FFC700] text-[#181206] font-black shadow-xs border border-[#D8A700] translate-x-1"
+                            ? "bg-[#FF9933] text-[#181206] font-black shadow-xs border border-[#D8A700] translate-x-1"
                             : "text-[#181206] hover:bg-[#FAF3D6] hover:text-[#181206] hover:translate-x-1"
                         }`}
                       >
@@ -405,7 +379,7 @@ function ShopPage() {
                         }}
                         className={`w-full flex items-center justify-between px-3 py-2 rounded-[6px] text-xs font-semibold transition-all duration-200 text-left cursor-pointer active:scale-98 ${
                           active
-                            ? "bg-[#FFC700] text-[#181206] font-black shadow-xs border border-[#D8A700] translate-x-1"
+                            ? "bg-[#FF9933] text-[#181206] font-black shadow-xs border border-[#D8A700] translate-x-1"
                             : "text-[#181206] hover:bg-[#FAF3D6] hover:text-[#181206] hover:translate-x-1"
                         }`}
                       >
@@ -426,8 +400,8 @@ function ShopPage() {
               </div>
 
               {/* Widget 3: Authenticity Guarantee Card */}
-              <div className="rounded-[6px] border border-[#FFC700]/20 bg-[#FAF3D6] p-4 text-center">
-                <div className="w-10 h-10 mx-auto rounded-full bg-[#FFC700] text-[#181206] font-black flex items-center justify-center font-bold text-lg mb-2 shadow-xs">
+              <div className="rounded-[6px] border border-[#FF9933]/20 bg-[#FAF3D6] p-4 text-center">
+                <div className="w-10 h-10 mx-auto rounded-full bg-[#FF9933] text-[#181206] font-black flex items-center justify-center font-bold text-lg mb-2 shadow-xs">
                   YG
                 </div>
                 <h4 className="text-xs font-bold text-[#181206]">Direct From Tirunelveli</h4>
@@ -465,7 +439,7 @@ function ShopPage() {
                       disabled={currentPage === 1}
                       title="Previous Page"
                       aria-label="Previous Page"
-                      className="h-6 w-6 rounded-[4px] bg-white border border-[#E8DEC8] flex items-center justify-center disabled:opacity-30 hover:bg-[#FFC700] transition-colors cursor-pointer disabled:cursor-not-allowed active:scale-95"
+                      className="h-6 w-6 rounded-[4px] bg-white border border-[#E8DEC8] flex items-center justify-center disabled:opacity-30 hover:bg-[#FF9933] transition-colors cursor-pointer disabled:cursor-not-allowed active:scale-95"
                     >
                       <ChevronLeft className="h-3 w-3 text-[#181206]" />
                     </button>
@@ -481,7 +455,7 @@ function ShopPage() {
                       disabled={currentPage === totalPages}
                       title="Next Page"
                       aria-label="Next Page"
-                      className="h-6 w-6 rounded-[4px] bg-white border border-[#E8DEC8] flex items-center justify-center disabled:opacity-30 hover:bg-[#FFC700] transition-colors cursor-pointer disabled:cursor-not-allowed active:scale-95"
+                      className="h-6 w-6 rounded-[4px] bg-white border border-[#E8DEC8] flex items-center justify-center disabled:opacity-30 hover:bg-[#FF9933] transition-colors cursor-pointer disabled:cursor-not-allowed active:scale-95"
                     >
                       <ChevronRight className="h-3 w-3 text-[#181206]" />
                     </button>
@@ -569,7 +543,7 @@ function ShopPage() {
               <div className="flex flex-wrap items-center gap-2 mb-4 animate-in fade-in-50 duration-200">
                 <span className="text-xs text-[#6E777D]">Active Filters:</span>
                 {filter !== "all" && (
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-[#FFC700] text-[#181206] border border-[#D8A700] shadow-2xs">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-[#FF9933] text-[#181206] border border-[#D8A700] shadow-2xs">
                     Category: {filterCategories.find((c) => c.id === filter)?.label}
                     <button
                       type="button"
@@ -581,7 +555,7 @@ function ShopPage() {
                   </span>
                 )}
                 {(minPrice > 18 || maxPrice < 2000 || selectedPreset !== "all") && (
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-[#FFC700] text-[#181206] border border-[#D8A700] shadow-2xs">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-[#FF9933] text-[#181206] border border-[#D8A700] shadow-2xs">
                     {selectedPreset !== "all" && selectedPreset !== "custom"
                       ? `Price: ${PRICE_PRESETS.find((p) => p.id === selectedPreset)?.label}`
                       : `Price: ₹${minPrice} — ₹${maxPrice}`}
@@ -688,7 +662,7 @@ function ShopPage() {
                         className={cn(
                           "h-9 w-9 rounded-[6px] text-xs font-bold transition-all cursor-pointer shadow-xs",
                           currentPage === pageNum
-                            ? "bg-[#FFC700] text-[#181206] border border-[#FFC700] font-black"
+                            ? "bg-[#FF9933] text-[#181206] border border-[#FF9933] font-black"
                             : "bg-white text-[#181206] border border-[#E8DEC8] hover:bg-[#FAF3D6]"
                         )}
                       >
@@ -704,7 +678,7 @@ function ShopPage() {
                       window.scrollTo({ top: 200, behavior: "smooth" });
                     }}
                     disabled={currentPage === totalPages}
-                    className="h-9 px-3.5 rounded-[6px] border border-[#FFC700] bg-[#FFC700] text-xs font-bold text-[#181206] hover:bg-[#E6B000] disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer shadow-xs flex items-center gap-1 active:scale-95"
+                    className="h-9 px-3.5 rounded-[6px] border border-[#FF9933] bg-[#FF9933] text-xs font-bold text-[#181206] hover:bg-[#E6B000] disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer shadow-xs flex items-center gap-1 active:scale-95"
                   >
                     <span>Next</span>
                     <ChevronRight className="h-3.5 w-3.5" />
@@ -717,7 +691,7 @@ function ShopPage() {
               <div className="py-16 text-center rounded-[6px] border border-[#E8DEC8] bg-white p-8">
                 <p className="text-[#6E777D] text-sm">No products match this filter criteria.</p>
                 <Button
-                  className="mt-4 bg-[#FFC700] hover:bg-[#E6B000] text-[#181206] font-black rounded-[6px] px-5 py-2 text-xs font-bold"
+                  className="mt-4 bg-[#FF9933] hover:bg-[#E6B000] text-[#181206] font-black rounded-[6px] px-5 py-2 text-xs font-bold"
                   onClick={() => {
                     setFilter("all");
                     setMinPrice(18);

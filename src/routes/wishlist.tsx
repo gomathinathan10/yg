@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { SmartImage } from "@/components/site/SmartImage";
 import { RecentlyViewed } from "@/components/site/RecentlyViewed";
-import { formatPrice, getProduct } from "@/data/products";
+import { formatPrice, useLiveProducts } from "@/data/products";
 import { useCart } from "@/lib/cart";
 import { useWishlist } from "@/lib/wishlist";
 
@@ -32,7 +32,10 @@ export const Route = createFileRoute("/wishlist")({
 function WishlistPage() {
   const { slugs, remove, alerts } = useWishlist();
   const { add } = useCart();
-  const items = slugs.map(getProduct).filter((p): p is NonNullable<typeof p> => Boolean(p));
+  const allProducts = useLiveProducts();
+  const items = slugs
+    .map((slug) => allProducts.find((p) => p.slug === slug))
+    .filter((p): p is NonNullable<typeof p> => Boolean(p));
 
   return (
     <div className="container-page py-8 sm:py-14 px-3 sm:px-6">
@@ -62,7 +65,7 @@ function WishlistPage() {
           <p className="mt-2 max-w-sm text-sm text-muted-foreground">
             Tap the heart icon on any authentic formulation to save it here for later.
           </p>
-          <Button asChild className="mt-6 bg-[#FFC700] hover:bg-[#E6B000] text-[#181206] font-black rounded-[6px] font-bold shadow-xs">
+          <Button asChild className="mt-6 bg-[#FF9933] hover:bg-[#E6B000] text-[#181206] font-black rounded-[6px] font-bold shadow-xs">
             <Link to="/shop">Browse the collection</Link>
           </Button>
         </div>
@@ -98,7 +101,7 @@ function WishlistPage() {
                     <Button
                       size="sm"
                       disabled={soldOut}
-                      className="bg-[#FFC700] hover:bg-[#E6B000] text-[#181206] font-black rounded-[6px] font-bold text-xs shadow-xs"
+                      className="bg-[#FF9933] hover:bg-[#E6B000] text-[#181206] font-black rounded-[6px] font-bold text-xs shadow-xs"
                       onClick={() => add(p.slug, variant.id)}
                     >
                       {soldOut ? "Sold out" : "Add to basket"}
@@ -130,7 +133,7 @@ function WishlistPage() {
           </h2>
           <ul className="mt-4 grid gap-3 sm:grid-cols-2">
             {alerts.map((a) => {
-              const p = getProduct(a.slug);
+              const p = allProducts.find((prod) => prod.slug === a.slug);
               return (
                 <li
                   key={a.slug}
@@ -142,7 +145,7 @@ function WishlistPage() {
                       We&apos;ll message {a.contact}
                     </span>
                   </span>
-                  <span className="shrink-0 rounded-[4px] bg-[#FFC700]/10 border border-[#FFC700]/20 px-2.5 py-1 text-xs font-bold text-[#181206]">
+                  <span className="shrink-0 rounded-[4px] bg-[#FF9933]/10 border border-[#FF9933]/20 px-2.5 py-1 text-xs font-bold text-[#181206]">
                     Watching
                   </span>
                 </li>

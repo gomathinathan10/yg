@@ -1,13 +1,16 @@
 import { Link } from "@tanstack/react-router";
 import { History } from "lucide-react";
 import { SmartImage } from "@/components/site/SmartImage";
-import { formatPrice, getProduct } from "@/data/products";
+import { formatPrice, useLiveProducts } from "@/data/products";
 import { useRecentlyViewed } from "@/lib/recently-viewed";
 
 /** Horizontal strip of the last products this visitor opened. */
 export function RecentlyViewed({ currentSlug }: { currentSlug?: string }) {
   const { slugs, clear } = useRecentlyViewed(currentSlug);
-  const items = slugs.map(getProduct).filter((p): p is NonNullable<typeof p> => Boolean(p));
+  const allProducts = useLiveProducts();
+  const items = slugs
+    .map((slug) => allProducts.find((p) => p.slug === slug))
+    .filter((p): p is NonNullable<typeof p> => Boolean(p));
 
   if (items.length === 0) return null;
 

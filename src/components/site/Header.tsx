@@ -27,15 +27,11 @@ export type HeaderCategoryItem = {
 };
 
 export const headerCategoryItems: HeaderCategoryItem[] = [
-  { id: "all", label: "All Formulations", badge: "All" },
-  { id: "powder", label: "Compounded Powder" },
-  { id: "cake", label: "Solid Cake & Lump" },
-  { id: "gf", label: "Gluten-Free Pure", badge: "Pure" },
-  { id: "granules", label: "Granules & Pellets" },
-  { id: "wellness", label: "Health Mix (Sathu Maavu)" },
-  { id: "appalam", label: "Crispy Appalam" },
-  { id: "vismaya", label: "Vismaya Ready to Cook" },
-  { id: "pooja", label: "Pooja Sambrani" },
+  { id: "all", label: "All Products", badge: "All" },
+  { id: "asafoetida", label: "Asafoetida" },
+  { id: "crispi", label: "Crispi" },
+  { id: "food-products", label: "Food Products" },
+  { id: "pooja-products", label: "Pooja Products" },
 ];
 
 const nav = [
@@ -113,10 +109,10 @@ export function Header() {
       {/* ======================================================== */}
       {/* 1. TOP ANNOUNCEMENT STRIP (Neon Gold)                    */}
       {/* ======================================================== */}
-      <div className="bg-[#FFC700] text-[#181206] py-1 sm:py-1.5 text-[10px] sm:text-xs border-b border-[#D8A700] font-medium overflow-hidden">
+      <div className="bg-[#FF9933] text-[#181206] py-1 sm:py-1.5 text-[10px] sm:text-xs border-b border-[#D8A700] font-medium overflow-hidden">
         <div className="container-page flex flex-row items-center justify-between gap-2 px-2.5 sm:px-6 whitespace-nowrap">
           <div className="flex items-center gap-1.5 min-w-0 truncate">
-            <span className="inline-flex items-center gap-0.5 bg-[#181206] text-[#FFC700] font-black text-[8px] sm:text-[10px] px-1.5 py-0.5 rounded uppercase tracking-wider shrink-0">
+            <span className="inline-flex items-center gap-0.5 bg-[#181206] text-[#FF9933] font-black text-[8px] sm:text-[10px] px-1.5 py-0.5 rounded uppercase tracking-wider shrink-0">
               <Sparkles className="h-2.5 w-2.5 sm:h-3 sm:w-3" /> Special
             </span>
             <p className="text-[#181206] text-[10px] sm:text-xs font-semibold truncate">
@@ -158,7 +154,7 @@ export function Header() {
                   variant="ghost"
                   size="icon"
                   aria-label="Open navigation menu"
-                  className="h-9 w-9 text-[#181206] hover:bg-[#FFC700]/30 active:scale-95"
+                  className="h-9 w-9 text-[#181206] hover:bg-[#FF9933]/30 active:scale-95"
                 >
                   <Menu className="h-5 w-5" />
                 </Button>
@@ -179,8 +175,8 @@ export function Header() {
                         key={item.to}
                         to={item.to}
                         onClick={() => setMenuOpen(false)}
-                        className="bg-[#FFC700] text-[#181206] hover:bg-[#FFE57F] hover:border-[#C99600] rounded-[6px] px-3.5 py-2.5 text-sm font-bold border border-[#D8A700] shadow-xs transition-all flex items-center justify-between"
-                        activeProps={{ className: "!bg-white !text-[#8C5921] !border-[#8C5921] font-black ring-2 ring-[#FFC700]/80 shadow-xs" }}
+                        className="bg-[#FF9933] text-[#181206] hover:bg-[#FFE57F] hover:border-[#C99600] rounded-[6px] px-3.5 py-2.5 text-sm font-bold border border-[#D8A700] shadow-xs transition-all flex items-center justify-between"
+                        activeProps={{ className: "!bg-white !text-[#8C5921] !border-[#8C5921] font-black ring-2 ring-[#FF9933]/80 shadow-xs" }}
                       >
                         <span>{item.label}</span>
                       </Link>
@@ -191,7 +187,7 @@ export function Header() {
                       <button
                         type="button"
                         onClick={() => setMobileCategoriesOpen((o) => !o)}
-                        className="w-full bg-[#FFC700] text-[#181206] hover:bg-[#FFE57F] hover:border-[#C99600] rounded-[6px] px-3.5 py-2.5 text-sm font-bold border border-[#D8A700] shadow-xs transition-all flex items-center justify-between cursor-pointer active:scale-98"
+                        className="w-full bg-[#FF9933] text-[#181206] hover:bg-[#FFE57F] hover:border-[#C99600] rounded-[6px] px-3.5 py-2.5 text-sm font-bold border border-[#D8A700] shadow-xs transition-all flex items-center justify-between cursor-pointer active:scale-98"
                       >
                         <span className="flex items-center gap-2">
                           <Menu className="h-4 w-4 text-[#181206]" />
@@ -205,7 +201,7 @@ export function Header() {
                         />
                       </button>
                       {mobileCategoriesOpen && (
-                        <div className="mt-2 ml-1 pl-3 border-l-2 border-[#FFC700] flex flex-col gap-1.5 py-1 text-xs font-semibold animate-in fade-in-50 duration-200">
+                        <div className="mt-2 ml-1 pl-3 border-l-2 border-[#FF9933] flex flex-col gap-1.5 py-1 text-xs font-semibold animate-in fade-in-50 duration-200">
                           {headerCategoryItems.map((cat) => (
                             <Link
                               key={cat.id}
@@ -219,7 +215,7 @@ export function Header() {
                             >
                               <span>{cat.label}</span>
                               {cat.badge && (
-                                <span className="text-[10px] bg-[#FFC700] text-[#181206] px-1.5 py-0.2 rounded font-bold">
+                                <span className="text-[10px] bg-[#FF9933] text-[#181206] px-1.5 py-0.2 rounded font-bold">
                                   {cat.badge}
                                 </span>
                               )}
@@ -231,15 +227,15 @@ export function Header() {
                     <Link
                       to="/custom-branding"
                       onClick={() => setMenuOpen(false)}
-                      className="bg-[#FFC700] text-[#181206] hover:bg-[#FFE57F] hover:border-[#C99600] rounded-[6px] px-3.5 py-2.5 text-sm font-bold border border-[#D8A700] shadow-xs transition-all mt-1 flex items-center justify-between"
+                      className="bg-[#FF9933] text-[#181206] hover:bg-[#FFE57F] hover:border-[#C99600] rounded-[6px] px-3.5 py-2.5 text-sm font-bold border border-[#D8A700] shadow-xs transition-all mt-1 flex items-center justify-between"
                     >
                       <span>Enquire for Bulk Order</span>
                     </Link>
                     <Link
                       to="/wishlist"
                       onClick={() => setMenuOpen(false)}
-                      className="bg-[#FFC700] text-[#181206] hover:bg-[#FFE57F] hover:border-[#C99600] rounded-[6px] px-3.5 py-2.5 text-sm font-bold border border-[#D8A700] shadow-xs transition-all flex items-center justify-between"
-                      activeProps={{ className: "!bg-white !text-[#8C5921] !border-[#8C5921] font-black ring-2 ring-[#FFC700]/80 shadow-xs" }}
+                      className="bg-[#FF9933] text-[#181206] hover:bg-[#FFE57F] hover:border-[#C99600] rounded-[6px] px-3.5 py-2.5 text-sm font-bold border border-[#D8A700] shadow-xs transition-all flex items-center justify-between"
+                      activeProps={{ className: "!bg-white !text-[#8C5921] !border-[#8C5921] font-black ring-2 ring-[#FF9933]/80 shadow-xs" }}
                     >
                       <span>Wishlist</span>
                       {wishlist.slugs.length ? (
@@ -251,8 +247,8 @@ export function Header() {
                     <Link
                       to="/track"
                       onClick={() => setMenuOpen(false)}
-                      className="bg-[#FFC700] text-[#181206] hover:bg-[#FFE57F] hover:border-[#C99600] rounded-[6px] px-3.5 py-2.5 text-sm font-bold border border-[#D8A700] shadow-xs transition-all"
-                      activeProps={{ className: "!bg-white !text-[#8C5921] !border-[#8C5921] font-black ring-2 ring-[#FFC700]/80 shadow-xs" }}
+                      className="bg-[#FF9933] text-[#181206] hover:bg-[#FFE57F] hover:border-[#C99600] rounded-[6px] px-3.5 py-2.5 text-sm font-bold border border-[#D8A700] shadow-xs transition-all"
+                      activeProps={{ className: "!bg-white !text-[#8C5921] !border-[#8C5921] font-black ring-2 ring-[#FF9933]/80 shadow-xs" }}
                     >
                       Track Order
                     </Link>
@@ -313,7 +309,7 @@ export function Header() {
                             {cat.label}
                           </span>
                           {cat.badge && (
-                            <span className="text-[10px] bg-[#FFC700] text-[#181206] px-1.5 py-0.5 rounded font-mono font-bold">
+                            <span className="text-[10px] bg-[#FF9933] text-[#181206] px-1.5 py-0.5 rounded font-mono font-bold">
                               {cat.badge}
                             </span>
                           )}
@@ -340,7 +336,7 @@ export function Header() {
               <button
                 type="button"
                 onClick={() => setSearchOpen(true)}
-                className="bg-[#FFC700] hover:bg-[#F0B800] text-[#181206] px-5 py-2.5 rounded-[4px] text-xs font-bold flex items-center gap-1.5 transition-all shrink-0 shadow-xs cursor-pointer active:scale-95 border border-[#D8A700]"
+                className="bg-[#FF9933] hover:bg-[#F0B800] text-[#181206] px-5 py-2.5 rounded-[4px] text-xs font-bold flex items-center gap-1.5 transition-all shrink-0 shadow-xs cursor-pointer active:scale-95 border border-[#D8A700]"
               >
                 <span>Search</span>
                 <Search className="h-3.5 w-3.5 text-[#181206]" />
@@ -354,7 +350,7 @@ export function Header() {
             <button
               type="button"
               onClick={() => setSearchOpen(true)}
-              className="lg:hidden h-9 w-9 flex items-center justify-center text-[#181206] hover:bg-[#FFC700]/30 rounded-[6px] transition-colors active:scale-95"
+              className="lg:hidden h-9 w-9 flex items-center justify-center text-[#181206] hover:bg-[#FF9933]/30 rounded-[6px] transition-colors active:scale-95"
               aria-label="Search"
             >
               <Search className="h-5 w-5" />
@@ -363,7 +359,7 @@ export function Header() {
             {/* 1. Account Button */}
             <Link
               to="/account"
-              className="bg-[#FFC700] text-[#181206] hover:bg-[#F0B800] h-9 px-2.5 sm:px-3.5 rounded-[6px] text-xs sm:text-sm font-bold flex items-center gap-1.5 shadow-xs border border-[#D8A700] transition-all cursor-pointer active:scale-95"
+              className="bg-[#FF9933] text-[#181206] hover:bg-[#F0B800] h-9 px-2.5 sm:px-3.5 rounded-[6px] text-xs sm:text-sm font-bold flex items-center gap-1.5 shadow-xs border border-[#D8A700] transition-all cursor-pointer active:scale-95"
               title="Account"
             >
               <UserRound className="h-4 w-4 text-[#181206]" />
@@ -373,13 +369,13 @@ export function Header() {
             {/* 2. Wishlist Button with High-Contrast Count Badge */}
             <Link
               to="/wishlist"
-              className="bg-[#FFC700] text-[#181206] hover:bg-[#F0B800] h-9 px-2.5 sm:px-3.5 rounded-[6px] text-xs sm:text-sm font-bold flex items-center gap-1.5 shadow-xs border border-[#D8A700] transition-all relative cursor-pointer active:scale-95"
+              className="bg-[#FF9933] text-[#181206] hover:bg-[#F0B800] h-9 px-2.5 sm:px-3.5 rounded-[6px] text-xs sm:text-sm font-bold flex items-center gap-1.5 shadow-xs border border-[#D8A700] transition-all relative cursor-pointer active:scale-95"
               aria-label="Wishlist"
               title="Wishlist"
             >
               <div className="relative flex items-center">
                 <Heart className="h-4 w-4 text-[#181206]" />
-                <span className="absolute -top-3.5 -right-3 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#181206] text-[#FFC700] text-[9px] font-black px-1 shadow-xs">
+                <span className="absolute -top-3.5 -right-3 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#181206] text-[#FF9933] text-[9px] font-black px-1 shadow-xs">
                   {wishlist.slugs.length || 0}
                 </span>
               </div>
@@ -390,13 +386,13 @@ export function Header() {
             <button
               type="button"
               onClick={() => cart.setOpen(true)}
-              className="bg-[#FFC700] text-[#181206] hover:bg-[#F0B800] h-9 px-2.5 sm:px-3.5 rounded-[6px] text-xs sm:text-sm font-bold flex items-center gap-1.5 shadow-xs border border-[#D8A700] transition-all relative cursor-pointer active:scale-95"
+              className="bg-[#FF9933] text-[#181206] hover:bg-[#F0B800] h-9 px-2.5 sm:px-3.5 rounded-[6px] text-xs sm:text-sm font-bold flex items-center gap-1.5 shadow-xs border border-[#D8A700] transition-all relative cursor-pointer active:scale-95"
               aria-label="Open cart"
               title="Cart"
             >
               <div className="relative flex items-center">
                 <ShoppingBag className="h-4 w-4 text-[#181206]" />
-                <span className="absolute -top-3.5 -right-3 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#181206] text-[#FFC700] text-[9px] font-black px-1 shadow-xs">
+                <span className="absolute -top-3.5 -right-3 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#181206] text-[#FF9933] text-[9px] font-black px-1 shadow-xs">
                   {cart.count}
                 </span>
               </div>
@@ -416,8 +412,8 @@ export function Header() {
               <Link
                 key={item.to}
                 to={item.to}
-                className="bg-[#FFC700] text-[#181206] hover:bg-[#FFE57F] hover:border-[#C99600] font-bold text-xs sm:text-sm tracking-wide whitespace-nowrap px-3 sm:px-3.5 py-1.5 rounded-[6px] border border-[#D8A700] shadow-2xs hover:shadow-xs transition-all cursor-pointer active:scale-95"
-                activeProps={{ className: "!bg-white !text-[#8C5921] !border-[#8C5921] font-black shadow-xs ring-2 ring-[#FFC700]/80" }}
+                className="bg-[#FF9933] text-[#181206] hover:bg-[#FFE57F] hover:border-[#C99600] font-bold text-xs sm:text-sm tracking-wide whitespace-nowrap px-3 sm:px-3.5 py-1.5 rounded-[6px] border border-[#D8A700] shadow-2xs hover:shadow-xs transition-all cursor-pointer active:scale-95"
+                activeProps={{ className: "!bg-white !text-[#8C5921] !border-[#8C5921] font-black shadow-xs ring-2 ring-[#FF9933]/80" }}
               >
                 {item.label}
               </Link>
@@ -425,7 +421,7 @@ export function Header() {
           </nav>
 
           {/* Right Delivery Location */}
-          <div className="hidden md:flex items-center gap-1.5 text-xs text-[#181206] shrink-0 font-bold bg-[#FFC700]/25 border border-[#D8A700]/60 px-3 py-1.5 rounded-[6px]">
+          <div className="hidden md:flex items-center gap-1.5 text-xs text-[#181206] shrink-0 font-bold bg-[#FF9933]/25 border border-[#D8A700]/60 px-3 py-1.5 rounded-[6px]">
             <MapPin className="h-3.5 w-3.5 text-[#8C5921]" />
             <span>Delivery: <strong>Tamil Nadu &amp; All India Direct Dispatch</strong></span>
           </div>

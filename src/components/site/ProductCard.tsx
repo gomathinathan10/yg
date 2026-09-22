@@ -78,9 +78,9 @@ export function ProductCard({
   const isFavorite = wishlist.has(product.slug);
 
   return (
-    <article className="single-shopping-card-one product-card-interactive group bg-[#FAF3D6] border border-[#E8DEC8] rounded-[10px] sm:rounded-[12px] p-2.5 sm:p-4 transition-all duration-300 hover:border-[#FFC700] hover:shadow-[0_14px_32px_rgba(255,199,0,0.32)] flex flex-col justify-between relative h-full">
+    <article className="single-shopping-card-one product-card-interactive group bg-[#FAF3D6] border border-[#E8DEC8] rounded-[10px] sm:rounded-[12px] p-2.5 sm:p-4 transition-all duration-300 hover:border-[#FF9933] hover:shadow-[0_14px_32px_rgba(255, 153, 51,0.32)] flex flex-col justify-between relative h-full">
       {/* 1. Image and Action Area Wrapper */}
-      <div className="relative w-full overflow-hidden rounded-[8px] bg-white aspect-square flex items-center justify-center p-1.5 sm:p-2 border border-[#E8DEC8]/60 transition-all duration-300 group-hover:border-[#FFC700]/70 group-hover:shadow-xs">
+      <div className="relative w-full overflow-hidden rounded-[8px] bg-white aspect-square flex items-center justify-center p-1.5 sm:p-2 border border-[#E8DEC8]/60 transition-all duration-300 group-hover:border-[#FF9933]/70 group-hover:shadow-xs">
         {/* Top-Left Bookmark Ribbon Tag */}
         <div className="ekomart-ribbon-badge pointer-events-none transition-transform duration-300 group-hover:scale-105 group-hover:-rotate-2">
           <span>
@@ -117,11 +117,11 @@ export function ProductCard({
             aria-label="Add to wishlist"
             className={cn(
               "ekomart-action-btn",
-              isFavorite && "bg-[#181206] text-[#FFC700] border-[#181206]"
+              isFavorite && "bg-[#181206] text-[#FF9933] border-[#181206]"
             )}
             title="Add to Wishlist"
           >
-            <Heart className={cn("h-3.5 w-3.5", isFavorite && "fill-[#FFC700] text-[#FFC700]")} />
+            <Heart className={cn("h-3.5 w-3.5", isFavorite && "fill-[#FF9933] text-[#FF9933]")} />
           </button>
 
           <button
@@ -224,15 +224,15 @@ export function ProductCard({
             onClick={handleAddToCart}
             disabled={soldOut}
             className={cn(
-              "flex-1 h-8 sm:h-8.5 rounded-[6px] border border-[#FFC700] bg-[#FFC700] text-[#181206] hover:bg-[#E6B000] px-2 sm:px-3 font-extrabold text-[11px] sm:text-xs flex items-center justify-center gap-1 sm:gap-1.5 transition-all shadow-xs cursor-pointer active:scale-95",
-              justAdded && "bg-[#181206] text-[#FFC700] border-[#181206]",
+              "flex-1 h-8 sm:h-8.5 rounded-[6px] border border-[#FF9933] bg-[#FF9933] text-[#181206] hover:bg-[#E6B000] px-2 sm:px-3 font-extrabold text-[11px] sm:text-xs flex items-center justify-center gap-1 sm:gap-1.5 transition-all shadow-xs cursor-pointer active:scale-95",
+              justAdded && "bg-[#181206] text-[#FF9933] border-[#181206]",
               soldOut && "opacity-50 cursor-not-allowed border-gray-300 bg-gray-100 text-gray-400 hover:bg-gray-100 hover:text-gray-400"
             )}
             aria-label={`Add ${product.name} to cart`}
           >
             {justAdded ? (
               <>
-                <Check className="h-3.5 w-3.5 text-[#FFC700]" />
+                <Check className="h-3.5 w-3.5 text-[#FF9933]" />
                 <span>Added!</span>
               </>
             ) : (

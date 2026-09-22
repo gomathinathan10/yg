@@ -129,7 +129,7 @@ function ContactPage() {
             <span className="text-[#A0A8B0]">/</span>
             <span className="font-semibold text-[#181206]">Contact Us</span>
           </div>
-          <span className="hidden sm:inline-block text-xs font-semibold text-[#181206] bg-[#FFC700]/10 px-2.5 py-0.5 rounded-[4px]">
+          <span className="hidden sm:inline-block text-xs font-semibold text-[#181206] bg-[#FF9933]/10 px-2.5 py-0.5 rounded-[4px]">
             Support Desk · Tirunelveli
           </span>
         </div>
@@ -150,7 +150,7 @@ function ContactPage() {
 
         <div className="mt-8 grid items-start gap-8 lg:grid-cols-[1.2fr_1fr]">
           {status === "sent" ? (
-            <div className="rounded-2xl border-2 border-[#FFC700] bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6] p-6 sm:p-8 shadow-md ring-1 ring-[#FFC700]/30 flex flex-col items-start">
+            <div className="rounded-2xl border-2 border-[#FF9933] bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6] p-6 sm:p-8 shadow-md ring-1 ring-[#FF9933]/30 flex flex-col items-start">
               <CheckCircle2 className="h-10 w-10 text-[#8C5921]" />
               <h2 className="mt-4 text-2xl font-bold text-[#181206]">
                 Thank you, {values.name.split(" ")[0]}!
@@ -160,7 +160,7 @@ function ContactPage() {
               </p>
               <Button
                 variant="outline"
-                className="mt-6 rounded-[6px] border-[#D8A700] bg-white text-[#181206] hover:bg-[#FFC700] hover:border-[#D8A700] cursor-pointer"
+                className="mt-6 rounded-[6px] border-[#D8A700] bg-white text-[#181206] hover:bg-[#FF9933] hover:border-[#D8A700] cursor-pointer"
                 onClick={() => {
                   setValues({ name: "", email: "", subject: "", message: "" });
                   setTouched({});
@@ -172,12 +172,12 @@ function ContactPage() {
             </div>
           ) : (
             <form
-              className="rounded-2xl border-2 border-[#FFC700] bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6] p-6 sm:p-8 shadow-md ring-1 ring-[#FFC700]/30 space-y-4"
+              className="rounded-2xl border-2 border-[#FF9933] bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6] p-6 sm:p-8 shadow-md ring-1 ring-[#FF9933]/30 space-y-4"
               noValidate
               onSubmit={onSubmit}
             >
               <div className="flex items-center gap-2 border-b border-[#E8DEC8] pb-3">
-                <span className="p-1 rounded bg-[#FFC700] text-[#181206] border border-[#D8A700]">
+                <span className="p-1 rounded bg-[#FF9933] text-[#181206] border border-[#D8A700]">
                   <Mail className="h-4 w-4" />
                 </span>
                 <h3 className="text-base font-bold text-[#181206]">
@@ -260,7 +260,7 @@ function ContactPage() {
                 type="submit"
                 size="lg"
                 disabled={status === "sending"}
-                className="w-full sm:w-auto h-11 px-8 rounded-[6px] bg-[#FFC700] hover:bg-[#181206] text-[#181206] hover:text-[#FFC700] border border-[#D8A700] hover:border-[#181206] font-black text-xs shadow-xs cursor-pointer active:scale-95 transition-all"
+                className="w-full sm:w-auto h-11 px-8 rounded-[6px] bg-[#FF9933] hover:bg-[#181206] text-[#181206] hover:text-[#FF9933] border border-[#D8A700] hover:border-[#181206] font-black text-xs shadow-xs cursor-pointer active:scale-95 transition-all"
               >
                 {status === "sending" ? (
                   <>
@@ -275,13 +275,13 @@ function ContactPage() {
 
           {/* Right Info Cards */}
           <div className="space-y-4">
-            <div className="rounded-2xl border-2 border-[#E8DEC8] hover:border-[#FFC700] bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6] p-6 shadow-xs space-y-4 transition-all">
+            <div className="rounded-2xl border-2 border-[#E8DEC8] hover:border-[#FF9933] bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6] p-6 shadow-xs space-y-4 transition-all">
               <h3 className="text-sm font-bold text-[#181206] uppercase tracking-wider pb-2 border-b border-[#E8DEC8]">
                 Our Location &amp; Contact
               </h3>
 
               <div className="flex gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#FFC700] flex items-center justify-center text-[#181206] shrink-0 mt-0.5 border border-[#D8A700] shadow-2xs">
+                <div className="w-8 h-8 rounded-full bg-[#FF9933] flex items-center justify-center text-[#181206] shrink-0 mt-0.5 border border-[#D8A700] shadow-2xs">
                   <MapPin className="h-4 w-4" />
                 </div>
                 <div>
@@ -294,7 +294,7 @@ function ContactPage() {
               </div>
 
               <div className="flex gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#FFC700]/10 flex items-center justify-center text-[#181206] shrink-0 mt-0.5">
+                <div className="w-8 h-8 rounded-full bg-[#FF9933]/10 flex items-center justify-center text-[#181206] shrink-0 mt-0.5">
                   <Phone className="h-4 w-4" />
                 </div>
                 <div>
@@ -309,7 +309,7 @@ function ContactPage() {
               </div>
 
               <div className="flex gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#FFC700]/10 flex items-center justify-center text-[#181206] shrink-0 mt-0.5">
+                <div className="w-8 h-8 rounded-full bg-[#FF9933]/10 flex items-center justify-center text-[#181206] shrink-0 mt-0.5">
                   <Phone className="h-4 w-4" />
                 </div>
                 <div>
@@ -323,7 +323,7 @@ function ContactPage() {
               </div>
 
               <div className="flex gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#FFC700]/10 flex items-center justify-center text-[#181206] shrink-0 mt-0.5">
+                <div className="w-8 h-8 rounded-full bg-[#FF9933]/10 flex items-center justify-center text-[#181206] shrink-0 mt-0.5">
                   <Phone className="h-4 w-4" />
                 </div>
                 <div>
@@ -337,7 +337,7 @@ function ContactPage() {
               </div>
 
               <div className="flex gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#FFC700]/10 flex items-center justify-center text-[#181206] shrink-0 mt-0.5">
+                <div className="w-8 h-8 rounded-full bg-[#FF9933]/10 flex items-center justify-center text-[#181206] shrink-0 mt-0.5">
                   <Mail className="h-4 w-4" />
                 </div>
                 <div>
@@ -351,7 +351,7 @@ function ContactPage() {
               </div>
 
               <div className="flex gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#FFC700]/10 flex items-center justify-center text-[#181206] shrink-0 mt-0.5">
+                <div className="w-8 h-8 rounded-full bg-[#FF9933]/10 flex items-center justify-center text-[#181206] shrink-0 mt-0.5">
                   <MessageCircle className="h-4 w-4" />
                 </div>
                 <div>
@@ -372,7 +372,7 @@ function ContactPage() {
             </div>
 
             {/* Quick Bot Callout */}
-            <div className="rounded-[6px] border border-[#FFC700]/20 bg-[#FAF3D6] p-4 flex items-start gap-3">
+            <div className="rounded-[6px] border border-[#FF9933]/20 bg-[#FAF3D6] p-4 flex items-start gap-3">
               <MessageSquare className="h-5 w-5 text-[#181206] shrink-0 mt-0.5" />
               <div>
                 <p className="text-xs font-bold text-[#181206]">Quick answers, right now</p>

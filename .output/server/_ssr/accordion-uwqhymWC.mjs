@@ -2,7 +2,7 @@ import { r as __toESM } from "../_runtime.mjs";
 import { t as cn } from "./utils-C_uf36nf.mjs";
 import { u as require_react } from "../_libs/@floating-ui/react-dom+[...].mjs";
 import { a as Trigger2, i as Root2, n as Header, r as Item, t as Content2, v as require_jsx_runtime } from "../_libs/@radix-ui/react-accordion+[...].mjs";
-import { wt as ChevronDown } from "../_libs/lucide-react.mjs";
+import { kt as ChevronDown } from "../_libs/lucide-react.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/accordion-uwqhymWC.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();

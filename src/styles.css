@@ -80,8 +80,8 @@ html[data-theme="ekomart"],
   --popover: #FFFDF8;
   --popover-foreground: #181206;
 
-  --primary: #FFC700; /* Vibrant Neon Gold */
-  --primary-foreground: #181206;
+  --primary: #FF9933; /* Vibrant Heritage Crimson / Neon Gold */
+  --primary-foreground: #ffffff;
 
   --secondary: #F5EAC4;
   --secondary-foreground: #181206;
@@ -89,7 +89,7 @@ html[data-theme="ekomart"],
   --muted: #F5EAC4;
   --muted-foreground: #665A42; /* Warm slate body */
 
-  --accent: #F5EAC4; /* Subtle neon gold accent tint */
+  --accent: #F5EAC4; /* Subtle accent tint */
   --accent-foreground: #181206;
 
   --destructive: #DC2626; /* Ekomart sale red */
@@ -97,29 +97,29 @@ html[data-theme="ekomart"],
 
   --border: #E8DEC8;
   --input: #E8DEC8;
-  --ring: #FFC700;
+  --ring: #FF9933;
 
-  --gold: #FFC700; /* Neon Gold */
-  --gold-foreground: #181206;
+  --gold: #FF9933; /* Heritage Crimson / Neon Gold */
+  --gold-foreground: #ffffff;
   --clove: #1A150A; /* Deep warm espresso / dark footer */
   --clove-foreground: #ffffff;
-  --sage: #FFC700;
+  --sage: #FF9933;
   --cream: #FAF3D6;
 
-  --chart-1: #FFC700;
-  --chart-2: #FFAE00;
+  --chart-1: #FF9933;
+  --chart-2: #A01B1D;
   --chart-3: #1A150A;
-  --chart-4: #FFD700;
+  --chart-4: #E03537;
   --chart-5: #181206;
 
   --sidebar: #FAF3D6;
   --sidebar-foreground: #181206;
-  --sidebar-primary: #FFC700;
-  --sidebar-primary-foreground: #181206;
+  --sidebar-primary: #FF9933;
+  --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: #F5EAC4;
   --sidebar-accent-foreground: #181206;
   --sidebar-border: #E8DEC8;
-  --sidebar-ring: #FFC700;
+  --sidebar-ring: #FF9933;
 
   --color-primary: var(--primary);
   --color-background: var(--background);
@@ -145,8 +145,8 @@ html[data-theme="ekomart"],
   );
   --gradient-gold: linear-gradient(
     100deg,
-    #FFC700 0%,
-    #FFAE00 100%
+    #FF9933 0%,
+    #A01B1D 100%
   );
   --shadow-soft: 0px 4px 17px rgba(0, 0, 0, 0.04);
   --shadow-lift: 0 4px 20px rgba(0, 0, 0, 0.08);
@@ -486,7 +486,7 @@ html[data-theme="indigo"],
   --input: #E8DEC8;
   --ring: #D4AF37;
 
-  --gold: #FFC700;
+  --gold: #FF9933;
   --gold-foreground: #181206;
   --clove: #1A150A;
   --clove-foreground: #ffffff;
@@ -516,7 +516,7 @@ html[data-theme="indigo"],
   --gradient-gold: linear-gradient(
     100deg,
     #D4AF37 0%,
-    #FFC700 100%
+    #FF9933 100%
   );
   --shadow-soft: 0 1px 3px rgba(24, 18, 6, 0.06),
     0 8px 20px -12px rgba(24, 18, 6, 0.18);
@@ -1011,14 +1011,14 @@ html[data-theme="copper"],
   .rts-btn:hover:not(:disabled),
   [role="button"]:hover {
     transform: translateY(-2.5px) scale(1.02);
-    box-shadow: 0 8px 22px -4px rgba(255, 199, 0, 0.45);
+    box-shadow: 0 8px 22px -4px rgba(255, 153, 51, 0.45);
   }
 
   button:active:not(:disabled),
   .rts-btn:active:not(:disabled),
   [role="button"]:active {
     transform: translateY(1px) scale(0.98);
-    box-shadow: 0 2px 8px rgba(255, 199, 0, 0.2);
+    box-shadow: 0 2px 8px rgba(255, 153, 51, 0.2);
   }
 
   /* Pointing at button nudges its inner icon */
@@ -1043,8 +1043,8 @@ html[data-theme="copper"],
   [data-card]:hover,
   .hover-lift:hover {
     transform: translateY(-5px);
-    box-shadow: 0 16px 36px -8px rgba(255, 199, 0, 0.32), 0 4px 14px rgba(0, 0, 0, 0.05);
-    border-color: #FFC700 !important;
+    box-shadow: 0 16px 36px -8px rgba(255, 153, 51, 0.32), 0 4px 14px rgba(0, 0, 0, 0.05);
+    border-color: #FF9933 !important;
   }
 
   /* Pointing at product cards smoothly magnifies the image */
@@ -1068,13 +1068,13 @@ html[data-theme="copper"],
 
   .ekomart-action-btn:hover {
     transform: scale(1.2) rotate(4deg) !important;
-    box-shadow: 0 0 14px rgba(255, 199, 0, 0.7);
+    box-shadow: 0 0 14px rgba(255, 153, 51, 0.7);
     border-color: #181206 !important;
   }
 
   .ekomart-action-pill:hover {
     transform: translateX(-50%) translateY(-2px) scale(1.04);
-    box-shadow: 0 8px 20px rgba(255, 199, 0, 0.6);
+    box-shadow: 0 8px 20px rgba(255, 153, 51, 0.6);
   }
 
   /* 4. Navigation Links & Header Links: Subtle lift & text glow */
@@ -1088,23 +1088,23 @@ html[data-theme="copper"],
   nav a:hover,
   header a:hover {
     transform: translateY(-1.5px);
-    text-shadow: 0 0 10px rgba(255, 199, 0, 0.45);
+    text-shadow: 0 0 10px rgba(255, 153, 51, 0.45);
   }
 
   /* 5. Inputs, Selects & Search Boxes on Pointing */
   input:hover:not(:disabled),
   select:hover:not(:disabled),
   textarea:hover:not(:disabled) {
-    border-color: #FFC700 !important;
-    box-shadow: 0 0 0 3px rgba(255, 199, 0, 0.18);
+    border-color: #FF9933 !important;
+    box-shadow: 0 0 0 3px rgba(255, 153, 51, 0.18);
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
   }
 
   /* 6. Feature Cards & Certified Badges on Pointing */
   .grid > div.rounded-2xl:hover,
   .grid > div.rounded-xl:hover {
-    border-color: #FFC700;
-    box-shadow: 0 10px 24px -6px rgba(255, 199, 0, 0.25);
+    border-color: #FF9933;
+    box-shadow: 0 10px 24px -6px rgba(255, 153, 51, 0.25);
     transition: all 0.25s ease;
   }
 
@@ -1129,7 +1129,7 @@ html[data-theme="copper"],
 }
 
 .bg_primary {
-  background-color: #FFC700 !important;
+  background-color: #FF9933 !important;
   color: #181206 !important;
 }
 
@@ -1138,7 +1138,7 @@ html[data-theme="copper"],
 }
 
 .border_primary {
-  border-color: #FFC700 !important;
+  border-color: #FF9933 !important;
 }
 
 /* Theme Buttons */
@@ -1157,7 +1157,7 @@ html[data-theme="copper"],
 }
 
 .rts-btn.btn-primary {
-  background-color: #FFC700;
+  background-color: #FF9933;
   color: #181206;
   border: 1px solid #E6B000;
   font-weight: 800;
@@ -1166,18 +1166,18 @@ html[data-theme="copper"],
 .rts-btn.btn-primary:hover {
   background-color: #181206;
   border-color: #181206;
-  color: #FFC700;
+  color: #FF9933;
 }
 
 .rts-btn.btn-outline {
   background-color: transparent;
   color: #181206;
-  border: 1.5px solid #FFC700;
+  border: 1.5px solid #FF9933;
   font-weight: 700;
 }
 
 .rts-btn.btn-outline:hover {
-  background-color: #FFC700;
+  background-color: #FF9933;
   color: #181206;
 }
 
@@ -1202,8 +1202,8 @@ html[data-theme="copper"],
 }
 
 .single-shopping-card-one:hover {
-  border-color: #FFC700;
-  box-shadow: 0px 8px 24px rgba(255, 199, 0, 0.35);
+  border-color: #FF9933;
+  box-shadow: 0px 8px 24px rgba(255, 153, 51, 0.35);
 }
 
 .single-shopping-card-one .thumbnail-preview {
@@ -1226,7 +1226,7 @@ html[data-theme="copper"],
   position: absolute;
   top: 10px;
   left: 10px;
-  background: #FFC700;
+  background: #FF9933;
   color: #181206;
   font-weight: 800;
   font-size: 11px;
@@ -1244,7 +1244,7 @@ html[data-theme="copper"],
   left: 14px;
   width: 36px;
   height: 48px;
-  background: #FFC700;
+  background: #FF9933;
   color: #181206;
   font-weight: 800;
   font-size: 10px;
@@ -1276,7 +1276,7 @@ html[data-theme="copper"],
   bottom: 8px;
   left: 50%;
   transform: translateX(-50%) translateY(0);
-  background-color: #FFC700;
+  background-color: #FF9933;
   color: #181206;
   border: 1px solid rgba(24, 18, 6, 0.15);
   border-radius: 9999px;
@@ -1284,7 +1284,7 @@ html[data-theme="copper"],
   display: flex;
   align-items: center;
   gap: 8px;
-  box-shadow: 0 4px 14px rgba(255, 199, 0, 0.45);
+  box-shadow: 0 4px 14px rgba(255, 153, 51, 0.45);
   z-index: 15;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -1321,7 +1321,7 @@ html[data-theme="copper"],
 
 .ekomart-action-btn:hover {
   background: #181206;
-  color: #FFC700;
+  color: #FF9933;
   border-color: #181206;
 }
 
@@ -1417,10 +1417,10 @@ html[data-theme="copper"],
 
 @keyframes goldGlowPulse {
   0%, 100% {
-    box-shadow: 0 4px 16px rgba(255, 199, 0, 0.2), 0 0 0 1px rgba(255, 199, 0, 0.3);
+    box-shadow: 0 4px 16px rgba(255, 153, 51, 0.2), 0 0 0 1px rgba(255, 153, 51, 0.3);
   }
   50% {
-    box-shadow: 0 8px 28px rgba(255, 199, 0, 0.38), 0 0 12px rgba(255, 199, 0, 0.45);
+    box-shadow: 0 8px 28px rgba(255, 153, 51, 0.38), 0 0 12px rgba(255, 153, 51, 0.45);
   }
 }
 
@@ -1465,9 +1465,9 @@ html[data-theme="copper"],
 
 .category-card-interactive:hover {
   transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 18px 36px -6px rgba(255, 199, 0, 0.40),
-              0 0 20px rgba(255, 199, 0, 0.28);
-  border-color: #FFC700 !important;
+  box-shadow: 0 18px 36px -6px rgba(255, 153, 51, 0.40),
+              0 0 20px rgba(255, 153, 51, 0.28);
+  border-color: #FF9933 !important;
 }
 
 .category-card-interactive:hover .category-image-wrap {
@@ -1490,9 +1490,9 @@ html[data-theme="copper"],
 }
 .product-card-interactive:hover {
   transform: translateY(-6px);
-  box-shadow: 0 16px 32px -4px rgba(255, 199, 0, 0.32),
+  box-shadow: 0 16px 32px -4px rgba(255, 153, 51, 0.32),
               0 4px 12px rgba(0, 0, 0, 0.06);
-  border-color: #FFC700 !important;
+  border-color: #FF9933 !important;
 }
 
 .product-card-interactive:hover img {

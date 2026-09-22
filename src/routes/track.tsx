@@ -73,7 +73,7 @@ function TrackPage() {
 
       <div className="mx-auto max-w-lg">
         <div className="flex items-center gap-3">
-          <span className="grid h-12 w-12 place-items-center rounded-full bg-[#FFC700]/10 border border-[#FFC700]/20">
+          <span className="grid h-12 w-12 place-items-center rounded-full bg-[#FF9933]/10 border border-[#FF9933]/20">
             <PackageSearch className="h-6 w-6 text-[#181206]" aria-hidden />
           </span>
           <div>
@@ -125,7 +125,7 @@ function TrackPage() {
             ) : null}
           </div>
 
-          <Button type="submit" className="w-full bg-[#FFC700] hover:bg-[#E6B000] text-[#181206] font-black rounded-[6px] font-bold shadow-xs py-3" disabled={checking}>
+          <Button type="submit" className="w-full bg-[#FF9933] hover:bg-[#E6B000] text-[#181206] font-black rounded-[6px] font-bold shadow-xs py-3" disabled={checking}>
             {checking ? "Checking dispatch status…" : "Track Order Status"}
           </Button>
 

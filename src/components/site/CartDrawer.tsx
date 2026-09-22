@@ -24,22 +24,22 @@ export function CartDrawer() {
 
         {cart.resolved.length === 0 ? (
           <div className="flex flex-1 flex-col items-center justify-center gap-4 px-6 text-center">
-            <div className="h-16 w-16 rounded-full bg-[#FAF3D6] border border-[#FFC700] flex items-center justify-center shadow-xs">
+            <div className="h-16 w-16 rounded-full bg-[#FAF3D6] border border-[#FF9933] flex items-center justify-center shadow-xs">
               <ShoppingBag className="h-8 w-8 text-[#181206]" />
             </div>
             <div>
               <h3 className="font-bold text-[#181206] text-base">Your basket is empty</h3>
               <p className="mt-1 text-sm text-muted-foreground">
-                Start with our 1931 classic hing powder and authentic South Indian spices.
+                Start with our 1932 classic hing powder and authentic South Indian spices.
               </p>
             </div>
-            <Button asChild className="bg-[#FFC700] hover:bg-[#E6B000] text-[#181206] border border-black/15 rounded-[6px] font-bold shadow-xs" onClick={() => cart.setOpen(false)}>
+            <Button asChild className="bg-[#FF9933] hover:bg-[#E6B000] text-[#181206] border border-black/15 rounded-[6px] font-bold shadow-xs" onClick={() => cart.setOpen(false)}>
               <Link to="/shop">Shop all products</Link>
             </Button>
           </div>
         ) : (
           <>
-            <div className="border-b border-[#E8DEC8] bg-[#FFC700]/15 px-5 py-3">
+            <div className="border-b border-[#E8DEC8] bg-[#FF9933]/15 px-5 py-3">
               {remaining > 0 ? (
                 <p className="text-xs text-[#181206]">
                   Add <span className="font-bold text-[#DC2626]">{formatPrice(remaining)}</span>{" "}
@@ -51,7 +51,7 @@ export function CartDrawer() {
                 </p>
               )}
               <Progress
-                className="mt-2 h-2 bg-[#E2E2E2] [&>div]:bg-[#FFC700] border border-black/10"
+                className="mt-2 h-2 bg-[#E2E2E2] [&>div]:bg-[#FF9933] border border-black/10"
                 value={Math.min((cart.subtotal / cart.freeShippingThreshold) * 100, 100)}
               />
             </div>
@@ -97,7 +97,7 @@ export function CartDrawer() {
                 <span className="font-semibold text-foreground">{formatPrice(cart.subtotal)}</span>
               </div>
               {cart.appliedPromo && cart.totalSavings > 0 && (
-                <div className="space-y-1.5 rounded-[6px] border border-[#FFC700]/50 bg-[#FFC700]/20 px-3 py-2">
+                <div className="space-y-1.5 rounded-[6px] border border-[#FF9933]/50 bg-[#FF9933]/20 px-3 py-2">
                   <div className="flex justify-between text-xs font-bold text-[#181206]">
                     <span>
                       Promo {cart.appliedPromo.code}
@@ -127,7 +127,7 @@ export function CartDrawer() {
                 <span className="text-[#181206]">Total</span>
                 <span className="text-lg text-[#DC2626]">{formatPrice(cart.total)}</span>
               </div>
-              <Button className="w-full bg-[#FFC700] hover:bg-[#E6B000] text-[#181206] border border-black/15 rounded-[6px] font-black active:scale-[0.98] py-3 text-sm shadow-md" size="lg" asChild onClick={() => cart.setOpen(false)}>
+              <Button className="w-full bg-[#FF9933] hover:bg-[#E6B000] text-[#181206] border border-black/15 rounded-[6px] font-black active:scale-[0.98] py-3 text-sm shadow-md" size="lg" asChild onClick={() => cart.setOpen(false)}>
                 <Link to="/checkout" preload="render">Proceed to Checkout · {formatPrice(cart.total)}</Link>
               </Button>
             </div>

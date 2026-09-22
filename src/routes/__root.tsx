@@ -47,14 +47,14 @@ function DeferUntilIdle({ children }: { children: ReactNode }) {
 function NotFoundComponent() {
   const links = [
     { to: "/shop", label: "Shop all products" },
-    { to: "/story", label: "Our story since 1931" },
+    { to: "/story", label: "Our story since 1932" },
     { to: "/contact", label: "Contact support" },
     { to: "/account", label: "Your orders" },
   ] as const;
 
   return (
     <div className="container-page flex min-h-[60vh] flex-col items-center justify-center py-16 text-center">
-      <p className="eyebrow">Est. 1931 · Tirunelveli</p>
+      <p className="eyebrow">Est. 1932 · Tirunelveli</p>
       <h1 className="font-display mt-3 text-7xl leading-none font-bold text-primary">404</h1>
       <h2 className="mt-4 text-2xl font-semibold">This shelf is empty</h2>
       <p className="mt-2 max-w-md text-sm text-muted-foreground">
@@ -129,11 +129,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { name: "google-site-verification", content: "JCXySiTdM9cLVtF34BfI08thOQrkAoFOo5HOBWHlnR4" },
-      { title: "Y.G Asafoetida — Authentic Heritage Hing & Traditional Products Since 1931" },
+      { title: "Y.G Asafoetida — Authentic Heritage Hing & Traditional Products Since 1932" },
       {
         name: "description",
         content:
-          "Compounded artisanal asafoetida powder, pure gold hing cake, gluten-free hing, wood-roasted traditional health mix (sathu maavu), and pure temple benzoin sambrani from Tirunelveli since 1931.",
+          "Compounded artisanal asafoetida powder, pure gold hing cake, gluten-free hing, wood-roasted traditional health mix (sathu maavu), and pure temple benzoin sambrani from Tirunelveli since 1932.",
       },
       {
         name: "keywords",
@@ -142,26 +142,26 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { name: "author", content: "Y.G Asafoetida" },
       { name: "robots", content: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" },
-      { name: "theme-color", content: "#FFC700" },
+      { name: "theme-color", content: "#FF9933" },
       // Open Graph
       { property: "og:site_name", content: "Y.G Asafoetida" },
       { property: "og:type", content: "website" },
       { property: "og:locale", content: "en_IN" },
-      { property: "og:title", content: "Y.G Asafoetida — Authentic Heritage Hing & Traditional Products Since 1931" },
+      { property: "og:title", content: "Y.G Asafoetida — Authentic Heritage Hing & Traditional Products Since 1932" },
       {
         property: "og:description",
         content:
-          "Compounded artisanal asafoetida powder, pure gold hing cake, gluten-free hing, traditional health mix (sathu maavu), and pure temple benzoin sambrani from Tirunelveli since 1931.",
+          "Compounded artisanal asafoetida powder, pure gold hing cake, gluten-free hing, traditional health mix (sathu maavu), and pure temple benzoin sambrani from Tirunelveli since 1932.",
       },
       { property: "og:image", content: "https://ygasafoetida.in/logo.png" },
       { property: "og:image:alt", content: "Y.G Asafoetida Logo" },
       // Twitter Card
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Y.G Asafoetida — Authentic Heritage Hing & Traditional Products Since 1931" },
+      { name: "twitter:title", content: "Y.G Asafoetida — Authentic Heritage Hing & Traditional Products Since 1932" },
       {
         name: "twitter:description",
         content:
-          "Compounded artisanal asafoetida powder, pure gold hing cake, gluten-free hing, traditional health mix, and sambrani from Tirunelveli since 1931.",
+          "Compounded artisanal asafoetida powder, pure gold hing cake, gluten-free hing, traditional health mix, and sambrani from Tirunelveli since 1932.",
       },
       { name: "twitter:image", content: "https://ygasafoetida.in/logo.png" },
       // Regional & Local SEO
@@ -190,10 +190,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "@context": "https://schema.org",
           "@type": "GroceryStore",
           "name": "Y.G Asafoetida",
-          "description": "Authentic Heritage Asafoetida, Traditional Health Mix & Pure Sambrani handcrafted in Tirunelveli since 1931.",
+          "description": "Authentic Heritage Asafoetida, Traditional Health Mix & Pure Sambrani handcrafted in Tirunelveli since 1932.",
           "url": "https://ygasafoetida.in",
           "logo": "https://ygasafoetida.in/logo.png",
-          "foundingDate": "1931",
+          "foundingDate": "1932",
           "address": {
             "@type": "PostalAddress",
             "addressLocality": "Tirunelveli",
@@ -242,7 +242,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         />
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{var t=localStorage.getItem('yg-palette-theme-v1')||'saffron';document.documentElement.setAttribute('data-theme',t);var c={saffron:'#FFC700',emerald:'#FFAE00',indigo:'#D4AF37',plum:'#7289da'};if(c[t]){document.documentElement.style.setProperty('--primary',c[t]);document.documentElement.style.setProperty('--color-primary',c[t]);document.documentElement.style.setProperty('--primary-foreground','#181206');document.documentElement.style.setProperty('--background','#ffffff');document.documentElement.style.setProperty('--color-background','#ffffff');}}catch(e){}`,
+            __html: `try{var t=localStorage.getItem('yg-palette-theme-v1')||'saffron';document.documentElement.setAttribute('data-theme',t);var c={saffron:'#FF9933',emerald:'#FFAE00',indigo:'#D4AF37',plum:'#7289da'};if(c[t]){document.documentElement.style.setProperty('--primary',c[t]);document.documentElement.style.setProperty('--color-primary',c[t]);document.documentElement.style.setProperty('--primary-foreground','#181206');document.documentElement.style.setProperty('--background','#ffffff');document.documentElement.style.setProperty('--color-background','#ffffff');}}catch(e){}`,
           }}
         />
         <HeadContent />

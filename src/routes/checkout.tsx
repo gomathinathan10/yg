@@ -279,7 +279,7 @@ function CheckoutPage() {
         </div>
         <h1 className="mt-4 text-2xl sm:text-3xl font-bold text-[#181206]">Your basket is empty</h1>
         <p className="mt-2 text-sm text-muted-foreground">Add some authentic compounded hing before checking out.</p>
-        <Button className="mt-6 bg-[#FFC700] hover:bg-[#E6B000] text-[#181206] font-black rounded-[6px] font-bold" asChild>
+        <Button className="mt-6 bg-[#FF9933] hover:bg-[#E6B000] text-[#181206] font-black rounded-[6px] font-bold" asChild>
           <Link to="/shop">Shop all products</Link>
         </Button>
       </div>
@@ -384,9 +384,9 @@ function CheckoutPage() {
               onClick={() => i < step && goToStep(i)}
               className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-xs font-bold transition-colors ${
                 i < step
-                  ? "border-[#FFC700] bg-[#FFC700] text-[#181206] font-black"
+                  ? "border-[#FF9933] bg-[#FF9933] text-[#181206] font-black"
                   : i === step
-                    ? "border-[#FFC700] text-[#181206] bg-[#FFC700]/10"
+                    ? "border-[#FF9933] text-[#181206] bg-[#FF9933]/10"
                     : "border-[#E8DEC8] text-muted-foreground bg-white"
               }`}
             >
@@ -408,7 +408,7 @@ function CheckoutPage() {
                 <button
                   type="button"
                   onClick={useLastOrderDetails}
-                  className="mt-4 flex w-full items-center gap-3 rounded-[6px] border border-[#FFC700]/40 bg-[#FFC700]/5 px-4 py-3 text-left transition-colors hover:bg-[#FFC700]/10 cursor-pointer"
+                  className="mt-4 flex w-full items-center gap-3 rounded-[6px] border border-[#FF9933]/40 bg-[#FF9933]/5 px-4 py-3 text-left transition-colors hover:bg-[#FF9933]/10 cursor-pointer"
                 >
                   <Zap className="h-5 w-5 shrink-0 text-[#181206]" aria-hidden />
                   <span className="text-sm">
@@ -428,7 +428,7 @@ function CheckoutPage() {
                     <div
                       key={a.id}
                       className={`flex items-center gap-2 rounded-[6px] border px-4 py-3 text-sm transition-colors ${
-                        selectedAddress === a.id ? "border-[#FFC700] bg-[#FFC700]/5" : "border-[#E8DEC8]"
+                        selectedAddress === a.id ? "border-[#FF9933] bg-[#FF9933]/5" : "border-[#E8DEC8]"
                       }`}
                     >
                       <button type="button" onClick={() => pickAddress(a)} aria-pressed={selectedAddress === a.id} aria-label={`Deliver to ${a.firstName} ${a.lastName}, ${a.line1}, ${a.city} ${a.pin}`} className="flex-1 rounded-md text-left cursor-pointer">
@@ -460,7 +460,7 @@ function CheckoutPage() {
                     }}
                     aria-pressed={selectedAddress === "new"}
                     className={`block min-h-11 w-full rounded-[6px] border px-4 py-3 text-left text-sm font-semibold transition-colors cursor-pointer ${
-                      selectedAddress === "new" ? "border-[#FFC700] bg-[#FFC700]/5 text-[#181206]" : "border-[#E8DEC8] text-foreground"
+                      selectedAddress === "new" ? "border-[#FF9933] bg-[#FF9933]/5 text-[#181206]" : "border-[#E8DEC8] text-foreground"
                     }`}
                   >
                     + Use a new address
@@ -574,7 +574,7 @@ function CheckoutPage() {
               </label>
 
               <Button
-                className="mt-6 w-full sm:w-auto bg-[#FFC700] hover:bg-[#E6B000] text-[#181206] font-black rounded-[6px] font-bold shadow-xs"
+                className="mt-6 w-full sm:w-auto bg-[#FF9933] hover:bg-[#E6B000] text-[#181206] font-black rounded-[6px] font-bold shadow-xs"
                 size="lg"
                 onClick={() => {
                   if (detailsValid) {
@@ -616,7 +616,7 @@ function CheckoutPage() {
                     key={opt.id}
                     htmlFor={opt.id}
                     className={`flex min-h-16 cursor-pointer items-center gap-3 rounded-[6px] border px-4 transition-colors ${
-                      delivery === opt.id ? "border-[#FFC700] bg-[#FFC700]/5" : "border-[#E8DEC8]"
+                      delivery === opt.id ? "border-[#FF9933] bg-[#FF9933]/5" : "border-[#E8DEC8]"
                     }`}
                   >
                     <RadioGroupItem value={opt.id} id={opt.id} />
@@ -668,7 +668,7 @@ function CheckoutPage() {
                 <Button variant="outline" size="lg" className="rounded-[6px] border-[#E8DEC8]" onClick={() => goToStep(0)}>
                   Back
                 </Button>
-                <Button size="lg" className="flex-1 sm:flex-none bg-[#FFC700] hover:bg-[#E6B000] text-[#181206] font-black rounded-[6px] font-bold shadow-xs" onClick={() => goToStep(2)}>
+                <Button size="lg" className="flex-1 sm:flex-none bg-[#FF9933] hover:bg-[#E6B000] text-[#181206] font-black rounded-[6px] font-bold shadow-xs" onClick={() => goToStep(2)}>
                   Continue to payment
                 </Button>
               </div>
@@ -685,7 +685,7 @@ function CheckoutPage() {
                       key={opt.id}
                       htmlFor={opt.id}
                       className={`flex min-h-14 cursor-pointer items-center gap-3 rounded-[6px] border px-4 transition-colors ${
-                        payment === opt.id ? "border-[#FFC700] bg-[#FFC700]/5" : "border-[#E8DEC8]"
+                        payment === opt.id ? "border-[#FF9933] bg-[#FF9933]/5" : "border-[#E8DEC8]"
                       }`}
                     >
                       <RadioGroupItem value={opt.id} id={opt.id} />
@@ -737,7 +737,7 @@ function CheckoutPage() {
                   <Button variant="outline" size="lg" className="rounded-[6px] border-[#E8DEC8]" onClick={() => goToStep(1)}>
                     Back
                   </Button>
-                  <Button size="lg" className="flex-1 bg-[#FFC700] hover:bg-[#E6B000] text-[#181206] font-black rounded-[6px] font-bold shadow-md text-base" disabled={placing} onClick={submit}>
+                  <Button size="lg" className="flex-1 bg-[#FF9933] hover:bg-[#E6B000] text-[#181206] font-black rounded-[6px] font-bold shadow-md text-base" disabled={placing} onClick={submit}>
                     {placing ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden /> Placing order…
@@ -783,7 +783,7 @@ function CheckoutPage() {
                 Promo code
               </Label>
               {cart.appliedPromo && !cart.promoIsAutomatic ? (
-                <div className="flex items-center justify-between rounded-[6px] border border-[#FFC700]/40 bg-[#FFC700]/5 px-3 py-2">
+                <div className="flex items-center justify-between rounded-[6px] border border-[#FF9933]/40 bg-[#FF9933]/5 px-3 py-2">
                   <span className="text-sm font-bold text-[#181206]">{cart.appliedPromo.code}</span>
                   <button
                     type="button"
@@ -811,7 +811,7 @@ function CheckoutPage() {
                   <Button
                     type="button"
                     variant="outline"
-                    className="min-h-11 rounded-[6px] border-[#FFC700] text-[#181206] hover:bg-[#FFC700] hover:text-white font-bold px-4"
+                    className="min-h-11 rounded-[6px] border-[#FF9933] text-[#181206] hover:bg-[#FF9933] hover:text-white font-bold px-4"
                     onClick={() => {
                       const res = cart.applyPromo(promoInput);
                       setPromoMsg(
@@ -844,7 +844,7 @@ function CheckoutPage() {
                 <span className="font-semibold text-foreground">{formatPrice(cart.subtotal)}</span>
               </div>
               {cart.appliedPromo && cart.totalSavings > 0 && (
-                <div className="space-y-1.5 rounded-[6px] bg-[#FFC700]/5 border border-[#FFC700]/30 px-3 py-2">
+                <div className="space-y-1.5 rounded-[6px] bg-[#FF9933]/5 border border-[#FF9933]/30 px-3 py-2">
                   <div className="flex justify-between font-bold text-xs text-[#181206]">
                     <span>
                       Promo {cart.appliedPromo.code}

@@ -313,7 +313,7 @@ function ExportsPage() {
             <span>/</span>
             <span className="font-bold text-foreground">Global Exports</span>
           </div>
-          <span className="text-[11px] font-bold text-[#181206] bg-[#FFC700] px-2.5 py-0.5 rounded-full shadow-2xs border border-[#D8A700]">
+          <span className="text-[11px] font-bold text-[#181206] bg-[#FF9933] px-2.5 py-0.5 rounded-full shadow-2xs border border-[#D8A700]">
             Exporting Across Nations Monthly
           </span>
         </div>
@@ -324,7 +324,7 @@ function ExportsPage() {
       {/* ======================================================== */}
       <section className="relative overflow-hidden border-b border-[#E8DEC8] bg-white py-12 sm:py-20">
         <div className="container-page relative z-10 space-y-6">
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#D8A700] bg-[#FFC700] px-3.5 py-1 text-xs font-bold text-[#181206] uppercase shadow-2xs">
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#D8A700] bg-[#FF9933] px-3.5 py-1 text-xs font-bold text-[#181206] uppercase shadow-2xs">
             <Globe2 className="h-3.5 w-3.5" />
             <span>International Trade Desk &amp; Bulk Shipments</span>
           </div>
@@ -339,7 +339,7 @@ function ExportsPage() {
           </div>
 
           <div className="flex flex-wrap items-center gap-3 pt-2">
-            <Button size="lg" className="font-bold shadow-md gap-2 h-11 px-6 text-sm bg-[#FFC700] hover:bg-[#F0B800] text-[#181206] border border-[#D8A700]" asChild>
+            <Button size="lg" className="font-bold shadow-md gap-2 h-11 px-6 text-sm bg-[#FF9933] hover:bg-[#F0B800] text-[#181206] border border-[#D8A700]" asChild>
               <a href="#export-inquiry">
                 Request Export Quotation <ArrowRight className="h-4 w-4" />
               </a>
@@ -368,19 +368,19 @@ function ExportsPage() {
 
           {/* Key Metrics Strip */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-8 border-t border-[#E8DEC8]">
-            <div className="rounded-xl border-2 border-[#E8DEC8] bg-[#FAF3D6] p-4 text-center shadow-xs hover:border-[#FFC700] hover:shadow-sm transition-all group">
+            <div className="rounded-xl border-2 border-[#E8DEC8] bg-[#FAF3D6] p-4 text-center shadow-xs hover:border-[#FF9933] hover:shadow-sm transition-all group">
               <p className="text-2xl sm:text-3xl font-black text-[#181206]">5+ Nations</p>
               <p className="text-xs text-[#5D4730] font-semibold mt-1">Singapore, Malaysia, Sri Lanka, Canada &amp; USA</p>
             </div>
-            <div className="rounded-xl border-2 border-[#E8DEC8] bg-[#FAF3D6] p-4 text-center shadow-xs hover:border-[#FFC700] hover:shadow-sm transition-all group">
+            <div className="rounded-xl border-2 border-[#E8DEC8] bg-[#FAF3D6] p-4 text-center shadow-xs hover:border-[#FF9933] hover:shadow-sm transition-all group">
               <p className="text-2xl sm:text-3xl font-black text-[#181206]">25 kg</p>
               <p className="text-xs text-[#5D4730] font-semibold mt-1">Flexible Low Starting MOQ</p>
             </div>
-            <div className="rounded-xl border-2 border-[#E8DEC8] bg-[#FAF3D6] p-4 text-center shadow-xs hover:border-[#FFC700] hover:shadow-sm transition-all group">
+            <div className="rounded-xl border-2 border-[#E8DEC8] bg-[#FAF3D6] p-4 text-center shadow-xs hover:border-[#FF9933] hover:shadow-sm transition-all group">
               <p className="text-2xl sm:text-3xl font-black text-[#181206]">50 km</p>
               <p className="text-xs text-[#5D4730] font-semibold mt-1">Tuticorin VOC Sea Port Proximity</p>
             </div>
-            <div className="rounded-xl border-2 border-[#E8DEC8] bg-[#FAF3D6] p-4 text-center shadow-xs hover:border-[#FFC700] hover:shadow-sm transition-all group">
+            <div className="rounded-xl border-2 border-[#E8DEC8] bg-[#FAF3D6] p-4 text-center shadow-xs hover:border-[#FF9933] hover:shadow-sm transition-all group">
               <p className="text-2xl sm:text-3xl font-black text-[#181206]">100%</p>
               <p className="text-xs text-[#5D4730] font-semibold mt-1">Tested Purity &amp; Traceability</p>
             </div>
@@ -394,9 +394,9 @@ function ExportsPage() {
       <section className="py-14 sm:py-20 bg-white border-b border-[#E8DEC8]">
         <div className="container-page space-y-10">
           <div className="text-center max-w-3xl mx-auto space-y-3">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFC700]/20 border border-[#FFC700]/40 text-[#181206] text-xs font-bold uppercase tracking-wider">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FF9933]/20 border border-[#FF9933]/40 text-[#181206] text-xs font-bold uppercase tracking-wider">
               <Award className="h-3.5 w-3.5 text-[#8C5921]" />
-              <span>YG Trusted Since 1931 · Quality Benchmarks</span>
+              <span>YG Trusted Since 1932 · Quality Benchmarks</span>
             </div>
             <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-[#181206] uppercase">
               Our Certifications &amp; Quality Standards
@@ -410,11 +410,11 @@ function ExportsPage() {
             {QUALITY_CERTIFICATIONS.map((cert) => (
               <div
                 key={cert.id}
-                className="rounded-2xl border-2 border-[#E8DEC8] bg-[#FAF3D6] p-6 space-y-4 shadow-sm hover:border-[#FFC700] hover:shadow-md transition-all flex flex-col justify-between group"
+                className="rounded-2xl border-2 border-[#E8DEC8] bg-[#FAF3D6] p-6 space-y-4 shadow-sm hover:border-[#FF9933] hover:shadow-md transition-all flex flex-col justify-between group"
               >
                 <div className="space-y-3">
                   {/* Certificate Logo Graphic inside elevated white plaque */}
-                  <div className="h-24 w-full rounded-xl bg-white border border-[#E8DEC8] p-3 flex items-center justify-center shadow-xs group-hover:border-[#FFC700] transition-all duration-300">
+                  <div className="h-24 w-full rounded-xl bg-white border border-[#E8DEC8] p-3 flex items-center justify-center shadow-xs group-hover:border-[#FF9933] transition-all duration-300">
                     <img
                       src={cert.image}
                       alt={`${cert.fullName} Certificate Logo`}
@@ -427,7 +427,7 @@ function ExportsPage() {
                     <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#8C5921]">
                       {cert.authority}
                     </span>
-                    <span className="text-[10px] font-bold text-[#181206] bg-[#FFC700] border border-[#D8A700] px-2.5 py-0.5 rounded-full shrink-0 shadow-2xs">
+                    <span className="text-[10px] font-bold text-[#181206] bg-[#FF9933] border border-[#D8A700] px-2.5 py-0.5 rounded-full shrink-0 shadow-2xs">
                       {cert.tag}
                     </span>
                   </div>
@@ -462,7 +462,7 @@ function ExportsPage() {
       <section className="py-14 sm:py-20 bg-white border-b border-border">
         <div className="container-page space-y-12">
           <div className="text-center max-w-3xl mx-auto space-y-3">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFC700] border border-[#D8A700] text-[#181206] text-xs font-bold uppercase tracking-wider shadow-2xs">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FF9933] border border-[#D8A700] text-[#181206] text-xs font-bold uppercase tracking-wider shadow-2xs">
               <Factory className="h-3.5 w-3.5" />
               <span>Factory Manufacturing Journey</span>
             </div>
@@ -479,11 +479,11 @@ function ExportsPage() {
             {PRODUCTION_PROCESS_STEPS.map((item, index) => (
               <div
                 key={item.step}
-                className="relative rounded-2xl border border-border bg-card p-6 shadow-xs hover:border-[#FFC700] transition-all flex flex-col justify-between space-y-4 group"
+                className="relative rounded-2xl border border-border bg-card p-6 shadow-xs hover:border-[#FF9933] transition-all flex flex-col justify-between space-y-4 group"
               >
                 {/* Step Marker Badge */}
                 <div className="flex items-center justify-between">
-                  <div className="h-11 w-11 rounded-xl bg-[#FFC700] text-[#181206] font-black text-lg flex items-center justify-center shadow-xs border border-[#D8A700]">
+                  <div className="h-11 w-11 rounded-xl bg-[#FF9933] text-[#181206] font-black text-lg flex items-center justify-center shadow-xs border border-[#D8A700]">
                     {item.step}
                   </div>
                   <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
@@ -497,7 +497,7 @@ function ExportsPage() {
                   </h3>
 
                   {/* PDF Direct Quote */}
-                  <blockquote className="border-l-2 border-[#FFC700] pl-2.5 py-0.5 text-xs font-semibold text-foreground/90 italic">
+                  <blockquote className="border-l-2 border-[#FF9933] pl-2.5 py-0.5 text-xs font-semibold text-foreground/90 italic">
                     "{item.quote}"
                   </blockquote>
 
@@ -532,7 +532,7 @@ function ExportsPage() {
       <section className="py-14 sm:py-20 bg-card border-b border-border">
         <div className="container-page space-y-10">
           <div className="text-center max-w-3xl mx-auto space-y-3">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFC700] border border-[#D8A700] text-[#181206] text-xs font-bold uppercase tracking-wider shadow-2xs">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FF9933] border border-[#D8A700] text-[#181206] text-xs font-bold uppercase tracking-wider shadow-2xs">
               <Globe2 className="h-3.5 w-3.5" />
               <span>International Shipments</span>
             </div>
@@ -549,7 +549,7 @@ function ExportsPage() {
             {GLOBAL_DISTRIBUTION.map((item) => (
               <div
                 key={item.country}
-                className="rounded-2xl border border-border bg-background overflow-hidden shadow-xs hover:border-[#FFC700] hover:shadow-md transition-all flex flex-col justify-between group"
+                className="rounded-2xl border border-border bg-background overflow-hidden shadow-xs hover:border-[#FF9933] hover:shadow-md transition-all flex flex-col justify-between group"
               >
                 <div className="relative aspect-4/3 w-full overflow-hidden bg-muted">
                   <img
@@ -560,7 +560,7 @@ function ExportsPage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                   <div className="absolute bottom-2.5 left-3 right-3 text-white">
-                    <span className="text-[10px] uppercase tracking-wider font-bold text-[#FFC700] block">
+                    <span className="text-[10px] uppercase tracking-wider font-bold text-[#FF9933] block">
                       {item.region}
                     </span>
                     <h3 className="text-lg font-extrabold leading-tight drop-shadow-xs">{item.country}</h3>
@@ -894,7 +894,7 @@ function ExportsPage() {
                     />
                   </div>
 
-                  <Button type="submit" className="w-full font-bold h-10 text-xs shadow-sm mt-2 bg-[#FFC700] hover:bg-[#F0B800] text-[#181206] border border-[#D8A700]" disabled={sending}>
+                  <Button type="submit" className="w-full font-bold h-10 text-xs shadow-sm mt-2 bg-[#FF9933] hover:bg-[#F0B800] text-[#181206] border border-[#D8A700]" disabled={sending}>
                     {sending ? "Transmitting Export Enquiry..." : "Submit Export Enquiry"}
                   </Button>
 

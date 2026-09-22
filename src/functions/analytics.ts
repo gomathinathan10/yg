@@ -23,6 +23,11 @@ export type AdminDashboardStats = {
     revenue: number;
     orders: number;
   }>;
+  totalProducts: number;
+  activeProducts: number;
+  outOfStockProducts: number;
+  draftOrHiddenProducts: number;
+  featuredProducts: number;
 };
 
 export const adminGetDashboardStatsServerFn = async (): Promise<AdminDashboardStats> => {

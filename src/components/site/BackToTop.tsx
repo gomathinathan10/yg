@@ -18,7 +18,7 @@ export function BackToTop() {
     <button
       type="button"
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-      className="floating-back-to-top-btn fixed z-50 h-10 w-10 sm:h-11 sm:w-11 rounded-full bg-white border-2 border-[#E8DEC8] text-[#181206] hover:bg-[#FFC700] hover:border-[#D8A700] hover:scale-110 flex items-center justify-center shadow-lg transition-all duration-200 active:scale-95 cursor-pointer group"
+      className="floating-back-to-top-btn fixed z-50 h-10 w-10 sm:h-11 sm:w-11 rounded-full bg-white border-2 border-[#E8DEC8] text-[#181206] hover:bg-[#FF9933] hover:border-[#D8A700] hover:scale-110 flex items-center justify-center shadow-lg transition-all duration-200 active:scale-95 cursor-pointer group"
       aria-label="Scroll back to top"
       title="Back to top"
     >

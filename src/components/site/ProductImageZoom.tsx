@@ -186,7 +186,7 @@ export function ProductImageZoom({
         {isHovering && (
           <div
             ref={lensRef}
-            className="hidden md:block absolute pointer-events-none border-2 border-[#FFC700] bg-[#FFC700]/15 backdrop-contrast-110 shadow-lg rounded-[6px] z-20 transition-all duration-75"
+            className="hidden md:block absolute pointer-events-none border-2 border-[#FF9933] bg-[#FF9933]/15 backdrop-contrast-110 shadow-lg rounded-[6px] z-20 transition-all duration-75"
             style={{
               width: "140px",
               height: "140px",
@@ -196,7 +196,7 @@ export function ProductImageZoom({
           >
             {/* Center Crosshair */}
             <div className="absolute inset-0 flex items-center justify-center opacity-70">
-              <div className="w-2.5 h-2.5 rounded-full bg-[#FFC700] ring-2 ring-white shadow-xs" />
+              <div className="w-2.5 h-2.5 rounded-full bg-[#FF9933] ring-2 ring-white shadow-xs" />
             </div>
           </div>
         )}
@@ -207,7 +207,7 @@ export function ProductImageZoom({
             {formatLabel}
           </span>
           {isGlutenFree && (
-            <span className="rounded-[4px] bg-[#FFC700] px-2.5 py-0.5 text-[9px] sm:text-[10px] font-bold text-white uppercase shadow-xs">
+            <span className="rounded-[4px] bg-[#FF9933] px-2.5 py-0.5 text-[9px] sm:text-[10px] font-bold text-white uppercase shadow-xs">
               Gluten-Free
             </span>
           )}
@@ -228,7 +228,7 @@ export function ProductImageZoom({
             }}
             aria-label="View fullscreen high-res photo"
             title="Open fullscreen view"
-            className="grid h-8 w-8 sm:h-9 sm:w-9 place-items-center rounded-[6px] bg-white/95 text-[#181206] border border-[#E8DEC8] shadow-xs hover:bg-[#FFC700] hover:text-white transition-colors cursor-pointer"
+            className="grid h-8 w-8 sm:h-9 sm:w-9 place-items-center rounded-[6px] bg-white/95 text-[#181206] border border-[#E8DEC8] shadow-xs hover:bg-[#FF9933] hover:text-white transition-colors cursor-pointer"
           >
             <Maximize2 className="h-4 w-4" />
           </button>
@@ -248,7 +248,7 @@ export function ProductImageZoom({
                   }}
                   aria-label={`Go to slide ${i + 1}`}
                   className={`h-2 rounded-[4px] transition-all duration-300 cursor-pointer ${
-                    activeImage === i ? "w-5 bg-[#FFC700]" : "w-2 bg-[#6E777D]/30 hover:bg-[#6E777D]/60"
+                    activeImage === i ? "w-5 bg-[#FF9933]" : "w-2 bg-[#6E777D]/30 hover:bg-[#6E777D]/60"
                   }`}
                 />
               ))}
@@ -276,7 +276,7 @@ export function ProductImageZoom({
             <button
               type="button"
               onClick={prevImage}
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-[6px] border border-[#E8DEC8] bg-[#FAF3D6] text-xs font-bold text-[#181206] hover:bg-[#FFC700] hover:border-[#FFC700] transition-colors shadow-xs cursor-pointer active:scale-95"
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-[6px] border border-[#E8DEC8] bg-[#FAF3D6] text-xs font-bold text-[#181206] hover:bg-[#FF9933] hover:border-[#FF9933] transition-colors shadow-xs cursor-pointer active:scale-95"
             >
               <ChevronLeft className="h-3.5 w-3.5" />
               <span>Back</span>
@@ -287,7 +287,7 @@ export function ProductImageZoom({
             <button
               type="button"
               onClick={nextImage}
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-[6px] border border-[#E8DEC8] bg-[#FAF3D6] text-xs font-bold text-[#181206] hover:bg-[#FFC700] hover:border-[#FFC700] transition-colors shadow-xs cursor-pointer active:scale-95"
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-[6px] border border-[#E8DEC8] bg-[#FAF3D6] text-xs font-bold text-[#181206] hover:bg-[#FF9933] hover:border-[#FF9933] transition-colors shadow-xs cursor-pointer active:scale-95"
             >
               <span>Next</span>
               <ChevronRight className="h-3.5 w-3.5" />
@@ -316,8 +316,8 @@ export function ProductImageZoom({
                 title={`View photo ${i + 1}`}
                 className={`relative h-18 w-18 sm:h-20 sm:w-20 shrink-0 overflow-hidden rounded-[6px] border-2 p-1.5 bg-[#FAF3D6] transition-all cursor-pointer ${
                   active
-                    ? "border-[#FFC700] shadow-sm scale-105 ring-2 ring-[#FFC700]/30"
-                    : "border-[#E8DEC8] hover:border-[#FFC700]/60 opacity-75 hover:opacity-100"
+                    ? "border-[#FF9933] shadow-sm scale-105 ring-2 ring-[#FF9933]/30"
+                    : "border-[#E8DEC8] hover:border-[#FF9933]/60 opacity-75 hover:opacity-100"
                 }`}
               >
                 <img
@@ -327,7 +327,7 @@ export function ProductImageZoom({
                   loading="eager"
                 />
                 {active ? (
-                  <span className="absolute bottom-1 right-1 h-2 w-2 rounded-full bg-[#FFC700] ring-1 ring-white" />
+                  <span className="absolute bottom-1 right-1 h-2 w-2 rounded-full bg-[#FF9933] ring-1 ring-white" />
                 ) : null}
               </button>
             );

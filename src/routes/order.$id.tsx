@@ -132,13 +132,13 @@ function OrderTrackingPage() {
           </div>
 
           <div className="flex items-center gap-3 no-print">
-            <span className="rounded-[4px] bg-[#FFC700]/10 px-3 py-1 text-xs font-bold text-[#181206]">
+            <span className="rounded-[4px] bg-[#FF9933]/10 px-3 py-1 text-xs font-bold text-[#181206]">
               {status.label}
             </span>
             <Button
               onClick={() => window.print()}
               size="sm"
-              className="rounded-[6px] bg-[#FFC700] hover:bg-[#E6B000] text-[#181206] font-black font-bold text-xs shadow-xs cursor-pointer"
+              className="rounded-[6px] bg-[#FF9933] hover:bg-[#E6B000] text-[#181206] font-black font-bold text-xs shadow-xs cursor-pointer"
             >
               Print Invoice
             </Button>
@@ -165,7 +165,7 @@ function OrderTrackingPage() {
                     <span
                       className={`flex h-7 w-7 items-center justify-center rounded-full border text-xs font-bold ${
                         step.done
-                          ? "border-[#FFC700] bg-[#FFC700] text-[#181206] font-black"
+                          ? "border-[#FF9933] bg-[#FF9933] text-[#181206] font-black"
                           : "border-[#E8DEC8] text-[#A0A8B0]"
                       }`}
                     >
@@ -290,7 +290,7 @@ function OrderTrackingPage() {
             </div>
 
             <Button
-              className="mt-4 w-full h-10 rounded-[6px] bg-[#FFC700] hover:bg-[#E6B000] text-[#181206] font-black font-bold text-xs shadow-xs cursor-pointer no-print"
+              className="mt-4 w-full h-10 rounded-[6px] bg-[#FF9933] hover:bg-[#E6B000] text-[#181206] font-black font-bold text-xs shadow-xs cursor-pointer no-print"
               onClick={() => {
                 order.items.forEach((i) => cart.add(i.slug, i.variantId, i.qty));
                 toast.success("Items added back to your basket");

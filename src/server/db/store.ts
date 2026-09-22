@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import type { Address, OrderItem, OrderTotals, Resolution } from "@/lib/orders";
+import { products as staticProductSeed } from "@/data/products";
 
 export type FullOrder = {
   id: string;
@@ -28,13 +29,37 @@ export type DbProductVariant = {
   mrp: number | null;
   stock: number;
   sort_order: number;
+  image: string | null;
+  gallery: string | null;
+};
+
+export type DbProductFormat =
+  | "powder"
+  | "granules"
+  | "cake"
+  | "combo"
+  | "wellness"
+  | "pooja"
+  | "vismaya"
+  | "appalam";
+
+export type DbProductStatus = "active" | "draft" | "out_of_stock" | "hidden";
+
+export type DbCategory = {
+  slug: string;
+  name: string;
+  created_at: number;
 };
 
 export type DbProduct = {
   slug: string;
   name: string;
   tagline: string;
-  format: "powder" | "granules" | "cake" | "combo" | "wellness" | "pooja";
+  format: DbProductFormat;
+  category: string;
+  sku: string;
+  status: DbProductStatus;
+  archived: number;
   gluten_free: number;
   bestseller: number;
   image: string;
@@ -115,6 +140,7 @@ export type DbPromo = {
 export type StoreData = {
   products: DbProduct[];
   product_variants: DbProductVariant[];
+  categories: DbCategory[];
   orders: Array<{
     id: string;
     created_at: number;
@@ -251,6 +277,66 @@ const DEFAULT_SEED_QUESTIONS: DbQuestion[] = [
   },
 ];
 
+const DEFAULT_CATEGORIES: DbCategory[] = [
+  { slug: "powder", name: "Powder", created_at: Date.now() },
+  { slug: "granules", name: "Granules", created_at: Date.now() },
+  { slug: "cake", name: "Cake", created_at: Date.now() },
+  { slug: "combo", name: "Gift & combo", created_at: Date.now() },
+  { slug: "wellness", name: "Health Mix", created_at: Date.now() },
+  { slug: "pooja", name: "Pooja Sambrani", created_at: Date.now() },
+  { slug: "vismaya", name: "Vismaya Ready to Cook", created_at: Date.now() },
+  { slug: "appalam", name: "Crispy Appalam", created_at: Date.now() },
+];
+
+function buildSeedProducts(): { products: DbProduct[]; variants: DbProductVariant[] } {
+  const products: DbProduct[] = [];
+  const variants: DbProductVariant[] = [];
+  const now = Date.now();
+
+  for (const p of staticProductSeed) {
+    products.push({
+      slug: p.slug,
+      name: p.name,
+      tagline: p.tagline,
+      format: p.format as DbProductFormat,
+      category: p.format,
+      sku: p.slug.toUpperCase().replace(/[^A-Z0-9]+/g, "-").slice(0, 24),
+      status: p.inStock === false ? "out_of_stock" : "active",
+      archived: 0,
+      gluten_free: p.glutenFree ? 1 : 0,
+      bestseller: p.bestseller ? 1 : 0,
+      image: p.image,
+      gallery: JSON.stringify(p.gallery || [p.image]),
+      description: p.description,
+      ingredients: p.ingredients,
+      usage: p.usage,
+      shelf_life: p.shelfLife,
+      in_stock: p.inStock === false ? 0 : 1,
+      stock_left: p.stockLeft ?? null,
+      rating: p.rating,
+      reviews: p.reviews,
+      created_at: now,
+      updated_at: now,
+    });
+
+    p.variants.forEach((v, idx) => {
+      variants.push({
+        id: v.id,
+        product_slug: p.slug,
+        label: v.label,
+        price: v.price,
+        mrp: v.mrp ?? null,
+        stock: v.stock ?? 50,
+        sort_order: idx,
+        image: v.image ?? null,
+        gallery: v.gallery ? JSON.stringify(v.gallery) : null,
+      });
+    });
+  }
+
+  return { products, variants };
+}
+
 class JsonStore {
   private filePath: string;
   private data: StoreData | null = null;
@@ -274,6 +360,7 @@ class JsonStore {
       this.data = {
         products: [],
         product_variants: [],
+        categories: [],
         orders: [],
         order_items: [],
         reviews: [],
@@ -287,6 +374,53 @@ class JsonStore {
 
     // Seed default reviews & questions if empty
     let dirty = false;
+    if (!this.data.categories || this.data.categories.length === 0) {
+      this.data.categories = DEFAULT_CATEGORIES;
+      dirty = true;
+    }
+    if (!this.data.products) {
+      this.data.products = [];
+      dirty = true;
+    }
+    if (!this.data.product_variants) {
+      this.data.product_variants = [];
+      dirty = true;
+    }
+    {
+      // Top up any catalog products that were added to the static seed but
+      // never migrated into the DB, without touching products already saved here.
+      const existingSlugs = new Set(this.data.products.map((p) => p.slug));
+      const seed = buildSeedProducts();
+      const missingProducts = seed.products.filter((p) => !existingSlugs.has(p.slug));
+      if (missingProducts.length > 0) {
+        this.data.products.push(...missingProducts);
+        const missingSlugSet = new Set(missingProducts.map((p) => p.slug));
+        this.data.product_variants.push(
+          ...seed.variants.filter((v) => missingSlugSet.has(v.product_slug))
+        );
+        dirty = true;
+      }
+    }
+    // Backfill new product fields (category/sku/status/archived) onto rows
+    // saved before this schema existed.
+    for (const p of this.data.products as any[]) {
+      if (p.category === undefined) {
+        p.category = p.format;
+        dirty = true;
+      }
+      if (p.sku === undefined) {
+        p.sku = p.slug.toUpperCase().replace(/[^A-Z0-9]+/g, "-").slice(0, 24);
+        dirty = true;
+      }
+      if (p.status === undefined) {
+        p.status = p.in_stock ? "active" : "out_of_stock";
+        dirty = true;
+      }
+      if (p.archived === undefined) {
+        p.archived = 0;
+        dirty = true;
+      }
+    }
     if (!this.data.reviews || this.data.reviews.length === 0) {
       this.data.reviews = DEFAULT_SEED_REVIEWS;
       dirty = true;
@@ -339,7 +473,7 @@ class JsonStore {
   }
 
   // ==================== PRODUCTS ====================
-  listProducts(): DbProduct[] {
+  listProducts(options?: { includeArchived?: boolean }): DbProduct[] {
     const data = this.ensureLoaded();
     const variantsBySlug = new Map<string, DbProductVariant[]>();
     for (const v of data.product_variants || []) {
@@ -348,17 +482,19 @@ class JsonStore {
       variantsBySlug.set(v.product_slug, list);
     }
 
-    return (data.products || []).map((p) => {
-      const variants = (variantsBySlug.get(p.slug) || []).sort(
-        (a, b) => a.sort_order - b.sort_order
-      );
-      return { ...p, variants };
-    });
+    return (data.products || [])
+      .filter((p) => options?.includeArchived || p.archived !== 1)
+      .map((p) => {
+        const variants = (variantsBySlug.get(p.slug) || []).sort(
+          (a, b) => a.sort_order - b.sort_order
+        );
+        return { ...p, variants };
+      });
   }
 
-  getProduct(slug: string): DbProduct | null {
+  getProduct(slug: string, options?: { includeArchived?: boolean }): DbProduct | null {
     const target = slug.trim().toLowerCase();
-    const all = this.listProducts();
+    const all = this.listProducts(options);
     return all.find((p) => p.slug.toLowerCase() === target) || null;
   }
 
@@ -366,7 +502,10 @@ class JsonStore {
     slug: string;
     name: string;
     tagline: string;
-    format: "powder" | "granules" | "cake" | "combo" | "wellness" | "pooja";
+    format: DbProductFormat;
+    category?: string;
+    sku?: string;
+    status?: DbProductStatus;
     glutenFree: boolean;
     bestseller: boolean;
     image: string;
@@ -385,17 +524,26 @@ class JsonStore {
       price: number;
       mrp?: number | null;
       stock?: number;
+      image?: string | null;
+      gallery?: string[] | null;
     }>;
   }): DbProduct {
     const data = this.ensureLoaded();
     const now = Date.now();
     const existingIndex = data.products.findIndex((p) => p.slug === input.slug);
+    const existing = existingIndex >= 0 ? data.products[existingIndex] : undefined;
+
+    const status: DbProductStatus = input.status ?? (input.inStock ? "active" : "out_of_stock");
 
     const productRecord: DbProduct = {
       slug: input.slug,
       name: input.name,
       tagline: input.tagline,
       format: input.format,
+      category: input.category || input.format,
+      sku: input.sku || existing?.sku || "",
+      status,
+      archived: existing?.archived ?? 0,
       gluten_free: input.glutenFree ? 1 : 0,
       bestseller: input.bestseller ? 1 : 0,
       image: input.image,
@@ -404,11 +552,11 @@ class JsonStore {
       ingredients: input.ingredients,
       usage: input.usage,
       shelf_life: input.shelfLife || "12 months from packing.",
-      in_stock: input.inStock ? 1 : 0,
+      in_stock: status === "active" ? 1 : status === "out_of_stock" ? 0 : input.inStock ? 1 : 0,
       stock_left: input.stockLeft ?? null,
-      rating: input.rating ?? (existingIndex >= 0 ? data.products[existingIndex]!.rating : 4.8),
-      reviews: input.reviews ?? (existingIndex >= 0 ? data.products[existingIndex]!.reviews : 50),
-      created_at: existingIndex >= 0 ? data.products[existingIndex]!.created_at : now,
+      rating: input.rating ?? (existing ? existing.rating : 4.8),
+      reviews: input.reviews ?? (existing ? existing.reviews : 50),
+      created_at: existing ? existing.created_at : now,
       updated_at: now,
     };
 
@@ -431,6 +579,8 @@ class JsonStore {
         mrp: v.mrp ?? null,
         stock: v.stock ?? 50,
         sort_order: idx,
+        image: v.image ?? null,
+        gallery: v.gallery ? JSON.stringify(v.gallery) : null,
       });
     });
 
@@ -444,6 +594,18 @@ class JsonStore {
     if (!p) return false;
     p.in_stock = inStock ? 1 : 0;
     p.stock_left = stockLeft ?? null;
+    p.status = inStock ? "active" : "out_of_stock";
+    p.updated_at = Date.now();
+    this.save();
+    return true;
+  }
+
+  setProductStatus(slug: string, status: DbProductStatus): boolean {
+    const data = this.ensureLoaded();
+    const p = data.products.find((prod) => prod.slug === slug);
+    if (!p) return false;
+    p.status = status;
+    p.in_stock = status === "active" ? 1 : status === "out_of_stock" ? 0 : p.in_stock;
     p.updated_at = Date.now();
     this.save();
     return true;
@@ -453,11 +615,104 @@ class JsonStore {
     const data = this.ensureLoaded();
     const p = data.products.find((prod) => prod.slug === slug);
     if (!p) return false;
-    p.in_stock = 0;
-    p.stock_left = 0;
+    p.archived = 1;
     p.updated_at = Date.now();
     this.save();
     return true;
+  }
+
+  restoreProduct(slug: string): boolean {
+    const data = this.ensureLoaded();
+    const p = data.products.find((prod) => prod.slug === slug);
+    if (!p) return false;
+    p.archived = 0;
+    p.updated_at = Date.now();
+    this.save();
+    return true;
+  }
+
+  /**
+   * Sets the storefront display order. Slugs listed in `orderedSlugs` are
+   * placed first, in that exact order; any product not mentioned keeps its
+   * existing relative order and is appended after them.
+   */
+  reorderProducts(orderedSlugs: string[]): boolean {
+    const data = this.ensureLoaded();
+    const bySlug = new Map(data.products.map((p) => [p.slug, p]));
+    const ordered: DbProduct[] = [];
+    for (const slug of orderedSlugs) {
+      const p = bySlug.get(slug);
+      if (p) {
+        ordered.push(p);
+        bySlug.delete(slug);
+      }
+    }
+    const remaining = data.products.filter((p) => bySlug.has(p.slug));
+    data.products = [...ordered, ...remaining];
+    this.save();
+    return true;
+  }
+
+  // ==================== CATEGORIES ====================
+  listCategories(): Array<DbCategory & { productCount: number }> {
+    const data = this.ensureLoaded();
+    const counts = new Map<string, number>();
+    for (const p of data.products || []) {
+      if (p.archived === 1) continue;
+      counts.set(p.category, (counts.get(p.category) || 0) + 1);
+    }
+    return (data.categories || []).map((c) => ({ ...c, productCount: counts.get(c.slug) || 0 }));
+  }
+
+  saveCategory(input: { slug?: string; name: string }): DbCategory {
+    const data = this.ensureLoaded();
+    const slug =
+      input.slug?.trim().toLowerCase() ||
+      input.name
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)/g, "");
+    const existingIndex = data.categories.findIndex((c) => c.slug === slug);
+    const record: DbCategory = {
+      slug,
+      name: input.name.trim(),
+      created_at: existingIndex >= 0 ? data.categories[existingIndex]!.created_at : Date.now(),
+    };
+    if (existingIndex >= 0) {
+      data.categories[existingIndex] = record;
+    } else {
+      data.categories.push(record);
+    }
+    this.save();
+    return record;
+  }
+
+  deleteCategory(slug: string, replacementSlug?: string): { ok: boolean; error?: string } {
+    const data = this.ensureLoaded();
+    const target = slug.trim().toLowerCase();
+    const inUse = (data.products || []).filter((p) => p.archived !== 1 && p.category === target);
+
+    if (inUse.length > 0) {
+      if (!replacementSlug) {
+        return {
+          ok: false,
+          error: `${inUse.length} product(s) still use this category. Choose a replacement category to move them to first.`,
+        };
+      }
+      const replacement = data.categories.find((c) => c.slug === replacementSlug);
+      if (!replacement) {
+        return { ok: false, error: "Replacement category not found." };
+      }
+      for (const p of inUse) {
+        p.category = replacement.slug;
+        p.updated_at = Date.now();
+      }
+    }
+
+    data.categories = data.categories.filter((c) => c.slug !== target);
+    this.save();
+    return { ok: true };
   }
 
   // ==================== ORDERS ====================
@@ -1020,6 +1275,14 @@ class JsonStore {
       else if (p.variants?.some((v) => v.stock <= 10)) lowStockProductsCount++;
     }
 
+    const totalProducts = products.length;
+    const activeProducts = products.filter((p) => p.status === "active").length;
+    const outOfStockProducts = products.filter((p) => p.status === "out_of_stock").length;
+    const draftOrHiddenProducts = products.filter(
+      (p) => p.status === "draft" || p.status === "hidden"
+    ).length;
+    const featuredProducts = products.filter((p) => p.bestseller === 1).length;
+
     const recentOrders = orders.slice(0, 6).map((o) => ({
       id: o.id,
       createdAt: o.createdAt,
@@ -1061,6 +1324,11 @@ class JsonStore {
       ordersByStatus,
       recentOrders,
       recentSalesTrend,
+      totalProducts,
+      activeProducts,
+      outOfStockProducts,
+      draftOrHiddenProducts,
+      featuredProducts,
     };
   }
 }

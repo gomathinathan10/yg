@@ -22,7 +22,7 @@ export const promos: Promo[] = [
   {
     code: "HERITAGE10",
     label: "10% off",
-    description: "10% off your order — our 1931 heritage welcome offer.",
+    description: "10% off your order — our 1932 heritage welcome offer.",
     percentOff: 10,
     isActive: true,
   },
