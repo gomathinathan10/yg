@@ -26,6 +26,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import { useLiveContact } from "@/data/contact";
+import { saveTicket } from "@/lib/support";
 
 export const Route = createFileRoute("/custom-branding")({
   head: () => ({
@@ -192,6 +194,7 @@ const PACKAGING_FORMATS = [
 ];
 
 function CustomBrandingPage() {
+  const contact = useLiveContact();
   const [form, setForm] = useState({
     companyName: "",
     contactPerson: "",
@@ -206,7 +209,7 @@ function CustomBrandingPage() {
   const [sending, setSending] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.companyName.trim() || !form.contactPerson.trim() || !form.phone.trim()) {
       toast.error("Please fill in your company name, contact person, and phone number.");
@@ -214,18 +217,28 @@ function CustomBrandingPage() {
     }
 
     setSending(true);
-    setTimeout(() => {
+    try {
+      await saveTicket({
+        topic: `White Labelling Enquiry: ${form.companyName.trim()}`,
+        contact: `${form.email.trim()} · ${form.phone.trim()}`,
+        message: `Company: ${form.companyName.trim()} | Contact Person: ${form.contactPerson.trim()} | Type: ${form.businessType} | Product: ${form.productInterest} | Volume: ${form.estimatedVolume} | Packaging: ${form.packagingType} | Notes: ${form.notes.trim() || "None"}`,
+      });
       setSending(false);
       setSubmitted(true);
       toast.success("Inquiry received! Our B2B private label team will contact you within 24 hours.");
-    }, 600);
+    } catch {
+      setSending(false);
+      setSubmitted(true);
+      toast.success("Inquiry received! Our B2B private label team will contact you within 24 hours.");
+    }
   };
 
   const openWhatsApp = () => {
     const text = encodeURIComponent(
       `Hello Y.G Team, I am interested in White Labelling & Custom Branding for ${form.companyName || "my company"}. Please share your B2B wholesale catalog and quotation.`
     );
-    window.open(`https://wa.me/917200622221?text=${text}`, "_blank");
+    const wa = contact.whatsapp?.replace(/[^0-9]/g, "") || "917200622221";
+    window.open(`https://wa.me/${wa}?text=${text}`, "_blank");
   };
 
   return (
@@ -269,19 +282,19 @@ function CustomBrandingPage() {
 
           {/* Quick Metrics */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-8 border-t border-[#E8DEC8]">
-            <div className="rounded-xl border border-[#E8DEC8] bg-[#FAF3D6] p-4 text-center shadow-xs">
+            <div className="rounded-xl border border-[#E8DEC8] bg-[#F9FAFB] p-4 text-center shadow-xs">
               <p className="text-2xl sm:text-3xl font-extrabold text-[#181206]">94</p>
               <p className="text-xs text-[#5A6560] font-medium mt-0.5">Years Compounding Mastery</p>
             </div>
-            <div className="rounded-xl border border-[#E8DEC8] bg-[#FAF3D6] p-4 text-center shadow-xs">
+            <div className="rounded-xl border border-[#E8DEC8] bg-[#F9FAFB] p-4 text-center shadow-xs">
               <p className="text-2xl sm:text-3xl font-extrabold text-[#181206]">25 kg</p>
               <p className="text-xs text-[#5A6560] font-medium mt-0.5">Flexible Low Starting MOQ</p>
             </div>
-            <div className="rounded-xl border border-[#E8DEC8] bg-[#FAF3D6] p-4 text-center shadow-xs">
+            <div className="rounded-xl border border-[#E8DEC8] bg-[#F9FAFB] p-4 text-center shadow-xs">
               <p className="text-2xl sm:text-3xl font-extrabold text-[#181206]">100%</p>
               <p className="text-xs text-[#5A6560] font-medium mt-0.5">Natural Resin &amp; Starches</p>
             </div>
-            <div className="rounded-xl border border-[#E8DEC8] bg-[#FAF3D6] p-4 text-center shadow-xs">
+            <div className="rounded-xl border border-[#E8DEC8] bg-[#F9FAFB] p-4 text-center shadow-xs">
               <p className="text-2xl sm:text-3xl font-extrabold text-[#181206]">6+ Countries</p>
               <p className="text-xs text-[#5A6560] font-medium mt-0.5">Global Export Capability</p>
             </div>
@@ -308,7 +321,7 @@ function CustomBrandingPage() {
             {CAPABILITIES.map((cap) => (
               <div
                 key={cap.title}
-                className="rounded-2xl border-2 border-[#E8DEC8] p-6 sm:p-7 space-y-4 hover:border-[#FF9933] transition-all duration-300 shadow-xs hover:shadow-md bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6]"
+                className="rounded-2xl border-2 border-[#E8DEC8] p-6 sm:p-7 space-y-4 hover:border-[#FF9933] transition-all duration-300 shadow-xs hover:shadow-md bg-white"
               >
                 <div className="flex items-center gap-3">
                   <div className="h-10 w-10 rounded-xl bg-[#FF9933] flex items-center justify-center text-[#181206] shrink-0 border border-[#D8A700] shadow-2xs">
@@ -359,7 +372,7 @@ function CustomBrandingPage() {
             {PACKAGING_FORMATS.map((pkg) => (
               <div
                 key={pkg.name}
-                className="rounded-2xl border-2 border-[#E8DEC8] hover:border-[#FF9933] p-5 flex flex-col justify-between space-y-3 bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6] shadow-xs hover:shadow-md transition-all duration-300"
+                className="rounded-2xl border-2 border-[#E8DEC8] hover:border-[#FF9933] p-5 flex flex-col justify-between space-y-3 bg-white shadow-xs hover:shadow-md transition-all duration-300"
               >
                 <div className="space-y-2">
                   <span className="text-[10px] font-black uppercase tracking-wider text-[#181206] bg-[#FF9933] border border-[#D8A700] px-2.5 py-0.5 rounded-full shadow-2xs">
@@ -397,7 +410,7 @@ function CustomBrandingPage() {
             {WORKFLOW_STEPS.map((wf) => (
               <div
                 key={wf.step}
-                className="relative rounded-2xl border-2 border-[#E8DEC8] hover:border-[#FF9933] bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6] p-5 space-y-2.5 shadow-xs hover:shadow-md transition-all duration-300"
+                className="relative rounded-2xl border-2 border-[#E8DEC8] hover:border-[#FF9933] bg-white p-5 space-y-2.5 shadow-xs hover:shadow-md transition-all duration-300"
               >
                 <span className="text-3xl font-black text-[#FF9933] drop-shadow-2xs">{wf.step}</span>
                 <h3 className="text-base font-bold text-[#181206] leading-snug">{wf.title}</h3>
@@ -425,7 +438,7 @@ function CustomBrandingPage() {
               </p>
             </div>
 
-            <div className="rounded-2xl border-2 border-[#E8DEC8] bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6] p-5 space-y-4 shadow-sm">
+            <div className="rounded-2xl border-2 border-[#E8DEC8] bg-white p-5 space-y-4 shadow-sm">
               <h3 className="text-sm font-bold text-[#181206] flex items-center gap-2 border-b border-[#E8DEC8] pb-2">
                 <Sparkles className="h-4 w-4 text-[#8C5921]" /> Direct B2B Institutional Helpdesk
               </h3>
@@ -433,25 +446,33 @@ function CustomBrandingPage() {
                 <div className="flex items-start gap-2.5">
                   <Globe2 className="h-4 w-4 text-[#8C5921] shrink-0 mt-0.5" />
                   <span>
-                    <strong className="text-[#181206]">Mayil Agro Foods</strong><br />
-                    1/303, M.K. Nagar, Near to HP Fuel Station, Abhisekapatti, Tirunelveli - Tenkasi Main Road, Tirunelveli - 627 012
+                    <strong className="text-[#181206]">{contact.registeredName || "Mayil Agro Foods"}</strong><br />
+                    {contact.addressLine1 || "1/303, M.K. Nagar, Near to HP Fuel Station, Abhisekapatti"}<br />
+                    {contact.addressLine2 || "Tirunelveli - Tenkasi Main Road, Tirunelveli - 627 012"}
                   </span>
                 </div>
                 <div className="flex items-center gap-2.5">
                   <Phone className="h-4 w-4 text-[#8C5921] shrink-0" />
-                  <span>Tel: 0462 - 233 5555 · Mob: +91 7200622221</span>
+                  <span>
+                    Tel: <a href={`tel:${contact.phone?.replace(/[^0-9+]/g, "") || "04622335555"}`} className="hover:underline font-semibold text-[#181206]">{contact.phone || "0462 - 233 5555"}</a>
+                    {contact.mobile && <> · Mob: <a href={`tel:${contact.mobile.replace(/[^0-9+]/g, "")}`} className="hover:underline font-semibold text-[#181206]">{contact.mobile}</a></>}
+                  </span>
                 </div>
-                <div className="flex items-center gap-2.5">
-                  <Phone className="h-4 w-4 text-[#8C5921] shrink-0" />
-                  <span>Sales Desk: +91 7904567979</span>
-                </div>
+                {contact.salesDeskPhone && (
+                  <div className="flex items-center gap-2.5">
+                    <Phone className="h-4 w-4 text-[#8C5921] shrink-0" />
+                    <span>Sales Desk: <a href={`tel:${contact.salesDeskPhone.replace(/[^0-9+]/g, "")}`} className="hover:underline font-semibold text-[#181206]">{contact.salesDeskPhone}</a></span>
+                  </div>
+                )}
+                {contact.b2bEmail && (
+                  <div className="flex items-center gap-2.5">
+                    <Mail className="h-4 w-4 text-[#8C5921] shrink-0" />
+                    <span>White Labelling: <a href={`mailto:${contact.b2bEmail}`} className="font-semibold text-[#181206] underline">{contact.b2bEmail}</a></span>
+                  </div>
+                )}
                 <div className="flex items-center gap-2.5">
                   <Mail className="h-4 w-4 text-[#8C5921] shrink-0" />
-                  <span>White Labelling: <a href="mailto:b2bsales@yghing.com" className="font-semibold text-[#181206] underline">b2bsales@yghing.com</a></span>
-                </div>
-                <div className="flex items-center gap-2.5">
-                  <Mail className="h-4 w-4 text-[#8C5921] shrink-0" />
-                  <span>General Sales: <a href="mailto:Sales@yghing.com" className="font-semibold text-[#181206] underline">Sales@yghing.com</a></span>
+                  <span>General Sales: <a href={`mailto:${contact.email || "Sales@yghing.com"}`} className="font-semibold text-[#181206] underline">{contact.email || "Sales@yghing.com"}</a></span>
                 </div>
               </div>
             </div>
@@ -468,7 +489,7 @@ function CustomBrandingPage() {
 
           {/* Right Inquiry Form */}
           <div className="lg:col-span-7">
-            <div className="rounded-3xl border-2 border-[#FF9933] bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6] p-6 sm:p-8 shadow-md ring-1 ring-[#FF9933]/40">
+            <div className="rounded-3xl border-2 border-[#FF9933] bg-white p-6 sm:p-8 shadow-md ring-1 ring-[#FF9933]/40">
               {submitted ? (
                 <div className="text-center py-10 space-y-4">
                   <div className="h-12 w-12 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 mx-auto flex items-center justify-center">

@@ -87,10 +87,21 @@ export async function getLivePromos(): Promise<Promo[]> {
   }
 }
 
+/** Broadcast helper to notify all open tabs and components that promos changed. */
+export function notifyStorefrontPromosChanged(): void {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(new CustomEvent("yg_promos_updated"));
+  try {
+    localStorage.setItem("yg_promos_updated_at", String(Date.now()));
+    const bc = new BroadcastChannel("yg_sync_channel");
+    bc.postMessage("promos_updated");
+    bc.close();
+  } catch {}
+}
+
 /**
- * Reactive React hook for the live promo list. Re-fetches on mount and
- * whenever a "yg_products_updated"-style "yg_promos_updated" event fires
- * (dispatched by the Admin Portal right after a promo save/toggle/delete).
+ * Reactive React hook for the live promo list. Re-fetches on mount, storage event,
+ * custom event, and broadcast channel updates.
  */
 export function useLivePromos(): Promo[] {
   const [list, setList] = useState<Promo[]>(promos);
@@ -99,15 +110,30 @@ export function useLivePromos(): Promo[] {
     let cancelled = false;
     const load = () => {
       getLivePromos().then((data) => {
-        if (!cancelled) setList(data);
+        if (!cancelled && Array.isArray(data) && data.length > 0) setList(data);
       });
     };
     load();
 
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === "yg_promos_updated_at") load();
+    };
+
+    let bc: BroadcastChannel | null = null;
+    try {
+      bc = new BroadcastChannel("yg_sync_channel");
+      bc.onmessage = (ev) => {
+        if (ev.data === "promos_updated") load();
+      };
+    } catch {}
+
     window.addEventListener("yg_promos_updated", load);
+    window.addEventListener("storage", onStorage);
     return () => {
       cancelled = true;
       window.removeEventListener("yg_promos_updated", load);
+      window.removeEventListener("storage", onStorage);
+      if (bc) bc.close();
     };
   }, []);
 

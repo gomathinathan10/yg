@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/site/ProductCard";
+import { TestimonialsSlider } from "@/components/site/TestimonialsSlider";
 import {
   MAIN_CATEGORIES,
   matchesCategory,
@@ -76,63 +77,6 @@ export const Route = createFileRoute("/")({
   component: HomePage,
 });
 
-
-const verifiedReviews = [
-  {
-    rating: 5,
-    title: "Authentic Paati's Rasam Aroma",
-    comment:
-      "Takes me straight back to my grandmother's kitchen in Tirunelveli. Standard store brands smell synthetic compared to this deep, wholesome aroma.",
-    name: "Sowmya Raman",
-    city: "Chennai",
-    product: "Gold Powder",
-  },
-  {
-    rating: 4,
-    title: "Life-Saver for Celiac Cooking",
-    comment:
-      "Finding truly wheat-free hing that still has authentic strength was impossible until I found Y.G's rice-starch formula. Safe and fragrant.",
-    name: "Karthik Sundaram",
-    city: "Bengaluru",
-    product: "Gluten-Free Hing",
-  },
-  {
-    rating: 4,
-    title: "Pellets in Curd Rice are Perfection",
-    comment:
-      "The Hing Pellets don't burn like fine powders do. They puff slightly during tempering, giving a delicate crunch and sustained aroma.",
-    name: "Meenakshi V.",
-    city: "Madurai",
-    product: "Hing Pellets",
-  },
-  {
-    rating: 5,
-    title: "Gold Cake for Temple Kuzhambu",
-    comment:
-      "Shaving a small piece of the Pindi Hing into hot ghee gives the authentic tangy aroma needed for traditional vathal kuzhambu.",
-    name: "Dr. K. Raghavan",
-    city: "Coimbatore",
-    product: "Gold Cake",
-  },
-  {
-    rating: 5,
-    title: "Glass Jar Locks Aroma Completely",
-    comment:
-      "The airtight rubber gasket jar is gorgeous on the kitchen counter and keeps the fragrance locked in. You need only a tiny pinch.",
-    name: "Anita Deshmukh",
-    city: "Mumbai",
-    product: "Bottle Jar",
-  },
-  {
-    rating: 5,
-    title: "Exquisite Heritage 4-in-1 Box",
-    comment:
-      "Ordered the combo box as a housewarming gift. The engraved brass spoon and assortment of powder, cake, chips, and pellets delighted our hosts.",
-    name: "Sridhar K.",
-    city: "Hyderabad",
-    product: "Heritage Box",
-  },
-];
 
 const HERO_VIDEOS = [
   { src: "/hero-video-heritage.mp4" },
@@ -311,10 +255,10 @@ function HomePage() {
       {/* ======================================================== */}
       {/* 2. BUYING EASYWAY PROCESS STRIP                          */}
       {/* ======================================================== */}
-      <section className="border-b border-[#E8DEC8] bg-[#FAF3D6]/60 py-5 sm:py-6">
+      <section className="border-b border-[#E8DEC8] bg-white py-5 sm:py-6">
         <div className="container-page px-3 sm:px-6">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
-            <div className="flex items-center gap-2.5 sm:gap-3.5 p-2.5 sm:p-3 rounded-[8px] border border-[#E8DEC8] bg-white hover:border-[#FF9933] hover:shadow-xs transition-all">
+            <div className="flex items-center gap-2.5 sm:gap-3.5 p-2.5 sm:p-3 rounded-[8px] border border-[#E8DEC8] bg-[#FAF3D6]/60 hover:border-[#FF9933] hover:shadow-xs transition-all">
               <div className="h-9 w-9 sm:h-11 sm:w-11 rounded-full border-2 border-[#FF9933] bg-[#FF9933]/20 flex items-center justify-center shrink-0 text-[#181206]">
                 <CreditCard className="h-4 w-4 sm:h-5 sm:w-5" />
               </div>
@@ -324,7 +268,7 @@ function HomePage() {
               </div>
             </div>
 
-            <div className="flex items-center gap-2.5 sm:gap-3.5 p-2.5 sm:p-3 rounded-[8px] border border-[#E8DEC8] bg-white hover:border-[#FF9933] hover:shadow-xs transition-all">
+            <div className="flex items-center gap-2.5 sm:gap-3.5 p-2.5 sm:p-3 rounded-[8px] border border-[#E8DEC8] bg-[#FAF3D6]/60 hover:border-[#FF9933] hover:shadow-xs transition-all">
               <div className="h-9 w-9 sm:h-11 sm:w-11 rounded-full border-2 border-[#FF9933] bg-[#FF9933]/20 flex items-center justify-center shrink-0 text-[#181206]">
                 <MapPin className="h-4 w-4 sm:h-5 sm:w-5" />
               </div>
@@ -334,7 +278,7 @@ function HomePage() {
               </div>
             </div>
 
-            <div className="flex items-center gap-2.5 sm:gap-3.5 p-2.5 sm:p-3 rounded-[8px] border border-[#E8DEC8] bg-white hover:border-[#FF9933] hover:shadow-xs transition-all">
+            <div className="flex items-center gap-2.5 sm:gap-3.5 p-2.5 sm:p-3 rounded-[8px] border border-[#E8DEC8] bg-[#FAF3D6]/60 hover:border-[#FF9933] hover:shadow-xs transition-all">
               <div className="h-9 w-9 sm:h-11 sm:w-11 rounded-full border-2 border-[#FF9933] bg-[#FF9933]/20 flex items-center justify-center shrink-0 text-[#181206]">
                 <Smile className="h-4 w-4 sm:h-5 sm:w-5" />
               </div>
@@ -344,7 +288,7 @@ function HomePage() {
               </div>
             </div>
 
-            <div className="flex items-center gap-2.5 sm:gap-3.5 p-2.5 sm:p-3 rounded-[8px] border border-[#E8DEC8] bg-white hover:border-[#FF9933] hover:shadow-xs transition-all">
+            <div className="flex items-center gap-2.5 sm:gap-3.5 p-2.5 sm:p-3 rounded-[8px] border border-[#E8DEC8] bg-[#FAF3D6]/60 hover:border-[#FF9933] hover:shadow-xs transition-all">
               <div className="h-9 w-9 sm:h-11 sm:w-11 rounded-full border-2 border-[#FF9933] bg-[#FF9933]/20 flex items-center justify-center shrink-0 text-[#181206]">
                 <Truck className="h-4 w-4 sm:h-5 sm:w-5" />
               </div>
@@ -422,10 +366,10 @@ function HomePage() {
             </div>
           </div>
 
-          {/* 2-column mobile / 4-column desktop Product Grid with Staggered Entrance Animations */}
+          {/* 3-column Product Grid with Spacious, Attractive Layout & Staggered Animations */}
           <div
             key={activeCatalogTab}
-            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-6 animate-in fade-in-50 duration-300"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-7 animate-in fade-in-50 duration-300"
           >
             {displayedProducts.map((p, i) => (
               <div
@@ -433,7 +377,7 @@ function HomePage() {
                 className="animate-fade-in-up h-full"
                 style={{ animationDelay: `${i * 55}ms` }}
               >
-                <ProductCard product={p} priority={i < 4} />
+                <ProductCard product={p} priority={i < 3} />
               </div>
             ))}
           </div>
@@ -509,7 +453,7 @@ function HomePage() {
       </section>
 
       {/* ======================================================== */}
-      {/* 6. AUTHENTIC VERIFIED REVIEWS GRID                       */}
+      {/* 6. AUTHENTIC VERIFIED REVIEWS CAROUSEL (1 SLIDE AT A TIME) */}
       {/* ======================================================== */}
       <section className="container-page py-8 sm:py-14 px-3 sm:px-6">
         <div className="text-center max-w-xl mx-auto mb-6 sm:mb-8">
@@ -524,43 +468,7 @@ function HomePage() {
           </p>
         </div>
 
-        <div className="mt-4 sm:mt-6 flex flex-nowrap overflow-x-auto gap-3 pb-4 pt-1 px-3 -mx-3 scroll-smooth snap-x snap-mandatory touch-pan-x scrollbar-none md:grid md:grid-cols-2 lg:grid-cols-3 md:overflow-visible md:p-0 md:m-0 md:gap-4">
-          {verifiedReviews.map((rev) => (
-            <figure
-              key={rev.name}
-              className="w-[82vw] max-w-[300px] sm:max-w-[320px] shrink-0 snap-center md:w-auto md:max-w-none md:shrink single-shopping-card-one flex flex-col justify-between p-3.5 sm:p-5 rounded-[8px] border border-[#E8DEC8] shadow-xs hover:border-[#FF9933] transition-all bg-white"
-            >
-              <div>
-                <div className="flex items-center justify-between">
-                  <div className="flex text-[#EABC5E]">
-                    {Array.from({ length: rev.rating }).map((_, i) => (
-                      <Star key={i} className="h-3.5 w-3.5 fill-[#EABC5E] text-[#EABC5E]" />
-                    ))}
-                  </div>
-                  <span className="text-[9px] sm:text-[10px] px-2 py-0.5 bg-[#FF9933] text-[#181206] font-black rounded-[4px]">
-                    Verified Purchase
-                  </span>
-                </div>
-
-                <h4 className="mt-2.5 text-xs sm:text-base font-bold text-[#181206] leading-snug">{rev.title}</h4>
-
-                <blockquote className="mt-1.5 text-xs sm:text-sm text-[#5A6560] leading-relaxed">
-                  &ldquo;{rev.comment}&rdquo;
-                </blockquote>
-              </div>
-
-              <div className="mt-3 sm:mt-4 pt-2 border-t border-[#E8DEC8] flex items-center justify-between text-xs">
-                <div>
-                  <p className="font-bold text-[#181206] text-xs sm:text-sm">{rev.name}</p>
-                  <p className="text-[#5A6560] text-[10px] sm:text-[11px]">{rev.city}</p>
-                </div>
-                <span className="text-[10px] text-[#181206] font-bold bg-[#FF9933]/40 px-2 py-0.5 rounded">
-                  {rev.product}
-                </span>
-              </div>
-            </figure>
-          ))}
-        </div>
+        <TestimonialsSlider />
       </section>
 
       {/* ======================================================== */}

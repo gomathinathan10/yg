@@ -298,7 +298,7 @@ function ProductPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       {/* Top Breadcrumb Bar */}
-      <div className="border-b border-[#E8DEC8] bg-[#F5EAC4] py-3">
+      <div className="border-b border-[#E8DEC8] bg-[#F9FAFB] py-3">
         <div className="container-page flex items-center justify-between gap-3">
           <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-[#6E777D] overflow-x-auto whitespace-nowrap scrollbar-none min-w-0">
             <Link to="/" className="hover:text-[#181206] transition-colors font-medium shrink-0">
@@ -324,7 +324,7 @@ function ProductPage() {
 
           <Link
             to="/shop"
-            className="inline-flex items-center gap-1 font-bold text-[#181206] hover:text-[#B45309] transition-colors py-1 px-2.5 rounded-[6px] bg-white border border-[#E8DEC8] hover:bg-[#FAF3D6] shadow-xs shrink-0 cursor-pointer active:scale-95 text-xs"
+            className="inline-flex items-center gap-1 font-bold text-[#181206] hover:text-[#B45309] transition-colors py-1 px-2.5 rounded-[6px] bg-white border border-[#E8DEC8] hover:bg-[#F4F4F5] shadow-xs shrink-0 cursor-pointer active:scale-95 text-xs"
             title="Return to Shop catalog"
           >
             <ChevronLeft className="h-3.5 w-3.5" />
@@ -344,7 +344,7 @@ function ProductPage() {
 
             {/* Mobile Product Next/Back Navigation */}
             <div className="flex items-center gap-1.5">
-              <div className="flex items-center gap-1 bg-[#FAF3D6] px-2 py-0.5 rounded-[6px] border border-[#E8DEC8] shadow-xs">
+              <div className="flex items-center gap-1 bg-[#F4F4F5] px-2 py-0.5 rounded-[6px] border border-[#E8DEC8] shadow-xs">
                 {hasPrev && prevProduct ? (
                   <Link
                     to="/product/$slug"
@@ -442,7 +442,7 @@ function ProductPage() {
 
                 {/* Desktop Product Navigation: Back, 1/23, Next */}
                 <div className="flex items-center gap-2">
-                  <div className="flex items-center gap-1 bg-[#FAF3D6] px-2 py-0.5 rounded-[6px] border border-[#E8DEC8] shadow-xs">
+                  <div className="flex items-center gap-1 bg-[#F4F4F5] px-2 py-0.5 rounded-[6px] border border-[#E8DEC8] shadow-xs">
                     {hasPrev && prevProduct ? (
                       <Link
                         to="/product/$slug"
@@ -516,7 +516,7 @@ function ProductPage() {
             </p>
 
             {/* Price Box */}
-            <div className="rounded-[6px] border border-[#E8DEC8] bg-[#FAF3D6] p-3.5 sm:p-4 flex items-baseline justify-between shadow-xs">
+            <div className="rounded-[6px] border border-[#E8DEC8] bg-[#F9FAFB] p-3.5 sm:p-4 flex items-baseline justify-between shadow-xs">
               <div>
                 <div className="flex items-baseline gap-2.5">
                   <span className="text-2xl sm:text-3xl font-bold text-[#DC2626] font-mono">
@@ -640,7 +640,7 @@ function ProductPage() {
             )}
 
             {/* Available Offers (Ekomart Styled) */}
-            <div className="rounded-[6px] border border-[#E8DEC8] bg-[#F5EAC4] p-4 space-y-2.5">
+            <div className="rounded-[6px] border border-[#E8DEC8] bg-[#F9FAFB] p-4 space-y-2.5">
               <h4 className="text-xs font-bold text-[#181206] uppercase tracking-wider">
                 Available Offers & Guarantee
               </h4>
@@ -740,7 +740,7 @@ function ProductPage() {
       </section>
 
       {/* Product Showcase Navigation Bar: Back to Shop, Previous Product, Next Product */}
-      <div className="border-y border-[#E8DEC8] bg-[#FAF3D6]/80 py-3.5">
+      <div className="border-y border-[#E8DEC8] bg-[#F9FAFB] py-3.5">
         <div className="container-page flex items-center justify-between gap-3">
           {hasPrev && prevProduct ? (
             <Link
@@ -812,7 +812,7 @@ function ProductPage() {
       </div>
 
       {/* Community Q&A Section */}
-      <section className="border-t border-[#E8DEC8] bg-[#F5EAC4] py-8 sm:py-12">
+      <section className="border-t border-[#E8DEC8] bg-white py-8 sm:py-12">
         <div className="container-page">
           <Suspense
             fallback={
@@ -845,7 +845,7 @@ function ProductPage() {
       </section>
 
       {/* Related Formulations Grid */}
-      <section className="border-t border-[#E8DEC8] bg-[#F5EAC4] py-10 sm:py-14">
+      <section className="border-t border-[#E8DEC8] bg-white py-10 sm:py-14">
         <div className="container-page space-y-6">
           <div className="flex items-center justify-between">
             <div>
@@ -868,9 +868,9 @@ function ProductPage() {
             </Button>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
-            {related.map((p) => (
-              <ProductCard key={p.slug} product={p} mode="compact" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            {related.slice(0, 3).map((p) => (
+              <ProductCard key={p.slug} product={p} />
             ))}
           </div>
         </div>
@@ -898,7 +898,7 @@ function ProductPage() {
                 type="button"
                 onClick={() => setCartOpen(true)}
                 aria-label={`Open basket, ${count} items`}
-                className="relative grid h-9 w-9 shrink-0 place-items-center rounded-[6px] border border-[#E8DEC8] bg-[#FAF3D6] text-[#181206] shadow-xs"
+                className="relative grid h-9 w-9 shrink-0 place-items-center rounded-[6px] border border-[#E8DEC8] bg-white text-[#181206] shadow-xs"
               >
                 <ShoppingBag className="h-4 w-4" />
                 <span className="absolute -top-1 -right-1 grid h-4 min-w-4 place-items-center rounded-full bg-[#FF9933] px-1 text-[9px] font-bold text-white">

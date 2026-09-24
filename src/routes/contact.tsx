@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/accordion";
 import { SUPPORT, faqs } from "@/data/faq";
 import { saveTicket } from "@/lib/support";
+import { useLiveContact } from "@/data/contact";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -22,7 +23,7 @@ export const Route = createFileRoute("/contact")({
       {
         name: "description",
         content:
-          "Reach the Y.G Asafoetida team in Tirunelveli. Get direct help with orders, tracking, culinary recommendations, and bulk wholesale supply. Phone: +91 98765 43210.",
+          "Reach the Y.G Asafoetida team in Tirunelveli. Get direct help with orders, tracking, culinary recommendations, and bulk wholesale supply. Phone: 0462 - 233 5555.",
       },
       {
         name: "keywords",
@@ -77,6 +78,7 @@ export const Route = createFileRoute("/contact")({
 });
 
 function ContactPage() {
+  const contact = useLiveContact();
   const [values, setValues] = useState({ name: "", email: "", subject: "", message: "" });
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle");
@@ -120,7 +122,7 @@ function ContactPage() {
   return (
     <div className="min-h-screen bg-white font-sans pb-16">
       {/* Breadcrumb Navigation */}
-      <div className="border-b border-[#E8DEC8] bg-[#F5EAC4] py-3.5">
+      <div className="border-b border-[#E8DEC8] bg-[#F9FAFB] py-3.5">
         <div className="container-page flex items-center justify-between">
           <div className="flex items-center gap-2 text-xs text-[#6E777D]">
             <a href="/" className="hover:text-[#181206] transition-colors font-medium">
@@ -129,7 +131,7 @@ function ContactPage() {
             <span className="text-[#A0A8B0]">/</span>
             <span className="font-semibold text-[#181206]">Contact Us</span>
           </div>
-          <span className="hidden sm:inline-block text-xs font-semibold text-[#181206] bg-[#FF9933]/10 px-2.5 py-0.5 rounded-[4px]">
+          <span className="hidden sm:inline-block text-xs font-semibold text-[#181206] bg-[#FFF7ED] text-[#D97706] border border-[#F08B23]/20 px-2.5 py-0.5 rounded-[4px]">
             Support Desk · Tirunelveli
           </span>
         </div>
@@ -150,7 +152,7 @@ function ContactPage() {
 
         <div className="mt-8 grid items-start gap-8 lg:grid-cols-[1.2fr_1fr]">
           {status === "sent" ? (
-            <div className="rounded-2xl border-2 border-[#FF9933] bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6] p-6 sm:p-8 shadow-md ring-1 ring-[#FF9933]/30 flex flex-col items-start">
+            <div className="rounded-2xl border-2 border-[#FF9933] bg-white p-6 sm:p-8 shadow-md ring-1 ring-[#FF9933]/30 flex flex-col items-start">
               <CheckCircle2 className="h-10 w-10 text-[#8C5921]" />
               <h2 className="mt-4 text-2xl font-bold text-[#181206]">
                 Thank you, {values.name.split(" ")[0]}!
@@ -172,7 +174,7 @@ function ContactPage() {
             </div>
           ) : (
             <form
-              className="rounded-2xl border-2 border-[#FF9933] bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6] p-6 sm:p-8 shadow-md ring-1 ring-[#FF9933]/30 space-y-4"
+              className="rounded-2xl border-2 border-[#FF9933] bg-white p-6 sm:p-8 shadow-md ring-1 ring-[#FF9933]/30 space-y-4"
               noValidate
               onSubmit={onSubmit}
             >
@@ -275,7 +277,7 @@ function ContactPage() {
 
           {/* Right Info Cards */}
           <div className="space-y-4">
-            <div className="rounded-2xl border-2 border-[#E8DEC8] hover:border-[#FF9933] bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6] p-6 shadow-xs space-y-4 transition-all">
+            <div className="rounded-2xl border-2 border-[#E8DEC8] hover:border-[#FF9933] bg-white p-6 shadow-xs space-y-4 transition-all">
               <h3 className="text-sm font-bold text-[#181206] uppercase tracking-wider pb-2 border-b border-[#E8DEC8]">
                 Our Location &amp; Contact
               </h3>
@@ -287,8 +289,9 @@ function ContactPage() {
                 <div>
                   <p className="text-xs font-bold text-[#181206]">Works &amp; Registered Office</p>
                   <p className="text-xs text-[#6E777D] mt-0.5 leading-relaxed">
-                    <strong>Mayil Agro Foods</strong><br />
-                    1/303, M.K. Nagar, Near to HP Fuel Station, Abhisekapatti, Tirunelveli - Tenkasi Main Road, Tirunelveli - 627 012, Tamil Nadu, India
+                    <strong>{contact.registeredName || "Mayil Agro Foods"}</strong><br />
+                    {contact.addressLine1 || "1/303, M.K. Nagar, Near to HP Fuel Station, Abhisekapatti"}<br />
+                    {contact.addressLine2 || "Tirunelveli - Tenkasi Main Road, Tirunelveli - 627 012, Tamil Nadu, India"}
                   </p>
                 </div>
               </div>
@@ -300,41 +303,45 @@ function ContactPage() {
                 <div>
                   <p className="text-xs font-bold text-[#181206]">Telephone Support</p>
                   <p className="text-xs text-[#6E777D] mt-0.5">
-                    <a href="tel:04622335555" className="text-[#181206] font-semibold hover:underline">
-                      0462 - 233 5555
+                    <a href={`tel:${contact.phone?.replace(/[^0-9+]/g, "") || "04622335555"}`} className="text-[#181206] font-semibold hover:underline">
+                      {contact.phone || "0462 - 233 5555"}
                     </a>{" "}
-                    · {SUPPORT.hours}
+                    · {contact.businessHours || SUPPORT.hours}
                   </p>
                 </div>
               </div>
 
-              <div className="flex gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#FF9933]/10 flex items-center justify-center text-[#181206] shrink-0 mt-0.5">
-                  <Phone className="h-4 w-4" />
+              {contact.mobile && (
+                <div className="flex gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[#FF9933]/10 flex items-center justify-center text-[#181206] shrink-0 mt-0.5">
+                    <Phone className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-[#181206]">Direct Mobile</p>
+                    <p className="text-xs text-[#6E777D] mt-0.5">
+                      <a href={`tel:${contact.mobile.replace(/[^0-9+]/g, "")}`} className="text-[#181206] font-semibold hover:underline">
+                        {contact.mobile}
+                      </a>
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-xs font-bold text-[#181206]">Direct Mobile</p>
-                  <p className="text-xs text-[#6E777D] mt-0.5">
-                    <a href="tel:+917200622221" className="text-[#181206] font-semibold hover:underline">
-                      +91 7200622221
-                    </a>
-                  </p>
-                </div>
-              </div>
+              )}
 
-              <div className="flex gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#FF9933]/10 flex items-center justify-center text-[#181206] shrink-0 mt-0.5">
-                  <Phone className="h-4 w-4" />
+              {contact.salesDeskPhone && (
+                <div className="flex gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[#FF9933]/10 flex items-center justify-center text-[#181206] shrink-0 mt-0.5">
+                    <Phone className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-[#181206]">Sales Desk</p>
+                    <p className="text-xs text-[#6E777D] mt-0.5">
+                      <a href={`tel:${contact.salesDeskPhone.replace(/[^0-9+]/g, "")}`} className="text-[#181206] font-semibold hover:underline">
+                        {contact.salesDeskPhone}
+                      </a>
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-xs font-bold text-[#181206]">Sales Desk</p>
-                  <p className="text-xs text-[#6E777D] mt-0.5">
-                    <a href="tel:+917904567979" className="text-[#181206] font-semibold hover:underline">
-                      +91 7904567979
-                    </a>
-                  </p>
-                </div>
-              </div>
+              )}
 
               <div className="flex gap-3">
                 <div className="w-8 h-8 rounded-full bg-[#FF9933]/10 flex items-center justify-center text-[#181206] shrink-0 mt-0.5">
@@ -343,36 +350,40 @@ function ContactPage() {
                 <div>
                   <p className="text-xs font-bold text-[#181206]">Email Contacts</p>
                   <p className="text-xs text-[#6E777D] mt-0.5 space-y-1 flex flex-col">
-                    <span>General &amp; Sales: <a href="mailto:Sales@yghing.com" className="text-[#181206] font-semibold hover:underline">Sales@yghing.com</a></span>
-                    <span>White Labelling &amp; B2B: <a href="mailto:b2bsales@yghing.com" className="text-[#181206] font-semibold hover:underline">b2bsales@yghing.com</a></span>
+                    <span>General &amp; Sales: <a href={`mailto:${contact.email || "Sales@yghing.com"}`} className="text-[#181206] font-semibold hover:underline">{contact.email || "Sales@yghing.com"}</a></span>
+                    {contact.b2bEmail && (
+                      <span>White Labelling &amp; B2B: <a href={`mailto:${contact.b2bEmail}`} className="text-[#181206] font-semibold hover:underline">{contact.b2bEmail}</a></span>
+                    )}
                     <span>International Trade: <Link to="/exports" className="text-[#8C5921] font-semibold hover:underline">Visit Global Exports Desk →</Link></span>
                   </p>
                 </div>
               </div>
 
-              <div className="flex gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#FF9933]/10 flex items-center justify-center text-[#181206] shrink-0 mt-0.5">
-                  <MessageCircle className="h-4 w-4" />
+              {contact.whatsapp && (
+                <div className="flex gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[#FF9933]/10 flex items-center justify-center text-[#181206] shrink-0 mt-0.5">
+                    <MessageCircle className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-[#181206]">WhatsApp Support Desk</p>
+                    <p className="text-xs text-[#6E777D] mt-0.5">
+                      <a
+                        href={`https://wa.me/${contact.whatsapp.replace(/[^0-9]/g, "")}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-[#181206] font-semibold hover:underline"
+                      >
+                        {contact.whatsapp}
+                      </a>{" "}
+                      · Fastest for orders &amp; inquiries
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-xs font-bold text-[#181206]">WhatsApp Support Desk</p>
-                  <p className="text-xs text-[#6E777D] mt-0.5">
-                    <a
-                      href="https://wa.me/917200622221"
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-[#181206] font-semibold hover:underline"
-                    >
-                      +91 7200622221
-                    </a>{" "}
-                    · Fastest for orders &amp; inquiries
-                  </p>
-                </div>
-              </div>
+              )}
             </div>
 
             {/* Quick Bot Callout */}
-            <div className="rounded-[6px] border border-[#FF9933]/20 bg-[#FAF3D6] p-4 flex items-start gap-3">
+            <div className="rounded-[6px] border border-[#FF9933]/20 bg-white p-4 flex items-start gap-3 shadow-xs">
               <MessageSquare className="h-5 w-5 text-[#181206] shrink-0 mt-0.5" />
               <div>
                 <p className="text-xs font-bold text-[#181206]">Quick answers, right now</p>

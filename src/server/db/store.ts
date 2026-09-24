@@ -181,6 +181,7 @@ export type StoreData = {
   promos: DbPromo[];
   recipes: unknown[];
   calc_metrics: DbCalcMetrics | null;
+  contact?: any;
 };
 
 export type DbCalcMetrics = {
@@ -1371,6 +1372,39 @@ class JsonStore {
       draftOrHiddenProducts,
       featuredProducts,
     };
+  }
+
+  getStoreContact() {
+    const data = this.ensureLoaded();
+    return data.contact || null;
+  }
+
+  saveStoreContact(contact: any) {
+    const data = this.ensureLoaded();
+    data.contact = contact;
+    this.save();
+    return data.contact;
+  }
+
+  resetToFactoryDefaults() {
+    const seed = buildSeedProducts();
+    this.data = {
+      products: seed.products,
+      product_variants: seed.variants,
+      categories: DEFAULT_CATEGORIES,
+      orders: [],
+      order_items: [],
+      reviews: DEFAULT_SEED_REVIEWS,
+      questions: DEFAULT_SEED_QUESTIONS,
+      tickets: [],
+      stock_alerts: [],
+      promos: [],
+      recipes: [],
+      calc_metrics: null,
+      contact: null,
+    };
+    this.save();
+    return { ok: true };
   }
 }
 

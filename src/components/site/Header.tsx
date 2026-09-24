@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useCart } from "@/lib/cart";
 import { useWishlist } from "@/lib/wishlist";
+import { useLiveContact } from "@/data/contact";
 import { ThemeSwitcher } from "@/components/site/ThemeSwitcher";
 import { SearchDialog } from "@/components/site/SearchDialog";
 import { cn } from "@/lib/utils";
@@ -47,6 +48,7 @@ const nav = [
 export function Header() {
   const cart = useCart();
   const wishlist = useWishlist();
+  const contact = useLiveContact();
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
@@ -116,7 +118,7 @@ export function Header() {
               <Sparkles className="h-2.5 w-2.5 sm:h-3 sm:w-3" /> Special
             </span>
             <p className="text-[#181206] text-[10px] sm:text-xs font-semibold truncate">
-              FREE delivery &amp; 40% OFF next 3 orders!
+              {contact.announcementText || "FREE delivery & 40% OFF next 3 orders!"}
             </p>
             <span className="hidden md:inline text-[#181206]/75 font-normal">
               · Limited time festive offer
@@ -130,19 +132,19 @@ export function Header() {
               Enquire for Bulk Order
             </Link>
             <a
-              href="tel:04622335555"
+              href={`tel:${contact.phone?.replace(/[^0-9+]/g, "") || "04622335555"}`}
               className="flex items-center gap-1 hover:text-black transition-colors"
               title="Direct Factory Hotline"
             >
               <Phone className="h-3 w-3 text-[#181206]" />
-              <span><span className="hidden xs:inline sm:inline">Call: </span><strong className="text-[#181206]">0462 - 233 5555</strong></span>
+              <span><span className="hidden xs:inline sm:inline">Call: </span><strong className="text-[#181206]">{contact.phone || "0462 - 233 5555"}</strong></span>
             </a>
           </div>
         </div>
       </div>
 
       {/* ======================================================== */}
-      {/* 2. MAIN HEADER BAR (Mild Yellow Below Neon Gold)         */}
+      {/* 2. MAIN HEADER BAR (Heritage Warm Cream Bar)              */}
       {/* ======================================================== */}
       <div className="bg-[#FAF3D6] text-[#181206] py-2.5 sm:py-3.5 border-b border-[#E8DEC8] shadow-xs">
         <div className="container-page flex items-center justify-between gap-2.5 sm:gap-6 px-3 sm:px-6">
@@ -159,7 +161,7 @@ export function Header() {
                   <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="w-72 p-5 sm:p-6 flex flex-col justify-between bg-white text-[#181206]">
+              <SheetContent side="left" className="w-72 p-5 sm:p-6 flex flex-col justify-between bg-[#FAF3D6] text-[#181206]">
                 <div>
                   <div className="flex items-center pb-4 border-b border-[#E8DEC8]">
                     <img
@@ -169,25 +171,25 @@ export function Header() {
                     />
                   </div>
 
-                  <nav className="mt-5 flex flex-col gap-2 font-semibold">
+                  <nav className="mt-5 flex flex-col gap-1 font-semibold">
                     {nav.map((item) => (
                       <Link
                         key={item.to}
                         to={item.to}
                         onClick={() => setMenuOpen(false)}
-                        className="bg-[#FF9933] text-[#181206] hover:bg-[#FFE57F] hover:border-[#C99600] rounded-[6px] px-3.5 py-2.5 text-sm font-bold border border-[#D8A700] shadow-xs transition-all flex items-center justify-between"
-                        activeProps={{ className: "!bg-white !text-[#8C5921] !border-[#8C5921] font-black ring-2 ring-[#FF9933]/80 shadow-xs" }}
+                        className="text-stone-800 hover:text-[#8C5921] hover:bg-stone-50 rounded-lg px-3.5 py-2.5 text-sm font-semibold transition-colors flex items-center justify-between"
+                        activeProps={{ className: "!text-[#8C5921] !font-bold bg-[#FF9933]/15" }}
                       >
                         <span>{item.label}</span>
                       </Link>
                     ))}
 
                     {/* Mobile Categories Accordion Button */}
-                    <div className="pt-0.5">
+                    <div className="pt-1">
                       <button
                         type="button"
                         onClick={() => setMobileCategoriesOpen((o) => !o)}
-                        className="w-full bg-[#FF9933] text-[#181206] hover:bg-[#FFE57F] hover:border-[#C99600] rounded-[6px] px-3.5 py-2.5 text-sm font-bold border border-[#D8A700] shadow-xs transition-all flex items-center justify-between cursor-pointer active:scale-98"
+                        className="w-full text-stone-800 hover:text-[#8C5921] hover:bg-stone-50 rounded-lg px-3.5 py-2.5 text-sm font-semibold border border-stone-200/80 transition-colors flex items-center justify-between cursor-pointer"
                       >
                         <span className="flex items-center gap-2">
                           <Menu className="h-4 w-4 text-[#181206]" />
@@ -211,7 +213,7 @@ export function Header() {
                                 setMenuOpen(false);
                                 setMobileCategoriesOpen(false);
                               }}
-                              className="py-1 px-2 rounded text-[#181206] hover:bg-[#FAF3D6] hover:text-[#8C5921] transition-colors flex items-center justify-between"
+                              className="py-1 px-2 rounded text-[#181206] hover:bg-[#F4F4F5] hover:text-[#8C5921] transition-colors flex items-center justify-between"
                             >
                               <span>{cat.label}</span>
                               {cat.badge && (
@@ -303,7 +305,7 @@ export function Header() {
                           to="/shop"
                           search={{ category: cat.id === "all" ? undefined : cat.id }}
                           onClick={() => setCategoryDropdownOpen(false)}
-                          className="flex items-center justify-between px-3.5 py-2 text-xs hover:bg-[#FAF3D6] hover:text-[#8C5921] font-semibold transition-colors border-b border-gray-50 last:border-b-0"
+                          className="flex items-center justify-between px-3.5 py-2 text-xs hover:bg-[#F4F4F5] hover:text-[#8C5921] font-semibold transition-colors border-b border-gray-50 last:border-b-0"
                         >
                           <span className={cat.id === "all" ? "font-bold text-[#181206]" : ""}>
                             {cat.label}
@@ -328,7 +330,7 @@ export function Header() {
                 className="flex-1 text-left px-3 py-2 text-xs text-[#5A6560] hover:text-[#181206] focus:outline-none flex items-center justify-between"
               >
                 <span>Search for products, formulations...</span>
-                <span className="text-[10px] bg-[#FAF3D6] px-1.5 py-0.5 rounded border border-[#E8DEC8] text-[#5A6560] font-mono">
+                <span className="text-[10px] bg-[#F4F4F5] px-1.5 py-0.5 rounded border border-[#E8DEC8] text-[#5A6560] font-mono">
                   Ctrl+K
                 </span>
               </button>
@@ -403,17 +405,17 @@ export function Header() {
       </div>
 
       {/* ======================================================== */}
-      {/* 3. LOWER NAVIGATION BAR (Warm Heritage Navigation Strip) */}
+      {/* 3. LOWER NAVIGATION BAR (Heritage Navigation Strip)       */}
       {/* ======================================================== */}
-      <div className="sticky top-0 bg-[#FAF3D6]/95 backdrop-blur-xs border-t border-b border-[#E8DEC8] shadow-xs z-30 py-1 sm:py-1.5">
+      <div className="sticky top-0 bg-[#FAF3D6] border-t border-b border-[#E8DEC8] shadow-xs z-30 py-1">
         <div className="container-page flex items-center justify-between min-h-11 sm:min-h-12 px-3 sm:px-6">
-          <nav className="flex items-center gap-2 sm:gap-2.5 lg:gap-3 overflow-x-auto scrollbar-none py-1">
+          <nav className="flex items-center gap-1 sm:gap-2 lg:gap-2.5 overflow-x-auto scrollbar-none py-1">
             {nav.map((item) => (
               <Link
                 key={item.to}
                 to={item.to}
-                className="bg-[#FF9933] text-[#181206] hover:bg-[#FFE57F] hover:border-[#C99600] font-bold text-xs sm:text-sm tracking-wide whitespace-nowrap px-3 sm:px-3.5 py-1.5 rounded-[6px] border border-[#D8A700] shadow-2xs hover:shadow-xs transition-all cursor-pointer active:scale-95"
-                activeProps={{ className: "!bg-white !text-[#8C5921] !border-[#8C5921] font-black shadow-xs ring-2 ring-[#FF9933]/80" }}
+                className="text-[#181206] hover:text-[#8C5921] hover:bg-[#F5EAC4] font-semibold text-xs sm:text-sm tracking-wide whitespace-nowrap px-3 sm:px-3.5 py-1.5 rounded-md transition-colors cursor-pointer"
+                activeProps={{ className: "!text-[#8C5921] !font-bold bg-[#FF9933]/25 border border-[#D8A700]/50 rounded-md" }}
               >
                 {item.label}
               </Link>
@@ -421,9 +423,9 @@ export function Header() {
           </nav>
 
           {/* Right Delivery Location */}
-          <div className="hidden md:flex items-center gap-1.5 text-xs text-[#181206] shrink-0 font-bold bg-[#FF9933]/25 border border-[#D8A700]/60 px-3 py-1.5 rounded-[6px]">
+          <div className="hidden md:flex items-center gap-1.5 text-xs text-[#181206] shrink-0 font-medium bg-[#F5EAC4] border border-[#E8DEC8] px-3 py-1.5 rounded-full">
             <MapPin className="h-3.5 w-3.5 text-[#8C5921]" />
-            <span>Delivery: <strong>Tamil Nadu &amp; All India Direct Dispatch</strong></span>
+            <span>Delivery: <strong className="text-[#181206] font-semibold">Tamil Nadu &amp; All India Direct Dispatch</strong></span>
           </div>
         </div>
       </div>

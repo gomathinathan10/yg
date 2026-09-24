@@ -81,10 +81,21 @@ export async function getLiveMetrics(): Promise<CalculationMetrics> {
   }
 }
 
+/** Broadcast helper to notify all open tabs and components that calculation metrics changed. */
+export function notifyStorefrontMetricsChanged(): void {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(new CustomEvent("yg_calc_metrics_updated"));
+  try {
+    localStorage.setItem("yg_calc_metrics_updated_at", String(Date.now()));
+    const bc = new BroadcastChannel("yg_sync_channel");
+    bc.postMessage("metrics_updated");
+    bc.close();
+  } catch {}
+}
+
 /**
  * Reactive React hook for Calculation Metrics.
- * Re-fetches on mount and whenever "yg_calc_metrics_updated" fires
- * (dispatched by the Admin Portal right after a save/reset).
+ * Re-fetches on mount and on custom/storage/broadcast sync events.
  */
 export function useLiveMetrics(): CalculationMetrics {
   const [metrics, setMetrics] = useState<CalculationMetrics>(DEFAULT_METRICS);
@@ -98,10 +109,25 @@ export function useLiveMetrics(): CalculationMetrics {
     };
     load();
 
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === "yg_calc_metrics_updated_at") load();
+    };
+
+    let bc: BroadcastChannel | null = null;
+    try {
+      bc = new BroadcastChannel("yg_sync_channel");
+      bc.onmessage = (ev) => {
+        if (ev.data === "metrics_updated") load();
+      };
+    } catch {}
+
     window.addEventListener("yg_calc_metrics_updated", load);
+    window.addEventListener("storage", onStorage);
     return () => {
       cancelled = true;
       window.removeEventListener("yg_calc_metrics_updated", load);
+      window.removeEventListener("storage", onStorage);
+      if (bc) bc.close();
     };
   }, []);
 

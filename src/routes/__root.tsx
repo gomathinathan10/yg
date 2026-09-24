@@ -235,7 +235,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             __html: `
               html { background-color: #ffffff; color: #181206; font-family: "Barlow", sans-serif; overflow-x: hidden; }
               body { margin: 0; background-color: #ffffff; color: #181206; font-family: "Barlow", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
-              header.sticky { background-color: #FAF3D6; }
+              header.sticky { background-color: #ffffff; }
               img { content-visibility: auto; }
             `,
           }}
@@ -267,6 +267,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const routerState = useRouter();
+  const pathname = routerState.state.location.pathname;
+  const isAdmin = pathname.startsWith("/admin");
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -281,20 +284,22 @@ function RootComponent() {
           >
             Skip to main content
           </a>
-          <Header />
+          {!isAdmin && <Header />}
           <main id="main" className="flex-1 bg-white">
             {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
             <Outlet />
           </main>
-          <Footer />
+          {!isAdmin && <Footer />}
         </div>
-        <CartDrawer />
-        <MobileCartBar />
-        <ClickEffects />
-        <DeferUntilIdle>
-          <FaqBot />
-          <BackToTop />
-        </DeferUntilIdle>
+        {!isAdmin && <CartDrawer />}
+        {!isAdmin && <MobileCartBar />}
+        {!isAdmin && <ClickEffects />}
+        {!isAdmin && (
+          <DeferUntilIdle>
+            <FaqBot />
+            <BackToTop />
+          </DeferUntilIdle>
+        )}
         <Toaster position="top-center" />
       </CartProvider>
       </OrdersProvider>

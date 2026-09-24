@@ -88,7 +88,7 @@ function OrderTrackingPage() {
   return (
     <div className="min-h-screen bg-white font-sans pb-16">
       {/* Breadcrumb Navigation */}
-      <div className="border-b border-[#E8DEC8] bg-[#F5EAC4] py-3.5 no-print">
+      <div className="border-b border-[#E8DEC8] bg-[#F9FAFB] py-3.5 no-print">
         <div className="container-page flex items-center justify-between">
           <div className="flex items-center gap-2 text-xs text-[#6E777D]">
             <Link to="/" className="hover:text-[#181206] transition-colors font-medium">
@@ -245,7 +245,7 @@ function OrderTrackingPage() {
                     alt={item.name}
                     width={200}
                     height={200}
-                    wrapperClassName="h-12 w-12 shrink-0 rounded-[4px] border border-[#E8DEC8] bg-[#FAF3D6]"
+                    wrapperClassName="h-12 w-12 shrink-0 rounded-[4px] border border-[#E8DEC8] bg-[#F9FAFB]"
                     className="h-full w-full object-cover"
                   />
                   <div className="min-w-0 flex-1">

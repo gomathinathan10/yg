@@ -33,7 +33,7 @@ export function SmartImage({
 
   if (!src) {
     return (
-      <div className={cn("relative flex flex-col items-center justify-center gap-1.5 bg-[#FAF3D6]/80 p-3 text-center rounded-[8px] border border-[#E8DEC8]", wrapperClassName)}>
+      <div className={cn("relative flex flex-col items-center justify-center gap-1.5 bg-[#F4F4F5] p-3 text-center rounded-[8px] border border-[#E8DEC8]", wrapperClassName)}>
         <span className="text-xl">📦</span>
         <span className="text-[10px] leading-tight font-bold tracking-wide text-[#8C5921] uppercase line-clamp-1">
           {fallbackLabel ?? "Product"}
@@ -45,7 +45,7 @@ export function SmartImage({
 
   if (hasError) {
     return (
-      <div className={cn("relative flex flex-col items-center justify-center gap-2 bg-[#FAF3D6]/60 p-3 text-center rounded-[8px] border border-[#E8DEC8]", wrapperClassName)}>
+      <div className={cn("relative flex flex-col items-center justify-center gap-2 bg-[#F4F4F5] p-3 text-center rounded-[8px] border border-[#E8DEC8]", wrapperClassName)}>
         <ImageOff className="h-5 w-5 text-[#8C5921]" aria-hidden="true" />
         <span className="text-[10px] leading-tight font-medium tracking-wide text-[#8C5921] uppercase">
           {fallbackLabel ?? "Photo Coming Soon"}
@@ -56,7 +56,7 @@ export function SmartImage({
             setHasError(false);
             setAttempt((a) => a + 1);
           }}
-          className="inline-flex items-center gap-1 rounded-full border border-[#E8DEC8] bg-white px-2.5 py-1 text-[11px] font-medium text-[#181206] transition-colors hover:bg-[#FAF3D6]"
+          className="inline-flex items-center gap-1 rounded-full border border-[#E8DEC8] bg-white px-2.5 py-1 text-[11px] font-medium text-[#181206] transition-colors hover:bg-[#F4F4F5]"
         >
           <RefreshCw className="h-3 w-3" aria-hidden="true" />
           Retry

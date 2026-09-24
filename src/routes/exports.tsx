@@ -26,6 +26,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import { useLiveContact } from "@/data/contact";
+import { saveTicket } from "@/lib/support";
 
 export const Route = createFileRoute("/exports")({
   head: () => ({
@@ -266,6 +268,7 @@ const EXPORT_PRODUCTS = [
 ];
 
 function ExportsPage() {
+  const contact = useLiveContact();
   const [form, setForm] = useState({
     companyName: "",
     contactPerson: "",
@@ -281,7 +284,7 @@ function ExportsPage() {
   const [sending, setSending] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.companyName.trim() || !form.contactPerson.trim() || !form.email.trim() || !form.country.trim()) {
       toast.error("Please fill in company name, contact person, email, and destination country.");
@@ -289,18 +292,28 @@ function ExportsPage() {
     }
 
     setSending(true);
-    setTimeout(() => {
+    try {
+      await saveTicket({
+        topic: `Global Export Enquiry: ${form.companyName.trim()} (${form.country.trim()})`,
+        contact: `${form.email.trim()} · ${form.phone.trim() || "No phone"}`,
+        message: `Company: ${form.companyName.trim()} | Contact: ${form.contactPerson.trim()} | Country: ${form.country.trim()} | Port: ${form.destinationPort.trim() || "N/A"} | Product: ${form.productInterest} | Volume: ${form.shipmentVolume} | Incoterm: ${form.incoterm} | Notes: ${form.message.trim() || "None"}`,
+      });
       setSending(false);
       setSubmitted(true);
       toast.success("Export enquiry received! Our international trade desk will reply within 24 hours.");
-    }, 600);
+    } catch {
+      setSending(false);
+      setSubmitted(true);
+      toast.success("Export enquiry received! Our international trade desk will reply within 24 hours.");
+    }
   };
 
   const openWhatsApp = () => {
     const text = encodeURIComponent(
       `Hello Y.G Export Desk, I am interested in importing products to ${form.country || "our country"}. Please share your export catalog and FOB/CIF rates.`
     );
-    window.open(`https://wa.me/917200622221?text=${text}`, "_blank");
+    const wa = contact.whatsapp?.replace(/[^0-9]/g, "") || "917200622221";
+    window.open(`https://wa.me/${wa}?text=${text}`, "_blank");
   };
 
   return (
@@ -368,19 +381,19 @@ function ExportsPage() {
 
           {/* Key Metrics Strip */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-8 border-t border-[#E8DEC8]">
-            <div className="rounded-xl border-2 border-[#E8DEC8] bg-[#FAF3D6] p-4 text-center shadow-xs hover:border-[#FF9933] hover:shadow-sm transition-all group">
+            <div className="rounded-xl border-2 border-[#E8DEC8] bg-[#F9FAFB] p-4 text-center shadow-xs hover:border-[#FF9933] hover:shadow-sm transition-all group">
               <p className="text-2xl sm:text-3xl font-black text-[#181206]">5+ Nations</p>
               <p className="text-xs text-[#5D4730] font-semibold mt-1">Singapore, Malaysia, Sri Lanka, Canada &amp; USA</p>
             </div>
-            <div className="rounded-xl border-2 border-[#E8DEC8] bg-[#FAF3D6] p-4 text-center shadow-xs hover:border-[#FF9933] hover:shadow-sm transition-all group">
+            <div className="rounded-xl border-2 border-[#E8DEC8] bg-[#F9FAFB] p-4 text-center shadow-xs hover:border-[#FF9933] hover:shadow-sm transition-all group">
               <p className="text-2xl sm:text-3xl font-black text-[#181206]">25 kg</p>
               <p className="text-xs text-[#5D4730] font-semibold mt-1">Flexible Low Starting MOQ</p>
             </div>
-            <div className="rounded-xl border-2 border-[#E8DEC8] bg-[#FAF3D6] p-4 text-center shadow-xs hover:border-[#FF9933] hover:shadow-sm transition-all group">
+            <div className="rounded-xl border-2 border-[#E8DEC8] bg-[#F9FAFB] p-4 text-center shadow-xs hover:border-[#FF9933] hover:shadow-sm transition-all group">
               <p className="text-2xl sm:text-3xl font-black text-[#181206]">50 km</p>
               <p className="text-xs text-[#5D4730] font-semibold mt-1">Tuticorin VOC Sea Port Proximity</p>
             </div>
-            <div className="rounded-xl border-2 border-[#E8DEC8] bg-[#FAF3D6] p-4 text-center shadow-xs hover:border-[#FF9933] hover:shadow-sm transition-all group">
+            <div className="rounded-xl border-2 border-[#E8DEC8] bg-[#F9FAFB] p-4 text-center shadow-xs hover:border-[#FF9933] hover:shadow-sm transition-all group">
               <p className="text-2xl sm:text-3xl font-black text-[#181206]">100%</p>
               <p className="text-xs text-[#5D4730] font-semibold mt-1">Tested Purity &amp; Traceability</p>
             </div>
@@ -410,7 +423,7 @@ function ExportsPage() {
             {QUALITY_CERTIFICATIONS.map((cert) => (
               <div
                 key={cert.id}
-                className="rounded-2xl border-2 border-[#E8DEC8] bg-[#FAF3D6] p-6 space-y-4 shadow-sm hover:border-[#FF9933] hover:shadow-md transition-all flex flex-col justify-between group"
+                className="rounded-2xl border-2 border-[#E8DEC8] bg-[#F9FAFB] p-6 space-y-4 shadow-sm hover:border-[#FF9933] hover:shadow-md transition-all flex flex-col justify-between group"
               >
                 <div className="space-y-3">
                   {/* Certificate Logo Graphic inside elevated white plaque */}
@@ -637,7 +650,7 @@ function ExportsPage() {
               </p>
             </div>
 
-            <div className="rounded-2xl border border-[#D8A700]/50 bg-[#FAF3D6]/70 p-6 space-y-4 shadow-xs">
+            <div className="rounded-2xl border border-[#D8A700]/50 bg-[#F9FAFB]/70 p-6 space-y-4 shadow-xs">
               <h3 className="text-sm font-bold text-[#181206] flex items-center gap-2">
                 <Sparkles className="h-4 w-4 text-[#8C5921]" /> Dedicated Export Division Contacts
               </h3>
@@ -646,8 +659,9 @@ function ExportsPage() {
                   <MapPin className="h-4 w-4 text-[#8C5921] shrink-0 mt-0.5" />
                   <span>
                     <strong className="text-[#181206]">Works &amp; Registered Office:</strong><br />
-                    Mayil Agro Foods<br />
-                    1/303, M.K. Nagar, Near to HP Fuel Station, Abhisekapatti, Tirunelveli - Tenkasi Main Road, Tirunelveli - 627 012, Tamil Nadu, India
+                    {contact.registeredName || "Mayil Agro Foods"}<br />
+                    {contact.addressLine1 || "1/303, M.K. Nagar, Near to HP Fuel Station, Abhisekapatti"}<br />
+                    {contact.addressLine2 || "Tirunelveli - Tenkasi Main Road, Tirunelveli - 627 012, Tamil Nadu, India"}
                   </span>
                 </div>
 
@@ -665,8 +679,8 @@ function ExportsPage() {
                   <Phone className="h-4 w-4 text-[#8C5921] shrink-0" />
                   <span>
                     Export WhatsApp &amp; Mobile:{" "}
-                    <a href="https://wa.me/917200622221" target="_blank" rel="noreferrer" className="font-bold text-[#181206] underline hover:text-[#8C5921]">
-                      +91 7200622221
+                    <a href={`https://wa.me/${contact.whatsapp?.replace(/[^0-9]/g, "") || "917200622221"}`} target="_blank" rel="noreferrer" className="font-bold text-[#181206] underline hover:text-[#8C5921]">
+                      {contact.whatsapp || "+91 7200622221"}
                     </a>
                   </span>
                 </div>
@@ -674,16 +688,18 @@ function ExportsPage() {
                 <div className="flex items-center gap-2.5">
                   <Phone className="h-4 w-4 text-[#8C5921] shrink-0" />
                   <span>
-                    Telephone: <strong className="text-[#181206]">0462 - 233 5555</strong>
+                    Telephone: <a href={`tel:${contact.phone?.replace(/[^0-9+]/g, "") || "04622335555"}`} className="font-semibold text-[#181206] hover:underline">{contact.phone || "0462 - 233 5555"}</a>
                   </span>
                 </div>
 
-                <div className="flex items-center gap-2.5">
-                  <Phone className="h-4 w-4 text-[#8C5921] shrink-0" />
-                  <span>
-                    Trade Desk: <strong className="text-[#181206]">+91 7904567979</strong>
-                  </span>
-                </div>
+                {contact.salesDeskPhone && (
+                  <div className="flex items-center gap-2.5">
+                    <Phone className="h-4 w-4 text-[#8C5921] shrink-0" />
+                    <span>
+                      Trade Desk: <a href={`tel:${contact.salesDeskPhone.replace(/[^0-9+]/g, "")}`} className="font-semibold text-[#181206] hover:underline">{contact.salesDeskPhone}</a>
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
 

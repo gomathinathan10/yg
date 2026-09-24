@@ -2,10 +2,12 @@ import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, CheckCircle2, Lock, Mail, MapPin, Phone, ShieldCheck, Sparkles, Truck } from "lucide-react";
 import { toast } from "sonner";
+import { useLiveContact } from "@/data/contact";
 
 export function Footer() {
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
+  const contact = useLiveContact();
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
@@ -210,34 +212,41 @@ export function Footer() {
             <li className="flex items-start gap-2.5">
               <MapPin className="h-4 w-4 text-[#FF9933] shrink-0 mt-0.5" />
               <span className="leading-snug">
-                <strong>Mayil Agro Foods</strong><br />
-                1/303, M.K. Nagar, Near to HP Fuel Station, Abhisekapatti, Tirunelveli - Tenkasi Main Road, Tirunelveli - 627 012
+                <strong>{contact.registeredName || "Mayil Agro Foods"}</strong><br />
+                {contact.addressLine1 || "1/303, M.K. Nagar, Near to HP Fuel Station, Abhisekapatti"}
+                {contact.addressLine2 ? <><br />{contact.addressLine2}</> : <><br />Tirunelveli - Tenkasi Main Road, Tirunelveli - 627 012</>}
               </span>
             </li>
             <li className="flex items-center gap-2.5">
               <Phone className="h-4 w-4 text-[#FF9933] shrink-0" />
-              <span>Tel: <a href="tel:04622335555" className="hover:text-[#FF9933]">0462 - 233 5555</a></span>
+              <span>Tel: <a href={`tel:${contact.phone?.replace(/[^0-9+]/g, "") || "04622335555"}`} className="hover:text-[#FF9933]">{contact.phone || "0462 - 233 5555"}</a></span>
             </li>
-            <li className="flex items-center gap-2.5">
-              <Phone className="h-4 w-4 text-[#FF9933] shrink-0" />
-              <span>Mobile: <a href="tel:+917200622221" className="hover:text-[#FF9933]">+91 7200622221</a></span>
-            </li>
-            <li className="flex items-center gap-2.5">
-              <Phone className="h-4 w-4 text-[#FF9933] shrink-0" />
-              <span>Sales Desk: <a href="tel:+917904567979" className="hover:text-[#FF9933]">+91 7904567979</a></span>
-            </li>
+            {contact.mobile && (
+              <li className="flex items-center gap-2.5">
+                <Phone className="h-4 w-4 text-[#FF9933] shrink-0" />
+                <span>Mobile: <a href={`tel:${contact.mobile.replace(/[^0-9+]/g, "")}`} className="hover:text-[#FF9933]">{contact.mobile}</a></span>
+              </li>
+            )}
+            {contact.salesDeskPhone && (
+              <li className="flex items-center gap-2.5">
+                <Phone className="h-4 w-4 text-[#FF9933] shrink-0" />
+                <span>Sales Desk: <a href={`tel:${contact.salesDeskPhone.replace(/[^0-9+]/g, "")}`} className="hover:text-[#FF9933]">{contact.salesDeskPhone}</a></span>
+              </li>
+            )}
             <li className="flex items-center gap-2.5">
               <Mail className="h-4 w-4 text-[#FF9933] shrink-0" />
-              <span><a href="mailto:Sales@yghing.com" className="hover:text-[#FF9933]">Sales@yghing.com</a></span>
+              <span><a href={`mailto:${contact.email || "Sales@yghing.com"}`} className="hover:text-[#FF9933]">{contact.email || "Sales@yghing.com"}</a></span>
             </li>
-            <li className="flex items-center gap-2.5 text-[11px] text-white/70">
-              <Mail className="h-3.5 w-3.5 text-[#FF9933] shrink-0" />
-              <span>White Labelling: <a href="mailto:b2bsales@yghing.com" className="hover:text-[#FF9933] text-white/90">b2bsales@yghing.com</a></span>
-            </li>
+            {contact.b2bEmail && (
+              <li className="flex items-center gap-2.5 text-[11px] text-white/70">
+                <Mail className="h-3.5 w-3.5 text-[#FF9933] shrink-0" />
+                <span>White Labelling: <a href={`mailto:${contact.b2bEmail}`} className="hover:text-[#FF9933] text-white/90">{contact.b2bEmail}</a></span>
+              </li>
+            )}
           </ul>
           <div className="mt-4 p-3 bg-white/5 rounded-[6px] border border-white/10 text-[11px] text-white/70">
             <p className="font-semibold text-white">Business Hours:</p>
-            <p>Monday – Saturday: 9:00 AM – 7:00 PM</p>
+            <p>{contact.businessHours || "Monday – Saturday: 9:00 AM – 7:00 PM"}</p>
           </div>
         </div>
       </div>

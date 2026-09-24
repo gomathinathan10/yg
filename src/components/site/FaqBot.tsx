@@ -90,7 +90,7 @@ export function FaqBot() {
             </button>
           </header>
 
-          <div ref={listRef} className="flex-1 space-y-4 overflow-y-auto px-4 py-4 bg-[#FAF3D6]">
+          <div ref={listRef} className="flex-1 space-y-4 overflow-y-auto px-4 py-4 bg-[#F9FAFB]">
             {messages.map((m) => (
               <div key={m.id}>
                 {m.from === "user" ? (
@@ -101,7 +101,7 @@ export function FaqBot() {
                   <div className="max-w-[92%] text-xs leading-relaxed text-[#181206] bg-white p-3 rounded-[6px] border border-[#E8DEC8] shadow-xs">
                     <p>{m.text}</p>
                     {m.escalate && (
-                      <div className="mt-3 rounded-[4px] border border-[#FF9933]/20 bg-[#FAF3D6] p-2.5 text-[11px]">
+                      <div className="mt-3 rounded-[4px] border border-[#FF9933]/20 bg-[#F9FAFB] p-2.5 text-[11px]">
                         <p className="font-bold text-[#181206]">
                           Please contact our support team:
                         </p>
@@ -148,7 +148,7 @@ export function FaqBot() {
                             key={f}
                             type="button"
                             onClick={() => ask(f)}
-                            className="rounded-[4px] border border-[#E8DEC8] bg-[#FAF3D6] px-2 py-1 text-[10px] font-medium text-[#181206] transition-colors hover:border-[#FF9933] hover:text-[#181206] cursor-pointer"
+                            className="rounded-[4px] border border-[#E8DEC8] bg-[#F9FAFB] px-2 py-1 text-[10px] font-medium text-[#181206] transition-colors hover:border-[#FF9933] hover:text-[#181206] cursor-pointer"
                           >
                             {f}
                           </button>

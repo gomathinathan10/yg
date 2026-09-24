@@ -18,6 +18,7 @@ export type Product = {
   name: string;
   tagline: string;
   format: Format;
+  category?: string | undefined;
   glutenFree: boolean;
   bestseller?: boolean | undefined;
   image: string;
@@ -93,6 +94,12 @@ export const products: Product[] = [
         mrp: 780,
         stock: 80,
         image: "/products/100g-premium-asafoetida-powder/img-1.jpg",
+        gallery: [
+          "/products/100g-premium-asafoetida-powder/img-1.jpg",
+          "/products/100g-premium-asafoetida-powder/img-2.jpg",
+          "/products/100g-premium-asafoetida-powder/img-3.jpg",
+          "/products/100g-premium-asafoetida-powder/img-4.jpg",
+        ],
       },
       {
         id: "500g",
@@ -101,6 +108,12 @@ export const products: Product[] = [
         mrp: 1900,
         stock: 60,
         image: "/products/100g-premium-asafoetida-powder/img-1.jpg",
+        gallery: [
+          "/products/100g-premium-asafoetida-powder/img-1.jpg",
+          "/products/100g-premium-asafoetida-powder/img-2.jpg",
+          "/products/100g-premium-asafoetida-powder/img-3.jpg",
+          "/products/100g-premium-asafoetida-powder/img-4.jpg",
+        ],
       },
     ],
     inStock: true,
@@ -710,6 +723,7 @@ export const products: Product[] = [
     name: "Y.G Crispy Appalam",
     tagline: "Traditional Hand-Rolled Sun-Dried Papadum",
     format: "appalam",
+    category: "crispi",
     glutenFree: false,
     bestseller: true,
     image: "/products/crispy-appalam/img-1.jpg",
@@ -1127,31 +1141,62 @@ export const MAIN_CATEGORIES: Array<{ id: MainCategoryId; label: string }> = [
 
 export function matchesCategory(p: Product, catId: string | undefined | null): boolean {
   if (!catId || catId === "all") return true;
+  const target = catId.toLowerCase();
+  const prodFormat = (p.format || "").toLowerCase();
+  const prodCat = (p.category || "").toLowerCase();
+
   if (
-    catId === "asafoetida" ||
-    catId === "powder" ||
-    catId === "granules" ||
-    catId === "cake" ||
-    catId === "combo" ||
-    catId === "gf"
+    target === "asafoetida" ||
+    target === "powder" ||
+    target === "granules" ||
+    target === "cake" ||
+    target === "combo" ||
+    target === "gf"
   ) {
-    if (catId === "gf") return p.glutenFree;
-    if (catId === "powder" || catId === "granules" || catId === "cake" || catId === "combo") {
-      return p.format === catId;
+    if (target === "gf") return p.glutenFree;
+    if (target === "powder" || target === "granules" || target === "cake" || target === "combo") {
+      return prodFormat === target || prodCat === target;
     }
-    return p.format === "powder" || p.format === "granules" || p.format === "cake" || p.format === "combo" || p.glutenFree;
+    return (
+      prodFormat === "powder" ||
+      prodFormat === "granules" ||
+      prodFormat === "cake" ||
+      prodFormat === "combo" ||
+      prodCat === "asafoetida" ||
+      p.glutenFree
+    );
   }
-  if (catId === "crispi" || catId === "appalam") {
-    return p.format === "appalam" || p.slug.includes("appalam") || p.slug.includes("crispi");
+  if (target === "crispi" || target === "appalam" || target === "crispy" || target === "papad") {
+    return (
+      prodFormat === "appalam" ||
+      prodFormat === "crispi" ||
+      prodFormat === "crispy" ||
+      prodCat === "crispi" ||
+      prodCat === "crispy" ||
+      prodCat === "appalam" ||
+      p.slug.includes("appalam") ||
+      p.slug.includes("crispi") ||
+      p.slug.includes("crispy") ||
+      p.name.toLowerCase().includes("appalam") ||
+      p.name.toLowerCase().includes("crispy") ||
+      p.name.toLowerCase().includes("crispi")
+    );
   }
-  if (catId === "food-products" || catId === "food_products" || catId === "wellness" || catId === "vismaya") {
-    if (catId === "wellness" || catId === "vismaya") return p.format === catId;
-    return p.format === "wellness" || p.format === "vismaya";
+  if (target === "food-products" || target === "food_products" || target === "wellness" || target === "vismaya") {
+    if (target === "wellness" || target === "vismaya") return prodFormat === target || prodCat === target;
+    return (
+      prodFormat === "wellness" ||
+      prodFormat === "vismaya" ||
+      prodCat === "food-products" ||
+      prodCat === "food_products" ||
+      prodCat === "vismaya" ||
+      prodCat === "wellness"
+    );
   }
-  if (catId === "pooja-products" || catId === "pooja_products" || catId === "pooja") {
-    return p.format === "pooja";
+  if (target === "pooja-products" || target === "pooja_products" || target === "pooja") {
+    return prodFormat === "pooja" || prodCat === "pooja" || prodCat.includes("pooja");
   }
-  return p.format === catId;
+  return prodFormat === target || prodCat === target;
 }
 
 
@@ -1190,6 +1235,7 @@ function dbProductToProduct(db: DbProduct): Product {
     name: db.name,
     tagline: db.tagline,
     format: db.format as Format,
+    category: db.category || db.format,
     glutenFree: db.gluten_free === 1,
     bestseller: db.bestseller === 1,
     image: db.image,
@@ -1225,55 +1271,186 @@ function findBySlugWithAliases(list: Product[], slug: string): Product | undefin
   return list.find((p) => p.slug === slug);
 }
 
+const ADMIN_OVERRIDES_KEY = "yg_admin_product_overrides";
+const LIVE_PRODUCTS_CACHE_KEY = "yg_live_products_cache";
+
+export function getAdminLocalOverrides(): Record<string, Product> {
+  if (typeof window === "undefined") return {};
+  try {
+    const raw = localStorage.getItem(ADMIN_OVERRIDES_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+export function saveAdminProductOverride(p: Product): void {
+  if (typeof window === "undefined") return;
+  try {
+    const current = getAdminLocalOverrides();
+    current[p.slug] = p;
+    localStorage.setItem(ADMIN_OVERRIDES_KEY, JSON.stringify(current));
+
+    // Also update cached products list immediately
+    const cached = getCachedProductsList();
+    const idx = cached.findIndex((item) => item.slug === p.slug);
+    if (idx >= 0) {
+      cached[idx] = p;
+    } else {
+      cached.push(p);
+    }
+    localStorage.setItem(LIVE_PRODUCTS_CACHE_KEY, JSON.stringify(cached));
+  } catch {}
+}
+
+export function removeAdminProductOverride(slug: string): void {
+  if (typeof window === "undefined") return;
+  try {
+    const current = getAdminLocalOverrides();
+    delete current[slug];
+    localStorage.setItem(ADMIN_OVERRIDES_KEY, JSON.stringify(current));
+
+    const cached = getCachedProductsList().filter((p) => p.slug !== slug);
+    localStorage.setItem(LIVE_PRODUCTS_CACHE_KEY, JSON.stringify(cached));
+  } catch {}
+}
+
+export function applyOverridesToList(baseList: Product[]): Product[] {
+  const overrides = getAdminLocalOverrides();
+  const overrideSlugs = Object.keys(overrides);
+  if (overrideSlugs.length === 0) return baseList;
+
+  const list = baseList.map((p) => {
+    if (overrides[p.slug]) {
+      return { ...p, ...overrides[p.slug] };
+    }
+    return p;
+  });
+
+  // Also include any newly created products in overrides not present in baseList
+  const existingSlugs = new Set(list.map((p) => p.slug));
+  for (const slug of overrideSlugs) {
+    if (!existingSlugs.has(slug) && overrides[slug]) {
+      list.push(overrides[slug]!);
+    }
+  }
+
+  return list;
+}
+
+export function getCachedProductsList(): Product[] {
+  if (typeof window === "undefined") return products;
+  try {
+    const cached = localStorage.getItem(LIVE_PRODUCTS_CACHE_KEY);
+    if (cached) {
+      const parsed = JSON.parse(cached);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return applyOverridesToList(parsed);
+      }
+    }
+  } catch {}
+  return applyOverridesToList(products);
+}
+
 /**
  * Live product catalog synchronization:
  * Fetches the real, admin-managed catalog from the server database so the
- * entire storefront (Shop page, Product details, Cart, Checkout, Search)
+ * entire storefront (Home page, Shop page, Product details, Cart, Checkout, Search)
  * always reflects whatever an administrator has saved in the Admin Portal —
- * for every visitor, not just the browser that made the edit.
- * Only customer-visible statuses ("active"/"out_of_stock") are shown; a
- * network failure falls back to the bundled static catalog so the site
- * still renders something rather than an empty page.
+ * across all pages and tabs.
  */
 export async function getLiveProducts(): Promise<Product[]> {
   try {
     const dbProducts = await getProductsServerFn();
     if (Array.isArray(dbProducts) && dbProducts.length > 0) {
-      return dbProducts
+      const liveList = dbProducts
         .filter((p) => p.status === "active" || p.status === "out_of_stock")
         .map(dbProductToProduct);
+
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.setItem(LIVE_PRODUCTS_CACHE_KEY, JSON.stringify(liveList));
+        } catch {}
+      }
+      return applyOverridesToList(liveList);
     }
-    return products;
+    return getCachedProductsList();
   } catch (e) {
-    console.error("Failed to load live products, falling back to static catalog:", e);
-    return products;
+    console.error("Failed to load live products from server, falling back to cached/static catalog:", e);
+    return getCachedProductsList();
   }
+}
+
+/** Broadcast helper to notify all open tabs and components that products changed. */
+export function notifyStorefrontProductsChanged(): void {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(new CustomEvent("yg_products_updated"));
+  try {
+    localStorage.setItem("yg_products_updated_at", String(Date.now()));
+    const bc = new BroadcastChannel("yg_sync_channel");
+    bc.postMessage("products_updated");
+    bc.close();
+  } catch {}
 }
 
 /**
  * Reactive React hook for live products catalog.
- * Re-fetches on mount and whenever a "yg_products_updated" event fires
- * (dispatched by the Admin Portal right after a save/delete/status change).
- * Pass `initialProducts` (e.g. from a route loader that already awaited
- * getLiveProducts() server-side) to avoid a stale-then-corrected flash on
- * first paint.
+ * Re-fetches on mount, when initialProducts changes, and on custom/storage/broadcast sync events.
  */
 export function useLiveProducts(initialProducts?: Product[]): Product[] {
-  const [list, setList] = useState<Product[]>(initialProducts || products);
+  const [list, setList] = useState<Product[]>(() => {
+    if (typeof window !== "undefined") {
+      const cached = getCachedProductsList();
+      if (cached && cached.length > 0) return cached;
+    }
+    return initialProducts && initialProducts.length > 0 ? applyOverridesToList(initialProducts) : products;
+  });
+
+  useEffect(() => {
+    if (initialProducts && initialProducts.length > 0) {
+      setList(applyOverridesToList(initialProducts));
+    }
+  }, [initialProducts]);
 
   useEffect(() => {
     let cancelled = false;
     const load = () => {
+      // First update state immediately with latest local cache to prevent stale layout
+      const cached = getCachedProductsList();
+      if (cached.length > 0) {
+        setList(cached);
+      }
       getLiveProducts().then((data) => {
-        if (!cancelled) setList(data);
+        if (!cancelled && Array.isArray(data) && data.length > 0) {
+          setList(data);
+        }
       });
     };
     load();
 
-    window.addEventListener("yg_products_updated", load);
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === "yg_products_updated_at" || e.key === ADMIN_OVERRIDES_KEY || e.key === LIVE_PRODUCTS_CACHE_KEY) {
+        load();
+      }
+    };
+
+    let bc: BroadcastChannel | null = null;
+    try {
+      bc = new BroadcastChannel("yg_sync_channel");
+      bc.onmessage = (ev) => {
+        if (ev.data === "products_updated") load();
+      };
+    } catch {}
+
+    const onCustomEvent = () => load();
+
+    window.addEventListener("yg_products_updated", onCustomEvent);
+    window.addEventListener("storage", onStorage);
     return () => {
       cancelled = true;
-      window.removeEventListener("yg_products_updated", load);
+      window.removeEventListener("yg_products_updated", onCustomEvent);
+      window.removeEventListener("storage", onStorage);
+      if (bc) bc.close();
     };
   }, []);
 
@@ -1284,23 +1461,50 @@ export function useLiveProducts(initialProducts?: Product[]): Product[] {
  * Reactive React hook for a single product by slug.
  */
 export function useLiveProduct(slug: string): Product | undefined {
-  const [product, setProduct] = useState<Product | undefined>(() =>
-    findBySlugWithAliases(products, slug)
-  );
+  const [product, setProduct] = useState<Product | undefined>(() => {
+    const list = getCachedProductsList();
+    return findBySlugWithAliases(list, slug) || findBySlugWithAliases(products, slug);
+  });
 
   useEffect(() => {
     let cancelled = false;
     const load = () => {
+      const cached = getCachedProductsList();
+      const current = findBySlugWithAliases(cached, slug);
+      if (current) setProduct(current);
+
       getLiveProducts().then((all) => {
-        if (!cancelled) setProduct(findBySlugWithAliases(all, slug));
+        if (!cancelled) {
+          const found = findBySlugWithAliases(all, slug);
+          if (found) setProduct(found);
+        }
       });
     };
     load();
 
-    window.addEventListener("yg_products_updated", load);
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === "yg_products_updated_at" || e.key === ADMIN_OVERRIDES_KEY || e.key === LIVE_PRODUCTS_CACHE_KEY) {
+        load();
+      }
+    };
+
+    let bc: BroadcastChannel | null = null;
+    try {
+      bc = new BroadcastChannel("yg_sync_channel");
+      bc.onmessage = (ev) => {
+        if (ev.data === "products_updated") load();
+      };
+    } catch {}
+
+    const onCustomEvent = () => load();
+
+    window.addEventListener("yg_products_updated", onCustomEvent);
+    window.addEventListener("storage", onStorage);
     return () => {
       cancelled = true;
-      window.removeEventListener("yg_products_updated", load);
+      window.removeEventListener("yg_products_updated", onCustomEvent);
+      window.removeEventListener("storage", onStorage);
+      if (bc) bc.close();
     };
   }, [slug]);
 
@@ -1313,7 +1517,7 @@ export function searchProductsIn(list: Product[], query: string): Product[] {
   const terms = q.split(/\s+/);
   return list
     .map((p) => {
-      const haystack = [p.name, p.tagline, formatLabels[p.format] || "", p.description]
+      const haystack = [p.name, p.tagline, formatLabels[p.format] || "", p.category || "", p.description]
         .join(" ")
         .toLowerCase();
       let score = 0;

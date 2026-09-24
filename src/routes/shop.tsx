@@ -120,12 +120,12 @@ export const Route = createFileRoute("/shop")({
 const filterCategories = MAIN_CATEGORIES;
 
 export const PRICE_PRESETS = [
-  { id: "all", label: "All Prices", min: 18, max: 2000, shortLabel: "All" },
-  { id: "under-50", label: "Under ₹50", min: 18, max: 50, shortLabel: "< ₹50", badge: "Covers & Mini" },
+  { id: "all", label: "All Prices", min: 0, max: 5000, shortLabel: "All" },
+  { id: "under-50", label: "Under ₹50", min: 0, max: 50, shortLabel: "< ₹50", badge: "Covers & Mini" },
   { id: "50-100", label: "₹50 — ₹100", min: 50, max: 100, shortLabel: "₹50-100", badge: "Trays & Sambrani" },
   { id: "100-250", label: "₹100 — ₹250", min: 100, max: 250, shortLabel: "₹100-250", badge: "100g & Podis" },
   { id: "250-500", label: "₹250 — ₹500", min: 250, max: 500, shortLabel: "₹250-500", badge: "Containers & Jars" },
-  { id: "above-500", label: "₹500 & Above", min: 500, max: 2000, shortLabel: "> ₹500", badge: "Pouches & Hampers" },
+  { id: "above-500", label: "₹500 & Above", min: 500, max: 5000, shortLabel: "> ₹500", badge: "Pouches & Hampers" },
 ] as const;
 
 export type PricePresetId = (typeof PRICE_PRESETS)[number]["id"];
@@ -150,12 +150,12 @@ function ShopPage() {
   const [minPrice, setMinPrice] = useState<number>(() => {
     if (typeof search.minPrice === "number") return search.minPrice;
     const match = PRICE_PRESETS.find((p) => p.id === search.price);
-    return match ? match.min : 18;
+    return match ? match.min : 0;
   });
   const [maxPrice, setMaxPrice] = useState<number>(() => {
     if (typeof search.maxPrice === "number") return search.maxPrice;
     const match = PRICE_PRESETS.find((p) => p.id === search.price);
-    return match ? match.max : 2000;
+    return match ? match.max : 5000;
   });
   const [selectedPreset, setSelectedPreset] = useState<string>(() => {
     if (search.price && PRICE_PRESETS.some((p) => p.id === search.price)) {
@@ -579,7 +579,7 @@ function ShopPage() {
             {viewMode === "compact" && (
               <div
                 key={`compact-${currentPage}-${filter}-${sort}`}
-                className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 xl:grid-cols-3 gap-3 sm:gap-4 animate-in fade-in-50 duration-300"
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6 animate-in fade-in-50 duration-300"
               >
                 {paginated.map((p, i) => (
                   <div
@@ -596,7 +596,7 @@ function ShopPage() {
             {viewMode === "default" && (
               <div
                 key={`default-${currentPage}-${filter}-${sort}`}
-                className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 animate-in fade-in-50 duration-300"
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-7 animate-in fade-in-50 duration-300"
               >
                 {paginated.map((p, i) => (
                   <div
@@ -644,7 +644,7 @@ function ShopPage() {
                       window.scrollTo({ top: 200, behavior: "smooth" });
                     }}
                     disabled={currentPage === 1}
-                    className="h-9 px-3.5 rounded-[6px] border border-[#E8DEC8] bg-white text-xs font-semibold text-[#181206] hover:bg-[#FAF3D6] disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer shadow-xs flex items-center gap-1 active:scale-95"
+                    className="h-9 px-3.5 rounded-[6px] border border-[#E8DEC8] bg-white text-xs font-semibold text-[#181206] hover:bg-[#F4F4F5] disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer shadow-xs flex items-center gap-1 active:scale-95"
                   >
                     <ChevronLeft className="h-3.5 w-3.5" />
                     <span>Previous</span>
@@ -663,7 +663,7 @@ function ShopPage() {
                           "h-9 w-9 rounded-[6px] text-xs font-bold transition-all cursor-pointer shadow-xs",
                           currentPage === pageNum
                             ? "bg-[#FF9933] text-[#181206] border border-[#FF9933] font-black"
-                            : "bg-white text-[#181206] border border-[#E8DEC8] hover:bg-[#FAF3D6]"
+                            : "bg-white text-[#181206] border border-[#E8DEC8] hover:bg-[#F4F4F5]"
                         )}
                       >
                         {pageNum}

@@ -40,7 +40,7 @@ function AccountPage() {
   return (
     <div className="min-h-screen bg-white font-sans pb-16">
       {/* Breadcrumb Navigation */}
-      <div className="border-b border-[#E8DEC8] bg-[#F5EAC4] py-3.5">
+      <div className="border-b border-[#E8DEC8] bg-[#F9FAFB] py-3.5">
         <div className="container-page flex items-center justify-between">
           <div className="flex items-center gap-2 text-xs text-[#6E777D]">
             <Link to="/" className="hover:text-[#181206] transition-colors font-medium">
@@ -71,7 +71,7 @@ function AccountPage() {
         <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_1.6fr]">
           <div className="space-y-6">
             {/* Profile Section */}
-            <section className="rounded-2xl border-2 border-[#FF9933] bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6] p-6 shadow-md ring-1 ring-[#FF9933]/30">
+            <section className="rounded-2xl border-2 border-[#FF9933] bg-white p-6 shadow-md ring-1 ring-[#FF9933]/30">
               <h2 className="flex items-center gap-2 text-base font-bold text-[#181206] pb-3 border-b border-[#E8DEC8]">
                 <span className="p-1 rounded bg-[#FF9933] text-[#181206] border border-[#D8A700]">
                   <UserRound className="h-4 w-4" />
@@ -156,7 +156,7 @@ function AccountPage() {
             </section>
 
             {/* Saved Addresses Section */}
-            <section className="rounded-2xl border-2 border-[#E8DEC8] hover:border-[#FF9933] bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6] p-6 shadow-xs transition-all">
+            <section className="rounded-2xl border-2 border-[#E8DEC8] hover:border-[#FF9933] bg-white p-6 shadow-xs transition-all">
               <h2 className="flex items-center gap-2 text-base font-bold text-[#181206] pb-3 border-b border-[#E8DEC8]">
                 <span className="p-1 rounded bg-[#FF9933] text-[#181206] border border-[#D8A700]">
                   <MapPin className="h-4 w-4" />
@@ -172,7 +172,7 @@ function AccountPage() {
                   {addresses.map((a) => (
                     <li
                       key={a.id}
-                      className="rounded-[6px] border border-[#E8DEC8] p-3 text-xs bg-[#FAF3D6]"
+                      className="rounded-[6px] border border-[#E8DEC8] p-3 text-xs bg-[#F9FAFB]"
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div>
@@ -215,7 +215,7 @@ function AccountPage() {
           </div>
 
           {/* Orders Section */}
-          <section className="rounded-2xl border-2 border-[#E8DEC8] hover:border-[#FF9933] bg-gradient-to-b from-[#FFFDF2] to-[#FAF3D6] p-6 shadow-xs transition-all">
+          <section className="rounded-2xl border-2 border-[#E8DEC8] hover:border-[#FF9933] bg-white p-6 shadow-xs transition-all">
             <h2 className="flex items-center gap-2 text-base font-bold text-[#181206] pb-3 border-b border-[#E8DEC8]">
               <span className="p-1 rounded bg-[#FF9933] text-[#181206] border border-[#D8A700]">
                 <Package className="h-4 w-4" />
@@ -267,7 +267,7 @@ function AccountPage() {
                             alt={item.name}
                             width={200}
                             height={200}
-                            wrapperClassName="h-12 w-12 shrink-0 rounded-[4px] border border-[#E8DEC8] bg-[#FAF3D6]"
+                            wrapperClassName="h-12 w-12 shrink-0 rounded-[4px] border border-[#E8DEC8] bg-[#F9FAFB]"
                             className="h-full w-full object-cover"
                           />
                         ))}

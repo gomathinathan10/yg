@@ -93,7 +93,7 @@ export function SearchDialog({
         </DialogDescription>
 
         {/* Search Input Bar */}
-        <div className="relative flex items-center border-b border-[#E8DEC8] bg-[#FAF3D6] px-3.5 sm:px-4 py-1">
+        <div className="relative flex items-center border-b border-[#E8DEC8] bg-[#F4F4F5] px-3.5 sm:px-4 py-1">
           <Search className="h-4 w-4 sm:h-5 sm:w-5 text-[#181206] shrink-0 mr-2.5" />
           <input
             ref={inputRef}
@@ -136,7 +136,7 @@ export function SearchDialog({
               className={`px-2.5 py-1 rounded-[4px] text-[11px] font-medium transition-all shrink-0 cursor-pointer ${
                 query.toLowerCase() === tag.toLowerCase()
                   ? "bg-[#FF9933] text-[#181206] font-black font-bold shadow-xs"
-                  : "bg-[#FAF3D6] border border-[#E8DEC8] text-muted-foreground hover:text-[#181206] hover:border-[#FF9933]"
+                  : "bg-[#F4F4F5] border border-[#E8DEC8] text-muted-foreground hover:text-[#181206] hover:border-[#FF9933]"
               }`}
             >
               {tag}
@@ -149,7 +149,7 @@ export function SearchDialog({
           {/* No results state */}
           {!hasResults && query.trim() ? (
             <div className="py-10 text-center space-y-3">
-              <div className="h-12 w-12 rounded-full bg-[#FAF3D6] border border-[#E8DEC8] flex items-center justify-center mx-auto text-muted-foreground">
+              <div className="h-12 w-12 rounded-full bg-[#F4F4F5] border border-[#E8DEC8] flex items-center justify-center mx-auto text-muted-foreground">
                 <Search className="h-5 w-5 text-[#181206]" />
               </div>
               <div>
@@ -200,12 +200,12 @@ export function SearchDialog({
                     key={p.slug}
                     type="button"
                     onClick={() => handleSelectProduct(p.slug)}
-                    className="w-full flex items-center gap-3 p-2 rounded-[6px] text-left transition-all hover:bg-[#FAF3D6] group cursor-pointer border border-transparent hover:border-[#E8DEC8]"
+                    className="w-full flex items-center gap-3 p-2 rounded-[6px] text-left transition-all hover:bg-[#F4F4F5] group cursor-pointer border border-transparent hover:border-[#E8DEC8]"
                   >
                     <SmartImage
                       src={p.image}
                       alt={p.name}
-                      wrapperClassName="h-12 w-12 shrink-0 rounded-[6px] overflow-hidden bg-[#FAF3D6] border border-[#E8DEC8]"
+                      wrapperClassName="h-12 w-12 shrink-0 rounded-[6px] overflow-hidden bg-[#F4F4F5] border border-[#E8DEC8]"
                       className="h-full w-full object-cover group-hover:scale-105 transition-transform"
                     />
 
@@ -214,7 +214,7 @@ export function SearchDialog({
                         <span className="font-bold text-xs sm:text-sm text-[#181206] group-hover:text-[#181206] transition-colors truncate">
                           {p.name}
                         </span>
-                        <span className="text-[10px] px-1.5 py-0.5 rounded-[4px] bg-[#FAF3D6] text-[#4A5568] border border-[#E8DEC8] font-semibold uppercase">
+                        <span className="text-[10px] px-1.5 py-0.5 rounded-[4px] bg-[#F4F4F5] text-[#4A5568] border border-[#E8DEC8] font-semibold uppercase">
                           {formatLabels[p.format]}
                         </span>
                         {p.bestseller ? (
@@ -253,7 +253,7 @@ export function SearchDialog({
                   onOpenChange(false);
                   void navigate({ to: "/shop" });
                 }}
-                className="p-2 rounded-[6px] border border-[#E8DEC8] bg-[#FAF3D6] hover:bg-[#FF9933]/10 hover:border-[#FF9933]/40 text-center transition-all group cursor-pointer"
+                className="p-2 rounded-[6px] border border-[#E8DEC8] bg-[#F4F4F5] hover:bg-[#FF9933]/10 hover:border-[#FF9933]/40 text-center transition-all group cursor-pointer"
               >
                 <ShoppingBag className="h-4 w-4 mx-auto mb-1 text-[#181206] group-hover:scale-110 transition-transform" />
                 <span className="text-[11px] font-bold text-[#181206] block">Shop All</span>
@@ -265,7 +265,7 @@ export function SearchDialog({
                   onOpenChange(false);
                   void navigate({ to: "/track" });
                 }}
-                className="p-2 rounded-[6px] border border-[#E8DEC8] bg-[#FAF3D6] hover:bg-[#FF9933]/10 hover:border-[#FF9933]/40 text-center transition-all group cursor-pointer"
+                className="p-2 rounded-[6px] border border-[#E8DEC8] bg-[#F4F4F5] hover:bg-[#FF9933]/10 hover:border-[#FF9933]/40 text-center transition-all group cursor-pointer"
               >
                 <Package className="h-4 w-4 mx-auto mb-1 text-[#181206] group-hover:scale-110 transition-transform" />
                 <span className="text-[11px] font-bold text-[#181206] block">Track Order</span>
@@ -277,7 +277,7 @@ export function SearchDialog({
                   onOpenChange(false);
                   void navigate({ to: "/story" });
                 }}
-                className="p-2 rounded-[6px] border border-[#E8DEC8] bg-[#FAF3D6] hover:bg-[#FF9933]/10 hover:border-[#FF9933]/40 text-center transition-all group cursor-pointer"
+                className="p-2 rounded-[6px] border border-[#E8DEC8] bg-[#F4F4F5] hover:bg-[#FF9933]/10 hover:border-[#FF9933]/40 text-center transition-all group cursor-pointer"
               >
                 <History className="h-4 w-4 mx-auto mb-1 text-[#181206] group-hover:scale-110 transition-transform" />
                 <span className="text-[11px] font-bold text-[#181206] block">Since 1932</span>
@@ -287,7 +287,7 @@ export function SearchDialog({
         </div>
 
         {/* Modal Footer Key hint */}
-        <div className="p-2.5 bg-[#FAF3D6] border-t border-[#E8DEC8] flex items-center justify-between text-[11px] text-muted-foreground px-4">
+        <div className="p-2.5 bg-[#F4F4F5] border-t border-[#E8DEC8] flex items-center justify-between text-[11px] text-muted-foreground px-4">
           <span>
             Press <kbd className="px-1.5 py-0.5 rounded-[4px] bg-white border border-[#E8DEC8] font-mono text-[10px]">Enter</kbd> to select
           </span>

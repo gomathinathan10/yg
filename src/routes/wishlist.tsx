@@ -58,7 +58,7 @@ function WishlistPage() {
 
       {items.length === 0 ? (
         <div className="rounded-[6px] border border-[#E8DEC8] bg-white mt-8 flex flex-col items-center px-6 py-14 text-center shadow-xs">
-          <span className="grid h-16 w-16 place-items-center rounded-full bg-[#FAF3D6] border border-[#E8DEC8]">
+          <span className="grid h-16 w-16 place-items-center rounded-full bg-[#F4F4F5] border border-[#E8DEC8]">
             <Heart className="h-7 w-7 text-muted-foreground" aria-hidden />
           </span>
           <h2 className="mt-4 text-lg font-bold text-[#181206]">Your wishlist is currently empty</h2>
@@ -82,7 +82,7 @@ function WishlistPage() {
                     alt={p.name}
                     sizes="96px"
                     fallbackLabel={p.name}
-                    wrapperClassName="h-24 w-24 rounded-[6px] border border-[#E8DEC8] bg-[#FAF3D6]"
+                    wrapperClassName="h-24 w-24 rounded-[6px] border border-[#E8DEC8] bg-[#F4F4F5]"
                     className="h-full w-full object-cover"
                   />
                 </Link>

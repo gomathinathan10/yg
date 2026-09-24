@@ -274,7 +274,7 @@ function CheckoutPage() {
   if (cart.resolved.length === 0) {
     return (
       <div className="container-page flex min-h-[50vh] flex-col items-center justify-center text-center py-16">
-        <div className="h-16 w-16 rounded-full bg-[#FAF3D6] border border-[#E8DEC8] flex items-center justify-center">
+        <div className="h-16 w-16 rounded-full bg-[#F4F4F5] border border-[#E8DEC8] flex items-center justify-center">
           <Truck className="h-8 w-8 text-[#181206]" />
         </div>
         <h1 className="mt-4 text-2xl sm:text-3xl font-bold text-[#181206]">Your basket is empty</h1>
@@ -632,7 +632,7 @@ function CheckoutPage() {
 
               <Separator className="my-6 border-[#E8DEC8]" />
               <h2 className="text-lg font-bold text-[#181206]">Gifting &amp; notes</h2>
-              <label className="mt-4 flex items-start gap-3 rounded-[6px] border border-[#E8DEC8] bg-[#FAF3D6]/50 px-4 py-3 text-sm">
+              <label className="mt-4 flex items-start gap-3 rounded-[6px] border border-[#E8DEC8] bg-[#F9FAFB] px-4 py-3 text-sm">
                 <Checkbox checked={gift} onCheckedChange={(v) => setGift(Boolean(v))} className="mt-0.5" />
                 <span className="flex-1">
                   <span className="flex items-center gap-2 font-bold text-[#181206]">
@@ -763,7 +763,7 @@ function CheckoutPage() {
                     alt={line.product.name}
                     width={1000}
                     height={1000}
-                    wrapperClassName="h-16 w-16 shrink-0 rounded-[6px] border border-[#E8DEC8] bg-[#FAF3D6]"
+                    wrapperClassName="h-16 w-16 shrink-0 rounded-[6px] border border-[#E8DEC8] bg-[#F4F4F5]"
                     className="h-full w-full object-cover"
                   />
                   <div className="min-w-0 flex-1">

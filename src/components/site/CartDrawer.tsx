@@ -15,7 +15,7 @@ export function CartDrawer() {
   return (
     <Sheet open={cart.isOpen} onOpenChange={cart.setOpen}>
       <SheetContent className="flex w-full flex-col gap-0 p-0 sm:max-w-md bg-white border-l border-[#E8DEC8]">
-        <SheetHeader className="border-b border-[#E8DEC8] px-5 py-4 bg-[#FAF3D6]">
+        <SheetHeader className="border-b border-[#E8DEC8] px-5 py-4 bg-white">
           <SheetTitle className="text-lg font-bold text-[#181206] flex items-center gap-2">
             <ShoppingBag className="h-5 w-5 text-[#181206]" />
             Your basket {cart.count > 0 ? `(${cart.count})` : ""}
@@ -24,7 +24,7 @@ export function CartDrawer() {
 
         {cart.resolved.length === 0 ? (
           <div className="flex flex-1 flex-col items-center justify-center gap-4 px-6 text-center">
-            <div className="h-16 w-16 rounded-full bg-[#FAF3D6] border border-[#FF9933] flex items-center justify-center shadow-xs">
+            <div className="h-16 w-16 rounded-full bg-[#F4F4F5] border border-[#FF9933] flex items-center justify-center shadow-xs">
               <ShoppingBag className="h-8 w-8 text-[#181206]" />
             </div>
             <div>
@@ -64,7 +64,7 @@ export function CartDrawer() {
                     alt={line.product.name}
                     width={1000}
                     height={1000}
-                    wrapperClassName="h-20 w-20 shrink-0 rounded-[6px] border border-[#E8DEC8] bg-[#FAF3D6]"
+                    wrapperClassName="h-20 w-20 shrink-0 rounded-[6px] border border-[#E8DEC8] bg-[#F4F4F5]"
                     className="h-full w-full object-cover"
                   />
                   <div className="min-w-0 flex-1">
@@ -91,7 +91,7 @@ export function CartDrawer() {
               ))}
             </div>
 
-            <div className="space-y-3 border-t border-[#E8DEC8] bg-[#FAF3D6]/50 px-5 py-4">
+            <div className="space-y-3 border-t border-[#E8DEC8] bg-white px-5 py-4">
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Subtotal</span>
                 <span className="font-semibold text-foreground">{formatPrice(cart.subtotal)}</span>

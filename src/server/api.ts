@@ -457,15 +457,27 @@ export async function handleApiRequest(request: Request): Promise<Response | nul
       return json(store.listPromos(activeOnly));
     }
 
-    // POST /api/promos
-    if (path === "/api/promos" && method === "POST") {
+    // ==================== CONTACT INFO ====================
+    // GET /api/contact
+    if (path === "/api/contact" && method === "GET") {
+      return json(store.getStoreContact() || {});
+    }
+
+    // POST /api/contact
+    if (path === "/api/contact" && method === "POST") {
       if (!requireAdmin(request)) return json({ ok: false, error: "Unauthorized" }, 401);
       const body = await parseBody<any>(request);
-      if (!body?.code || !body?.label) {
-        return json({ ok: false, error: "Code and label required" }, 400);
-      }
-      const promo = store.savePromo(body);
-      return json({ ok: true, promo });
+      if (!body) return json({ ok: false, error: "Contact payload required" }, 400);
+      const contact = store.saveStoreContact(body);
+      return json({ ok: true, contact });
+    }
+
+    // ==================== SYSTEM RESET ====================
+    // POST /api/admin/reset-defaults
+    if (path === "/api/admin/reset-defaults" && method === "POST") {
+      if (!requireAdmin(request)) return json({ ok: false, error: "Unauthorized" }, 401);
+      const res = store.resetToFactoryDefaults();
+      return json(res);
     }
 
     return json({ ok: false, error: `Endpoint ${method} ${path} not found` }, 404);

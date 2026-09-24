@@ -153,7 +153,7 @@ export function ProductImageZoom({
         onMouseEnter={handleMouseEnter}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        className="surface-card group relative overflow-hidden rounded-[6px] border border-[#E8DEC8] bg-[#FAF3D6] p-4 sm:p-6 flex items-center justify-center touch-pan-y min-h-[340px] sm:min-h-[460px] cursor-crosshair shadow-xs"
+        className="surface-card group relative overflow-hidden rounded-[6px] border border-[#E8DEC8] bg-white p-4 sm:p-6 flex items-center justify-center touch-pan-y min-h-[340px] sm:min-h-[460px] cursor-crosshair shadow-xs"
       >
         {/* Dynamic Zoom Image Container */}
         {currentImage ? (
@@ -276,7 +276,7 @@ export function ProductImageZoom({
             <button
               type="button"
               onClick={prevImage}
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-[6px] border border-[#E8DEC8] bg-[#FAF3D6] text-xs font-bold text-[#181206] hover:bg-[#FF9933] hover:border-[#FF9933] transition-colors shadow-xs cursor-pointer active:scale-95"
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-[6px] border border-[#E8DEC8] bg-[#F4F4F5] text-xs font-bold text-[#181206] hover:bg-[#FF9933] hover:border-[#FF9933] transition-colors shadow-xs cursor-pointer active:scale-95"
             >
               <ChevronLeft className="h-3.5 w-3.5" />
               <span>Back</span>
@@ -287,7 +287,7 @@ export function ProductImageZoom({
             <button
               type="button"
               onClick={nextImage}
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-[6px] border border-[#E8DEC8] bg-[#FAF3D6] text-xs font-bold text-[#181206] hover:bg-[#FF9933] hover:border-[#FF9933] transition-colors shadow-xs cursor-pointer active:scale-95"
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-[6px] border border-[#E8DEC8] bg-[#F4F4F5] text-xs font-bold text-[#181206] hover:bg-[#FF9933] hover:border-[#FF9933] transition-colors shadow-xs cursor-pointer active:scale-95"
             >
               <span>Next</span>
               <ChevronRight className="h-3.5 w-3.5" />
@@ -314,7 +314,7 @@ export function ProductImageZoom({
                 onMouseEnter={() => onSelectImage(i)}
                 aria-label={`Switch to photo ${i + 1}`}
                 title={`View photo ${i + 1}`}
-                className={`relative h-18 w-18 sm:h-20 sm:w-20 shrink-0 overflow-hidden rounded-[6px] border-2 p-1.5 bg-[#FAF3D6] transition-all cursor-pointer ${
+                className={`relative h-18 w-18 sm:h-20 sm:w-20 shrink-0 overflow-hidden rounded-[6px] border-2 p-1.5 bg-white transition-all cursor-pointer ${
                   active
                     ? "border-[#FF9933] shadow-sm scale-105 ring-2 ring-[#FF9933]/30"
                     : "border-[#E8DEC8] hover:border-[#FF9933]/60 opacity-75 hover:opacity-100"
